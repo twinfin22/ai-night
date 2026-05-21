@@ -1,0 +1,159 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'AI 야학 — 실무자를 위한 AI 강의',
+  description = '공공기관·교육기관 실무자를 위한 AI 업무자동화 강의입니다. 비전공자 대상, 코드 없이 따라 할 수 있는 실무 중심 강의.',
+} = Astro.props;
+
+const siteUrl = 'https://ai-evening.kr';
+const ogImage = `${siteUrl}/og.png`;
+const GA4_ID = 'G-XXXXXXXXXX';
+
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={siteUrl} />
+    <link rel="alternate" hreflang="ko" href={siteUrl} />
+    <link rel="alternate" hreflang="x-default" href={siteUrl} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:site_name" content="AI 야학" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Pretendard -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+    />
+
+    <!-- GA4 (placeholder ID) -->
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
+    <script is:inline define:vars={{ GA4_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        window.dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Capture referrer category at pageview
+      let referrerCategory = 'direct';
+      try {
+        const ref = document.referrer || '';
+        if (!ref) {
+          referrerCategory = 'direct';
+        } else if (/mail\.google|outlook|naver\.com\/mail/.test(ref)) {
+          referrerCategory = 'email';
+        } else if (/google|naver|daum|bing/.test(ref)) {
+          referrerCategory = 'search';
+        } else if (/facebook|instagram|twitter|x\.com|linkedin|kakao/.test(ref)) {
+          referrerCategory = 'social';
+        } else {
+          referrerCategory = 'other';
+        }
+      } catch (e) {}
+
+      gtag('config', GA4_ID, {
+        page_referrer_category: referrerCategory,
+      });
+
+      gtag('event', 'referrer', {
+        referrer_category: referrerCategory,
+        referrer_raw: document.referrer || '(direct)',
+      });
+    </script>
+
+  </head>
+  <body>
+    <slot />
+
+    <script is:inline>
+      // GA4 click listeners
+      document.addEventListener('DOMContentLoaded', () => {
+        const fire = (name, params) => {
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', name, params || {});
+          }
+        };
+
+        document.querySelectorAll('[data-ga="kakao"]').forEach((el) => {
+          el.addEventListener('click', () => {
+            fire('kakao_click', { location: el.getAttribute('data-loc') || 'unknown' });
+          });
+        });
+
+        document.querySelectorAll('[data-ga="mail"]').forEach((el) => {
+          el.addEventListener('click', () => {
+            fire('mail_click', { location: el.getAttribute('data-loc') || 'unknown' });
+          });
+        });
+
+        document.querySelectorAll('[data-ga="pdf"]').forEach((el) => {
+          el.addEventListener('click', () => {
+            fire('pdf_download', { location: el.getAttribute('data-loc') || 'unknown' });
+          });
+        });
+
+        // Scroll depth: 25/50/75/100
+        const thresholds = [25, 50, 75, 100];
+        const fired = new Set();
+
+        const onScroll = () => {
+          const doc = document.documentElement;
+          const scrollTop = window.scrollY || doc.scrollTop;
+          const viewport = window.innerHeight || doc.clientHeight;
+          const full = doc.scrollHeight - viewport;
+          if (full <= 0) return;
+          const pct = Math.min(100, Math.round((scrollTop / full) * 100));
+          for (const t of thresholds) {
+            if (pct >= t && !fired.has(t)) {
+              fired.add(t);
+              fire('scroll_depth', { percent: t });
+            }
+          }
+        };
+
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              onScroll();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+
+        // Fire once on load in case page is short
+        onScroll();
+      });
+    </script>
+  </body>
+</html>

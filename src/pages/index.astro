@@ -1,0 +1,227 @@
+---
+import Base from '../layouts/Base.astro';
+
+const pdfPath = '/소개서.pdf';
+const kakaoUrl = '#kakao-channel-placeholder';
+const mailAddr = 'hello@ai-evening.kr';
+
+const trustLogos = [
+  '남해 청년센터',
+  '청도 경북시민재단',
+  '서울 고교 (협력)',
+  '사립대 (협력)',
+];
+
+const audience = [
+  {
+    head: '공공기관 주무관',
+    sub: '재단·청년센터의 AI 도입 담당',
+  },
+  {
+    head: '교육기관 담당자',
+    sub: '고교·대학교 교양·교직원 연수 운영',
+  },
+  {
+    head: '평생학습 코디네이터',
+    sub: '평생교육원·시민대학·도서관 기획',
+  },
+];
+
+const topics = [
+  {
+    title: '실무자를 위한 생성형 AI 입문',
+    result: '업무 문서·보고서 초안을 생성형 AI로 30분 안에 작성',
+    target: '공공기관·교육기관 실무자 (비전공자)',
+    hours: '2~3시간',
+  },
+  {
+    title: '보고서·공문 AI 업무자동화',
+    result: '반복 보고서·회의록·공문 초안 자동화 워크플로 1개 구축',
+    target: '재단·센터 주무관, 교육기관 행정직',
+    hours: '3~4시간',
+  },
+  {
+    title: '데이터·설문 정리 AI 활용',
+    result: '엑셀·설문 데이터를 AI로 요약·분류·시각화',
+    target: '사업 운영·평가 담당자',
+    hours: '3시간',
+  },
+  {
+    title: '교직원·교사 연수용 AI 리터러시',
+    result: '수업·행정 업무에 AI를 안전하게 도입하는 기준 정립',
+    target: '고교·대학교 교직원, 평생학습 강사',
+    hours: '2~4시간 (연수 규격에 맞춰 조정)',
+  },
+];
+
+const publicCases = [
+  {
+    name: '남해 청년센터',
+    meta: '[YYYY.MM] · [N시간] · [N명] · 만족도 [X.X]/5 ([자체 설문])',
+    quote: '[기관 담당자 인용 1줄]',
+    by: '[직함/실명]',
+  },
+  {
+    name: '청도 경북시민재단',
+    meta: '[YYYY.MM] · [N시간] · [N명] · 만족도 [X.X]/5 ([자체 설문])',
+    quote: '[기관 담당자 인용 1줄]',
+    by: '[직함/실명]',
+  },
+];
+
+const eduCases = [
+  {
+    name: '서울 고교 교사 연수',
+    meta: '[학교명] · [YYYY.MM] · [N시간] · [N명] · 만족도 [X.X]/5',
+    quote: '[교사 인용 1줄]',
+    by: '[직함/실명]',
+  },
+];
+---
+
+<Base
+  title="AI 야학 — 실무자를 위한 AI 강의"
+  description="공공기관·교육기관 실무자를 위한 AI 업무자동화 강의입니다. 비전공자 대상, 코드 없이 따라 할 수 있는 실무 중심 강의."
+>
+  <main>
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <span class="hero__eyebrow">AI 야학</span>
+      <h1 id="hero-title">AI 야학 — 실무자를 위한 AI 강의</h1>
+      <p class="hero__sub">공공기관·교육기관 실무자를 위한 AI 업무자동화 강의입니다.</p>
+      <p class="hero__trust">
+        누적 <strong>[N회]</strong> 출강 · 평균 만족도 <strong>[X.X]/5</strong> · 공공기관·교육기관 출강
+      </p>
+
+      <div class="hero__shot" role="img" aria-label="강의 현장 액션샷 (자료 확보 예정)">
+        강의 현장 액션샷 (자료 확보 예정)
+      </div>
+
+      <div class="cta-row">
+        <a
+          class="btn btn--primary"
+          href={kakaoUrl}
+          data-ga="kakao"
+          data-loc="hero"
+          rel="noopener"
+        >
+          카카오톡 채널 추가
+        </a>
+        <a
+          class="btn btn--secondary"
+          href={pdfPath}
+          data-ga="pdf"
+          data-loc="hero"
+          download
+        >
+          강의소개서(PDF) 다운로드
+        </a>
+      </div>
+    </section>
+
+    <!-- Trust strip -->
+    <section aria-labelledby="trust-title">
+      <h2 id="trust-title">최근 출강·협력 기관</h2>
+      <p style="font-size:14px;color:var(--ink-mute);margin-bottom:16px;">
+        최근 출강·협력 기관입니다. 게재는 모두 기관 동의 후 진행했습니다.
+      </p>
+      <ul class="trust-strip">
+        {trustLogos.map((name) => (
+          <li class="trust-strip__item">{name}</li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- 누가 이 강의를 듣나 -->
+    <section aria-labelledby="audience-title">
+      <h2 id="audience-title">누가 이 강의를 듣나</h2>
+      <ul class="audience">
+        {audience.map((a) => (
+          <li>
+            <strong>{a.head}</strong>
+            <span>{a.sub}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- 대표 강의 주제 -->
+    <section aria-labelledby="topics-title">
+      <h2 id="topics-title">대표 강의 주제</h2>
+      <div class="topics">
+        {topics.map((t) => (
+          <article class="topic">
+            <h3>{t.title}</h3>
+            <p>{t.result}</p>
+            <div class="topic__meta">대상: {t.target} · 시간: {t.hours}</div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- 출강 사례 -->
+    <section aria-labelledby="cases-title">
+      <h2 id="cases-title">출강 사례</h2>
+
+      <div class="case-group">
+        <span class="case-label">공공기관 출강</span>
+        {publicCases.map((c) => (
+          <article class="case">
+            <h3>{c.name}</h3>
+            <div class="case__meta">{c.meta}</div>
+            <blockquote class="case__quote">"{c.quote}" — {c.by}</blockquote>
+          </article>
+        ))}
+      </div>
+
+      <div class="case-group">
+        <span class="case-label">교육기관 협력</span>
+        {eduCases.map((c) => (
+          <article class="case">
+            <h3>{c.name}</h3>
+            <div class="case__meta">{c.meta}</div>
+            <blockquote class="case__quote">"{c.quote}" — {c.by}</blockquote>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- 강사료 정책 -->
+    <section aria-labelledby="fee-title">
+      <h2 id="fee-title">강사료 정책</h2>
+      <p class="fee">공공기관 강사료 지급기준 준수 · 교통/숙박비 별도 협의</p>
+    </section>
+
+    <!-- 강사 소개 -->
+    <section aria-labelledby="bio-title">
+      <h2 id="bio-title">강사 소개</h2>
+      <div class="bio">
+        <p><strong>[강사명]</strong> 입니다. 비전공자·실무자를 대상으로 AI 업무자동화를 가르칩니다.</p>
+        <p>공공기관·교육기관 현장에서 30대 주무관과 교직원이 실제로 마주하는 보고서·공문·데이터 업무를 출발점으로 삼아 강의합니다.</p>
+        <p>"AI 야학"은 격식보다 이해를 우선하는, 누구든 와서 배울 수 있는 AI 교육을 지향하는 이름입니다. 야학이라는 단어 그대로, 배움에 자격을 묻지 않는다는 태도에서 출발했습니다.</p>
+        <p>AI 엔지니어가 아니라 눈높이를 맞추는 교육자로서, 기관 담당자가 결재 라인에 안전하게 올릴 수 있는 강의를 만드는 것이 우선순위입니다.</p>
+        <p>[학력 1줄 — 예: OO대학교 OO학과 졸업]</p>
+      </div>
+    </section>
+  </main>
+
+  <footer aria-labelledby="footer-title">
+    <div class="footer-inner">
+      <h2 id="footer-title">문의</h2>
+      <div class="footer-links">
+        <a href={kakaoUrl} data-ga="kakao" data-loc="footer" rel="noopener">
+          카카오톡 채널 추가 (권장)
+        </a>
+        <a href={`mailto:${mailAddr}`} data-ga="mail" data-loc="footer">
+          이메일 — {mailAddr}
+        </a>
+        <a href={pdfPath} data-ga="pdf" data-loc="footer" download>
+          강의소개서(PDF) 다시 다운로드
+        </a>
+      </div>
+      <p class="footer-fine">
+        휴대폰 번호는 게재하지 않습니다. 단가·일정 협의는 카카오톡 채널에서 1:1로 진행합니다.
+      </p>
+    </div>
+  </footer>
+</Base>

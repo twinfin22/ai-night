@@ -1,0 +1,93 @@
+/*
+  print.css — AI 야학 강의소개서 인쇄 전용 스타일시트
+  대상 규격: A4 (210mm × 297mm), 단면, 1페이지
+  사용법: Chrome → 인쇄 → PDF로 저장 → 여백=없음, 배경 그래픽=켜기
+*/
+
+@charset "UTF-8";
+
+/* ── Pretendard 폰트 로딩 (인쇄 시에도 적용) ── */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+/* ── @page A4 ── */
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+/* ── 인쇄 시 기본 재정의 ── */
+@media print {
+
+  /* 모든 배경색·이미지 강제 출력 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html, body {
+    width: 210mm;
+    height: 297mm;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+  }
+
+  /* ── 페이지 컨테이너 ── */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    margin: 0;
+    padding: 14mm 16mm 12mm;
+    box-shadow: none;
+    overflow: hidden;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* ── 페이지 분리 방지 — 모든 section ── */
+  .section,
+  .header,
+  .images-section,
+  .footer-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* ── 링크 URL 표시 제거 (인쇄 시 href 자동 출력 방지) ── */
+  a[href]::after {
+    content: none !important;
+  }
+
+  /* ── 브라우저 기본 헤더/푸터 제거 ── */
+  @page {
+    margin: 0;
+  }
+
+  /* ── 이미지 크기 보장 ── */
+  .img-action,
+  .img-portrait,
+  .footer-qr img {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── 배경색 보장 ── */
+  .topic-card {
+    border-color: #1d3557 !important;
+  }
+
+  /* ── 화면 전용 요소 숨김 ── */
+  .screen-only {
+    display: none !important;
+  }
+
+  /* ── 폰트 렌더링 최적화 ── */
+  body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}

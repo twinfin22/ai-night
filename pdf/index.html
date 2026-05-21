@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 야학 강의소개서</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="print.css">
+  <style>
+    /* ── CSS 변수 ── */
+    :root {
+      --color-ink:    #1a1a1a;
+      --color-accent: #1d3557;   /* ink blue — 공문 친화, B&W 인쇄 시 진한 회색으로 충분히 구분됨 */
+      --color-rule:   #c8c8c8;
+      --color-bg:     #ffffff;
+      --color-muted:  #555555;
+      --color-light:  #f4f4f4;
+
+      --font-body:    'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+
+      --tracking-tight: -0.03em;   /* -3% ≈ 본문 -3 ~ -4 */
+      --lh-body:       1.65;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font-family: var(--font-body);
+      font-size: 10pt;
+      color: var(--color-ink);
+      background: var(--color-bg);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ── A4 wrapper ── */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      max-height: 297mm;
+      margin: 0 auto;
+      padding: 14mm 16mm 12mm;
+      display: grid;
+      grid-template-rows: auto auto auto auto auto auto auto auto;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    /* ── 공통 section 간격 ── */
+    .section { padding-block: 5pt; }
+    .section + .section { border-top: 0.5pt solid var(--color-rule); }
+
+    /* ══════════════════════════════
+       § 1. 헤더 — 이름·직함·정체성
+    ══════════════════════════════ */
+    .header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-bottom: 6pt;
+      border-bottom: 1.5pt solid var(--color-accent);
+      margin-bottom: 7pt;
+    }
+    .header-left { display: flex; align-items: baseline; gap: 10pt; }
+    .header-name {
+      font-size: 18pt;
+      font-weight: 700;
+      letter-spacing: var(--tracking-tight);
+      color: var(--color-accent);
+    }
+    .header-title {
+      font-size: 9pt;
+      font-weight: 500;
+      color: var(--color-muted);
+      letter-spacing: -0.02em;
+    }
+    .header-identity {
+      font-size: 8.5pt;
+      font-weight: 400;
+      color: var(--color-muted);
+      letter-spacing: -0.02em;
+      text-align: right;
+      line-height: 1.5;
+    }
+    .header-identity strong {
+      font-weight: 600;
+      color: var(--color-accent);
+    }
+
+    /* ══════════════════════════════
+       § 2. 이미지 — 액션샷 + 증명사진
+    ══════════════════════════════ */
+    .images-section {
+      display: flex;
+      gap: 10pt;
+      padding-block: 7pt;
+      align-items: flex-start;
+    }
+    .img-action {
+      flex: 1 1 auto;
+      aspect-ratio: 16 / 9;
+      max-height: 52mm;
+      background: var(--color-light);
+      border: 0.5pt solid var(--color-rule);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .img-action img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .img-action-label {
+      position: absolute;
+      bottom: 4pt;
+      left: 5pt;
+      font-size: 6.5pt;
+      color: var(--color-muted);
+      background: rgba(255,255,255,0.82);
+      padding: 1pt 3pt;
+      letter-spacing: -0.01em;
+    }
+    .img-portrait {
+      flex: 0 0 32mm;
+      width: 32mm;
+      aspect-ratio: 3 / 4;
+      background: var(--color-light);
+      border: 0.5pt solid var(--color-rule);
+      overflow: hidden;
+    }
+    .img-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* 이미지 없을 때 placeholder 텍스트 */
+    .img-placeholder-text {
+      font-size: 7pt;
+      color: var(--color-rule);
+      text-align: center;
+      padding: 6pt;
+      line-height: 1.4;
+    }
+
+    /* ══════════════════════════════
+       § 3. 약력
+    ══════════════════════════════ */
+    .bio-section { }
+    .section-label {
+      font-size: 6.5pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 3pt;
+    }
+    .bio-text {
+      font-size: 8.5pt;
+      line-height: var(--lh-body);
+      letter-spacing: var(--tracking-tight);
+      color: var(--color-ink);
+    }
+
+    /* ══════════════════════════════
+       § 4. 대표 강의 주제 카드
+    ══════════════════════════════ */
+    .topics-section { }
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6pt;
+      margin-top: 4pt;
+    }
+    .topic-card {
+      border: 0.5pt solid var(--color-accent);
+      padding: 5pt 6pt;
+      display: flex;
+      flex-direction: column;
+      gap: 3pt;
+    }
+    .topic-num {
+      font-size: 6pt;
+      font-weight: 700;
+      color: var(--color-accent);
+      letter-spacing: 0.04em;
+    }
+    .topic-title {
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: var(--tracking-tight);
+      line-height: 1.35;
+      color: var(--color-ink);
+    }
+    .topic-result {
+      font-size: 7pt;
+      line-height: 1.5;
+      color: var(--color-muted);
+      letter-spacing: -0.02em;
+    }
+
+    /* ══════════════════════════════
+       § 5. 주요 출강 기관
+    ══════════════════════════════ */
+    .orgs-section { }
+    .orgs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4pt 16pt;
+      margin-top: 4pt;
+    }
+    .org-group { }
+    .org-group-label {
+      font-size: 6.5pt;
+      font-weight: 700;
+      color: var(--color-accent);
+      letter-spacing: 0.06em;
+      border-bottom: 0.5pt solid var(--color-accent);
+      padding-bottom: 2pt;
+      margin-bottom: 3pt;
+    }
+    .org-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2pt;
+    }
+    .org-list li {
+      font-size: 7.5pt;
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+      color: var(--color-ink);
+      padding-left: 6pt;
+      position: relative;
+    }
+    .org-list li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+    .org-quote {
+      font-size: 7pt;
+      color: var(--color-muted);
+      letter-spacing: -0.02em;
+      margin-top: 2pt;
+      padding-left: 6pt;
+      font-style: italic;
+      line-height: 1.45;
+    }
+
+    /* ══════════════════════════════
+       § 6. 강사료 정책
+    ══════════════════════════════ */
+    .fee-section { }
+    .fee-text {
+      font-size: 8pt;
+      letter-spacing: -0.02em;
+      color: var(--color-ink);
+      line-height: 1.6;
+    }
+    .fee-text strong {
+      font-weight: 600;
+    }
+
+    /* ══════════════════════════════
+       § 7. 연락처
+    ══════════════════════════════ */
+    .contact-section { }
+    .contact-row {
+      display: flex;
+      gap: 16pt;
+      align-items: center;
+      margin-top: 3pt;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 4pt;
+    }
+    .contact-type {
+      font-size: 6.5pt;
+      font-weight: 700;
+      color: var(--color-accent);
+      letter-spacing: 0.04em;
+      min-width: 40pt;
+    }
+    .contact-value {
+      font-size: 8pt;
+      letter-spacing: -0.02em;
+      color: var(--color-ink);
+    }
+
+    /* ══════════════════════════════
+       § 8. Footer — URL + QR
+    ══════════════════════════════ */
+    .footer-section {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-top: 5pt;
+      border-top: 1pt solid var(--color-accent);
+      margin-top: 5pt;
+    }
+    .footer-left { }
+    .footer-url {
+      font-size: 9pt;
+      font-weight: 700;
+      color: var(--color-accent);
+      letter-spacing: -0.02em;
+    }
+    .footer-tagline {
+      font-size: 6.5pt;
+      color: var(--color-muted);
+      margin-top: 2pt;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+    }
+    .footer-qr {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2pt;
+    }
+    .footer-qr img {
+      width: 20mm;
+      height: 20mm;
+      display: block;
+      border: 0.5pt solid var(--color-rule);
+    }
+    .footer-qr-label {
+      font-size: 6pt;
+      color: var(--color-muted);
+      letter-spacing: 0.02em;
+      text-align: center;
+    }
+
+    /* ── 브라우저 미리보기용 wrapper ── */
+    @media screen {
+      body { background: #e8e8e8; padding: 20px; }
+      .page {
+        box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+        background: #fff;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- § 1. 이름 · 직함 · 정체성 -->
+  <div class="header">
+    <div class="header-left">
+      <span class="header-name">[강사 이름]</span>
+      <span class="header-title">AI 교육 강사 · 실무자 대상 AI 업무자동화 전문</span>
+    </div>
+    <div class="header-identity">
+      <strong>AI 야학</strong> — 누구든 와서 배울 수 있는 AI 강의<br>
+      공공기관 · 교육기관 · 평생교육 실무자 대상
+    </div>
+  </div>
+
+  <!-- § 2. 액션샷 (left) + 증명사진 (right) -->
+  <div class="images-section">
+    <div class="img-action">
+      <img src="./placeholder-action.jpg" alt="강의 현장 — 수강생들과 함께하는 AI 실습 장면">
+      <span class="img-action-label">강의 현장 (남해 청년센터, 2025)</span>
+    </div>
+    <div class="img-portrait">
+      <img src="./placeholder-portrait.jpg" alt="강사 프로필 사진">
+    </div>
+  </div>
+
+  <!-- § 3. 약력 -->
+  <div class="section bio-section">
+    <div class="section-label">강사 소개</div>
+    <p class="bio-text">
+      공공기관·교육기관 실무자를 대상으로 AI 업무자동화 강의를 진행하고 있습니다.
+      [누적 출강 N회], 누적 수강생 [N명] 이상을 기록하였으며, 비전공자도 당일 실습으로
+      업무에 적용 가능한 내용을 구성하는 것을 원칙으로 합니다.
+      남해 청년센터·청도 경북시민재단 등 지방 공공기관과 서울 소재 고교·사립대 교직원
+      대상 강의를 다수 진행하였습니다. 강의는 "AI 야학"이라는 컨셉 아래,
+      누구든 와서 배울 수 있는 환경을 지향합니다. [대학교 졸업 또는 관련 이력 1줄].
+    </p>
+  </div>
+
+  <!-- § 4. 대표 강의 주제 -->
+  <div class="section topics-section">
+    <div class="section-label">대표 강의 주제</div>
+    <div class="topics-grid">
+      <div class="topic-card">
+        <span class="topic-num">01</span>
+        <div class="topic-title">AI 업무자동화<br>입문</div>
+        <div class="topic-result">반복 업무를 줄이는 ChatGPT·Claude 실무 활용법을 당일 실습으로 체득</div>
+      </div>
+      <div class="topic-card">
+        <span class="topic-num">02</span>
+        <div class="topic-title">공공기관을 위한<br>AI 보고서 작성</div>
+        <div class="topic-result">공문·보고서·기안문 작성 시간을 절반으로 단축하는 프롬프트 실습</div>
+      </div>
+      <div class="topic-card">
+        <span class="topic-num">03</span>
+        <div class="topic-title">교직원 AI<br>리터러시 연수</div>
+        <div class="topic-result">AI 생성 콘텐츠 판별·활용 기준을 학교 현장에 맞게 정립</div>
+      </div>
+      <div class="topic-card">
+        <span class="topic-num">04</span>
+        <div class="topic-title">평생학습 AI<br>체험 워크숍</div>
+        <div class="topic-result">디지털 격차 없이 60대도 실습 가능한 AI 도구 체험 프로그램</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- § 5. 주요 출강 기관 -->
+  <div class="section orgs-section">
+    <div class="section-label">주요 출강 기관</div>
+    <div class="orgs-grid">
+      <div class="org-group">
+        <div class="org-group-label">공공기관 출강</div>
+        <ul class="org-list">
+          <li>남해 청년센터 (경남, 2025) — [N명, N회차]</li>
+          <li>청도 경북시민재단 (경북, 2025) — [N명, N회차]</li>
+          <li>[추가 기관 입력]</li>
+        </ul>
+        <p class="org-quote">"처음에는 막막했는데, 강의 끝나고 바로 써봤어요."<br>— 남해 청년센터 담당자 [이름], 자체 설문</p>
+      </div>
+      <div class="org-group">
+        <div class="org-group-label">교육기관 협력</div>
+        <ul class="org-list">
+          <li>서울 [고교명] 교직원 연수 (2025) — [N명]</li>
+          <li>[사립대명] 교직원 AI 리터러시 연수 (2025)</li>
+          <li>[추가 기관 입력]</li>
+        </ul>
+        <p class="org-quote">"우리 선생님들 눈높이에 딱 맞는 강의였습니다."<br>— [담당 교사 이름], 자체 설문</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- § 6. 강사료 정책 -->
+  <div class="section fee-section">
+    <div class="section-label">강사료 정책</div>
+    <p class="fee-text">
+      <strong>공공기관 강사료 지급기준 준수</strong> · 교통비·숙박비 별도 협의 ·
+      세금계산서 발행 가능 · 사업자등록증 보유
+    </p>
+  </div>
+
+  <!-- § 7. 연락처 -->
+  <div class="section contact-section">
+    <div class="section-label">문의</div>
+    <div class="contact-row">
+      <div class="contact-item">
+        <span class="contact-type">이메일</span>
+        <span class="contact-value">[이메일 주소]</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-type">카카오톡 채널</span>
+        <span class="contact-value">@AI야학 (채널 추가 후 메시지)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- § 8. Footer — 사이트 URL + QR -->
+  <div class="footer-section">
+    <div class="footer-left">
+      <div class="footer-url">ai-evening.kr</div>
+      <div class="footer-tagline">
+        강의 상세 소개 · 출강 사례 · 카카오톡 채널 추가<br>
+        본 자료는 강의소개서입니다. 최신 정보는 사이트에서 확인하세요.
+      </div>
+    </div>
+    <div class="footer-qr">
+      <img src="./qr-placeholder.png" alt="ai-evening.kr QR 코드">
+      <span class="footer-qr-label">QR 스캔<br>→ ai-evening.kr</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
