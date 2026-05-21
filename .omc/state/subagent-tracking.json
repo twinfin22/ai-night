@@ -1,0 +1,15 @@
+{
+  "agents": [
+    {
+      "agent_id": "aa8c06b1a3c4aafc3",
+      "agent_type": "docs-researcher",
+      "started_at": "2026-05-21T01:27:55.381Z",
+      "parent_mode": "none",
+      "status": "running"
+    }
+  ],
+  "total_spawned": 1,
+  "total_completed": 0,
+  "total_failed": 0,
+  "last_updated": "2026-05-21T01:27:55.484Z"
+}

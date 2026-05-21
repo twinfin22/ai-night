@@ -1,0 +1,45 @@
+{
+  "updatedAt": "2026-05-21T01:27:55.381Z",
+  "missions": [
+    {
+      "id": "session:a37b0d89-75a4-47ac-948a-985e841e1e7c:none",
+      "source": "session",
+      "name": "none",
+      "objective": "Session mission",
+      "createdAt": "2026-05-21T01:27:55.381Z",
+      "updatedAt": "2026-05-21T01:27:55.381Z",
+      "status": "running",
+      "workerCount": 1,
+      "taskCounts": {
+        "total": 1,
+        "pending": 0,
+        "blocked": 0,
+        "inProgress": 1,
+        "completed": 0,
+        "failed": 0
+      },
+      "agents": [
+        {
+          "name": "docs-researcher:aa8c06b",
+          "role": "docs-researcher",
+          "ownership": "aa8c06b1a3c4aafc3",
+          "status": "running",
+          "currentStep": null,
+          "latestUpdate": null,
+          "completedSummary": null,
+          "updatedAt": "2026-05-21T01:27:55.381Z"
+        }
+      ],
+      "timeline": [
+        {
+          "id": "session-start:aa8c06b1a3c4aafc3:2026-05-21T01:27:55.381Z",
+          "at": "2026-05-21T01:27:55.381Z",
+          "kind": "update",
+          "agent": "docs-researcher:aa8c06b",
+          "detail": "started docs-researcher:aa8c06b",
+          "sourceKey": "session-start:aa8c06b1a3c4aafc3"
+        }
+      ]
+    }
+  ]
+}
