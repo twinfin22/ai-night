@@ -5,27 +5,21 @@ const ctaHref = '#form';
 const mailAddr = 'hello@ai-night.study';
 
 const heroImage = '/assets/photo_2026-05-29_18-47-27.jpg';
+const bookclubHref = 'https://www.instagram.com/p/DZkCcupEZOb/?img_index=1';
 
 const gallery = [
-  '/assets/DSC05669.jpg',
-  '/assets/DSC05866.jpg',
-  '/assets/DSC06251.jpg',
-  '/assets/DSC07499.jpg',
-  '/assets/DSC07506.jpg',
-  '/assets/DSC07784.jpg',
-  '/assets/WhatsApp_Image_2026-03-20_at_19.16.30.jpg',
-  '/assets/WhatsApp_Image_2026-03-20_at_19.16.32.jpg',
-  '/assets/photo_2024-11-13_13-49-19.jpg',
-  '/assets/photo_2024-11-13_14-09-03.jpg',
-  '/assets/photo_2025-01-25_14-56-40.jpg',
-  '/assets/photo_2025-01-25_14-56-46.jpg',
-  '/assets/photo_2025-07-10_19-07-18.jpg',
-  '/assets/photo_2025-07-10_19-07-18_2.jpg',
-  '/assets/photo_2026-05-29_18-47-26.jpg',
-  '/assets/photo_2026-05-29_18-47-27.jpg',
-  '/assets/photo_2026-06-01_02-35-16.jpg',
-  '/assets/photo_2026-06-02_22-17-02.jpg',
-  '/assets/photo_2026-06-16_17-36-00.jpg',
+  { src: '/assets/photo_2026-06-16_17-36-00.jpg', variant: 'standard', alt: '참가자와 함께한 현장' },
+  { src: '/assets/photo_2026-06-02_22-17-02.jpg', variant: 'standard', alt: '라운지 그룹 세션' },
+  { src: '/assets/ai-bookclub.png', variant: 'poster', href: bookclubHref, alt: 'AI 야학 독서클럽 인스타그램 포스터' },
+  { src: '/assets/photo_2025-07-10_19-07-18_2.jpg', variant: 'wide', alt: '강의실 실습 현장' },
+  { src: '/assets/DSC05866.jpg', variant: 'landscape', alt: '강의실 참가자' },
+  { src: '/assets/DSC05669.jpg', variant: 'portrait', alt: '강의 연단 발표' },
+  { src: '/assets/DSC07506.jpg', variant: 'landscape', alt: '패널 토크 현장' },
+  { src: '/assets/ai-yahak-recruit.png', variant: 'poster', alt: 'AI 야학 참여자 모집 포스터' },
+  { src: '/assets/WhatsApp_Image_2026-03-20_at_19.16.32.jpg', variant: 'standard', alt: '워크숍 네트워킹 현장' },
+  { src: '/assets/photo_2024-11-13_14-09-03.jpg', variant: 'standard', alt: '무대 대담 현장' },
+  { src: '/assets/onboarding-cheongdo.jpg', variant: 'poster', alt: '고향올래 온보딩청도 — 내 아이디어를 AI로 구현해보는 워크숍 포스터' },
+  { src: '/assets/photo_2025-01-25_14-56-40.jpg', variant: 'portrait', alt: '컨퍼런스 발표 현장' },
 ];
 const galleryLoop = [...gallery, ...gallery, ...gallery];
 const journey = [
@@ -48,27 +42,27 @@ const journey = [
 
 const programTracks = [
   {
-    title: '지원사업 도전',
+    title: '정부지원사업 기획서·발표자료 만들기',
     body: '사업 아이템을 심사 언어로 정리합니다.',
     outputs: ['로컬 맞춤형 BM 분석', '정부지원사업 HWP 기획서 초안', '발표자료·심사 대응 문장'],
   },
   {
-    title: '브랜드 콘텐츠',
+    title: '인스타·블로그·숏폼 콘텐츠 만들기',
     body: '매장과 상품을 바로 홍보할 콘텐츠로 바꿉니다.',
     outputs: ['인스타그램·블로그 발행 캘린더', '스마트폰 촬영 기반 숏폼 초안', '상세페이지·펀딩 스토리 구조'],
   },
   {
-    title: 'AI 부사수',
+    title: '반복 업무 AI에게 맡기기',
     body: '혼자 반복하던 일을 맡길 AI 흐름을 만듭니다.',
     outputs: ['Notion·NotebookLM 업무 매뉴얼', '카카오톡 채널 FAQ 응대 흐름', '예약·위치·영업시간 반복 문의 자동화'],
   },
   {
-    title: '정산·행정',
+    title: '영수증·정산·결과보고서 정리',
     body: '영수증과 보고서 사이의 시간을 줄입니다.',
     outputs: ['OCR 기반 영수증 정리', '지출 항목 분류', '결과보고서·정산보고서 초안'],
   },
   {
-    title: '지역자원 상품화',
+    title: '로컬 투어·체험 프로그램 기획',
     body: '지역의 이야기와 공간을 체험 상품으로 만듭니다.',
     outputs: ['마을 아카이브 정리', '로컬 투어 동선 설계', '가이드 시나리오·체험 프로그램 초안'],
   },
@@ -81,7 +75,7 @@ const credentials = [
   },
   {
     org: '경북시민재단',
-    role: '시민사회 활동가 대상 AI 도입',
+    role: '로컬 창업가 대상 <AI 온보딩> 운영 및 <AI 야학>, <AI 독서클럽> 준비 중',
   },
   {
     org: '서울 사립대 / 공립 교사',
@@ -89,15 +83,23 @@ const credentials = [
   },
   {
     org: '모두의연구소',
-    role: 'AI 교육 트랙 운영',
+    role: '<AI 데이터 사이언티스트> 과정 수료',
   },
   {
     org: 'Anthropic Courses',
-    role: 'Claude 공식 코스 한국 번역·로컬라이즈',
+    role: 'Claude 공식 코스 수료',
   },
   {
-    org: '테크 교육·행사 10년+',
+    org: '테크 온보딩·커뮤니티 운영 8년+',
     role: '커뮤니티·컨퍼런스 운영 경력',
+  },
+  {
+    org: '연세대학교 경영학과',
+    role: '졸업',
+  },
+  {
+    org: '글로벌 테크 스타트업',
+    role: '(전) APAC 지역 담당',
   },
 ];
 
@@ -109,11 +111,11 @@ const quotes = [
 ];
 
 const sections = [
-  { id: 'difference', label: '방식' },
-  { id: 'outputs', label: '프로그램' },
-  { id: 'studio', label: '야학 풍경' },
-  { id: 'voices', label: '후기' },
-  { id: 'expertise', label: '진행자' },
+  { id: 'difference', label: '운영 방식' },
+  { id: 'outputs', label: '교육 주제' },
+  { id: 'studio', label: '현장 사례' },
+  { id: 'voices', label: '참가자 후기' },
+  { id: 'expertise', label: '강사 이력' },
   { id: 'form', label: '문의' },
 ];
 ---
@@ -148,11 +150,12 @@ const sections = [
       <div class="hero__inner">
         <h1 id="hero-title">
           로컬 비즈니스를 위한<br/>
-          <em>AI 야학.</em>
+          <em>AI 야학</em>
         </h1>
         <p class="hero__sub">
           기획서부터 홍보 콘텐츠, 고객 응대, 반복 업무까지.
-          작은 사업자가 매일 마주치는 일을 <strong>AI로 덜어내는 실습형 교육</strong>입니다.
+          작은 사업자가 매일 마주치는 일을<br/>
+          <strong>AI로 덜어내는 실습형 교육</strong>입니다.
         </p>
 
         <div class="hero__cta">
@@ -167,7 +170,7 @@ const sections = [
     <div class="shell">
       <!-- Difference -->
       <section id="difference" aria-labelledby="difference-title">
-        <span class="eyebrow">방식</span>
+        <span class="eyebrow">운영 방식</span>
         <h2 id="difference-title">내 사업 자료로 시작해, 결과물로 끝납니다.</h2>
         <p class="lede">
           챗GPT 사용법을 배우는 시간이 아닙니다.
@@ -191,8 +194,8 @@ const sections = [
 
       <!-- Outputs -->
       <section id="outputs" aria-labelledby="outputs-title">
-        <span class="eyebrow">프로그램</span>
-        <h2 id="outputs-title">기관 사업 목적에 맞춰 5가지 트랙으로 묶습니다.</h2>
+        <span class="eyebrow">교육 주제</span>
+        <h2 id="outputs-title">참가자의 업무와 필요에 맞춰 수업을 설계합니다.</h2>
         <p class="lede">
           로컬 창업, 소상공인 디지털 전환, 로컬브랜드 고도화 사업에 맞춰
           필요한 트랙만 골라 1일 워크숍, 코호트, 마켓톤으로 설계합니다.
@@ -211,16 +214,6 @@ const sections = [
             </li>
           ))}
         </ul>
-        <aside class="bookclub-showcase" aria-label="AI 북클럽 사례">
-          <div class="bookclub-showcase__copy">
-            <span class="bookclub-showcase__label">AI 북클럽</span>
-            <h3>AI를 쓰기 전에, AI를 읽고 토론합니다.</h3>
-            <p>기술 활용법만이 아니라 AI FOMO에 휩쓸리지 않을 자기 관점을 함께 만듭니다.</p>
-          </div>
-          <figure class="bookclub-showcase__poster">
-            <img src="/assets/ai-bookclub.png" alt="AI 야학 독서클럽 모집 포스터" loading="lazy" />
-          </figure>
-        </aside>
         <p class="footnote">
           필요한 트랙만 골라 구성합니다. 기준은 강의 목차가 아니라 참가자가 가져갈 결과물입니다.
         </p>
@@ -230,20 +223,36 @@ const sections = [
     <!-- Studio / gallery -->
     <section id="studio" class="studio" aria-labelledby="studio-title">
       <div class="studio__head">
-        <span class="eyebrow eyebrow--dark">풍경</span>
-        <h2 id="studio-title">강의가 끝나면, 바로 쓸 업무 도구가 남습니다.</h2>
+        <span class="eyebrow eyebrow--dark">현장 사례</span>
+        <h2 id="studio-title">한국에서, 해외에서. 이미 쌓아온 강의 현장입니다.</h2>
+        <p class="lede">
+          공공기관·대학·로컬 창업가 워크숍부터 해외 컨퍼런스 무대까지.
+          다양한 청중 앞에서 다져온 강의 경험을 그대로 가져옵니다.
+        </p>
       </div>
       <div class="studio__carousel" role="region" aria-label="강의 현장 사진">
         <button class="studio__arrow studio__arrow--prev" type="button" aria-label="이전 사진" data-carousel-prev>‹</button>
         <div class="studio__track" tabindex="0" aria-label="강의 현장 사진 목록" data-loop-size={gallery.length}>
-          {gallery.map((src, i) => (
-            <figure class="studio__cell" data-carousel-cell>
-              <img src={src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
+          {gallery.map((item, i) => (
+            <figure class={`studio__cell studio__cell--${item.variant}`} data-carousel-cell>
+              {item.href ? (
+                <a class="studio__link" href={item.href} target="_blank" rel="noreferrer" aria-label="AI 북클럽 인스타그램 게시물 열기">
+                  <img src={item.src} alt={item.alt} loading={i < 4 ? 'eager' : 'lazy'} />
+                </a>
+              ) : (
+                <img src={item.src} alt={item.alt} loading={i < 4 ? 'eager' : 'lazy'} />
+              )}
             </figure>
           ))}
-          {galleryLoop.slice(gallery.length).map((src, i) => (
-            <figure class="studio__cell" data-carousel-cell aria-hidden="true">
-              <img src={src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
+          {galleryLoop.slice(gallery.length).map((item, i) => (
+            <figure class={`studio__cell studio__cell--${item.variant}`} data-carousel-cell aria-hidden="true">
+              {item.href ? (
+                <a class="studio__link" href={item.href} target="_blank" rel="noreferrer" tabindex="-1">
+                  <img src={item.src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
+                </a>
+              ) : (
+                <img src={item.src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
+              )}
             </figure>
           ))}
         </div>
@@ -254,7 +263,7 @@ const sections = [
     <div class="shell">
       <!-- Quotes -->
       <section id="voices" aria-labelledby="voices-title">
-        <span class="eyebrow">후기</span>
+        <span class="eyebrow">참가자 후기</span>
         <h2 id="voices-title">강의실을 나간 다음에 남는 것.</h2>
 
         <div class="quotes">
@@ -269,11 +278,10 @@ const sections = [
 
       <!-- Expertise -->
       <section id="expertise" aria-labelledby="expertise-title">
-        <span class="eyebrow">진행자</span>
-        <h2 id="expertise-title">로컬 현장에 맞춰 수업을 설계합니다.</h2>
+        <span class="eyebrow">강사 이력</span>
+        <h2 id="expertise-title">교육, 커뮤니티, 테크 현장을 함께 경험했습니다.</h2>
         <p class="lede">
-          로컬 창업가와 소상공인, 비전공자들을 위한 AI 교육 경험.
-          각자의 사업 자료를 가져와도 따라올 수 있도록 강의보다 실습과 피드백 중심으로 운영합니다.
+          비전공자와 실무자가 기술을 자기 일에 붙일 수 있도록 돕는 교육 경험을 바탕으로 진행합니다.
         </p>
 
         <ul class="creds">
@@ -365,6 +373,12 @@ const sections = [
       const last = cells[cells.length - 1].getBoundingClientRect();
       return last.right - first.left;
     };
+    const getStudioCellStep = () => {
+      if (!(studioTrack instanceof HTMLElement)) return 0;
+      const cells = studioTrack.querySelectorAll<HTMLElement>('[data-carousel-cell]');
+      if (cells.length < 2) return 0;
+      return cells[1].getBoundingClientRect().left - cells[0].getBoundingClientRect().left;
+    };
     const syncStudioLoop = () => {
       if (!(studioTrack instanceof HTMLElement)) return;
       const loopWidth = getStudioLoopWidth();
@@ -378,15 +392,13 @@ const sections = [
     const scrollStudio = (dir: number) => {
       if (!(studioTrack instanceof HTMLElement)) return;
       syncStudioLoop();
-      studioPausedUntil = Date.now() + 4500;
-      studioTrack.scrollBy({
-        left: dir * Math.min(studioTrack.clientWidth * 0.86, 720),
-        behavior: 'smooth',
-      });
+      studioPausedUntil = Date.now() + 5000;
+      const step = getStudioCellStep() || Math.min(studioTrack.clientWidth * 0.86, 720);
+      studioTrack.scrollBy({ left: dir * step, behavior: 'smooth' });
     };
     prev?.addEventListener('click', () => scrollStudio(-1));
     next?.addEventListener('click', () => scrollStudio(1));
-    studioTrack?.addEventListener('scroll', syncStudioLoop, { passive: true });
+    studioTrack?.addEventListener('scrollend', syncStudioLoop);
     window.addEventListener('resize', () => {
       if (!(studioTrack instanceof HTMLElement)) return;
       const loopWidth = getStudioLoopWidth();
@@ -398,18 +410,16 @@ const sections = [
       if (loopWidth) studioTrack.scrollLeft = loopWidth;
     });
     studioTrack?.addEventListener('pointerenter', () => {
-      studioPausedUntil = Date.now() + 1000;
+      studioPausedUntil = Date.now() + 2500;
     });
-    const autoScrollStudio = () => {
-      if (studioTrack instanceof HTMLElement) {
-        syncStudioLoop();
-        if (Date.now() > studioPausedUntil) {
-          studioTrack.scrollLeft += 0.45;
-        }
-      }
-      requestAnimationFrame(autoScrollStudio);
-    };
-    requestAnimationFrame(autoScrollStudio);
+    setInterval(() => {
+      if (!(studioTrack instanceof HTMLElement)) return;
+      if (Date.now() < studioPausedUntil) return;
+      syncStudioLoop();
+      const step = getStudioCellStep();
+      if (!step) return;
+      studioTrack.scrollBy({ left: step, behavior: 'smooth' });
+    }, 3200);
 
     const form = document.querySelector('.contact-form');
     form?.addEventListener('submit', (event) => {
