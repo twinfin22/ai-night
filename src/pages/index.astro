@@ -7,15 +7,27 @@ const mailAddr = 'hello@ai-night.study';
 const heroImage = '/assets/photo_2026-05-29_18-47-27.jpg';
 
 const gallery = [
+  '/assets/DSC05669.jpg',
   '/assets/DSC05866.jpg',
   '/assets/DSC06251.jpg',
+  '/assets/DSC07499.jpg',
   '/assets/DSC07506.jpg',
   '/assets/DSC07784.jpg',
+  '/assets/WhatsApp_Image_2026-03-20_at_19.16.30.jpg',
   '/assets/WhatsApp_Image_2026-03-20_at_19.16.32.jpg',
+  '/assets/photo_2024-11-13_13-49-19.jpg',
   '/assets/photo_2024-11-13_14-09-03.jpg',
+  '/assets/photo_2025-01-25_14-56-40.jpg',
   '/assets/photo_2025-01-25_14-56-46.jpg',
+  '/assets/photo_2025-07-10_19-07-18.jpg',
+  '/assets/photo_2025-07-10_19-07-18_2.jpg',
+  '/assets/photo_2026-05-29_18-47-26.jpg',
+  '/assets/photo_2026-05-29_18-47-27.jpg',
+  '/assets/photo_2026-06-01_02-35-16.jpg',
   '/assets/photo_2026-06-02_22-17-02.jpg',
+  '/assets/photo_2026-06-16_17-36-00.jpg',
 ];
+const galleryLoop = [...gallery, ...gallery, ...gallery];
 const journey = [
   {
     step: '01',
@@ -107,8 +119,8 @@ const sections = [
 ---
 
 <Base
-  title="AI 야학 — 로컬 창업가를 위한 실무 AI 교육"
-  description="로컬 창업가와 소상공인이 실제 사업 자료를 들고 와서 지원사업 기획서, 홍보 콘텐츠, 고객 응대, AI 부사수를 만드는 실습형 AI 교육."
+  title="AI 야학 — 로컬 비즈니스를 위한 실전 AI 교육"
+  description="기획서부터 홍보 콘텐츠, 고객 응대, 반복 업무까지. 작은 사업자가 매일 마주치는 일을 AI로 덜어내는 실습형 교육."
 >
   <header class="masthead">
     <div class="masthead-inner">
@@ -134,15 +146,13 @@ const sections = [
       </div>
 
       <div class="hero__inner">
-        <span class="hero__eyebrow">AI 야학 · 로컬 창업 실습 프로그램</span>
         <h1 id="hero-title">
-          로컬 창업가를 위한<br/>
+          로컬 비즈니스를 위한<br/>
           <em>AI 야학.</em>
         </h1>
         <p class="hero__sub">
-          큰 조직만 쓰던 AI 업무 방식을, 작은 가게와 로컬 팀도 자기 일에 맞게 가져가도록 돕습니다.
-          실제 사업 자료로 <strong>지원사업 기획서, 홍보 콘텐츠, 고객 응대, AI 부사수</strong>를
-          함께 만드는 실습형 AI 교육입니다.
+          기획서부터 홍보 콘텐츠, 고객 응대, 반복 업무까지.
+          작은 사업자가 매일 마주치는 일을 <strong>AI로 덜어내는 실습형 교육</strong>입니다.
         </p>
 
         <div class="hero__cta">
@@ -151,18 +161,13 @@ const sections = [
           </a>
         </div>
 
-        <ul class="hero__meta" aria-label="대상">
-          <li><span>대상</span> 로컬 창업가·소상공인</li>
-          <li><span>형식</span> 1일 워크숍·코호트·마켓톤</li>
-          <li><span>전제</span> 코딩 경험 불필요</li>
-        </ul>
       </div>
     </section>
 
     <div class="shell">
       <!-- Difference -->
       <section id="difference" aria-labelledby="difference-title">
-        <span class="eyebrow">No. 01 — 방식</span>
+        <span class="eyebrow">방식</span>
         <h2 id="difference-title">내 사업 자료로 시작해, 결과물로 끝납니다.</h2>
         <p class="lede">
           챗GPT 사용법을 배우는 시간이 아닙니다.
@@ -180,14 +185,13 @@ const sections = [
         </ol>
 
         <p class="footnote">
-          1일 워크숍도 가능하지만, 야학의 본 트랙은 <strong>같은 동료들과 3-4회 이상</strong> 만나는 코호트 과정입니다.
-          처음 쓰는 사람도 따라올 수 있도록 실습과 피드백 시간을 넉넉히 둡니다.
+          1일 워크숍부터 3-4회 코호트까지, 참여자 수준에 맞춰 실습과 피드백 시간을 조정합니다.
         </p>
       </section>
 
       <!-- Outputs -->
       <section id="outputs" aria-labelledby="outputs-title">
-        <span class="eyebrow">No. 02 — 프로그램</span>
+        <span class="eyebrow">프로그램</span>
         <h2 id="outputs-title">기관 사업 목적에 맞춰 5가지 트랙으로 묶습니다.</h2>
         <p class="lede">
           로컬 창업, 소상공인 디지털 전환, 로컬브랜드 고도화 사업에 맞춰
@@ -207,9 +211,18 @@ const sections = [
             </li>
           ))}
         </ul>
+        <aside class="bookclub-showcase" aria-label="AI 북클럽 사례">
+          <div class="bookclub-showcase__copy">
+            <span class="bookclub-showcase__label">AI 북클럽</span>
+            <h3>AI를 쓰기 전에, AI를 읽고 토론합니다.</h3>
+            <p>기술 활용법만이 아니라 AI FOMO에 휩쓸리지 않을 자기 관점을 함께 만듭니다.</p>
+          </div>
+          <figure class="bookclub-showcase__poster">
+            <img src="/assets/ai-bookclub.png" alt="AI 야학 독서클럽 모집 포스터" loading="lazy" />
+          </figure>
+        </aside>
         <p class="footnote">
-          기관의 사업명, 참여자 수준, 지역 산업군에 맞춰 다시 묶습니다.
-          처음에는 참가자가 손에 쥐고 갈 결과물부터 정합니다.
+          필요한 트랙만 골라 구성합니다. 기준은 강의 목차가 아니라 참가자가 가져갈 결과물입니다.
         </p>
       </section>
     </div>
@@ -217,15 +230,19 @@ const sections = [
     <!-- Studio / gallery -->
     <section id="studio" class="studio" aria-labelledby="studio-title">
       <div class="studio__head">
-        <span class="eyebrow eyebrow--dark">No. 03 — 풍경</span>
+        <span class="eyebrow eyebrow--dark">풍경</span>
         <h2 id="studio-title">강의가 끝나면, 바로 쓸 업무 도구가 남습니다.</h2>
-        <p>강의실 사진과 코호트 작업 풍경입니다.</p>
       </div>
       <div class="studio__carousel" role="region" aria-label="강의 현장 사진">
         <button class="studio__arrow studio__arrow--prev" type="button" aria-label="이전 사진" data-carousel-prev>‹</button>
-        <div class="studio__track" tabindex="0" aria-label="강의 현장 사진 목록">
+        <div class="studio__track" tabindex="0" aria-label="강의 현장 사진 목록" data-loop-size={gallery.length}>
           {gallery.map((src, i) => (
-            <figure class="studio__cell">
+            <figure class="studio__cell" data-carousel-cell>
+              <img src={src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
+            </figure>
+          ))}
+          {galleryLoop.slice(gallery.length).map((src, i) => (
+            <figure class="studio__cell" data-carousel-cell aria-hidden="true">
               <img src={src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
             </figure>
           ))}
@@ -237,7 +254,7 @@ const sections = [
     <div class="shell">
       <!-- Quotes -->
       <section id="voices" aria-labelledby="voices-title">
-        <span class="eyebrow">No. 04 — 후기</span>
+        <span class="eyebrow">후기</span>
         <h2 id="voices-title">강의실을 나간 다음에 남는 것.</h2>
 
         <div class="quotes">
@@ -252,7 +269,7 @@ const sections = [
 
       <!-- Expertise -->
       <section id="expertise" aria-labelledby="expertise-title">
-        <span class="eyebrow">No. 05 — 진행자</span>
+        <span class="eyebrow">진행자</span>
         <h2 id="expertise-title">로컬 현장에 맞춰 수업을 설계합니다.</h2>
         <p class="lede">
           로컬 창업가와 소상공인, 비전공자들을 위한 AI 교육 경험.
@@ -273,13 +290,13 @@ const sections = [
     <!-- Form -->
     <section id="form" class="form-section" aria-labelledby="form-title">
       <div class="form-shell">
-        <span class="eyebrow eyebrow--dark">No. 06 — 문의</span>
+        <span class="eyebrow eyebrow--dark">문의</span>
         <h2 id="form-title">우리 기관에 맞는 과정으로 상담해 보세요.</h2>
         <p class="lede lede--dark">
           대상, 예산, 회차, 참가자 수준을 알려주시면 맞는 형태로 제안드립니다.
         </p>
 
-        <form class="contact-form" aria-describedby="form-note">
+        <form class="contact-form">
           <label>
             <span>이름 / 직함</span>
             <input type="text" name="name" autocomplete="name" />
@@ -299,13 +316,7 @@ const sections = [
 
           <div class="contact-form__cta">
             <button type="submit" class="btn btn--primary btn--lg">맞춤 교육 문의 보내기</button>
-            <a href={`mailto:${mailAddr}`} class="contact-form__alt" data-ga="mail" data-loc="form">
-              또는 메일로 직접 보내기 →
-            </a>
           </div>
-          <p id="form-note" class="contact-form__note">
-            버튼을 누르면 입력 내용이 메일 초안으로 열립니다. 마케팅 수신·DB 저장 없음.
-          </p>
         </form>
       </div>
     </section>
@@ -318,12 +329,8 @@ const sections = [
         로컬 창업가와 소상공인이 AI로 더 가볍게 일할 수 있도록.
       </p>
       <div class="footer-links">
-        <a href="#form" data-ga="cta" data-loc="footer">교육 과정 문의하기</a>
         <a href={`mailto:${mailAddr}`} data-ga="mail" data-loc="footer">{mailAddr}</a>
       </div>
-      <p class="footer-fine">
-        AI 야학 · 2026 · 중간지원조직과 함께 로컬 창업가·소상공인을 위한 실습형 AI 교육을 운영합니다.
-      </p>
     </div>
   </footer>
 
@@ -348,14 +355,30 @@ const sections = [
     const studioTrack = document.querySelector('.studio__track');
     const prev = document.querySelector('[data-carousel-prev]');
     const next = document.querySelector('[data-carousel-next]');
-    const updateStudioArrows = () => {
-      if (!(studioTrack instanceof HTMLElement) || !(prev instanceof HTMLButtonElement) || !(next instanceof HTMLButtonElement)) return;
-      const maxScroll = studioTrack.scrollWidth - studioTrack.clientWidth - 2;
-      prev.disabled = studioTrack.scrollLeft <= 2;
-      next.disabled = studioTrack.scrollLeft >= maxScroll;
+    let studioPausedUntil = 0;
+    const getStudioLoopWidth = () => {
+      if (!(studioTrack instanceof HTMLElement)) return 0;
+      const loopSize = Number(studioTrack.dataset.loopSize) || 0;
+      const cells = Array.from(studioTrack.querySelectorAll('[data-carousel-cell]')).slice(0, loopSize);
+      if (!cells.length) return 0;
+      const first = cells[0].getBoundingClientRect();
+      const last = cells[cells.length - 1].getBoundingClientRect();
+      return last.right - first.left;
+    };
+    const syncStudioLoop = () => {
+      if (!(studioTrack instanceof HTMLElement)) return;
+      const loopWidth = getStudioLoopWidth();
+      if (!loopWidth) return;
+      if (studioTrack.scrollLeft < loopWidth * 0.5) {
+        studioTrack.scrollLeft += loopWidth;
+      } else if (studioTrack.scrollLeft > loopWidth * 1.5) {
+        studioTrack.scrollLeft -= loopWidth;
+      }
     };
     const scrollStudio = (dir: number) => {
-      if (!studioTrack) return;
+      if (!(studioTrack instanceof HTMLElement)) return;
+      syncStudioLoop();
+      studioPausedUntil = Date.now() + 4500;
       studioTrack.scrollBy({
         left: dir * Math.min(studioTrack.clientWidth * 0.86, 720),
         behavior: 'smooth',
@@ -363,9 +386,30 @@ const sections = [
     };
     prev?.addEventListener('click', () => scrollStudio(-1));
     next?.addEventListener('click', () => scrollStudio(1));
-    studioTrack?.addEventListener('scroll', updateStudioArrows, { passive: true });
-    window.addEventListener('resize', updateStudioArrows);
-    updateStudioArrows();
+    studioTrack?.addEventListener('scroll', syncStudioLoop, { passive: true });
+    window.addEventListener('resize', () => {
+      if (!(studioTrack instanceof HTMLElement)) return;
+      const loopWidth = getStudioLoopWidth();
+      if (loopWidth) studioTrack.scrollLeft = loopWidth;
+    });
+    requestAnimationFrame(() => {
+      if (!(studioTrack instanceof HTMLElement)) return;
+      const loopWidth = getStudioLoopWidth();
+      if (loopWidth) studioTrack.scrollLeft = loopWidth;
+    });
+    studioTrack?.addEventListener('pointerenter', () => {
+      studioPausedUntil = Date.now() + 1000;
+    });
+    const autoScrollStudio = () => {
+      if (studioTrack instanceof HTMLElement) {
+        syncStudioLoop();
+        if (Date.now() > studioPausedUntil) {
+          studioTrack.scrollLeft += 0.45;
+        }
+      }
+      requestAnimationFrame(autoScrollStudio);
+    };
+    requestAnimationFrame(autoScrollStudio);
 
     const form = document.querySelector('.contact-form');
     form?.addEventListener('submit', (event) => {
