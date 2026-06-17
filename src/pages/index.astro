@@ -4,19 +4,17 @@ import Base from '../layouts/Base.astro';
 const ctaHref = '#form';
 const mailAddr = 'hello@ai-night.study';
 
-const heroImage = '/assets/photo_2025-07-10_19-07-18_2.jpg';
+const heroImage = '/assets/photo_2026-05-29_18-47-27.jpg';
 
 const gallery = [
-  '/assets/photo_2025-07-10_19-07-18.jpg',
-  '/assets/photo_2026-06-16_17-36-00.jpg',
-  '/assets/WhatsApp_Image_2026-03-20_at_19.16.30.jpg',
-  '/assets/photo_2025-01-25_14-56-46.jpg',
   '/assets/DSC05866.jpg',
-  '/assets/photo_2026-06-02_22-17-02.jpg',
-  '/assets/photo_2026-06-01_02-35-16.jpg',
+  '/assets/DSC06251.jpg',
+  '/assets/DSC07506.jpg',
+  '/assets/DSC07784.jpg',
+  '/assets/WhatsApp_Image_2026-03-20_at_19.16.32.jpg',
   '/assets/photo_2024-11-13_14-09-03.jpg',
-  '/assets/DSC07499.jpg',
-  '/assets/DSC05669.jpg',
+  '/assets/photo_2025-01-25_14-56-46.jpg',
+  '/assets/photo_2026-06-02_22-17-02.jpg',
 ];
 const galleryLoop = [...gallery, ...gallery];
 
@@ -38,13 +36,32 @@ const journey = [
   },
 ];
 
-const outputs = [
-  '지원사업 신청서·결과보고서',
-  'SNS 콘텐츠·카드뉴스',
-  '정산·회계 보고',
-  '고객·민원 응대',
-  '모집글·상세 페이지',
-  'AI 가상 비서 (업무용)',
+const programTracks = [
+  {
+    title: '지원사업 도전',
+    body: '사업 아이템을 심사 언어로 정리합니다.',
+    outputs: ['로컬 맞춤형 BM 분석', '정부지원사업 HWP 기획서 초안', '발표자료·심사 대응 문장'],
+  },
+  {
+    title: '브랜드 콘텐츠',
+    body: '매장과 상품을 바로 홍보할 콘텐츠로 바꿉니다.',
+    outputs: ['인스타그램·블로그 발행 캘린더', '스마트폰 촬영 기반 숏폼 초안', '상세페이지·펀딩 스토리 구조'],
+  },
+  {
+    title: 'AI 부사수',
+    body: '혼자 반복하던 일을 맡길 AI 흐름을 만듭니다.',
+    outputs: ['Notion·NotebookLM 업무 매뉴얼', '카카오톡 채널 FAQ 응대 흐름', '예약·위치·영업시간 반복 문의 자동화'],
+  },
+  {
+    title: '정산·행정',
+    body: '영수증과 보고서 사이의 시간을 줄입니다.',
+    outputs: ['OCR 기반 영수증 정리', '지출 항목 분류', '결과보고서·정산보고서 초안'],
+  },
+  {
+    title: '지역자원 상품화',
+    body: '지역의 이야기와 공간을 체험 상품으로 만듭니다.',
+    outputs: ['마을 아카이브 정리', '로컬 투어 동선 설계', '가이드 시나리오·체험 프로그램 초안'],
+  },
 ];
 
 const credentials = [
@@ -76,32 +93,24 @@ const credentials = [
 
 const quotes = [
   {
-    body: '책상에서 매일 쓰던 양식을 그대로 들고 갔는데, 같은 양식을 30분 만에 끝내는 방법을 배웠다. 다음날 출근해서 바로 써봤다.',
-    by: '서울 사립대 직원 · AI 과외 수강',
-  },
-  {
-    body: '강의가 끝나도 결과물이 남는다. "이건 좋았는데 어떻게 다시 하지" 가 아니라, 만든 워크플로가 다음 회의에서 그대로 돌아간다.',
-    by: '경북시민재단 사업 담당자',
-  },
-  {
-    body: '지역에 와서 같이 만드는 느낌이었다. 일방적인 특강이 아니라, 다른 동기들이 막힌 데서 내가 배우는 야학.',
-    by: '남해 청년센터 참여자',
+    body: 'AI에게 단순히 명령을 입력하는 것이 아니라, 원하는 결과를 얻기 위해 어떻게 질문하고 요청해야 하는지 배울 수 있었던 유익한 시간이었습니다. 그동안 AI가 어렵고 막연하게 느껴졌는데, 이번 강의를 통해 보다 친숙하게 다가갈 수 있었고 앞으로 실생활과 업무에도 적극 활용해보고 싶다는 생각이 들었습니다.',
+    by: '경북시민재단 기획실 PM',
   },
 ];
 
 const sections = [
-  { id: 'difference', label: '일반 특강과 다른 점' },
-  { id: 'outputs', label: '만드는 결과물' },
-  { id: 'expertise', label: '강사·기관 이력' },
-  { id: 'voices', label: '수강생 후기' },
+  { id: 'difference', label: '방식' },
+  { id: 'outputs', label: '프로그램' },
   { id: 'studio', label: '야학 풍경' },
-  { id: 'form', label: '15분 제안 콜' },
+  { id: 'voices', label: '후기' },
+  { id: 'expertise', label: '진행자' },
+  { id: 'form', label: '문의' },
 ];
 ---
 
 <Base
-  title="AI 야학 — 돈도 사람도 부족한 로컬 팀을 위한 AI"
-  description="추상적인 AI 특강이 아니라, 본인 업무 파일을 들고 와서 다음날 현장에서 쓸 도구를 만들어 가는 코호트 학습. 공공·교육·로컬 팀을 위한 AI 야학."
+  title="AI 야학 — 로컬 창업가를 위한 실무 AI 교육"
+  description="로컬 창업가와 소상공인이 실제 사업 자료를 들고 와서 지원사업 기획서, SNS 콘텐츠, 고객 응대, AI 부사수를 만드는 실습형 AI 교육."
 >
   <header class="masthead">
     <div class="masthead-inner">
@@ -111,7 +120,7 @@ const sections = [
           <a href={`#${s.id}`}>{s.label}</a>
         ))}
       </nav>
-      <a class="masthead__cta" href={ctaHref} data-ga="cta" data-loc="nav">제안 콜</a>
+      <a class="masthead__cta" href={ctaHref} data-ga="cta" data-loc="nav">교육 문의</a>
     </div>
   </header>
 
@@ -124,43 +133,36 @@ const sections = [
       </div>
 
       <div class="hero__inner">
-        <span class="hero__eyebrow">AI 야학 · 코호트 학습 프로그램</span>
+        <span class="hero__eyebrow">AI 야학 · 로컬 창업 실습 프로그램</span>
         <h1 id="hero-title">
-          돈도 사람도 부족한<br/>
-          로컬 팀을 위한<br/>
+          로컬 창업가를 위한<br/>
           <em>AI 야학.</em>
         </h1>
         <p class="hero__sub">
-          공공기관 주무관, 지역 활동가, 작은 학교 교직원, 1인 창업가.
-          매주 같은 일을 손으로 처리하는 사람들을 위해, 본인의 업무 파일을 들고 와
-          <strong>다음날 책상에서 쓸 도구</strong>를 함께 만들어 갑니다.
+          예비창업가와 소상공인이 실제 사업 자료를 들고 와서
+          지원사업 기획서, SNS 콘텐츠, 고객 응대, AI 부사수를 만드는
+          <strong>실습형 AI 교육</strong>입니다.
         </p>
 
         <div class="hero__cta">
           <a class="btn btn--primary" href={ctaHref} data-ga="cta" data-loc="hero">
-            15분 제안 콜 잡기 →
+            교육 과정 문의하기 →
           </a>
           <a class="btn btn--ghost" href="#difference" data-ga="learn" data-loc="hero">
             먼저 살펴보기
           </a>
         </div>
-
-        <ul class="hero__meta" aria-label="대상">
-          <li><span>대상</span> 공공·교육·로컬 팀</li>
-          <li><span>형식</span> 3-6인 코호트, 2-4회차</li>
-          <li><span>전제</span> 코딩 경험 불필요</li>
-        </ul>
       </div>
     </section>
 
     <div class="shell">
       <!-- Difference -->
       <section id="difference" aria-labelledby="difference-title">
-        <span class="eyebrow">No. 01 — 방법론</span>
-        <h2 id="difference-title">일반 AI 특강과 다릅니다.</h2>
+        <span class="eyebrow">No. 01 — 방식</span>
+        <h2 id="difference-title">내 사업 자료로 시작해, 결과물로 끝납니다.</h2>
         <p class="lede">
-          좋은 슬라이드를 보고 돌아와서 다시 막막해진 경험, 한 번쯤 있을 겁니다.
-          AI 야학은 그 자리에서 본인 일을 끝내고 돌아갑니다.
+          챗GPT 사용법을 배우는 시간이 아닙니다.
+          참가자의 실제 사업 자료를 가져와서 강의실 안에서 결과물까지 만듭니다.
         </p>
 
         <ol class="journey">
@@ -174,35 +176,86 @@ const sections = [
         </ol>
 
         <p class="footnote">
-          1회성 특강도 가능하지만, 야학의 본 트랙은 <strong>같은 동료들과 4회차 이상</strong> 만나는 코호트 과정입니다.
-          서로의 막힌 지점을 보는 게 학습 효율의 핵심입니다.
+          1일 워크숍도 가능하지만, 야학의 본 트랙은 <strong>같은 동료들과 3-4회 이상</strong> 만나는 코호트 과정입니다.
+          처음 쓰는 사람도 따라올 수 있도록 실습과 피드백 시간을 넉넉히 둡니다.
         </p>
       </section>
 
       <!-- Outputs -->
       <section id="outputs" aria-labelledby="outputs-title">
-        <span class="eyebrow">No. 02 — 결과물</span>
-        <h2 id="outputs-title">이런 것들을 만들고 갑니다.</h2>
+        <span class="eyebrow">No. 02 — 프로그램</span>
+        <h2 id="outputs-title">기관 사업 목적에 맞춰 5가지 트랙으로 묶습니다.</h2>
         <p class="lede">
-          매주 손으로 처리하던 업무. 코드 없이, AI가 옆에서 일하게 만드는 방식으로.
+          로컬 창업, 소상공인 디지털 전환, 로컬브랜드 고도화 사업에 맞춰
+          필요한 트랙만 골라 1일 워크숍, 코호트, 마켓톤으로 설계합니다.
         </p>
-        <ul class="chips">
-          {outputs.map((o) => (
-            <li class="chip">{o}</li>
+        <ul class="program-grid">
+          {programTracks.map((program, i) => (
+            <li class="program-card">
+              <div class="program-card__num">{String(i + 1).padStart(2, '0')}</div>
+              <h3>{program.title}</h3>
+              <p>{program.body}</p>
+              <ul class="program-card__outputs">
+                {program.outputs.map((output) => (
+                  <li>{output}</li>
+                ))}
+              </ul>
+            </li>
           ))}
         </ul>
         <p class="footnote">
-          기관 맞춤으로 결과물을 사전 설계합니다. 첫 콜에서 "지금 가장 손이 많이 가는 업무"부터 듣습니다.
+          기관의 사업명, 참여자 수준, 지역 산업군에 맞춰 다시 묶습니다.
+          처음에는 참가자가 손에 쥐고 갈 결과물부터 정합니다.
         </p>
+      </section>
+
+    </div>
+
+    <!-- Studio / gallery -->
+    <section id="studio" class="studio" aria-labelledby="studio-title">
+      <div class="studio__head">
+        <span class="eyebrow eyebrow--dark">No. 03 — 풍경</span>
+        <h2 id="studio-title">밤이 깊을수록, 손에 잡히는 것이 생긴다.</h2>
+        <p>강의실 사진과 코호트 작업 풍경입니다.</p>
+      </div>
+      <div class="studio__carousel" id="studio-carousel" role="region" aria-label="강의 현장 사진">
+        <div class="studio__track" aria-hidden="false">
+          {galleryLoop.map((src, i) => (
+            <figure class="studio__cell" aria-hidden={i >= gallery.length ? 'true' : 'false'}>
+              <img src={src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
+            </figure>
+          ))}
+        </div>
+      </div>
+      <div class="studio__controls" aria-label="사진 넘기기">
+        <button type="button" class="studio__control" data-carousel-dir="-1" aria-label="이전 사진">←</button>
+        <button type="button" class="studio__control" data-carousel-dir="1" aria-label="다음 사진">→</button>
+      </div>
+    </section>
+
+    <div class="shell">
+      <!-- Quotes -->
+      <section id="voices" aria-labelledby="voices-title">
+        <span class="eyebrow">No. 04 — 후기</span>
+        <h2 id="voices-title">강의실을 나간 다음에 남는 것.</h2>
+
+        <div class="quotes">
+          {quotes.map((q) => (
+            <figure class="quote">
+              <blockquote>{q.body}</blockquote>
+              <figcaption>— {q.by}</figcaption>
+            </figure>
+          ))}
+        </div>
       </section>
 
       <!-- Expertise -->
       <section id="expertise" aria-labelledby="expertise-title">
-        <span class="eyebrow">No. 03 — 전문성</span>
-        <h2 id="expertise-title">기관 결재 라인에 안전하게 올릴 수 있는 강사.</h2>
+        <span class="eyebrow">No. 05 — 진행자</span>
+        <h2 id="expertise-title">로컬 현장에 맞춰 수업을 설계합니다.</h2>
         <p class="lede">
-          AI 엔지니어가 아니라, 비전공자에게 눈높이를 맞추는 교육자.
-          공공·교육·커뮤니티 현장에서 다음과 같이 일해 왔습니다.
+          로컬 창업가와 소상공인, 비전공자들을 위한 AI 교육 경험.
+          각자의 사업 자료를 가져와도 따라올 수 있도록 강의보다 실습과 피드백 중심으로 운영합니다.
         </p>
 
         <ul class="creds">
@@ -214,78 +267,41 @@ const sections = [
           ))}
         </ul>
       </section>
-
-      <!-- Quotes -->
-      <section id="voices" aria-labelledby="voices-title">
-        <span class="eyebrow">No. 04 — 현장의 말</span>
-        <h2 id="voices-title">강의실을 나간 다음에 남는 것.</h2>
-
-        <div class="quotes">
-          {quotes.map((q) => (
-            <figure class="quote">
-              <blockquote>{q.body}</blockquote>
-              <figcaption>— {q.by}</figcaption>
-            </figure>
-          ))}
-        </div>
-        <p class="footnote">인용은 모두 동의 받은 placeholder입니다. 실명·기관명은 협의 후 게재합니다.</p>
-      </section>
     </div>
-
-    <!-- Studio / gallery -->
-    <section id="studio" class="studio" aria-labelledby="studio-title">
-      <div class="studio__head">
-        <span class="eyebrow eyebrow--dark">No. 05 — 야학 풍경</span>
-        <h2 id="studio-title">밤이 깊을수록, 손에 잡히는 것이 생긴다.</h2>
-        <p>강의실 사진과 코호트 작업 풍경입니다.</p>
-      </div>
-      <div class="studio__carousel" role="region" aria-label="강의 현장 사진">
-        <div class="studio__track" aria-hidden="false">
-          {galleryLoop.map((src, i) => (
-            <figure class="studio__cell" aria-hidden={i >= gallery.length ? 'true' : 'false'}>
-              <img src={src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
-            </figure>
-          ))}
-        </div>
-      </div>
-    </section>
 
     <!-- Form -->
     <section id="form" class="form-section" aria-labelledby="form-title">
       <div class="form-shell">
-        <span class="eyebrow eyebrow--dark">No. 06 — 시작</span>
-        <h2 id="form-title">15분만 통화해도 충분합니다.</h2>
+        <span class="eyebrow eyebrow--dark">No. 06 — 문의</span>
+        <h2 id="form-title">우리 기관에 맞는 과정으로 상담해 보세요.</h2>
         <p class="lede lede--dark">
-          "지금 가장 손이 많이 가는 업무가 무엇인지" 한 가지만 들으면, 야학 트랙으로 풀 수 있는지 그 자리에서 답해 드립니다.
+          대상, 예산, 회차, 참가자 수준을 알려주시면 맞는 형태로 제안드립니다.
         </p>
 
-        <form class="contact-form" onsubmit="event.preventDefault(); return false;" aria-describedby="form-note">
+        <form class="contact-form" onsubmit="return false;" aria-describedby="form-note">
           <label>
             <span>이름 / 직함</span>
-            <input type="text" name="name" placeholder="예: 김주무관 / 평생학습팀" autocomplete="name" />
+            <input type="text" name="name" autocomplete="name" />
           </label>
           <label>
             <span>소속 기관·팀</span>
-            <input type="text" name="org" placeholder="예: ○○청년센터 / ○○대학교" autocomplete="organization" />
+            <input type="text" name="org" autocomplete="organization" />
           </label>
           <label>
             <span>연락 받을 채널</span>
-            <input type="text" name="contact" placeholder="이메일 또는 전화 (편하신 쪽)" />
+            <input type="text" name="contact" />
           </label>
           <label class="contact-form__full">
-            <span>지금 가장 손이 많이 가는 업무 한 줄</span>
-            <textarea name="pain" rows="3" placeholder="예: 매주 정산 보고서 양식이 다 달라서 시간이 너무 듭니다."></textarea>
+            <span>희망 과정이나 참가자 상황</span>
+            <textarea name="pain" rows="3"></textarea>
           </label>
 
           <div class="contact-form__cta">
-            <button type="submit" class="btn btn--primary btn--lg">제안 콜 요청 보내기</button>
+            <button type="submit" class="btn btn--primary btn--lg">맞춤 교육 문의 보내기</button>
             <a href={`mailto:${mailAddr}`} class="contact-form__alt" data-ga="mail" data-loc="form">
               또는 메일로 직접 보내기 →
             </a>
           </div>
-          <p id="form-note" class="contact-form__note">
-            제출 시 별도 처리 없이 hello@ai-night.study 로 회신을 약속드립니다. 마케팅 수신·DB 저장 없음.
-          </p>
         </form>
       </div>
     </section>
@@ -295,20 +311,22 @@ const sections = [
     <div class="footer-inner">
       <h2 id="footer-title">AI 야학</h2>
       <p class="footer-tag">
-        동아시아 로컬 팀이 AI로 더 오래 버틸 수 있도록.
+        로컬 창업가와 소상공인이 AI로 더 가볍게 일할 수 있도록.
       </p>
       <div class="footer-links">
-        <a href="#form" data-ga="cta" data-loc="footer">15분 제안 콜 잡기</a>
+        <a href="#form" data-ga="cta" data-loc="footer">교육 과정 문의하기</a>
         <a href={`mailto:${mailAddr}`} data-ga="mail" data-loc="footer">{mailAddr}</a>
       </div>
       <p class="footer-fine">
-        AI 야학 · 2026 · 한국에서 비영리·공공·교육·로컬 팀을 위해 운영합니다.
+        AI 야학 · 2026 · 중간지원조직과 함께 로컬 창업가·소상공인을 위한 실습형 AI 교육을 운영합니다.
       </p>
     </div>
   </footer>
 
   <!-- Mobile sticky CTA -->
   <a href={ctaHref} class="sticky-cta" data-ga="cta" data-loc="sticky">
-    15분 제안 콜 잡기 →
+    교육 과정 문의하기 →
   </a>
+
+  <script is:inline src="/studio-carousel.js" defer></script>
 </Base>
