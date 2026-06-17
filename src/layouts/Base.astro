@@ -115,6 +115,12 @@ import '../styles/global.css';
           });
         });
 
+        document.querySelectorAll('[data-ga="cta"]').forEach((el) => {
+          el.addEventListener('click', () => {
+            fire('cta_click', { location: el.getAttribute('data-loc') || 'unknown' });
+          });
+        });
+
         document.querySelectorAll('[data-ga="pdf"]').forEach((el) => {
           el.addEventListener('click', () => {
             fire('pdf_download', { location: el.getAttribute('data-loc') || 'unknown' });
