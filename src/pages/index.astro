@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 
-const ctaHref = '#form';
+const ctaHref = 'https://calendly.com/ai-night/15min';
 const mailAddr = 'hello@ai-night.study';
 
 const heroImage = '/assets/photo_2026-05-29_18-47-27.jpg';
@@ -135,7 +135,7 @@ const sections = [
           <a href={`#${s.id}`}>{s.label}</a>
         ))}
       </nav>
-      <a class="masthead__cta" href={ctaHref} data-ga="cta" data-loc="nav">교육 문의</a>
+      <a class="masthead__cta" href={ctaHref} target="_blank" rel="noreferrer" data-ga="cta" data-loc="nav">상담 예약</a>
     </div>
   </header>
 
@@ -159,8 +159,8 @@ const sections = [
         </p>
 
         <div class="hero__cta">
-          <a class="btn btn--primary" href={ctaHref} data-ga="cta" data-loc="hero">
-            교육 과정 문의하기 →
+          <a class="btn btn--primary" href={ctaHref} target="_blank" rel="noreferrer" data-ga="cta" data-loc="hero">
+            15분 상담 예약하기 →
           </a>
         </div>
 
@@ -299,9 +299,17 @@ const sections = [
     <section id="form" class="form-section" aria-labelledby="form-title">
       <div class="form-shell">
         <span class="eyebrow eyebrow--dark">문의</span>
-        <h2 id="form-title">우리 기관에 맞는 과정으로 상담해 보세요.</h2>
+        <h2 id="form-title">우리 기관에 맞는 과정인지 15분만 확인해 보세요.</h2>
         <p class="lede lede--dark">
-          대상, 예산, 회차, 참가자 수준을 알려주시면 맞는 형태로 제안드립니다.
+          대상, 일정, 예산, 참가자 수준을 짧게 듣고 맞는 운영 방식을 함께 정리합니다.
+        </p>
+
+        <a class="btn btn--primary btn--lg form-section__booking" href={ctaHref} target="_blank" rel="noreferrer" data-ga="cta" data-loc="form">
+          15분 상담 예약하기 →
+        </a>
+
+        <p class="form-section__fallback">
+          바로 예약이 어렵다면 문의 내용을 남겨주세요.
         </p>
 
         <form class="contact-form">
@@ -323,7 +331,7 @@ const sections = [
           </label>
 
           <div class="contact-form__cta">
-            <button type="submit" class="btn btn--primary btn--lg">맞춤 교육 문의 보내기</button>
+            <button type="submit" class="btn btn--primary btn--lg">문의 내용 보내기</button>
           </div>
         </form>
       </div>
@@ -343,8 +351,8 @@ const sections = [
   </footer>
 
   <!-- Mobile sticky CTA -->
-  <a href={ctaHref} class="sticky-cta" data-ga="cta" data-loc="sticky">
-    교육 과정 문의하기 →
+  <a href={ctaHref} class="sticky-cta" target="_blank" rel="noreferrer" data-ga="cta" data-loc="sticky">
+    15분 상담 예약하기 →
   </a>
 
   <script>

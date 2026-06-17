@@ -730,6 +730,17 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   padding: 0 20px;
 }
 
+.form-section__booking {
+  margin-bottom: 22px;
+}
+
+.form-section__fallback {
+  margin: 0 0 14px;
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
 .contact-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
