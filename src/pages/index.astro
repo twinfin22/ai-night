@@ -308,32 +308,29 @@ const sections = [
           15분 상담 예약하기 →
         </a>
 
-        <p class="form-section__fallback">
-          바로 예약이 어렵다면 문의 내용을 남겨주세요.
-        </p>
-
-        <form class="contact-form">
-          <label>
-            <span>이름 / 직함</span>
-            <input type="text" name="name" autocomplete="name" />
-          </label>
-          <label>
-            <span>소속 기관·팀</span>
-            <input type="text" name="org" autocomplete="organization" />
-          </label>
-          <label>
-            <span>연락 받을 채널</span>
-            <input type="text" name="contact" />
-          </label>
-          <label class="contact-form__full">
-            <span>희망 과정이나 참가자 상황</span>
-            <textarea name="pain" rows="3"></textarea>
-          </label>
-
-          <div class="contact-form__cta">
-            <button type="submit" class="btn btn--primary btn--lg">문의 내용 보내기</button>
-          </div>
-        </form>
+        <details class="form-fallback">
+          <summary>
+            <span class="form-fallback__icon" aria-hidden="true">✉</span>
+            <span class="form-fallback__label">이메일이 편하시면 여기로 남겨주세요</span>
+          </summary>
+          <form class="contact-form">
+            <label class="contact-form__full">
+              <span>이름</span>
+              <input type="text" name="name" autocomplete="name" />
+            </label>
+            <label class="contact-form__full">
+              <span>이메일</span>
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+            <label class="contact-form__full">
+              <span>관심 있는 과정이나 상황 (선택)</span>
+              <textarea name="pain" rows="2"></textarea>
+            </label>
+            <div class="contact-form__cta">
+              <button type="submit" class="btn btn--primary">보내기</button>
+            </div>
+          </form>
+        </details>
       </div>
     </section>
   </main>
@@ -437,11 +434,10 @@ const sections = [
       const subject = encodeURIComponent('[AI 야학] 맞춤 교육 문의');
       const body = encodeURIComponent(
         [
-          `이름 / 직함: ${data.get('name') || ''}`,
-          `소속 기관·팀: ${data.get('org') || ''}`,
-          `연락 받을 채널: ${data.get('contact') || ''}`,
+          `이름: ${data.get('name') || ''}`,
+          `이메일: ${data.get('email') || ''}`,
           '',
-          `희망 과정이나 참가자 상황: ${data.get('pain') || ''}`,
+          `메모: ${data.get('pain') || ''}`,
         ].join('\n'),
       );
       window.location.href = `mailto:${mailAddress}?subject=${subject}&body=${body}`;
