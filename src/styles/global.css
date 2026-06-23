@@ -960,6 +960,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   align-items: flex-start;
   margin-top: 4px;
 }
+.contact-form__status {
+  margin: 0;
+  min-height: 24px;
+  font-size: 14px;
+  color: var(--ink-mute);
+}
+.contact-form__status[data-state="success"] { color: var(--amber); }
+.contact-form__status[data-state="error"] { color: var(--warn); }
+.contact-form button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
 @media (max-width: 600px) {
   .contact-form { padding: 16px; }
 }

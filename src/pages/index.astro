@@ -376,6 +376,7 @@ const sections = [
             </label>
             <div class="contact-form__cta">
               <button type="submit" class="btn btn--primary">보내기</button>
+              <p class="contact-form__status" role="status" aria-live="polite"></p>
             </div>
           </form>
         </details>
@@ -403,7 +404,6 @@ const sections = [
   <script>
     const stickyCta = document.querySelector('.sticky-cta');
     const hero = document.querySelector('.hero');
-    const mailAddress = 'hello@ai-night.study';
     const updateStickyCta = () => {
       if (!stickyCta || !hero) return;
       const trigger = Math.min(hero.clientHeight * 0.72, 620);
@@ -475,20 +475,42 @@ const sections = [
     }, 3200);
 
     const form = document.querySelector('.contact-form');
-    form?.addEventListener('submit', (event) => {
+    const formStatus = document.querySelector('.contact-form__status');
+    const submitButton = form?.querySelector('button[type="submit"]');
+    form?.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!(form instanceof HTMLFormElement)) return;
+      if (!(formStatus instanceof HTMLElement)) return;
+      if (!(submitButton instanceof HTMLButtonElement)) return;
       const data = new FormData(form);
-      const subject = encodeURIComponent('[AI 야학] 맞춤 교육 문의');
-      const body = encodeURIComponent(
-        [
-          `이름: ${data.get('name') || ''}`,
-          `이메일: ${data.get('email') || ''}`,
-          '',
-          `메모: ${data.get('pain') || ''}`,
-        ].join('\n'),
-      );
-      window.location.href = `mailto:${mailAddress}?subject=${subject}&body=${body}`;
+      submitButton.disabled = true;
+      submitButton.textContent = '보내는 중';
+      formStatus.dataset.state = 'pending';
+      formStatus.textContent = '전송 중입니다.';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: data.get('name') || '',
+            email: data.get('email') || '',
+            pain: data.get('pain') || '',
+          }),
+        });
+
+        if (!res.ok) throw new Error('request failed');
+
+        form.reset();
+        formStatus.dataset.state = 'success';
+        formStatus.textContent = '문의가 전송되었습니다.';
+      } catch {
+        formStatus.dataset.state = 'error';
+        formStatus.textContent = '전송에 실패했습니다. hello@ai-night.study 로 직접 보내주세요.';
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = '보내기';
+      }
     });
   </script>
 </Base>
