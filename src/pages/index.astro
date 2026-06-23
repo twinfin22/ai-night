@@ -6,12 +6,15 @@ const mailAddr = 'hello@ai-night.study';
 
 const heroImage = '/assets/photo_2026-05-29_18-47-27.jpg';
 const bookclubHref = 'https://www.instagram.com/p/DZkCcupEZOb/?img_index=1';
+const profileImage = '/assets/nomad-profile-square.webp';
 
 const gallery = [
+  { src: '/assets/namhae-vibe-coding-workshop.webp', variant: 'poster', href: 'https://www.instagram.com/p/DWNulOLk-ax/?img_index=3', alt: '남해 청년센터 바이브 코딩 워크숍 안내 이미지' },
+  { src: '/assets/ai-yahak-workshop-session.webp', variant: 'standard', alt: 'AI 야학 강의 현장' },
+  { src: '/assets/ai-yahak-metal-room-session.webp', variant: 'portrait', alt: '금속 벽 강의장에서 진행한 AI 야학 현장' },
   { src: '/assets/photo_2026-06-16_17-36-00.jpg', variant: 'standard', alt: '참가자와 함께한 현장' },
   { src: '/assets/photo_2026-06-02_22-17-02.jpg', variant: 'standard', alt: '라운지 그룹 세션' },
   { src: '/assets/ai-bookclub.png', variant: 'poster', href: bookclubHref, alt: 'AI 야학 독서클럽 인스타그램 포스터' },
-  { src: '/assets/photo_2025-07-10_19-07-18_2.jpg', variant: 'wide', alt: '강의실 실습 현장' },
   { src: '/assets/DSC05866.jpg', variant: 'landscape', alt: '강의실 참가자' },
   { src: '/assets/DSC05669.jpg', variant: 'portrait', alt: '강의 연단 발표' },
   { src: '/assets/DSC07506.jpg', variant: 'landscape', alt: '패널 토크 현장' },
@@ -68,61 +71,55 @@ const programTracks = [
   },
 ];
 
-const credentials = [
+const expertiseGroups = [
   {
-    org: '로컬노마드 (localnomad.club)',
-    role: '디지털 노마드를 위한 동아시아 소프트랜딩 서비스 대표',
+    label: '테크 업계 최전선 근무 경험',
+    headline: '테크 업계의 변화 속에서, 현장에 필요한 적용 방식을 익혀 왔습니다.',
+    items: [
+      { text: '테크 업계 8년+ 근무' },
+      { text: '전) 글로벌 테크 스타트업 APAC 지역 매니저' },
+      { text: '모두의연구소 <AI 데이터 사이언티스트> 과정 수료', href: 'https://aiffel.io/' },
+      { text: 'Anthropic Claude 공식 코스 수료', href: 'https://anthropic.skilljar.com/' },
+    ],
   },
   {
-    org: 'nonce community',
-    role: '프론티어 테크 코리빙·코워킹 커뮤니티 초기 팀 (nonce.community)',
+    label: '실무형 수업 운영 경력',
+    headline: '비전공자와 실무자가 따라오는 AI 수업을 운영했습니다.',
+    items: [
+      { text: '남해 청년센터 <바이브코딩> 워크숍', href: 'https://www.instagram.com/p/DWNulOLk-ax/?img_index=1' },
+      { text: '경북 청도 <AI 온보딩> 및 <AI와 함께 일하는 방법을 배우는 4주 : AI 야학> 운영', href: 'https://gbcommons.org/' },
+      { text: '비수도권 지역 소상공인 1:1 AI 컨설팅 진행' },
+    ],
   },
   {
-    org: '<코리안 노마드의 출근길 뉴스레터>',
-    role: '연재 중 (maily.so/asthedaysgoby)',
+    label: '커뮤니티형 프로그램 운영 경력',
+    headline: '사람이 모이고 배우는 장을 직접 만들고 운영했습니다.',
+    items: [
+      { text: '디지털 노마드를 위한 동아시아 소프트랜딩 서비스 <로컬노마드> 대표', href: 'https://localnomad.club/' },
+      { text: '노마드 커뮤니티 팝업 마을 <ProtoVille> 운영', href: 'https://protoville.xyz/' },
+      { text: '전) 프론티어 테크 코리빙·코워킹 커뮤니티 <nonce> 운영팀', href: 'https://nonce.community/' },
+    ],
   },
-  {
-    org: 'LinkedIn',
-    role: 'linkedin.com/in/gen1234',
-  },
-  {
-    org: '남해 청년센터',
-    role: '지역 청년 AI 워크숍',
-  },
-  {
-    org: '경북시민재단',
-    role: '로컬 창업가 대상 <AI 온보딩> 운영 및 <AI 야학>, <AI 독서클럽> 준비 중',
-  },
-  {
-    org: '서울 사립대 / 공립 교사',
-    role: '1:1 AI 과외 (재직자)',
-  },
-  {
-    org: '모두의연구소',
-    role: '<AI 데이터 사이언티스트> 과정 수료',
-  },
-  {
-    org: 'Anthropic Courses',
-    role: 'Claude 공식 코스 수료',
-  },
-  {
-    org: '테크 온보딩·커뮤니티 운영 8년+',
-    role: '커뮤니티·컨퍼런스 운영 경력',
-  },
-  {
-    org: '연세대학교 경영학과',
-    role: '졸업',
-  },
-  {
-    org: '글로벌 테크 스타트업',
-    role: '(전) APAC 지역 담당',
-  },
+];
+
+const supportingCredentials = [
+  { text: '<코리안 노마드의 출근길 뉴스레터> 연재 중', href: 'https://maily.so/asthedaysgoby' },
+  { text: '연세대학교 경영학과 졸업' },
+  { text: 'LinkedIn', href: 'https://www.linkedin.com/in/gen1234/' },
 ];
 
 const quotes = [
   {
     body: 'AI에게 단순히 명령을 입력하는 것이 아니라, 원하는 결과를 얻기 위해 어떻게 질문하고 요청해야 하는지 배울 수 있었던 유익한 시간이었습니다. 그동안 AI가 어렵고 막연하게 느껴졌는데, 이번 강의를 통해 보다 친숙하게 다가갈 수 있었고 앞으로 실생활과 업무에도 적극 활용해보고 싶다는 생각이 들었습니다.',
     by: '경북시민재단 기획실 PM',
+  },
+  {
+    body: '시골에서 부모님과 작은 사업을 운영하고 있는데 홍보 및 운영, 관리의 자동화에 전혀 신경 쓰지 않고 그냥 흘러가는대로 지내다 우연한 기회에 수업을 알고 듣게 되었습니다. 기대했던 것보다 훨씬 좋은 배움이었습니다. 저희 지역 특징을 살린 사업 홍보, 고객 응대 및 예약 자동화 등의 업무를 AI를 통해 보다 수월히 할 수 있게 되었고, 강사님도 완전 초보인 제가 잘 따라올 수 있도록 반복적으로 친절하게 잘 알려주셨습니다. 앞으로도 활용가능한 툴의 기초를 잡을 수 있는 훌륭한 경험이었습니다.',
+    by: '전북 무주 자영업자',
+  },
+  {
+    body: '수업 평가와 자료 개발에 AI를 적용하는 방법을 배우면서, 수업 준비에 드는 품과 시간을 줄이면서도 더 풍성한 수업을 준비할 수 있다는 가능성을 경험했습니다. 아직은 걸음마 단계이지만, 이번 강의를 통해 AI 활용을 조금씩 연습하고 확장해 갈 수 있는 기반을 다질 수 있었습니다. 앞으로 수업을 비롯한 삶의 여러 영역에서 AI에게 적절히 도움을 받을 수 있다면, 피로감을 덜고 보다 현명하게 삶을 운영해 나갈 수 있으리라 기대합니다.',
+    by: '서울시 교사',
   },
 ];
 
@@ -131,7 +128,7 @@ const sections = [
   { id: 'outputs', label: '교육 주제' },
   { id: 'studio', label: '현장 사례' },
   { id: 'voices', label: '참가자 후기' },
-  { id: 'expertise', label: '강사 이력' },
+  { id: 'expertise', label: '강사 소개' },
   { id: 'form', label: '문의' },
 ];
 ---
@@ -294,20 +291,55 @@ const sections = [
 
       <!-- Expertise -->
       <section id="expertise" aria-labelledby="expertise-title">
-        <span class="eyebrow">강사 이력</span>
-        <h2 id="expertise-title">교육, 커뮤니티, 테크 현장을 함께 경험했습니다.</h2>
-        <p class="lede">
-          비전공자와 실무자가 기술을 자기 일에 붙일 수 있도록 돕는 교육 경험을 바탕으로 진행합니다.
-        </p>
+        <span class="eyebrow">검증된 역량</span>
+        <h2 id="expertise-title">현장에서 검증된 AI 실습 교육.</h2>
+        <div class="expertise-layout">
+          <div>
+            <p class="lede">
+              이력의 핵심은 이름 나열이 아니라, 로컬 현장에서 AI를 실제 업무 결과물로 바꿔본 경험입니다.
+            </p>
 
-        <ul class="creds">
-          {credentials.map((c) => (
-            <li class="cred">
-              <div class="cred__org">{c.org}</div>
-              <div class="cred__role">{c.role}</div>
-            </li>
-          ))}
-        </ul>
+            <div class="expertise-grid">
+              {expertiseGroups.map((group, i) => (
+                <article class="expertise-card" aria-labelledby={`expertise-group-${i}`}>
+                  <div class="expertise-card__label">{group.label}</div>
+                  <h3 id={`expertise-group-${i}`}>{group.headline}</h3>
+                  <ul class="expertise-card__items">
+                    {group.items.map((item) => (
+                      <li>
+                        {item.href ? (
+                          <a href={item.href} target="_blank" rel="noreferrer">{item.text}</a>
+                        ) : (
+                          item.text
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+
+          </div>
+
+          <figure class="profile-sidebar">
+            <img src={profileImage} alt="AI 야학 강사 프로필 사진" loading="lazy" />
+            <div class="profile-sidebar__body">
+              <figcaption>
+                <strong>이젠</strong>
+                <span>5년차 디지털 노마드</span>
+              </figcaption>
+              <div class="profile-sidebar__credentials" aria-label="보조 이력">
+                {supportingCredentials.map((item) => (
+                  item.href ? (
+                    <a href={item.href} target="_blank" rel="noreferrer">{item.text}</a>
+                  ) : (
+                    <span>{item.text}</span>
+                  )
+                ))}
+              </div>
+            </div>
+          </figure>
+        </div>
       </section>
     </div>
 
