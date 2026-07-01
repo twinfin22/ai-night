@@ -72,6 +72,24 @@ const programTracks = [
   },
 ];
 
+const practiceModules = [
+  {
+    tag: '웹사이트',
+    title: '내 사업 소개 페이지 만들기',
+    body: '소개, 대상, 제공 내용, 문의 동선을 한 장짜리 페이지로 정리합니다.',
+    chips: ['소개 문장', '페이지 구조', '문의 CTA'],
+    status: '시작하기',
+    href: '/modules/website/',
+  },
+  {
+    tag: '블로그',
+    title: '내 자료로 문의 받는 글 만들기',
+    body: '기존 자료 하나로 독자 질문을 찾고, 네이버 블로그에 올릴 짧은 초안까지 만듭니다.',
+    chips: ['자료 1개', '글감 1개', '초안 1개'],
+    status: '준비 중',
+  },
+];
+
 const expertiseGroups = [
   {
     label: '테크 업계 최전선 근무 경험',
@@ -232,6 +250,38 @@ const sections = [
         <p class="footnote">
           필요한 트랙만 골라 구성합니다. 기준은 강의 목차가 아니라 참가자가 가져갈 결과물입니다.
         </p>
+      </section>
+
+      <section id="modules" aria-labelledby="modules-title">
+        <span class="eyebrow">실습 모듈</span>
+        <h2 id="modules-title">바로 따라 할 수 있는 작은 과제입니다.</h2>
+        <ul class="module-card-grid">
+          {practiceModules.map((module) => (
+            <li>
+              {module.href ? (
+                <a class="module-card module-card--link" href={module.href}>
+                  <span class="module-card__tag">{module.tag}</span>
+                  <h3>{module.title}</h3>
+                  <p>{module.body}</p>
+                  <ul>
+                    {module.chips.map((chip) => <li>{chip}</li>)}
+                  </ul>
+                  <strong>{module.status}</strong>
+                </a>
+              ) : (
+                <article class="module-card" aria-disabled="true">
+                  <span class="module-card__tag">{module.tag}</span>
+                  <h3>{module.title}</h3>
+                  <p>{module.body}</p>
+                  <ul>
+                    {module.chips.map((chip) => <li>{chip}</li>)}
+                  </ul>
+                  <strong>{module.status}</strong>
+                </article>
+              )}
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
 
