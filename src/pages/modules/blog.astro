@@ -1,0 +1,305 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const pageTitle = '내 자료로 문의 받는 글 만들기 — AI 야학';
+const pageDescription = '기존 자료 하나로 독자 질문을 찾고, 짧은 블로그 초안까지 만드는 AI 야학 자율학습 모듈.';
+
+const outcomes = ['자료 1개', '글감 1개', '초안 1개'];
+const checklist = [
+  '자료 1개',
+  '글감 1개',
+  '초안 또는 발행글 1개',
+  '선택: 다음 20분 재개 프롬프트 1개',
+];
+const platforms = [
+  { title: '기본', body: '네이버 블로그에 올릴 글로 생각한다.' },
+  { title: '대안', body: '브런치, 티스토리, 홈페이지 글은 초안을 만든 뒤 바꾼다.' },
+];
+
+const steps = [
+  {
+    num: '01',
+    title: '목표 고르기',
+    body: '이번 글로 얻고 싶은 결과를 하나만 고른다. 문의, 신뢰, 신청 중 하나면 충분하다.',
+    result: '글의 방향 1개',
+  },
+  {
+    num: '02',
+    title: '내 자료 1개 넣기',
+    body: '기존 글, 후기, FAQ, 상품 설명, 사진 설명, 링크 중 하나만 넣는다.',
+    result: '자료 핵심 3줄',
+  },
+  {
+    num: '03',
+    title: '글감 1개 고르기',
+    body: 'AI가 뽑은 독자 질문 3개 중 내가 실제 경험으로 답할 수 있는 질문을 고른다.',
+    result: '독자 질문 1개',
+  },
+  {
+    num: '04',
+    title: '초안 일부 쓰기',
+    body: '완성형 장문이 아니라 고칠 수 있는 초안을 만든다. 없는 내용은 만들지 않는다.',
+    result: '짧은 초안',
+  },
+  {
+    num: '05',
+    title: '다음 할 일 저장',
+    body: '오늘 어디까지 했는지와 다음 20분에 이어갈 문장만 남긴다.',
+    result: '재개 프롬프트',
+  },
+];
+
+const corePrompts = [
+  {
+    id: 'goal',
+    title: '목표 고르기',
+    note: '처음 시작할 때 붙여넣기',
+    text: `나는 내 자료를 바탕으로 블로그 글을 하나 쓰려고 해.
+
+이번 글의 목표를 먼저 고르고 싶어.
+아래 3개 중 무엇이 가장 맞는지 나에게 질문해서 골라줘.
+
+1. 문의 받기
+2. 신뢰 만들기
+3. 수업/서비스 신청으로 연결하기
+
+질문은 한 번에 하나씩만 해줘.
+내 답을 듣고 목표를 하나로 정한 뒤, 이 글에서 피해야 할 방향도 3줄로 말해줘.`,
+  },
+  {
+    id: 'material',
+    title: '내 자료 넣기',
+    note: '자료 하나를 글감으로 바꿀 때',
+    text: `아래 자료 하나를 블로그 글감으로 바꿔줘.
+
+조건:
+- 자료에 없는 내용은 만들지 마.
+- 실제 경험처럼 보이게 꾸미지 마.
+- 독자가 궁금해할 질문을 먼저 찾아줘.
+- 블로그 글로 쓰기 어려운 부분도 솔직히 말해줘.
+
+자료:
+[여기에 기존 글, 후기, FAQ, 상품 설명, 사진 설명, 링크 내용을 붙여넣기]
+
+출력:
+1. 이 자료의 핵심 3줄
+2. 독자 질문 3개
+3. 글로 쓰면 좋은 질문 1개
+4. 쓰면 안 되는 방향`,
+  },
+  {
+    id: 'draft',
+    title: '짧은 초안 쓰기',
+    note: '고칠 수 있는 첫 초안 만들기',
+    text: `아래 독자 질문과 자료를 바탕으로 블로그 초안을 써줘.
+
+독자 질문:
+[질문]
+
+사용할 자료:
+[자료 요약]
+
+글 구조:
+1. 독자가 겪는 문제
+2. 내가 가진 자료나 경험
+3. 해결 흐름
+4. 따라 할 체크리스트
+5. 문의/신청/다음 행동
+
+조건:
+- 한국어로 써줘.
+- 문장은 짧게.
+- 과장하지 마.
+- "혁신적", "최적화", "차별화" 같은 말 쓰지 마.
+- 자료에 없는 내용은 만들지 마.`,
+  },
+  {
+    id: 'resume',
+    title: '20분 재개하기',
+    note: '수업 다음 시간에 이어갈 때',
+    text: `지금까지 한 일을 요약해줘.
+그리고 다음 20분에 그대로 붙여넣고 이어갈 프롬프트를 만들어줘.
+
+포함할 것:
+1. 이번 글의 목표
+2. 사용한 자료
+3. 고른 독자 질문
+4. 지금까지 완성한 것
+5. 아직 안 된 것
+6. 다음 20분에 할 일 하나
+7. 이어서 쓸 프롬프트`,
+  },
+];
+
+const polishPrompt = {
+  id: 'polish',
+  title: 'AI티 제거',
+  note: '초안이 있을 때만 사용',
+  text: `아래 블로그 초안을 고쳐줘.
+
+특히 봐야 할 것:
+1. AI가 쓴 티 나는 문장
+2. 너무 추상적인 표현
+3. 근거 없는 주장
+4. 자료와 연결이 약한 문단
+5. 독자에게 도움 안 되는 문단
+6. 너무 긴 문장
+
+출력:
+1. 문제점
+2. 바로 고친 버전
+3. 수정 전/후 차이
+4. 아직 찜찜한 부분`,
+};
+
+const advancedItems = [
+  '자료 모음 만들기',
+  '색인 카드 만들기',
+  '글감 큐 만들기',
+  '제목/SEO 점검',
+  '발행 후 반응 기록',
+  '인스타/뉴스레터/FAQ 재활용',
+];
+---
+
+<Base title={pageTitle} description={pageDescription} canonicalPath="/modules/blog/">
+  <main class="module-page">
+    <section class="module-hero" aria-labelledby="module-title">
+      <div class="module-hero__bg" aria-hidden="true">
+        <img src="/assets/ai-yahak-workshop-session.webp" alt="" loading="eager" fetchpriority="high" />
+      </div>
+      <div class="module-hero__inner">
+        <a class="module-back" href="/">AI 야학</a>
+        <p class="module-kicker">20분 자율학습 모듈</p>
+        <h1 id="module-title">내 자료로 문의 받는 글 만들기</h1>
+        <p class="module-hero__lede">
+          기존 자료 하나로 독자 질문을 찾고, 짧은 블로그 초안까지 만든다.
+          기본 발행처는 네이버 블로그다.
+        </p>
+        <p class="module-hero__promise">완성보다 시작. 다음 20분에 이어갈 수 있으면 성공이다.</p>
+        <ul class="module-outcomes" aria-label="예상 산출물">
+          {outcomes.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="module-band" aria-labelledby="submit-title">
+      <div class="module-shell module-two-col">
+        <div>
+          <span class="eyebrow">제출 체크리스트</span>
+          <h2 id="submit-title">오늘 끝내야 할 것은 작다.</h2>
+          <p class="lede">
+            블로그 운영 시스템이 아니라 첫 글의 시작점을 만든다. 자료 여러 개, 폴더 구조, 발행 분석은 나중이다.
+          </p>
+        </div>
+        <ul class="module-checklist">
+          {checklist.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="module-shell" aria-labelledby="rule-title">
+      <span class="eyebrow">기본 규칙</span>
+      <h2 id="rule-title">자료에 없는 말은 만들지 않는다.</h2>
+      <div class="module-rule-grid">
+        <p class="lede">
+          이 모듈의 핵심은 AI가 그럴듯하게 쓰는 것이 아니다. 내가 가진 자료와 실제 경험 안에서 쓸 수 있는 질문을 고르는 것이다.
+        </p>
+        <div class="platform-box" aria-label="발행 플랫폼">
+          {platforms.map((item) => (
+            <article>
+              <strong>{item.title}</strong>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="module-band" aria-labelledby="flow-title">
+      <div class="module-shell">
+        <span class="eyebrow">20분 흐름</span>
+        <h2 id="flow-title">한 번에 하나씩만 한다.</h2>
+        <ol class="module-steps">
+          {steps.map((step) => (
+            <li class="module-step">
+              <div class="module-step__num">{step.num}</div>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </div>
+              <strong>{step.result}</strong>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="module-shell" aria-labelledby="prompt-title">
+      <span class="eyebrow">프롬프트팩</span>
+      <h2 id="prompt-title">복사해서 바로 쓴다.</h2>
+      <p class="lede">
+        핵심 4개만 먼저 쓴다. 초안이 생긴 뒤에만 AI티 제거를 연다. 자료에 없는 내용은 끝까지 넣지 않는다.
+      </p>
+      <div class="prompt-grid">
+        {corePrompts.map((prompt) => (
+          <article class="prompt-card">
+            <div class="prompt-card__head">
+              <div>
+                <h3>{prompt.title}</h3>
+                <p>{prompt.note}</p>
+              </div>
+              <button type="button" data-copy-target={`prompt-${prompt.id}`}>복사</button>
+            </div>
+            <pre id={`prompt-${prompt.id}`}><code>{prompt.text}</code></pre>
+          </article>
+        ))}
+      </div>
+
+      <details class="module-details">
+        <summary>초안 고치기 프롬프트 열기</summary>
+        <article class="prompt-card prompt-card--wide">
+          <div class="prompt-card__head">
+            <div>
+              <h3>{polishPrompt.title}</h3>
+              <p>{polishPrompt.note}</p>
+            </div>
+            <button type="button" data-copy-target={`prompt-${polishPrompt.id}`}>복사</button>
+          </div>
+          <pre id={`prompt-${polishPrompt.id}`}><code>{polishPrompt.text}</code></pre>
+        </article>
+      </details>
+    </section>
+
+    <section class="module-shell" aria-labelledby="advanced-title">
+      <span class="eyebrow">더 해보기</span>
+      <h2 id="advanced-title">반복 운영은 첫 성공 뒤에 한다.</h2>
+      <ul class="advanced-list">
+        {advancedItems.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('[data-copy-target]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const target = button.getAttribute('data-copy-target');
+        const node = target ? document.getElementById(target) : null;
+        const text = node?.textContent || '';
+        if (!text) return;
+
+        try {
+          await navigator.clipboard.writeText(text);
+          const before = button.textContent;
+          button.textContent = '복사됨';
+          window.setTimeout(() => {
+            button.textContent = before || '복사';
+          }, 1400);
+        } catch {
+          button.textContent = '실패';
+        }
+      });
+    });
+  </script>
+</Base>
