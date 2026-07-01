@@ -78,8 +78,7 @@ const practiceModules = [
     title: '내 사업 소개 페이지 만들기',
     body: '소개, 대상, 제공 내용, 문의 동선을 한 장짜리 페이지로 정리하는 실습입니다.',
     outputs: ['소개 문장', '페이지 구조', '문의 CTA'],
-    href: '',
-    status: '준비 중',
+    href: '/modules/website/',
   },
   {
     label: '블로그',
@@ -281,7 +280,7 @@ const sections = [
                   <ul class="practice-card__outputs">
                     {module.outputs.map((output) => <li>{output}</li>)}
                   </ul>
-                  <span class="practice-card__soon">{module.status}</span>
+                  <span class="practice-card__soon">준비 중</span>
                 </div>
               )}
             </li>
