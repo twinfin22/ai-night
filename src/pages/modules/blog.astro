@@ -1,60 +1,19 @@
 ---
-import Base from '../../layouts/Base.astro';
-
-const pageTitle = '내 자료로 문의 받는 글 만들기 — AI 야학';
-const pageDescription = '기존 자료 하나로 독자 질문을 찾고, 짧은 블로그 초안까지 만드는 AI 야학 자율학습 모듈.';
-
-const outcomes = ['자료 1개', '글감 1개', '초안 1개'];
-const checklist = [
-  '자료 1개',
-  '글감 1개',
-  '초안 또는 발행글 1개',
-  '선택: 다음 20분 재개 프롬프트 1개',
-];
-const platforms = [
-  { title: '기본', body: '네이버 블로그에 올릴 글로 생각한다.' },
-  { title: '대안', body: '브런치, 티스토리, 홈페이지 글은 초안을 만든 뒤 바꾼다.' },
-];
+import ModuleTemplate from '../../components/ModuleTemplate.astro';
 
 const steps = [
   {
+    id: 'goal',
     num: '01',
     title: '목표 고르기',
-    body: '이번 글로 얻고 싶은 결과를 하나만 고른다. 문의, 신뢰, 신청 중 하나면 충분하다.',
+    summary: '이번 글로 얻고 싶은 결과를 하나만 고릅니다.',
+    time: '5분',
+    body: '문의, 신뢰, 수업/서비스 신청 중 하나만 고르면 됩니다. 커뮤니티 운영이나 전문성 증명처럼 큰 말은 뒤로 미룹니다.',
+    myTasks: ['지금 필요한 결과 고르기', '피하고 싶은 방향 말하기', '내 말과 맞는지 확인하기'],
+    aiTasks: ['한 번에 하나씩 질문하기', '목표를 하나로 정리하기', '피해야 할 방향 3줄로 말하기'],
+    skills: ['office-hours'],
     result: '글의 방향 1개',
-  },
-  {
-    num: '02',
-    title: '내 자료 1개 넣기',
-    body: '기존 글, 후기, FAQ, 상품 설명, 사진 설명, 링크 중 하나만 넣는다.',
-    result: '자료 핵심 3줄',
-  },
-  {
-    num: '03',
-    title: '글감 1개 고르기',
-    body: 'AI가 뽑은 독자 질문 3개 중 내가 실제 경험으로 답할 수 있는 질문을 고른다.',
-    result: '독자 질문 1개',
-  },
-  {
-    num: '04',
-    title: '초안 일부 쓰기',
-    body: '완성형 장문이 아니라 고칠 수 있는 초안을 만든다. 없는 내용은 만들지 않는다.',
-    result: '짧은 초안',
-  },
-  {
-    num: '05',
-    title: '다음 할 일 저장',
-    body: '오늘 어디까지 했는지와 다음 20분에 이어갈 문장만 남긴다.',
-    result: '재개 프롬프트',
-  },
-];
-
-const corePrompts = [
-  {
-    id: 'goal',
-    title: '목표 고르기',
-    note: '처음 시작할 때 붙여넣기',
-    text: `나는 내 자료를 바탕으로 블로그 글을 하나 쓰려고 해.
+    prompt: `나는 내 자료를 바탕으로 블로그 글을 하나 쓰려고 해.
 
 이번 글의 목표를 먼저 고르고 싶어.
 아래 3개 중 무엇이 가장 맞는지 나에게 질문해서 골라줘.
@@ -68,9 +27,16 @@ const corePrompts = [
   },
   {
     id: 'material',
-    title: '내 자료 넣기',
-    note: '자료 하나를 글감으로 바꿀 때',
-    text: `아래 자료 하나를 블로그 글감으로 바꿔줘.
+    num: '02',
+    title: '내 자료 1개 넣기',
+    summary: '자료 하나를 블로그 글감으로 바꿉니다.',
+    time: '5분',
+    body: '기존 글, 후기, FAQ, 상품 설명, 사진 설명, 웹사이트 링크 중 하나만 넣습니다. 자료 묶음이나 폴더 구조는 아직 만들지 않습니다.',
+    myTasks: ['자료 하나만 고르기', '그대로 붙여넣기', '자료에 없는 내용 지우기'],
+    aiTasks: ['핵심 3줄 찾기', '독자 질문 3개 뽑기', '글로 쓰기 어려운 방향 말하기'],
+    skills: ['copywriting'],
+    result: '자료 핵심 3줄',
+    prompt: `아래 자료 하나를 블로그 글감으로 바꿔줘.
 
 조건:
 - 자료에 없는 내용은 만들지 마.
@@ -88,10 +54,29 @@ const corePrompts = [
 4. 쓰면 안 되는 방향`,
   },
   {
+    id: 'topic',
+    num: '03',
+    title: '글감 1개 고르기',
+    summary: '실제 독자가 물어볼 질문 하나를 고릅니다.',
+    time: '3분',
+    body: '검색어처럼 짧고, 내가 실제 경험으로 답할 수 있는 질문을 고릅니다. 네이버에서 사람들이 찾을 만한 말인지도 같이 봅니다.',
+    myTasks: ['질문 3개 읽기', '내 경험으로 답할 수 있는 것 고르기', '검색어처럼 짧은지 확인하기'],
+    aiTasks: ['질문을 짧게 다듬기', '없는 내용이 필요한 질문 걸러내기', '가장 좋은 질문 1개 추천하기'],
+    skills: ['copywriting'],
+    result: '독자 질문 1개',
+  },
+  {
     id: 'draft',
+    num: '04',
     title: '짧은 초안 쓰기',
-    note: '고칠 수 있는 첫 초안 만들기',
-    text: `아래 독자 질문과 자료를 바탕으로 블로그 초안을 써줘.
+    summary: '완성형 장문이 아니라 고칠 수 있는 초안을 만듭니다.',
+    time: '10분',
+    body: '독자가 겪는 문제, 내가 가진 자료나 경험, 해결 흐름, 체크리스트, 다음 행동 순서로 짧게 씁니다.',
+    myTasks: ['독자 질문 붙여넣기', '사용할 자료 요약 넣기', '과장된 표현 지우기'],
+    aiTasks: ['짧은 초안 쓰기', '자료 밖 내용 만들지 않기', '다음 행동 문장 제안하기'],
+    skills: ['copywriting'],
+    result: '짧은 블로그 초안',
+    prompt: `아래 독자 질문과 자료를 바탕으로 블로그 초안을 써줘.
 
 독자 질문:
 [질문]
@@ -114,28 +99,18 @@ const corePrompts = [
 - 자료에 없는 내용은 만들지 마.`,
   },
   {
-    id: 'resume',
-    title: '20분 재개하기',
-    note: '수업 다음 시간에 이어갈 때',
-    text: `지금까지 한 일을 요약해줘.
-그리고 다음 20분에 그대로 붙여넣고 이어갈 프롬프트를 만들어줘.
-
-포함할 것:
-1. 이번 글의 목표
-2. 사용한 자료
-3. 고른 독자 질문
-4. 지금까지 완성한 것
-5. 아직 안 된 것
-6. 다음 20분에 할 일 하나
-7. 이어서 쓸 프롬프트`,
-  },
-];
-
-const polishPrompt = {
-  id: 'polish',
-  title: 'AI티 제거',
-  note: '초안이 있을 때만 사용',
-  text: `아래 블로그 초안을 고쳐줘.
+    id: 'polish',
+    num: '05',
+    title: 'AI티 제거',
+    summary: '초안이 있을 때만 문장을 고칩니다.',
+    time: '5분',
+    body: '추상적인 칭찬, 근거 없는 말, 내 경험이 없는 것처럼 보이는 문장, 너무 긴 문장을 잡습니다.',
+    myTasks: ['고칠 지적 고르기', '내 말투와 맞는 문장 선택하기', '찜찜한 부분 남기기'],
+    aiTasks: ['문제점 찾기', '바로 고친 버전 쓰기', '수정 전/후 차이 설명하기'],
+    skills: ['copywriting'],
+    helpers: ['design-review'],
+    result: '수정된 초안',
+    prompt: `아래 블로그 초안을 고쳐줘.
 
 특히 봐야 할 것:
 1. AI가 쓴 티 나는 문장
@@ -150,156 +125,55 @@ const polishPrompt = {
 2. 바로 고친 버전
 3. 수정 전/후 차이
 4. 아직 찜찜한 부분`,
-};
-
-const advancedItems = [
-  '자료 모음 만들기',
-  '색인 카드 만들기',
-  '글감 큐 만들기',
-  '제목/SEO 점검',
-  '발행 후 반응 기록',
-  '인스타/뉴스레터/FAQ 재활용',
+  },
 ];
 ---
 
-<Base title={pageTitle} description={pageDescription} canonicalPath="/modules/blog/">
-  <main class="module-page">
-    <section class="module-hero" aria-labelledby="module-title">
-      <div class="module-hero__bg" aria-hidden="true">
-        <img src="/assets/ai-yahak-workshop-session.webp" alt="" loading="eager" fetchpriority="high" />
-      </div>
-      <div class="module-hero__inner">
-        <a class="module-back" href="/">AI 야학</a>
-        <p class="module-kicker">20분 자율학습 모듈</p>
-        <h1 id="module-title">내 자료로 문의 받는 글 만들기</h1>
-        <p class="module-hero__lede">
-          기존 자료 하나로 독자 질문을 찾고, 짧은 블로그 초안까지 만든다.
-          기본 발행처는 네이버 블로그다.
-        </p>
-        <p class="module-hero__promise">완성보다 시작. 다음 20분에 이어갈 수 있으면 성공이다.</p>
-        <ul class="module-outcomes" aria-label="예상 산출물">
-          {outcomes.map((item) => <li>{item}</li>)}
-        </ul>
-      </div>
-    </section>
+<ModuleTemplate
+  title="내 자료로 문의 받는 글 만들기"
+  description="기존 자료 하나로 독자 질문을 찾고, 네이버 블로그에 올릴 짧은 초안까지 만듭니다."
+  canonicalPath="/modules/blog/"
+  heroImage="/assets/ai-yahak-workshop-session.webp"
+  stats={[
+    { label: '예상 시간', value: '약 20분' },
+    { label: '진행 방식', value: '5단계 + 재개' },
+    { label: '최종 결과', value: '짧은 블로그 초안' },
+  ]}
+  prep={{
+    eyebrow: 'before start',
+    title: '먼저 이것만 준비하세요.',
+    items: ['기존 블로그 글, 고객 후기, FAQ, 상품 설명, 사진 설명, 웹사이트 링크 중 1개', '이번 글로 얻고 싶은 결과 1개', '피하고 싶은 말투 1-2개', '다음에 연락받을 방법 또는 신청 링크'],
+    note: '빈칸을 혼자 채우려고 오래 붙잡지 마세요. 1단계에서 AI가 먼저 물어보게 만듭니다.',
+  }}
+  rule={{
+    eyebrow: 'basic rule',
+    title: '자료에 없는 말은 만들지 않는다.',
+    body: '이 모듈의 핵심은 AI가 그럴듯하게 쓰는 것이 아닙니다. 내가 가진 자료와 실제 경험 안에서 쓸 수 있는 질문을 고르는 것입니다.',
+    cards: [
+      { title: '기본', body: '네이버 블로그에 올릴 글로 생각합니다.' },
+      { title: '대안', body: '브런치, 티스토리, 홈페이지 글은 초안을 만든 뒤 바꿉니다.' },
+    ],
+  }}
+  steps={steps}
+  more={{
+    eyebrow: 'next',
+    title: '반복 운영은 첫 성공 뒤에 합니다.',
+    items: ['자료 모음 만들기', '색인 카드 만들기', '글감 큐 만들기', '제목/SEO 점검', '발행 후 반응 기록', '인스타/뉴스레터/FAQ 재활용'],
+  }}
+  pause={{
+    eyebrow: 'pause',
+    title: '중간에 끊기면 이것만 남기세요.',
+    body: '바쁜 수강생에게는 긴 운영표보다 다음 20분에 그대로 이어갈 문장 하나가 더 중요합니다.',
+    prompt: `지금까지 한 일을 요약해줘.
+그리고 다음 20분에 그대로 붙여넣고 이어갈 프롬프트를 만들어줘.
 
-    <section class="module-band" aria-labelledby="submit-title">
-      <div class="module-shell module-two-col">
-        <div>
-          <span class="eyebrow">제출 체크리스트</span>
-          <h2 id="submit-title">오늘 끝내야 할 것은 작다.</h2>
-          <p class="lede">
-            블로그 운영 시스템이 아니라 첫 글의 시작점을 만든다. 자료 여러 개, 폴더 구조, 발행 분석은 나중이다.
-          </p>
-        </div>
-        <ul class="module-checklist">
-          {checklist.map((item) => <li>{item}</li>)}
-        </ul>
-      </div>
-    </section>
-
-    <section class="module-shell" aria-labelledby="rule-title">
-      <span class="eyebrow">기본 규칙</span>
-      <h2 id="rule-title">자료에 없는 말은 만들지 않는다.</h2>
-      <div class="module-rule-grid">
-        <p class="lede">
-          이 모듈의 핵심은 AI가 그럴듯하게 쓰는 것이 아니다. 내가 가진 자료와 실제 경험 안에서 쓸 수 있는 질문을 고르는 것이다.
-        </p>
-        <div class="platform-box" aria-label="발행 플랫폼">
-          {platforms.map((item) => (
-            <article>
-              <strong>{item.title}</strong>
-              <p>{item.body}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="module-band" aria-labelledby="flow-title">
-      <div class="module-shell">
-        <span class="eyebrow">20분 흐름</span>
-        <h2 id="flow-title">한 번에 하나씩만 한다.</h2>
-        <ol class="module-steps">
-          {steps.map((step) => (
-            <li class="module-step">
-              <div class="module-step__num">{step.num}</div>
-              <div>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </div>
-              <strong>{step.result}</strong>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
-    <section class="module-shell" aria-labelledby="prompt-title">
-      <span class="eyebrow">프롬프트팩</span>
-      <h2 id="prompt-title">복사해서 바로 쓴다.</h2>
-      <p class="lede">
-        핵심 4개만 먼저 쓴다. 초안이 생긴 뒤에만 AI티 제거를 연다. 자료에 없는 내용은 끝까지 넣지 않는다.
-      </p>
-      <div class="prompt-grid">
-        {corePrompts.map((prompt) => (
-          <article class="prompt-card">
-            <div class="prompt-card__head">
-              <div>
-                <h3>{prompt.title}</h3>
-                <p>{prompt.note}</p>
-              </div>
-              <button type="button" data-copy-target={`prompt-${prompt.id}`}>복사</button>
-            </div>
-            <pre id={`prompt-${prompt.id}`}><code>{prompt.text}</code></pre>
-          </article>
-        ))}
-      </div>
-
-      <details class="module-details">
-        <summary>초안 고치기 프롬프트 열기</summary>
-        <article class="prompt-card prompt-card--wide">
-          <div class="prompt-card__head">
-            <div>
-              <h3>{polishPrompt.title}</h3>
-              <p>{polishPrompt.note}</p>
-            </div>
-            <button type="button" data-copy-target={`prompt-${polishPrompt.id}`}>복사</button>
-          </div>
-          <pre id={`prompt-${polishPrompt.id}`}><code>{polishPrompt.text}</code></pre>
-        </article>
-      </details>
-    </section>
-
-    <section class="module-shell" aria-labelledby="advanced-title">
-      <span class="eyebrow">더 해보기</span>
-      <h2 id="advanced-title">반복 운영은 첫 성공 뒤에 한다.</h2>
-      <ul class="advanced-list">
-        {advancedItems.map((item) => <li>{item}</li>)}
-      </ul>
-    </section>
-  </main>
-
-  <script>
-    document.querySelectorAll('[data-copy-target]').forEach((button) => {
-      button.addEventListener('click', async () => {
-        if (!(button instanceof HTMLButtonElement)) return;
-        const target = button.getAttribute('data-copy-target');
-        const node = target ? document.getElementById(target) : null;
-        const text = node?.textContent || '';
-        if (!text) return;
-
-        try {
-          await navigator.clipboard.writeText(text);
-          const before = button.textContent;
-          button.textContent = '복사됨';
-          window.setTimeout(() => {
-            button.textContent = before || '복사';
-          }, 1400);
-        } catch {
-          button.textContent = '실패';
-        }
-      });
-    });
-  </script>
-</Base>
+포함할 것:
+1. 이번 글의 목표
+2. 사용한 자료
+3. 고른 독자 질문
+4. 지금까지 완성한 것
+5. 아직 안 된 것
+6. 다음 20분에 할 일 하나
+7. 이어서 쓸 프롬프트`,
+  }}
+/>

@@ -1,0 +1,278 @@
+---
+import Base from '../layouts/Base.astro';
+
+type Stat = {
+  label: string;
+  value: string;
+};
+
+type InfoCard = {
+  title: string;
+  body: string;
+};
+
+type Step = {
+  id: string;
+  num: string;
+  title: string;
+  summary: string;
+  time?: string;
+  body: string;
+  myTasks?: string[];
+  aiTasks?: string[];
+  skills?: string[];
+  helpers?: string[];
+  result: string;
+  prompt?: string;
+};
+
+export interface Props {
+  title: string;
+  description: string;
+  canonicalPath: string;
+  eyebrow?: string;
+  heroImage: string;
+  heroAlt?: string;
+  stats: Stat[];
+  navLabel?: string;
+  prep: {
+    eyebrow: string;
+    title: string;
+    items: string[];
+    note?: string;
+  };
+  rule?: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    cards?: InfoCard[];
+  };
+  steps: Step[];
+  pause: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    prompt: string;
+  };
+  more?: {
+    eyebrow: string;
+    title: string;
+    items: string[];
+  };
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  eyebrow = '자율학습 모듈',
+  heroImage,
+  heroAlt = '',
+  stats,
+  navLabel = '모듈 목차',
+  prep,
+  rule,
+  steps,
+  pause,
+  more,
+} = Astro.props;
+
+const pageTitle = `${title} — AI 야학`;
+---
+
+<Base title={pageTitle} description={description} canonicalPath={canonicalPath}>
+  <main class="module-page">
+    <section class="module-hero" aria-labelledby="module-title">
+      <div class="module-hero__bg" aria-hidden="true">
+        <img src={heroImage} alt={heroAlt} loading="eager" fetchpriority="high" />
+      </div>
+      <div class="module-hero__inner">
+        <a class="module-back" href="/">AI 야학</a>
+        <p class="module-kicker">{eyebrow}</p>
+        <h1 id="module-title">{title}</h1>
+        <p class="module-hero__lede">{description}</p>
+        <dl class="module-stats" aria-label="모듈 요약">
+          {stats.map((stat) => (
+            <div>
+              <dt>{stat.label}</dt>
+              <dd>{stat.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+
+    <nav class="module-nav" aria-label={navLabel}>
+      <div class="module-shell module-nav__inner">
+        <a href="#prep">시작</a>
+        <a href="#steps">{steps.length}단계</a>
+        {more && <a href="#more">더 해보기</a>}
+        <a href="#pause">중간에 멈출 때</a>
+      </div>
+    </nav>
+
+    <section id="prep" class="module-band" aria-labelledby="prep-title">
+      <div class="module-shell module-two-col">
+        <div>
+          <span class="eyebrow">{prep.eyebrow}</span>
+          <h2 id="prep-title">{prep.title}</h2>
+          {prep.note && <p class="lede">{prep.note}</p>}
+        </div>
+        <ul class="module-checklist">
+          {prep.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    {rule && (
+      <section class="module-shell" aria-labelledby="rule-title">
+        <span class="eyebrow">{rule.eyebrow}</span>
+        <h2 id="rule-title">{rule.title}</h2>
+        <div class="module-rule-grid">
+          <p class="lede">{rule.body}</p>
+          {rule.cards && (
+            <div class="platform-box" aria-label={rule.title}>
+              {rule.cards.map((card) => (
+                <article>
+                  <strong>{card.title}</strong>
+                  <p>{card.body}</p>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <section id="steps" class="module-band" aria-labelledby="steps-title">
+      <div class="module-shell">
+        <span class="eyebrow">step by step</span>
+        <h2 id="steps-title">한 단계씩 열어서 따라가세요.</h2>
+        <div class="module-step-list">
+          {steps.map((step, index) => (
+            <details id={step.id} class="module-step-card" open={index === 0 ? true : undefined}>
+              <summary class="module-step-card__head">
+                <div class="module-step-card__num">{step.num}</div>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.summary}</p>
+                </div>
+                {step.time && <span>{step.time}</span>}
+              </summary>
+
+              <p class="module-step-card__body">{step.body}</p>
+
+              <div class="module-task-grid">
+                {step.myTasks && (
+                  <div>
+                    <h4>내가 할 일</h4>
+                    <ul>
+                      {step.myTasks.map((item) => <li>{item}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {step.aiTasks && (
+                  <div>
+                    <h4>AI에게 맡길 일</h4>
+                    <ul>
+                      {step.aiTasks.map((item) => <li>{item}</li>)}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              <div class="module-tool-row">
+                {step.skills && step.skills.length > 0 && (
+                  <div>
+                    <strong>추천 스킬</strong>
+                    <p>{step.skills.join(', ')}</p>
+                  </div>
+                )}
+                {step.helpers && step.helpers.length > 0 && (
+                  <div>
+                    <strong>같이 쓰면 좋은 기능</strong>
+                    <p>{step.helpers.join(', ')}</p>
+                  </div>
+                )}
+              </div>
+
+              <p class="module-result">
+                <span>이 단계 결과물</span>
+                {step.result}
+              </p>
+
+              {step.prompt && (
+                <details class="module-prompt-details">
+                  <summary>복붙 프롬프트 열기</summary>
+                  <div class="prompt-card">
+                    <div class="prompt-card__head">
+                      <div>
+                        <h3>{step.title} 프롬프트</h3>
+                        <p>그대로 복사해서 시작</p>
+                      </div>
+                      <button type="button" data-copy-target={`prompt-${step.id}`}>복사하기</button>
+                    </div>
+                    <pre id={`prompt-${step.id}`}><code>{step.prompt}</code></pre>
+                  </div>
+                </details>
+              )}
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {more && (
+      <section id="more" class="module-shell" aria-labelledby="more-title">
+        <span class="eyebrow">{more.eyebrow}</span>
+        <h2 id="more-title">{more.title}</h2>
+        <ul class="advanced-list">
+          {more.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+    )}
+
+    <section id="pause" class="module-band" aria-labelledby="pause-title">
+      <div class="module-shell module-two-col">
+        <div>
+          <span class="eyebrow">{pause.eyebrow}</span>
+          <h2 id="pause-title">{pause.title}</h2>
+          <p class="lede">{pause.body}</p>
+        </div>
+        <article class="prompt-card">
+          <div class="prompt-card__head">
+            <div>
+              <h3>다음 세션 시작용 프롬프트</h3>
+              <p>중간에 끊길 때 저장</p>
+            </div>
+            <button type="button" data-copy-target="prompt-pause">복사하기</button>
+          </div>
+          <pre id="prompt-pause"><code>{pause.prompt}</code></pre>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('[data-copy-target]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const target = button.getAttribute('data-copy-target');
+        const node = target ? document.getElementById(target) : null;
+        const text = node?.textContent || '';
+        if (!text) return;
+
+        try {
+          await navigator.clipboard.writeText(text);
+          const before = button.textContent;
+          button.textContent = '복사됨';
+          window.setTimeout(() => {
+            button.textContent = before || '복사하기';
+          }, 1400);
+        } catch {
+          button.textContent = '실패';
+        }
+      });
+    });
+  </script>
+</Base>
