@@ -15,7 +15,7 @@ const {
   ogImageAlt = '로컬 비즈니스를 위한 AI 야학',
 } = Astro.props;
 
-const siteUrl = Astro.site?.origin ?? 'https://ai-evening.kr';
+const siteUrl = Astro.site?.origin ?? 'https://ai-night.study';
 const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, siteUrl).href;
 const ogImage = ogImageProp ? new URL(ogImageProp, siteUrl).href : `${siteUrl}/og.png`;
 const GA4_ID = 'G-XXXXXXXXXX';
