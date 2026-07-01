@@ -8,7 +8,6 @@ type SummaryItem = {
 
 type Step = {
   step: string;
-  time: string;
   label: string;
   title: string;
   goal: string;
@@ -91,7 +90,6 @@ const {
 
       <div class="module-content">
         <section id="start" class="module-panel" aria-labelledby="start-title">
-          <span class="eyebrow">before start</span>
           <h2 id="start-title">먼저 이것만 준비하세요.</h2>
           <ul class="prep-list">
             {prepItems.map((item) => <li>{item}</li>)}
@@ -103,7 +101,6 @@ const {
         </section>
 
         <section id="steps" class="module-panel" aria-labelledby="steps-title">
-          <span class="eyebrow">step by step</span>
           <h2 id="steps-title">한 단계씩 열어서 따라가세요.</h2>
 
           <div class="lesson-steps">
@@ -115,32 +112,37 @@ const {
                     <strong>{item.label}</strong>
                     <em>{item.title}</em>
                   </span>
-                  <span class="lesson-step__time">{item.time}</span>
                 </summary>
 
                 <div class="lesson-step__body">
                   <p class="lesson-step__goal">{item.goal}</p>
 
-                  <div class="lesson-columns">
-                    <div>
-                      <h3>내가 할 일</h3>
-                      <ul>
-                        {item.learner.map((task) => <li>{task}</li>)}
-                      </ul>
+                  {(item.learner.length > 0 || item.ai.length > 0) && (
+                    <div class="lesson-columns">
+                      {item.learner.length > 0 && (
+                        <div>
+                          <h3>내가 할 일</h3>
+                          <ul>
+                            {item.learner.map((task) => <li>{task}</li>)}
+                          </ul>
+                        </div>
+                      )}
+                      {item.ai.length > 0 && (
+                        <div>
+                          <h3>AI에게 맡길 일</h3>
+                          <ul>
+                            {item.ai.map((task) => <li>{task}</li>)}
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                    <div>
-                      <h3>AI에게 맡길 일</h3>
-                      <ul>
-                        {item.ai.map((task) => <li>{task}</li>)}
-                      </ul>
-                    </div>
-                  </div>
+                  )}
 
                   <div class="skill-strip">
                     {item.recommended.length > 0 && (
                       <div>
                         <span>추천 스킬</span>
-                        <ul>{item.recommended.map((skill) => <li>{skill}</li>)}</ul>
+                        <ul class="skill-strip__cmds">{item.recommended.map((skill) => <li>{skill}</li>)}</ul>
                       </div>
                     )}
                     {item.useful.length > 0 && (
@@ -159,7 +161,7 @@ const {
                     <details class="prompt-toggle">
                       <summary>복붙 프롬프트 열기</summary>
                       <div class="prompt-copy-row">
-                        <button type="button" data-copy-prompt>복사하기</button>
+                        <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
                       </div>
                       <pre><code>{item.prompt}</code></pre>
                     </details>
@@ -171,12 +173,11 @@ const {
         </section>
 
         <section id="resume" class="module-panel" aria-labelledby="resume-title">
-          <span class="eyebrow">pause</span>
           <h2 id="resume-title">중간에 끊기면 이것만 남기세요.</h2>
           <details class="prompt-toggle prompt-toggle--standalone">
             <summary>다음에 이어가기 프롬프트</summary>
             <div class="prompt-copy-row">
-              <button type="button" data-copy-prompt>복사하기</button>
+              <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
             </div>
             <pre><code>{resumePrompt}</code></pre>
           </details>
