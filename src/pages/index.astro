@@ -126,6 +126,7 @@ const quotes = [
 const sections = [
   { id: 'difference', label: '운영 방식' },
   { id: 'outputs', label: '교육 주제' },
+  { id: 'modules', label: '학습 모듈', href: '/modules/website/' },
   { id: 'studio', label: '현장 사례' },
   { id: 'voices', label: '참가자 후기' },
   { id: 'expertise', label: '강사 소개' },
@@ -145,7 +146,7 @@ const sections = [
       </a>
       <nav class="masthead__nav" aria-label="섹션 이동">
         {sections.slice(0, 5).map((s) => (
-          <a href={`#${s.id}`}>{s.label}</a>
+          <a href={s.href ?? `#${s.id}`}>{s.label}</a>
         ))}
       </nav>
       <a class="masthead__cta" href={ctaHref} target="_blank" rel="noreferrer" data-ga="cta" data-loc="nav">상담 예약</a>

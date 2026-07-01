@@ -1,0 +1,378 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const moduleSteps = [
+  {
+    step: '01',
+    time: '10분',
+    label: '내 상황 말하기',
+    title: 'AI에게 먼저 인터뷰를 시킵니다.',
+    goal: '내가 만들 홈페이지의 목적, 방문자, 버튼 행동을 말로 정리합니다.',
+    recommended: ['office-hours'],
+    useful: ['spec: 말한 내용을 한 장짜리 설계로 정리할 때'],
+    learner: ['질문에 짧게 답하기', '내가 싫어하는 톤 말하기', '최종 정리가 내 말과 맞는지 확인하기'],
+    ai: ['질문하기', '답을 묶어서 홈페이지 제작 메모(pipeline_canvas) 만들기', '빠진 정보 다시 묻기'],
+    output: '홈페이지 제작 메모(pipeline_canvas) 초안',
+    prompt: `/office-hours
+
+나는 홈페이지를 만들고 싶지만, 아직 구조가 흐릿해.
+나를 인터뷰해서 홈페이지 제작 메모(pipeline_canvas)를 정리해줘.
+
+규칙:
+1. 한 번에 질문 2개만 해줘.
+2. 내가 빈칸을 채우게 하지 말고, 내 답을 바탕으로 네가 정리해줘.
+3. 대상 방문자, 버튼 문구, 참고 사이트, 피하고 싶은 톤을 꼭 물어봐줘.
+4. 마지막에는 홈페이지 제작자가 바로 쓸 수 있는 홈페이지 제작 메모(pipeline_canvas)로 정리해줘.
+
+어려운 말은 쉽게 풀어서 설명해줘.`,
+  },
+  {
+    step: '02',
+    time: '15분',
+    label: '자료 모으기',
+    title: '참고 사이트와 내 자료를 제작 요청서로 바꿉니다.',
+    goal: '사진, 소개글, 참고 사이트, 연락처처럼 흩어진 자료를 한 덩어리로 만듭니다.',
+    recommended: ['copywriting'],
+    useful: ['GitHub(깃허브): 자료와 수정 이력을 저장할 때'],
+    learner: ['참고 사이트 2-3개 고르기', '꼭 들어갈 자료 붙여넣기', '과장된 표현 지우기'],
+    ai: ['섹션 목록 만들기', '버튼 문구 제안하기', '빼도 되는 내용 골라내기'],
+    output: '제작 요청서',
+    prompt: `/copywriting
+
+아래 자료를 홈페이지 제작 요청서로 정리해줘.
+
+포함할 것:
+1. 참고 사이트 2-3개에서 배울 점
+2. 내 자료에서 꼭 써야 할 문장과 이미지
+3. 대상 방문자
+4. 가장 중요한 버튼 행동
+5. 피하고 싶은 말투
+6. 첫 화면에 반드시 보여야 할 것
+
+너무 멋있게 포장하지 말고, 실제 제작자가 바로 쓰게 정리해줘.`,
+  },
+  {
+    step: '03',
+    time: '30분',
+    label: '첫 화면 만들기',
+    title: '예쁜 시안이 아니라 열리는 홈페이지를 만듭니다.',
+    goal: '제작 요청서를 바탕으로 실제 파일을 만들고, 내 컴퓨터에서 열리는지 확인합니다.',
+    recommended: ['frontend-design'],
+    useful: ['ui-mockup: 빠른 화면 초안이 필요할 때', 'ts-react: React 기반 프로젝트일 때'],
+    learner: ['첫 화면 문구 고르기', '버튼 행동 확인하기', '내 자료가 빠지지 않았는지 보기'],
+    ai: ['구조 만들기', '문구 초안 쓰기', '모바일 화면까지 맞추기'],
+    output: '내 컴퓨터에서 열리는 홈페이지',
+    prompt: `/frontend-design
+
+이 제작 요청서를 바탕으로 홈페이지를 만들어줘.
+
+목표:
+1. 첫 화면에서 무엇을 하는 곳인지 바로 보이게 해줘.
+2. 모바일에서 먼저 읽히게 해줘.
+3. 참고 사이트의 좋은 점은 배우되 복붙 느낌은 피해주세요.
+4. 문구는 AI가 쓴 것처럼 과장하지 말고 짧게 써줘.
+5. 배포 가능한 상태까지 파일을 정리해줘.
+
+완성 후에는 내가 확인할 주소와 수정해야 할 점 3개를 알려줘.`,
+  },
+  {
+    step: '04',
+    time: '15분',
+    label: '혹평받고 고치기',
+    title: '공유 전에 한 번 고칩니다.',
+    goal: 'AI티 나는 문장, 흐린 버튼, 모바일 깨짐을 찾아 고칩니다.',
+    recommended: ['design-review'],
+    useful: ['web-design-guidelines: 화면 기본기를 점검할 때', 'copywriting: 문장만 다시 다듬을 때'],
+    learner: ['고칠 지적을 고르기', '내 말투와 맞는 문장 선택하기', '수정 전/후 차이 남기기'],
+    ai: ['문제 찾기', '수정 문장 제안하기', '모바일 문제 짚기'],
+    output: '수정 전/후 비교',
+    prompt: `/design-review
+
+이 홈페이지를 좋게 말하지 말고 혹평해줘.
+
+꼭 봐야 할 것:
+1. 첫 화면에서 정체가 바로 보이는지
+2. 모바일에서 문장과 버튼이 안 깨지는지
+3. AI티 나는 문구가 있는지
+4. 버튼 흐름이 자연스러운지
+5. 신뢰를 주는 정보가 충분한지
+
+칭찬은 짧게.
+고칠 점은 바로 바꿀 문장이나 화면 수정안으로 알려줘.`,
+  },
+  {
+    step: '05',
+    time: '10분',
+    label: '브라우저 확인',
+    title: 'Playwright(플레이라이트)로 실제로 눌러봅니다.',
+    goal: '눈으로만 보지 말고, 실제 브라우저에서 버튼과 링크가 작동하는지 확인합니다.',
+    recommended: ['playwright'],
+    useful: ['Lighthouse(라이트하우스): 속도와 검색 노출 기본 점검', 'axe(액스): 버튼 이름과 색 대비 같은 접근성 점검'],
+    learner: ['확인 결과 읽기', '실패한 버튼이나 링크 고치기', '필요할 때만 화면을 잠깐 보기'],
+    ai: ['화면 없이 자동으로 여는 브라우저(headless, 자동 확인 방식)로 열기', '데스크톱/모바일 확인하기', '문제 파일과 다음 행동 말하기'],
+    output: 'Playwright(플레이라이트) 확인 결과',
+    prompt: `/playwright
+
+이 홈페이지를 실제 브라우저에서 확인해줘.
+
+필수 확인:
+1. 화면 없이 자동으로 여는 브라우저(headless, 자동 확인 방식)로 데스크톱 화면 확인
+2. 화면 없이 자동으로 여는 브라우저(headless, 자동 확인 방식)로 모바일 화면 확인
+3. 첫 화면에서 정체가 바로 보이는지
+4. 버튼이 눌리는지
+5. 내부 링크가 열리는지
+6. 글자나 버튼이 겹치거나 잘리지 않는지
+7. 배포 주소가 있으면 실제로 열리는지
+
+스크린샷은 필요할 때만 잠깐 확인하고, 파일로 저장하지 않아도 돼.
+문제가 있으면 통과라고 하지 말고, 고칠 파일과 다음 행동 하나만 알려줘.`,
+  },
+  {
+    step: '06',
+    time: '15분',
+    label: '배포하기',
+    title: 'Vercel(버셀) 주소까지 만듭니다.',
+    goal: '내 컴퓨터에서만 열리는 화면이 아니라, 남에게 보낼 수 있는 주소를 만듭니다.',
+    recommended: ['@vercel', 'vercel:vercel-cli'],
+    useful: ['Vercel logs(버셀 로그): 배포 실패 이유를 찾을 때', 'GitHub(깃허브): 수정하면 자동 배포되게 만들 때'],
+    learner: ['계정 연결하기', '배포 주소 열어보기', '안 열리면 에러를 복사해 AI에게 주기'],
+    ai: ['연결 상태 확인하기', '미리보기 주소(preview) 만들기', '실패 원인을 쉬운 말로 바꾸기'],
+    output: 'Vercel(버셀) 배포 주소',
+    prompt: `@vercel
+
+이 홈페이지를 Vercel로 배포해줘.
+나는 초보자야.
+
+먼저 필요한 연결 상태를 확인해줘.
+계정 연결이 필요하면 어디를 눌러야 하는지 한 단계씩 알려줘.
+연결이 끝나면 미리보기 주소(preview)를 만들어줘.
+실패하면 원인을 쉬운 말로 설명하고 다음 행동 하나만 알려줘.`,
+  },
+  {
+    step: '07',
+    time: '2분',
+    label: '공유',
+    title: '단체방에 주소를 공유합니다.',
+    goal: 'Vercel(버셀) 배포 주소를 커뮤니티 단체방에 올립니다.',
+    recommended: [],
+    useful: [],
+    learner: ['배포 주소 복사하기', '커뮤니티 단체방에 붙여넣기'],
+    ai: [],
+    output: '공유 완료',
+    prompt: '',
+  },
+];
+
+const resumePrompt = `지금까지 한 일을 요약해줘.
+그리고 다음 세션 시작 때 그대로 붙여넣을 프롬프트를 만들어줘.
+
+포함할 것:
+1. 현재 목표
+2. 완성된 것
+3. 아직 안 된 것
+4. 막힌 점
+5. 다음 20분에 할 일 하나
+6. 다음에 쓸 추천 스킬
+7. 현재 배포 주소가 있으면 포함
+
+결과물은 "다음 세션 시작용 프롬프트"다.`;
+
+const prepItems = [
+  '참고하고 싶은 홈페이지 2-3개',
+  '내 소개글, 사진, 연락처, 신청 링크',
+  '방문자가 눌러야 할 버튼 행동 1개',
+  '피하고 싶은 말투 1-2개',
+];
+
+---
+
+<Base
+  title="홈페이지 제작 파이프라인 만들기 — AI 야학"
+  description="AI와 함께 홈페이지 제작 순서를 설계하고, 실제 Vercel 배포 주소를 커뮤니티 단체방에 공유하는 AI 야학 자율학습 모듈."
+  canonicalPath="/modules/website/"
+>
+  <header class="masthead module-nav">
+    <div class="masthead-inner">
+      <a href="/" class="masthead__wordmark" aria-label="AI 야학 홈">
+        <img src="/favicon.svg" alt="" width="34" height="34" />
+        <span>AI 야학</span>
+      </a>
+      <nav class="masthead__nav" aria-label="모듈 섹션 이동">
+        <a href="#start">시작</a>
+        <a href="#steps">7단계</a>
+      </nav>
+      <a class="masthead__cta" href="#steps">바로 시작</a>
+    </div>
+  </header>
+
+  <main class="module-page">
+    <section class="module-lesson-hero" aria-labelledby="module-title">
+      <div class="module-lesson-hero__inner">
+        <div>
+          <span class="eyebrow">자율학습 모듈</span>
+          <h1 id="module-title">홈페이지 제작 파이프라인 만들기</h1>
+        </div>
+        <aside class="module-summary" aria-label="모듈 요약">
+          <div>
+            <span>예상 시간</span>
+            <strong>약 100분</strong>
+          </div>
+          <div>
+            <span>진행 방식</span>
+            <strong>6단계 + 공유</strong>
+          </div>
+          <div>
+            <span>최종 결과</span>
+            <strong>배포 주소</strong>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="module-shell">
+      <aside class="module-sidebar" aria-label="모듈 빠른 이동">
+        <a href="#start">시작 전 준비</a>
+        {moduleSteps.map((item) => (
+          <a href={`#step-${item.step}`}>{item.step}. {item.label}</a>
+        ))}
+        <a href="#resume">중간에 멈출 때</a>
+      </aside>
+
+      <div class="module-content">
+        <section id="start" class="module-panel" aria-labelledby="start-title">
+          <span class="eyebrow">before start</span>
+          <h2 id="start-title">먼저 이것만 준비하세요.</h2>
+          <ul class="prep-list">
+            {prepItems.map((item) => <li>{item}</li>)}
+          </ul>
+          <div class="module-note">
+            <strong>중요:</strong>
+            빈칸을 혼자 채우려고 오래 붙잡지 마세요. 1단계에서 AI가 먼저 물어보게 만듭니다.
+          </div>
+        </section>
+
+        <section id="steps" class="module-panel" aria-labelledby="steps-title">
+          <span class="eyebrow">step by step</span>
+          <h2 id="steps-title">한 단계씩 열어서 따라가세요.</h2>
+
+          <div class="lesson-steps">
+            {moduleSteps.map((item, index) => (
+              <details id={`step-${item.step}`} class="lesson-step" open={index === 0}>
+                <summary>
+                  <span class="lesson-step__num">{item.step}</span>
+                  <span class="lesson-step__main">
+                    <strong>{item.label}</strong>
+                    <em>{item.title}</em>
+                  </span>
+                  <span class="lesson-step__time">{item.time}</span>
+                </summary>
+
+                <div class="lesson-step__body">
+                  <p class="lesson-step__goal">{item.goal}</p>
+
+                  <div class="lesson-columns">
+                    <div>
+                      <h3>내가 할 일</h3>
+                      <ul>
+                        {item.learner.map((task) => <li>{task}</li>)}
+                      </ul>
+                    </div>
+                    <div>
+                      <h3>AI에게 맡길 일</h3>
+                      <ul>
+                        {item.ai.map((task) => <li>{task}</li>)}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="skill-strip">
+                    {item.recommended.length > 0 && (
+                      <div>
+                        <span>추천 스킬</span>
+                        <ul>{item.recommended.map((skill) => <li>{skill}</li>)}</ul>
+                      </div>
+                    )}
+                    {item.useful.length > 0 && (
+                      <div>
+                        <span>같이 쓰면 좋은 기능</span>
+                        <ul>{item.useful.map((skill) => <li>{skill}</li>)}</ul>
+                      </div>
+                    )}
+                    <div>
+                      <span>이 단계 결과물</span>
+                      <strong>{item.output}</strong>
+                    </div>
+                  </div>
+
+                  {item.prompt && (
+                    <details class="prompt-toggle">
+                      <summary>복붙 프롬프트 열기</summary>
+                      <div class="prompt-copy-row">
+                        <button type="button" data-copy-prompt>복사하기</button>
+                      </div>
+                      <pre><code>{item.prompt}</code></pre>
+                    </details>
+                  )}
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section id="resume" class="module-panel" aria-labelledby="resume-title">
+          <span class="eyebrow">pause</span>
+          <h2 id="resume-title">중간에 끊기면 이것만 남기세요.</h2>
+          <details class="prompt-toggle prompt-toggle--standalone">
+            <summary>다음에 이어가기 프롬프트</summary>
+            <div class="prompt-copy-row">
+              <button type="button" data-copy-prompt>복사하기</button>
+            </div>
+            <pre><code>{resumePrompt}</code></pre>
+          </details>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const copyButtons = document.querySelectorAll('[data-copy-prompt]');
+
+    const fallbackCopy = (text: string) => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+    };
+
+    copyButtons.forEach((button) => {
+      button.addEventListener('click', async () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const prompt = button.closest('.prompt-toggle')?.querySelector('code')?.textContent || '';
+        if (!prompt.trim()) return;
+
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(prompt);
+          } else {
+            fallbackCopy(prompt);
+          }
+          const original = button.textContent || '복사하기';
+          button.textContent = '복사됨';
+          window.setTimeout(() => {
+            button.textContent = original;
+          }, 1400);
+        } catch {
+          button.textContent = '복사 실패';
+          window.setTimeout(() => {
+            button.textContent = '복사하기';
+          }, 1400);
+        }
+      });
+    });
+  </script>
+</Base>
