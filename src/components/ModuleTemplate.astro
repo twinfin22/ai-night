@@ -1,29 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-
-type SummaryItem = {
-  label: string;
-  value: string;
-};
-
-type Step = {
-  step: string;
-  label: string;
-  title: string;
-  goal: string;
-  recommended: string[];
-  useful: string[];
-  learner: string[];
-  ai: string[];
-  output: string;
-  prompt?: string;
-};
+import type { SummaryItem, TutorialStep } from '../data/tutorial-types';
 
 export interface Props {
   title: string;
   description: string;
   canonicalPath: string;
-  steps: Step[];
+  markdownPath: string;
+  steps: TutorialStep[];
   summary: SummaryItem[];
   prepItems: string[];
   prepNote: string;
@@ -36,6 +20,7 @@ const {
   title,
   description,
   canonicalPath,
+  markdownPath,
   steps,
   summary,
   prepItems,
@@ -65,7 +50,7 @@ const {
     <section class="module-lesson-hero" aria-labelledby="module-title">
       <div class="module-lesson-hero__inner">
         <div>
-          <span class="eyebrow">자율학습 모듈</span>
+          <span class="eyebrow">튜토리얼</span>
           <h1 id="module-title">{title}</h1>
         </div>
         <aside class="module-summary" aria-label="모듈 요약">
@@ -82,6 +67,7 @@ const {
     <div class="module-shell">
       <aside class="module-sidebar" aria-label="모듈 빠른 이동">
         <a href="#start">시작 전 준비</a>
+        <a href="#overview">전체 흐름</a>
         {steps.map((item) => (
           <a href={`#step-${item.step}`}>{item.step}. {item.label}</a>
         ))}
@@ -98,6 +84,27 @@ const {
             <strong>중요:</strong>
             {prepNote}
           </div>
+        </section>
+
+        <section id="overview" class="module-panel" aria-labelledby="overview-title">
+          <h2 id="overview-title">이번 튜토리얼에서 하는 일</h2>
+          <p class="module-panel__intro">사람이 확인하고 결정하는 순서입니다. AI가 할 일은 각 단계 안에 같이 넣었습니다.</p>
+          <ol class="tutorial-flow">
+            {steps.map((item) => (
+              <li>
+                <a href={`#step-${item.step}`}>
+                  <span>{item.step}</span>
+                  <strong>{item.label}</strong>
+                </a>
+              </li>
+            ))}
+          </ol>
+          <details class="module-ai-note">
+            <summary>AI에게 이 페이지를 줄 때</summary>
+            <p>
+              이 튜토리얼 전체를 텍스트로 넘기려면 <a href={markdownPath}>{markdownPath}</a> 주소를 사용하세요.
+            </p>
+          </details>
         </section>
 
         <section id="steps" class="module-panel" aria-labelledby="steps-title">
