@@ -151,7 +151,7 @@ const quotes = [
 const sections = [
   { id: 'difference', label: '운영 방식' },
   { id: 'outputs', label: '교육 주제' },
-  { id: 'modules', label: '실습 모듈' },
+  { id: 'modules', label: '튜토리얼' },
   { id: 'studio', label: '현장 사례' },
   { id: 'voices', label: '참가자 후기' },
   { id: 'expertise', label: '강사 소개' },
@@ -260,7 +260,7 @@ const sections = [
 
       <!-- Practice modules -->
       <section id="modules" aria-labelledby="modules-title">
-        <span class="eyebrow">실습 모듈</span>
+        <span class="eyebrow">튜토리얼</span>
         <h2 id="modules-title">수업 뒤에 혼자 이어갈 수 있는 작은 모듈.</h2>
         <p class="lede">
           긴 강의자료 대신 바로 복사해서 쓰는 흐름입니다.
@@ -271,7 +271,7 @@ const sections = [
           {practiceModules.map((module) => (
             <li class={`practice-card${module.href ? ' practice-card--link' : ''}`}>
               {module.href ? (
-                <a class="practice-card__body practice-card__body--link" href={module.href} aria-label={`${module.title} 실습 모듈`}>
+                <a class="practice-card__body practice-card__body--link" href={module.href} aria-label={`${module.title} 튜토리얼`}>
                   <div class="practice-card__label">{module.label}</div>
                   <h3>{module.title}</h3>
                   <p>{module.body}</p>
@@ -455,7 +455,7 @@ const sections = [
       </p>
       <div class="footer-links">
         <a href={`mailto:${mailAddr}`} data-ga="mail" data-loc="footer">{mailAddr}</a>
-        <a href="/modules/blog/">학습 모듈</a>
+        <a href="/modules/blog/">튜토리얼</a>
       </div>
     </div>
   </footer>
