@@ -158,18 +158,16 @@ const {
                         <ul>{item.useful.map((skill) => <li>{skill}</li>)}</ul>
                       </div>
                     )}
-                    <div>
-                      <span>이 단계 결과물</span>
-                      <strong>{item.output}</strong>
-                    </div>
                   </div>
+
+                  <p class="lesson-step__output"><span>이 단계 결과물</span>{item.output}</p>
 
                   {item.prompt && (
                     <details class="prompt-toggle">
-                      <summary>복붙 프롬프트 열기</summary>
-                      <div class="prompt-copy-row">
+                      <summary>
+                        <span>복붙 프롬프트</span>
                         <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
-                      </div>
+                      </summary>
                       <pre><code>{item.prompt}</code></pre>
                     </details>
                   )}
@@ -182,10 +180,10 @@ const {
         <section id="resume" class="module-panel" aria-labelledby="resume-title">
           <h2 id="resume-title">중간에 끊기면 이것만 남기세요.</h2>
           <details class="prompt-toggle prompt-toggle--standalone">
-            <summary>다음에 이어가기 프롬프트</summary>
-            <div class="prompt-copy-row">
+            <summary>
+              <span>다음에 이어가기 프롬프트</span>
               <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
-            </div>
+            </summary>
             <pre><code>{resumePrompt}</code></pre>
           </details>
         </section>
@@ -209,14 +207,20 @@ const {
     };
 
     copyButtons.forEach((button) => {
-      button.addEventListener('click', async () => {
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         if (!(button instanceof HTMLButtonElement)) return;
         const prompt = button.closest('.prompt-toggle')?.querySelector('code')?.textContent || '';
         if (!prompt.trim()) return;
 
         try {
           if (navigator.clipboard?.writeText) {
-            await navigator.clipboard.writeText(prompt);
+            try {
+              await navigator.clipboard.writeText(prompt);
+            } catch {
+              fallbackCopy(prompt);
+            }
           } else {
             fallbackCopy(prompt);
           }
