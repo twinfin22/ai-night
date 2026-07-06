@@ -17,6 +17,7 @@ export interface Props {
   };
   toolSelector?: boolean;
   stepsLabel?: string;
+  firstPromptBuilder?: boolean;
 }
 
 const {
@@ -26,13 +27,15 @@ const {
   steps,
   overviewTemplate = 'default',
   toolSelector = false,
+  firstPromptBuilder = false,
 } = Astro.props;
 
 const tutorialLinks = [
-  { href: '/modules/setup/', label: 'AI 작업 환경 만들기' },
-  { href: '/modules/website/', label: '홈페이지 제작 파이프라인 만들기' },
+  { href: '/modules/setup/', label: '내 AI 작업실 만들기' },
+  { href: '/modules/first-prompt/', label: 'AI에게 내 일 시켜보기' },
+  { href: '/modules/website/', label: '내 사업 소개 페이지 만들기' },
   { href: '/modules/blog/', label: '내 자료로 문의 받는 글 만들기' },
-  { href: '/modules/github-vercel/', label: '깃허브와 버셀 세팅' },
+  { href: '/modules/github-vercel/', label: '내 작업물 보관하고 링크 만들기' },
 ];
 
 const overviewFlow = overviewTemplate === 'flow';
@@ -141,6 +144,59 @@ const actorFallback = {
               </li>
             ))}
           </ol>
+
+          {firstPromptBuilder && (
+            <section class="first-prompt-builder" aria-labelledby="first-prompt-builder-title">
+              <div class="first-prompt-builder__head">
+                <div>
+                  <h3 id="first-prompt-builder-title">내 첫 AI 작업 지시서</h3>
+                  <p>샘플을 고른 뒤 내 가게에 맞게 5칸만 고치세요.</p>
+                </div>
+                <button type="button" data-first-prompt-copy aria-live="polite">복사하기</button>
+              </div>
+
+              <div class="sample-picker" role="group" aria-label="샘플로 채우기">
+                <button type="button" data-first-prompt-sample="restaurant">동네 식당 홍보글</button>
+                <button type="button" data-first-prompt-sample="farm">농산물 판매글</button>
+                <button type="button" data-first-prompt-sample="stay">숙소 안내문</button>
+                <button type="button" data-first-prompt-sample="class">체험 프로그램 소개글</button>
+              </div>
+
+              <div class="first-prompt-builder__grid">
+                <label>
+                  <span>내 상황</span>
+                  <textarea data-first-prompt-field="context" rows="4">청도 읍내에서 점심 장사를 하는 작은 식당입니다. 단골은 많지만 새 손님에게 가게 분위기를 잘 알리지 못하고 있습니다.</textarea>
+                </label>
+                <label>
+                  <span>AI가 맡을 역할</span>
+                  <textarea data-first-prompt-field="role" rows="4">동네 가게 홍보글을 잘 쓰는 사람처럼 도와주세요.</textarea>
+                </label>
+                <label>
+                  <span>해달라는 일</span>
+                  <textarea data-first-prompt-field="task" rows="4">오늘 인스타그램에 올릴 점심 메뉴 홍보글을 써주세요.</textarea>
+                </label>
+                <label>
+                  <span>말투</span>
+                  <textarea data-first-prompt-field="style" rows="4">너무 광고처럼 보이지 않게, 동네 손님에게 말하듯 편하게 써주세요.</textarea>
+                </label>
+                <label>
+                  <span>지켜야 할 조건</span>
+                  <textarea data-first-prompt-field="rules" rows="4">첫 문장은 짧게 써주세요. 메뉴 이름, 가격, 오늘만 좋은 점을 넣어주세요. 문장은 5줄 안으로 써주세요.</textarea>
+                </label>
+              </div>
+
+              <div class="compare-box" aria-label="대충 말했을 때와 5칸으로 말했을 때 비교">
+                <div>
+                  <span>대충 말하면</span>
+                  <p>우리 가게 홍보글 써줘</p>
+                </div>
+                <div>
+                  <span>5칸으로 말하면</span>
+                  <pre><code data-first-prompt-output></code></pre>
+                </div>
+              </div>
+            </section>
+          )}
         </section>
 
         <section id="steps" class="module-panel" aria-labelledby="steps-title">
@@ -278,7 +334,7 @@ const actorFallback = {
                   {item.prompt && (
                     <details class="prompt-toggle">
                       <summary>
-                        <span>복붙 프롬프트</span>
+                        <span>복사해서 쓸 말</span>
                       </summary>
                       <div class="prompt-toggle__body">
                         <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
@@ -394,5 +450,120 @@ const actorFallback = {
         }
       });
     });
+
+    const firstPromptSamples = {
+      restaurant: {
+        context: '청도 읍내에서 점심 장사를 하는 작은 식당입니다. 단골은 많지만 새 손님에게 가게 분위기를 잘 알리지 못하고 있습니다.',
+        role: '동네 가게 홍보글을 잘 쓰는 사람처럼 도와주세요.',
+        task: '오늘 인스타그램에 올릴 점심 메뉴 홍보글을 써주세요.',
+        style: '너무 광고처럼 보이지 않게, 동네 손님에게 말하듯 편하게 써주세요.',
+        rules: '첫 문장은 짧게 써주세요. 메뉴 이름, 가격, 오늘만 좋은 점을 넣어주세요. 문장은 5줄 안으로 써주세요.',
+      },
+      farm: {
+        context: '부모님과 함께 복숭아 농장을 운영합니다. 이번 주 수확한 복숭아를 택배로 판매하려고 합니다.',
+        role: '농산물 판매글을 쉽게 쓰는 사람처럼 도와주세요.',
+        task: '동네 단체방에 올릴 복숭아 판매글을 써주세요.',
+        style: '믿음이 가고 부담스럽지 않은 말투로 써주세요.',
+        rules: '복숭아 상태, 주문 방법, 마감 시간을 넣어주세요. 너무 과장하지 말아주세요.',
+      },
+      stay: {
+        context: '조용한 시골 마을에서 작은 숙소를 운영합니다. 처음 오는 손님이 길과 이용 방법을 자주 물어봅니다.',
+        role: '숙소 손님 안내문을 친절하게 정리하는 사람처럼 도와주세요.',
+        task: '예약한 손님에게 보내는 입실 안내문을 써주세요.',
+        style: '짧고 친절하게 써주세요. 딱딱한 안내문처럼 보이지 않게 해주세요.',
+        rules: '주소, 주차, 입실 시간, 와이파이, 문의 번호를 넣어주세요. 문단을 나눠서 읽기 쉽게 써주세요.',
+      },
+      class: {
+        context: '우리 공방에서 주말마다 가족 체험 수업을 엽니다. 아이와 부모가 함께 오기 좋은 수업입니다.',
+        role: '체험 프로그램 소개글을 쓰는 사람처럼 도와주세요.',
+        task: '네이버 블로그에 올릴 체험 수업 소개글 첫 부분을 써주세요.',
+        style: '따뜻하고 쉽게 써주세요. 부모가 바로 이해할 수 있게 써주세요.',
+        rules: '대상, 걸리는 시간, 만들 수 있는 결과물, 예약 방법을 넣어주세요. 어려운 말은 쓰지 말아주세요.',
+      },
+    };
+
+    const firstPromptLabels = {
+      context: '내 상황',
+      role: 'AI가 맡을 역할',
+      task: '해달라는 일',
+      style: '말투',
+      rules: '지켜야 할 조건',
+    };
+
+    const firstPromptFields = document.querySelectorAll('[data-first-prompt-field]');
+    const firstPromptOutput = document.querySelector('[data-first-prompt-output]');
+
+    const buildFirstPromptText = () => {
+      const taskField = document.querySelector('[data-first-prompt-field="task"]');
+      const taskText = taskField instanceof HTMLTextAreaElement ? taskField.value.trim() : '';
+      const lines = [`내가 하고 싶은 일: ${taskText}`];
+      firstPromptFields.forEach((field) => {
+        if (!(field instanceof HTMLTextAreaElement)) return;
+        const key = field.dataset.firstPromptField || '';
+        const label = firstPromptLabels[key as keyof typeof firstPromptLabels];
+        if (!label) return;
+        lines.push(`${label}: ${field.value.trim()}`);
+      });
+      lines.push('AI가 나에게 먼저 물어볼 질문: 더 잘 만들기 위해 나에게 먼저 물어봐야 할 질문 3개만 해줘. 질문은 쉬운 말로 해줘.');
+      return lines.join('\n');
+    };
+
+    const updateFirstPromptOutput = () => {
+      if (!firstPromptOutput) return;
+      firstPromptOutput.textContent = buildFirstPromptText();
+    };
+
+    firstPromptFields.forEach((field) => {
+      field.addEventListener('input', updateFirstPromptOutput);
+    });
+
+    document.querySelectorAll('[data-first-prompt-sample]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const sampleName = button.dataset.firstPromptSample as keyof typeof firstPromptSamples;
+        const sample = firstPromptSamples[sampleName];
+        if (!sample) return;
+
+        firstPromptFields.forEach((field) => {
+          if (!(field instanceof HTMLTextAreaElement)) return;
+          const key = field.dataset.firstPromptField as keyof typeof sample;
+          field.value = sample[key] || '';
+        });
+
+        document.querySelectorAll('[data-first-prompt-sample]').forEach((sampleButton) => {
+          sampleButton.toggleAttribute('aria-pressed', sampleButton === button);
+        });
+        updateFirstPromptOutput();
+      });
+    });
+
+    document.querySelector('[data-first-prompt-copy]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      if (!(button instanceof HTMLButtonElement)) return;
+      const text = buildFirstPromptText();
+
+      try {
+        if (navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch {
+            fallbackCopy(text);
+          }
+        } else {
+          fallbackCopy(text);
+        }
+        button.textContent = '복사됨';
+        window.setTimeout(() => {
+          button.textContent = '복사하기';
+        }, 1400);
+      } catch {
+        button.textContent = '복사 실패';
+        window.setTimeout(() => {
+          button.textContent = '복사하기';
+        }, 1400);
+      }
+    });
+
+    updateFirstPromptOutput();
   </script>
 </Base>

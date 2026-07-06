@@ -70,7 +70,7 @@ const programTracks = [
   {
     title: '인스타·블로그·숏폼 콘텐츠 만들기',
     body: '매장과 상품을 바로 홍보할 콘텐츠로 바꿉니다.',
-    outputs: ['인스타그램·블로그 발행 캘린더', '스마트폰 촬영 기반 숏폼 초안', '상세페이지·펀딩 스토리 구조'],
+    outputs: ['인스타그램·블로그 발행 캘린더', '스마트폰 촬영 기반 숏폼 초안', '상세페이지·펀딩 스토리 틀'],
   },
   {
     title: '반복 업무 AI에게 맡기기',
@@ -91,31 +91,38 @@ const programTracks = [
 
 const practiceModules = [
   {
-    label: '환경설정',
-    title: 'AI 작업 환경 만들기',
-    body: '앱 설치, 작업 폴더 지정, 첫 정리 실습까지 끝내고 다음 수업을 이어갈 준비를 만듭니다.',
-    outputs: ['작업 폴더', '답변 규칙 문서', '도움 요청 문장'],
+    label: '작업 준비',
+    title: '내 AI 작업실 만들기',
+    body: '수업 때 쓸 앱을 켜고, 내 파일을 모아둘 폴더를 하나 만듭니다. 다음에 다시 열어도 이어서 일할 수 있게 해둡니다.',
+    outputs: ['작업 폴더', '내 말투 규칙', '막혔을 때 물어볼 문장'],
     href: '/modules/setup/',
   },
   {
-    label: '배포세팅',
-    title: '깃허브와 버셀 세팅',
-    body: '내 작업물을 GitHub에 저장하고 Vercel 공개 링크로 배포하는 흐름을 만듭니다.',
-    outputs: ['GitHub 저장소', 'Vercel 공개 주소', '수정 반영 확인'],
+    label: '첫 지시',
+    title: 'AI에게 내 일 시켜보기',
+    body: '대충 말했을 때와 제대로 말했을 때 결과가 어떻게 달라지는지 직접 비교합니다.',
+    outputs: ['내 첫 AI 작업 지시서'],
+    href: '/modules/first-prompt/',
+  },
+  {
+    label: '공개 링크',
+    title: '내 작업물 보관하고 링크 만들기',
+    body: '내 컴퓨터에 있는 작업물을 GitHub에 보관하고, Vercel로 남에게 보낼 수 있는 링크를 만듭니다.',
+    outputs: ['GitHub 보관함', 'Vercel 공개 주소', '다시 고친 뒤 확인하는 방법'],
     href: '/modules/github-vercel/',
   },
   {
     label: '웹사이트',
     title: '내 사업 소개 페이지 만들기',
-    body: '소개, 대상, 제공 내용, 문의 동선을 한 장짜리 페이지로 정리하는 실습입니다.',
-    outputs: ['소개 문장', '페이지 구조', '문의 CTA'],
+    body: '내 사업이 누구에게 무엇을 해주는지 한 장으로 정리합니다. 보고 바로 문의할 수 있는 길까지 만듭니다.',
+    outputs: ['첫 화면 문장', '페이지 순서', '문의 버튼'],
     href: '/modules/website/',
   },
   {
     label: '블로그',
     title: '내 자료로 문의 받는 글 만들기',
-    body: '기존 자료 하나로 독자 질문을 찾고, 네이버 블로그에 올릴 짧은 초안까지 만듭니다.',
-    outputs: ['자료 1개', '글감 1개', '초안 1개'],
+    body: '후기, 안내문, 자주 듣는 질문 중 하나를 골라 블로그 글의 뼈대를 만듭니다. 처음부터 완성하려고 하지 않습니다.',
+    outputs: ['독자 질문 1개', '글 뼈대', '고쳐 쓸 초안'],
     href: '/modules/blog/',
   },
 ];
@@ -260,7 +267,7 @@ const sections = [
         <span class="eyebrow">교육 주제</span>
         <h2 id="outputs-title">참가자의 업무와 필요에 맞춰 수업을 설계합니다.</h2>
         <p class="lede">
-          로컬 창업, 소상공인 디지털 전환, 로컬브랜드 고도화 사업에 맞춰
+          로컬 창업, 소상공인 디지털 전환, 로컬브랜드 개선 사업에 맞춰
           필요한 트랙만 골라 1일 워크숍, 코호트, 마켓톤으로 설계합니다.
         </p>
         <ul class="program-grid">
@@ -285,10 +292,11 @@ const sections = [
       <!-- Practice modules -->
       <section id="modules" aria-labelledby="modules-title">
         <span class="eyebrow">튜토리얼</span>
-        <h2 id="modules-title">수업 뒤에 혼자 이어갈 수 있는 작은 모듈.</h2>
+        <h2 id="modules-title">내 사업에 바로 남길 작은 결과물.</h2>
         <p class="lede">
-          긴 강의자료 대신 바로 복사해서 쓰는 흐름입니다.
-          환경설정, 배포, 웹사이트, 블로그처럼 혼자 막히기 쉬운 작업부터 엽니다.
+          1. 먼저 지금 해야 할 일을 봅니다.
+          2. 왜 필요한지 확인합니다.
+          3. 끝나면 무엇이 남는지 보고 다음으로 넘어갑니다.
         </p>
 
         <ul class="practice-grid">
@@ -516,7 +524,7 @@ const sections = [
     </div>
   </footer>
 
-  <!-- Mobile sticky CTA -->
+  <!-- Mobile sticky button -->
   <a href={ctaHref} class="sticky-cta" target="_blank" rel="noreferrer" data-ga="cta" data-loc="sticky">
     15분 상담 예약하기 →
   </a>

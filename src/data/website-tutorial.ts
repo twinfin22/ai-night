@@ -1,8 +1,8 @@
 import type { TutorialData } from './tutorial-types';
 
 export const websiteTutorial: TutorialData = {
-  title: '홈페이지 제작 파이프라인 만들기',
-  description: 'AI와 함께 홈페이지 제작 순서를 설계하고, 실제 Vercel 배포 주소를 커뮤니티 단체방에 공유하는 AI 야학 튜토리얼.',
+  title: '내 사업 소개 페이지 만들기',
+  description: '내 가게를 처음 보는 사람이 바로 이해하도록 홈페이지 내용을 만들고, Vercel 공개 링크를 단체방에 공유하는 AI 야학 튜토리얼.',
   canonicalPath: '/modules/website/',
   markdownPath: '/modules/website.md',
   overviewTemplate: 'flow',
@@ -16,8 +16,8 @@ export const websiteTutorial: TutorialData = {
 3. 아직 안 된 것
 4. 막힌 점
 5. 다음 20분에 할 일 하나
-6. 다음에 쓸 추천 스킬
-7. 현재 배포 주소가 있으면 포함
+6. 다음에 쓰면 좋은 도구
+7. 현재 공개 링크가 있으면 포함
 
 결과물은 "다음 세션 시작용 프롬프트"다.`,
   steps: [
@@ -25,28 +25,28 @@ export const websiteTutorial: TutorialData = {
       step: '01',
       actor: 'human',
       actorLabel: '사람',
-      label: '스킬로 인터뷰 받기',
-      title: 'office-hours나 grill-with-docs로 홈페이지 목적을 질문받습니다.',
-      goal: '내 상황을 혼자 길게 쓰지 않고, 인터뷰 스킬을 설치하고 실행해서 목적, 방문자, 버튼 행동을 정리합니다.',
+      label: '목적 정하기',
+      title: 'AI에게 내 홈페이지 목적을 묻게 합니다.',
+      goal: '1. 지금 할 일: AI 질문에 답하며 홈페이지 목적을 정합니다. 2. 필요한 이유: 처음 보는 손님에게 무엇을 보여줄지 먼저 정해야 합니다. 3. 끝나면 보이는 것: 방문자, 첫 화면, 눌러야 할 버튼이 한 장 메모로 남습니다.',
       recommended: ['office-hours', 'grill-with-docs'],
       useful: ['skill-installer: grill-with-docs 설치가 필요할 때', 'spec: 인터뷰 결과를 한 장짜리 설계로 정리할 때'],
-      output: '스킬 인터뷰로 정리한 홈페이지 제작 메모(pipeline_canvas) 초안',
-      prompt: `먼저 내가 쓸 수 있는 인터뷰 스킬을 확인해줘.
+      output: '질문 답변으로 정리한 홈페이지 제작 메모 초안',
+      prompt: `먼저 내가 쓸 수 있는 인터뷰 도구를 확인해줘.
 
 1. gstack office-hours가 설치되어 있으면 /office-hours로 시작하게 안내해줘.
 2. office-hours를 쓸 수 없으면 grill-with-docs를 설치하거나 활성화하는 방법을 알려줘.
-3. 둘 중 하나가 준비되면 그 스킬로 인터뷰를 시작하게 해줘.
-4. 마지막에는 홈페이지 제작 메모(pipeline_canvas)를 정리해줘.
+3. 둘 중 하나가 준비되면 그 도구로 질문을 시작하게 해줘.
+4. 마지막에는 홈페이지 제작 메모를 정리해줘.
 
 내 상황:
-나는 홈페이지를 만들고 싶지만, 아직 구조가 흐릿해.
+나는 홈페이지를 만들고 싶지만, 무엇부터 보여줘야 할지 흐릿해.
 
 규칙:
 1. 한 번에 질문 2개만 해줘.
 2. 내가 처음부터 상황 설명을 길게 쓰게 하지 말고, 네가 질문해서 필요한 정보를 끌어내줘.
 3. 대상 방문자, 버튼 문구, 참고 사이트, 피하고 싶은 톤을 꼭 물어봐줘.
 4. 답이 짧거나 흐리면 예시를 보여주고 고르게 해줘.
-5. 홈페이지 제작자가 바로 쓸 수 있는 홈페이지 제작 메모(pipeline_canvas)로 정리해줘.
+5. 홈페이지 제작자가 바로 쓸 수 있는 제작 메모로 정리해줘.
 
 어려운 말은 쉽게 풀어서 설명해줘.`,
     },
@@ -56,7 +56,7 @@ export const websiteTutorial: TutorialData = {
       actorLabel: '사람',
       label: '자료 주기',
       title: '참고 사이트와 내 자료를 AI에게 줍니다.',
-      goal: '사진, 소개글, 참고 사이트, 연락처처럼 흩어진 자료를 한 덩어리로 만듭니다.',
+      goal: '1. 지금 할 일: 사진, 소개글, 참고 사이트, 연락처를 한곳에 모읍니다. 2. 필요한 이유: 자료가 흩어져 있으면 AI가 엉뚱한 말을 만들기 쉽습니다. 3. 끝나면 보이는 것: 홈페이지에 꼭 들어갈 내용 목록이 생깁니다.',
       recommended: ['copywriting'],
       useful: ['GitHub(깃허브): 자료와 수정 이력을 저장할 때'],
       output: '제작 요청서',
@@ -72,21 +72,21 @@ export const websiteTutorial: TutorialData = {
 5. 피하고 싶은 말투
 6. 첫 화면에 반드시 보여야 할 것
 
-너무 멋있게 포장하지 말고, 실제 제작자가 바로 쓰게 정리해줘.`,
+너무 멋있게 포장하지 말고, 실제 제작자가 바로 쓸 수 있게 정리해줘.`,
     },
     {
       step: '03',
       actor: 'ai',
       actorLabel: 'AI',
-      label: '계획 검토',
-      title: 'AI가 제안한 계획을 맞다/아니다로 봅니다.',
-      goal: '예쁜 시안을 만들기 전에 홈페이지 흐름이 내 목적과 맞는지 확인합니다.',
+      label: '순서 확인',
+      title: '첫 화면부터 어떤 순서로 보여줄지 확인합니다.',
+      goal: '1. 지금 할 일: AI가 제안한 화면 순서를 맞다/아니다로 봅니다. 2. 필요한 이유: 예쁘게 만들기 전에 손님이 이해할 순서를 잡아야 합니다. 3. 끝나면 보이는 것: 첫 화면, 소개, 후기, 문의 버튼의 순서가 정해집니다.',
       recommended: ['frontend-design'],
       useful: ['ui-mockup: 빠른 화면 초안이 필요할 때', 'ts-react: React 기반 프로젝트일 때'],
       output: '확정한 홈페이지 계획',
       prompt: `/frontend-design
 
-이 제작 요청서를 바탕으로 홈페이지 계획을 먼저 제안해줘.
+이 제작 요청서를 바탕으로 홈페이지에 보여줄 순서를 먼저 제안해줘.
 
 목표:
 1. 첫 화면에서 무엇을 하는 곳인지 바로 보이게 해줘.
@@ -95,7 +95,7 @@ export const websiteTutorial: TutorialData = {
 4. 문구는 AI가 쓴 것처럼 과장하지 말고 짧게 써줘.
 5. 내가 맞다/아니다로 검토할 수 있게 섹션 순서와 버튼 행동을 먼저 보여줘.
 
-아직 파일을 만들기보다, 먼저 계획을 확인받아줘.`,
+아직 파일을 만들기보다, 먼저 보여줄 순서를 확인받아줘.`,
     },
     {
       step: '04',
@@ -111,14 +111,14 @@ export const websiteTutorial: TutorialData = {
         {
           actor: 'ai',
           actorLabel: 'AI',
-          label: '계획 업데이트',
-          output: '피드백 반영한 수정 계획',
+          label: '수정 방향',
+          output: '피드백을 담은 수정 방향',
         },
       ],
       loop: true,
       label: '초안 보고 고치기',
       title: '첫 화면 초안을 보고 고칠 점을 말합니다.',
-      goal: 'AI티 나는 문장, 흐린 버튼, 모바일 깨짐을 찾아 고칩니다.',
+      goal: '1. 지금 할 일: 첫 화면을 보고 이상한 문장과 흐린 버튼을 표시합니다. 2. 필요한 이유: 손님은 첫 화면에서 5초 안에 나갈지 말지 정합니다. 3. 끝나면 보이는 것: 더 짧고 분명한 문장과 고칠 화면 목록이 남습니다.',
       recommended: ['design-review'],
       useful: ['web-design-guidelines: 화면 기본기를 점검할 때', 'copywriting: 문장만 다시 다듬을 때'],
       output: '수정된 홈페이지 초안',
@@ -141,23 +141,23 @@ export const websiteTutorial: TutorialData = {
       actor: 'human',
       actorLabel: '사람',
       label: '미리보기 확인',
-      title: '미리보기 주소(preview)를 열어 최종 확인합니다.',
-      goal: '눈으로만 보지 말고, 실제 브라우저에서 버튼과 링크가 작동하는지 확인합니다.',
+      title: '미리보기 링크를 열어 최종 확인합니다.',
+      goal: '1. 지금 할 일: 실제 화면을 열어 버튼과 링크를 눌러봅니다. 2. 필요한 이유: 보기에는 멀쩡해도 눌렀을 때 안 되는 경우가 많습니다. 3. 끝나면 보이는 것: 고칠 곳이 있는지 적힌 확인 결과가 남습니다.',
       recommended: ['playwright'],
       useful: ['Lighthouse(라이트하우스): 속도와 검색 노출 기본 점검', 'axe(액스): 버튼 이름과 색 대비 같은 접근성 점검'],
-      output: '최종 확인된 미리보기 주소(preview)',
+      output: '최종 확인된 미리보기 링크',
       prompt: `/playwright
 
 이 홈페이지를 실제 브라우저에서 확인해줘.
 
 필수 확인:
-1. 화면 없이 자동으로 여는 브라우저(headless, 자동 확인 방식)로 데스크톱 화면 확인
-2. 화면 없이 자동으로 여는 브라우저(headless, 자동 확인 방식)로 모바일 화면 확인
+1. 데스크톱 화면 확인
+2. 모바일 화면 확인
 3. 첫 화면에서 정체가 바로 보이는지
 4. 버튼이 눌리는지
 5. 내부 링크가 열리는지
 6. 글자나 버튼이 겹치거나 잘리지 않는지
-7. 배포 주소가 있으면 실제로 열리는지
+7. 공개 링크가 있으면 실제로 열리는지
 
 스크린샷은 필요할 때만 잠깐 확인하고, 파일로 저장하지 않아도 돼.
 문제가 있으면 통과라고 하지 말고, 고칠 파일과 다음 행동 하나만 알려줘.`,
@@ -167,19 +167,19 @@ export const websiteTutorial: TutorialData = {
       actor: 'human',
       actorLabel: '사람',
       label: '공개 링크 공유',
-      title: '최종 공개 링크(production)를 단체방에 공유합니다.',
-      goal: '내 컴퓨터에서만 열리는 화면이 아니라, 남에게 보낼 수 있는 주소를 만듭니다.',
+      title: '최종 공개 링크를 단체방에 공유합니다.',
+      goal: '1. 지금 할 일: Vercel로 남에게 보낼 수 있는 링크를 만듭니다. 2. 필요한 이유: 내 컴퓨터에서만 보이면 손님에게 보여줄 수 없습니다. 3. 끝나면 보이는 것: 단체방에 보낼 최종 홈페이지 링크가 생깁니다.',
       recommended: ['@vercel', 'vercel:vercel-cli'],
       useful: ['Vercel logs(버셀 로그): 배포 실패 이유를 찾을 때', 'GitHub(깃허브): 수정하면 자동 배포되게 만들 때'],
-      output: '단체방에 공유한 최종 공개 링크(production)',
+      output: '단체방에 공유한 최종 공개 링크',
       prompt: `@vercel
 
-이 홈페이지를 Vercel로 배포해줘.
+이 홈페이지를 Vercel로 공개 링크까지 만들어줘.
 나는 초보자야.
 
 먼저 필요한 연결 상태를 확인해줘.
 계정 연결이 필요하면 어디를 눌러야 하는지 한 단계씩 알려줘.
-연결이 끝나면 최종 공개 링크(production)를 만들어줘.
+연결이 끝나면 최종 공개 링크를 만들어줘.
 실패하면 원인을 쉬운 말로 설명하고 다음 행동 하나만 알려줘.`,
     },
   ],
