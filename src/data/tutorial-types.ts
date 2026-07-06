@@ -27,9 +27,9 @@ export type TutorialStep = {
   }[];
   screenshots?: {
     track?: 'both' | 'codex' | 'claude';
+    url: string;
     src: string;
     alt: string;
-    caption: string;
   }[];
   successCriteria?: string[];
   conceptToggles?: {

@@ -28,14 +28,14 @@ export const githubVercelTutorial: TutorialData = {
       duration: '5분',
       screenshots: [
         {
+          url: 'https://github.com/',
           src: '/assets/tutorials/github-vercel/screenshots/github-repo-files.png',
           alt: 'GitHub 저장소 파일 목록 실제 화면',
-          caption: 'GitHub 저장소는 프로젝트 파일과 수정 기록을 보관하는 온라인 작업 창고입니다.',
         },
         {
+          url: 'https://vercel.com/docs/git',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-git-docs.png',
           alt: 'Vercel Git 저장소 배포 문서 실제 화면',
-          caption: 'Vercel은 GitHub 저장소를 가져와 공개 주소로 배포하는 서비스입니다.',
         },
       ],
       successCriteria: [
@@ -101,14 +101,14 @@ export const githubVercelTutorial: TutorialData = {
       ],
       screenshots: [
         {
+          url: 'https://github.com/signup',
           src: '/assets/tutorials/github-vercel/screenshots/github-signup.png',
           alt: 'GitHub 가입 실제 화면',
-          caption: 'GitHub 계정을 먼저 만듭니다. 이메일, 비밀번호, 사용자 이름을 차례대로 입력합니다.',
         },
         {
+          url: 'https://vercel.com/signup',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-signup.png',
           alt: 'Vercel 가입 실제 화면',
-          caption: 'Vercel은 GitHub 계정으로 로그인하면 저장소 연결 단계가 짧아집니다.',
         },
       ],
       successCriteria: [
@@ -151,9 +151,9 @@ export const githubVercelTutorial: TutorialData = {
       ],
       screenshots: [
         {
+          url: 'https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository',
           src: '/assets/tutorials/github-vercel/screenshots/github-new-repository-docs.png',
           alt: 'GitHub 새 저장소 만들기 공식 문서 실제 화면',
-          caption: 'GitHub 권한이 연결되어 있으면 AI가 저장소 생성까지 할 수 있습니다. 안 되면 공식 문서의 순서대로 사람이 눌러 만들고, 다음 단계는 AI에게 맡깁니다.',
         },
       ],
       successCriteria: [
@@ -206,9 +206,9 @@ export const githubVercelTutorial: TutorialData = {
       duration: '10분',
       screenshots: [
         {
+          url: 'https://github.com/',
           src: '/assets/tutorials/github-vercel/screenshots/github-repo-files.png',
           alt: 'GitHub 저장소 파일 목록 실제 화면',
-          caption: '업로드가 끝나면 GitHub 저장소에서 파일 목록이 보입니다. 파일이 보이면 push가 된 것입니다.',
         },
       ],
       successCriteria: [
@@ -267,19 +267,19 @@ export const githubVercelTutorial: TutorialData = {
       ],
       screenshots: [
         {
+          url: 'https://vercel.com/docs/git',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-git-docs.png',
           alt: 'Vercel Git 저장소 배포 문서 실제 화면',
-          caption: 'Vercel은 GitHub 저장소를 연결하면 branch push마다 새 배포를 만들 수 있습니다.',
         },
         {
+          url: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-domain-docs.png',
           alt: 'Vercel 도메인 연결 문서 실제 화면',
-          caption: '내 도메인을 붙일 때는 Vercel의 Domains 화면에서 안내하는 DNS 값을 확인합니다.',
         },
         {
+          url: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/',
           src: '/assets/tutorials/github-vercel/screenshots/cloudflare-dns-docs.png',
           alt: 'Cloudflare DNS 레코드 문서 실제 화면',
-          caption: '도메인 DNS가 Cloudflare에 있으면 Vercel이 알려준 A/CNAME 값을 Cloudflare DNS Records에 넣습니다.',
         },
       ],
       successCriteria: [
@@ -350,14 +350,14 @@ export const githubVercelTutorial: TutorialData = {
       duration: '8분',
       screenshots: [
         {
+          url: 'https://vercel.com/docs/deployments',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-deployments-docs.png',
           alt: 'Vercel 배포 문서 실제 화면',
-          caption: 'Vercel 배포가 성공하면 공개 주소에서 새 버전을 확인할 수 있습니다.',
         },
         {
+          url: 'https://github.com/',
           src: '/assets/tutorials/github-vercel/screenshots/github-repo-files.png',
           alt: 'GitHub 저장소 파일 목록 실제 화면',
-          caption: '수정한 파일이 GitHub에 올라갔는지 먼저 확인하고, 그다음 Vercel 배포 상태를 봅니다.',
         },
       ],
       successCriteria: [

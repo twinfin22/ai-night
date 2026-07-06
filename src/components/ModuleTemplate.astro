@@ -192,7 +192,9 @@ const actorFallback = {
                           <a class="tutorial-shot-link" href={shot.src} target="_blank" rel="noreferrer" aria-label={`${shot.alt} 크게 열기`}>
                             <img src={shot.src} alt={shot.alt} loading="lazy" />
                           </a>
-                          <figcaption>{shot.caption}</figcaption>
+                          <figcaption>
+                            <a href={shot.url} target="_blank" rel="noopener noreferrer">{shot.url}</a>
+                          </figcaption>
                         </figure>
                       ))}
                     </div>

@@ -2084,9 +2084,21 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 .tutorial-shots figcaption {
   padding: 12px 14px;
   border-top: 1px solid var(--hairline);
-  color: #b9ad96;
   font-size: 15px;
   line-height: 1.5;
+}
+
+.tutorial-shots figcaption a {
+  color: #d8ceb9;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 14px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.tutorial-shots figcaption a:hover {
+  color: var(--amber);
 }
 
 .prompt-toggle {
