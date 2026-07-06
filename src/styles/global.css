@@ -1452,6 +1452,10 @@ footer h2::before { content: none; }
 .module-page--tool-selector .module-sidebar [data-track='claude'],
 .module-page--tool-selector .tutorial-flow > [data-track='codex'],
 .module-page--tool-selector .tutorial-flow > [data-track='claude'],
+.module-page--tool-selector .lesson-meta > [data-track='codex'],
+.module-page--tool-selector .lesson-meta > [data-track='claude'],
+.module-page--tool-selector .tutorial-shots > [data-track='codex'],
+.module-page--tool-selector .tutorial-shots > [data-track='claude'],
 .module-page--tool-selector .lesson-step[data-track='codex'],
 .module-page--tool-selector .lesson-step[data-track='claude'] {
   display: none;
@@ -1459,9 +1463,13 @@ footer h2::before { content: none; }
 
 html[data-setup-tool='codex'] .module-page--tool-selector .module-sidebar [data-track='codex'],
 html[data-setup-tool='codex'] .module-page--tool-selector .tutorial-flow > [data-track='codex'],
+html[data-setup-tool='codex'] .module-page--tool-selector .lesson-meta > [data-track='codex'],
+html[data-setup-tool='codex'] .module-page--tool-selector .tutorial-shots > [data-track='codex'],
 html[data-setup-tool='codex'] .module-page--tool-selector .lesson-step[data-track='codex'],
 html[data-setup-tool='claude'] .module-page--tool-selector .module-sidebar [data-track='claude'],
 html[data-setup-tool='claude'] .module-page--tool-selector .tutorial-flow > [data-track='claude'],
+html[data-setup-tool='claude'] .module-page--tool-selector .lesson-meta > [data-track='claude'],
+html[data-setup-tool='claude'] .module-page--tool-selector .tutorial-shots > [data-track='claude'],
 html[data-setup-tool='claude'] .module-page--tool-selector .lesson-step[data-track='claude'] {
   display: revert;
 }

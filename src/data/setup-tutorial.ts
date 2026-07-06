@@ -21,8 +21,8 @@ export const setupTutorial: TutorialData = {
       title: '유료 계정으로 로그인되어 있는지 확인합니다.',
       goal: '수업 중 기능 제한으로 멈추지 않게 ChatGPT 또는 Claude 유료 계정 상태를 확인합니다.',
       officialLinks: [
-        { label: 'ChatGPT 회원가입/로그인', url: 'https://chatgpt.com/' },
-        { label: 'Claude 회원가입/로그인', url: 'https://claude.ai/' },
+        { track: 'codex', label: 'ChatGPT 회원가입/로그인', url: 'https://chatgpt.com/' },
+        { track: 'claude', label: 'Claude 회원가입/로그인', url: 'https://claude.ai/' },
       ],
       successCriteria: ['내 계정으로 로그인되어 있다.', '유료 플랜 사용 가능 상태를 확인했다.'],
       conceptToggles: [
@@ -47,16 +47,18 @@ export const setupTutorial: TutorialData = {
       title: '공식 앱을 설치하고 로그인합니다.',
       goal: '검색 결과의 가짜 앱을 피하고, 공식 앱에서 수업을 시작할 준비를 합니다.',
       officialLinks: [
-        { label: 'Codex 시작하기', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
-        { label: 'Claude 공식 다운로드', url: 'https://claude.com/ko/download' },
+        { track: 'codex', label: 'Codex 시작하기', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
+        { track: 'claude', label: 'Claude 공식 다운로드', url: 'https://claude.com/ko/download' },
       ],
       screenshots: [
         {
+          track: 'codex',
           src: '/assets/tutorials/setup/codex-download.png',
           alt: 'Codex 한국어 시작 안내 화면',
           caption: 'Codex는 한국어 시작 안내에서 앱 사용법을 확인합니다.',
         },
         {
+          track: 'claude',
           src: '/assets/tutorials/setup/claude-download.png',
           alt: 'Claude 한국어 다운로드 페이지',
           caption: 'Claude는 한국어 다운로드 페이지에서 macOS용 앱 버튼을 확인합니다.',

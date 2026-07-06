@@ -11,10 +11,12 @@ export type TutorialStep = {
   goal: string;
   duration?: string;
   officialLinks?: {
+    track?: 'both' | 'codex' | 'claude';
     label: string;
     url: string;
   }[];
   screenshots?: {
+    track?: 'both' | 'codex' | 'claude';
     src: string;
     alt: string;
     caption: string;

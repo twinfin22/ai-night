@@ -141,7 +141,7 @@ const tutorialLinks = [
                   {item.officialLinks?.length && (
                     <div class="lesson-meta">
                       {item.officialLinks?.map((link) => (
-                        <a class="lesson-link" href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`${link.label} 새 창으로 열기`}>
+                        <a class="lesson-link" href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`${link.label} 새 창으로 열기`} data-track={link.track ?? 'both'}>
                           <span>공식 링크 / 새 창</span>
                           <strong>{link.label} 열기</strong>
                           <code>{link.url}</code>
@@ -153,7 +153,7 @@ const tutorialLinks = [
                   {(item.screenshots ?? []).length > 0 && (
                     <div class="tutorial-shots">
                       {(item.screenshots ?? []).map((shot) => (
-                        <figure>
+                        <figure data-track={shot.track ?? 'both'}>
                           <a class="tutorial-shot-link" href={shot.src} target="_blank" rel="noreferrer" aria-label={`${shot.alt} 크게 열기`}>
                             <img src={shot.src} alt={shot.alt} loading="lazy" />
                           </a>
