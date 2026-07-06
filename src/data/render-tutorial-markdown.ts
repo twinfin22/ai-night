@@ -41,10 +41,4 @@ ${tutorial.description}
 ## 이번 튜토리얼에서 하는 일
 ${list(tutorial.steps.map((step) => `${step.step}. ${step.label} - ${step.title}`))}
 
-${tutorial.steps.map(renderStep).join('\n')}
-## 중간에 끊기면
-
-\`\`\`text
-${tutorial.resumePrompt}
-\`\`\`
-`;
+${tutorial.steps.map(renderStep).join('\n')}`;

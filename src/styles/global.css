@@ -1354,7 +1354,7 @@ footer h2::before { content: none; }
 }
 
 .module-lesson-hero {
-  padding: 58px 20px 36px;
+  padding: 70px 24px 46px;
   border-bottom: 1px solid var(--hairline);
   background:
     linear-gradient(180deg, rgba(244, 184, 96, 0.08), rgba(244, 184, 96, 0)),
@@ -1362,22 +1362,22 @@ footer h2::before { content: none; }
 }
 
 .module-lesson-hero__inner {
-  max-width: 1240px;
+  max-width: 1500px;
   margin: 0 auto;
   display: grid;
   gap: 24px;
 }
 
 .module-lesson-hero h1 {
-  max-width: 11ch;
-  font-size: clamp(42px, 6vw, 76px);
-  line-height: 1.02;
+  max-width: 14ch;
+  font-size: clamp(46px, 6vw, 82px);
+  line-height: 1.06;
 }
 
 .module-page .hero__sub,
 .module-page .lede {
-  font-size: clamp(18px, 2vw, 21px);
-  line-height: 1.75;
+  font-size: clamp(20px, 2vw, 24px);
+  line-height: 1.82;
   color: #e3dac8;
 }
 
@@ -1400,7 +1400,7 @@ footer h2::before { content: none; }
 .lesson-step__output span {
   display: block;
   color: #b8ad98;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: .04em;
 }
@@ -1409,14 +1409,14 @@ footer h2::before { content: none; }
   display: block;
   margin-top: 6px;
   color: var(--cream);
-  font-size: 21px;
+  font-size: 24px;
   line-height: 1.35;
 }
 
 .module-shell {
-  max-width: 1240px;
+  max-width: 1500px;
   margin: 0 auto;
-  padding: 28px 20px 80px;
+  padding: 34px 24px 96px;
   display: grid;
   gap: 24px;
 }
@@ -1436,11 +1436,11 @@ footer h2::before { content: none; }
   flex: 0 0 auto;
   color: #ded4c2;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
-  padding: 10px 8px;
+  padding: 12px 10px;
   border: 0;
-  line-height: 1.35;
+  line-height: 1.45;
   transition: color .15s ease;
 }
 
@@ -1486,7 +1486,7 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 }
 
 .module-panel {
-  padding: 40px 0;
+  padding: 52px 0;
   border-top: 1px solid var(--hairline);
   scroll-margin-top: 116px;
 }
@@ -1590,12 +1590,12 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 }
 
 .tutorial-flow a {
-  min-height: 112px;
+  min-height: 128px;
   display: grid;
   align-content: center;
   justify-items: start;
   gap: 12px;
-  padding: 18px;
+  padding: 22px;
   border: 1px solid var(--hairline-2);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.045);
@@ -1626,20 +1626,20 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 .tutorial-flow span {
   display: grid;
   place-items: center;
-  width: 46px;
-  height: 46px;
+  width: 54px;
+  height: 54px;
   border: 1px solid rgba(244, 184, 96, 0.45);
   border-radius: 8px;
   color: var(--amber);
   font-family: 'SFMono-Regular', 'Menlo', monospace;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 900;
 }
 
 .tutorial-flow strong {
   color: var(--cream);
-  font-size: 19px;
-  line-height: 1.35;
+  font-size: 22px;
+  line-height: 1.42;
 }
 
 .tutorial-flow li:not(:last-child)::after {
@@ -1709,8 +1709,8 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 18px;
-  padding: 18px 0;
+  gap: 22px;
+  padding: 24px 0;
 }
 
 .lesson-step > summary::-webkit-details-marker,
@@ -1721,7 +1721,7 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 .lesson-step > summary::after {
   content: '+';
   color: var(--amber);
-  font-size: 24px;
+  font-size: 34px;
   font-weight: 800;
   line-height: 1;
   transition: color .15s ease, transform .15s ease;
@@ -1734,14 +1734,14 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 .lesson-step__num {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   border: 1px solid rgba(244, 184, 96, 0.45);
   border-radius: 8px;
   background: var(--bg);
   color: var(--amber);
   font-family: 'SFMono-Regular', 'Menlo', monospace;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 800;
 }
 
@@ -1751,54 +1751,54 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 
 .lesson-step__main {
   display: grid;
-  gap: 3px;
+  gap: 8px;
 }
 
 .lesson-step__main strong {
   color: var(--cream);
-  font-size: clamp(21px, 2.1vw, 28px);
-  line-height: 1.2;
+  font-size: clamp(26px, 2.5vw, 36px);
+  line-height: 1.22;
 }
 
 .lesson-step__main em {
   color: #d8ceb9;
-  font-size: 17px;
+  font-size: clamp(20px, 1.9vw, 24px);
   font-style: normal;
-  line-height: 1.45;
+  line-height: 1.55;
 }
 
 
 .lesson-step__body {
   display: grid;
-  gap: 22px;
-  padding: 0 0 26px 62px;
+  gap: 30px;
+  padding: 0 0 40px 78px;
 }
 
 .lesson-step__goal {
   margin: 0;
   color: var(--cream);
-  font-size: clamp(18px, 2vw, 21px);
-  line-height: 1.6;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.65;
   font-weight: 700;
 }
 
 .lesson-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
 }
 
 .lesson-meta span,
 .lesson-meta a {
   display: inline-flex;
   align-items: center;
-  min-height: 34px;
-  padding: 7px 10px;
+  min-height: 44px;
+  padding: 10px 14px;
   border: 1px solid var(--hairline-2);
   border-radius: 6px;
   color: var(--ink-soft);
   background: rgba(255, 255, 255, 0.035);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 800;
   line-height: 1.25;
   text-decoration: none;
@@ -1815,7 +1815,7 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 
 .tutorial-shots {
   display: grid;
-  gap: 14px;
+  gap: 22px;
 }
 
 .tutorial-shots figure {
@@ -1826,20 +1826,26 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   background: var(--panel);
 }
 
+.tutorial-shot-link {
+  display: block;
+  text-decoration: none;
+  cursor: zoom-in;
+}
+
 .tutorial-shots img {
   width: 100%;
   aspect-ratio: 16 / 9;
-  object-fit: cover;
+  object-fit: contain;
   object-position: top center;
   background: #fff;
 }
 
 .tutorial-shots figcaption {
-  padding: 12px 14px;
+  padding: 18px 20px;
   border-top: 1px solid var(--hairline);
   color: #d8ceb9;
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 19px;
+  line-height: 1.65;
 }
 
 .prompt-toggle {
@@ -1857,7 +1863,7 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 
 .skill-strip li {
   color: #e0d6c4;
-  font-size: 16.5px;
+  font-size: 19px;
   font-weight: 400;
   line-height: 1.72;
 }
@@ -1872,8 +1878,8 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   padding-left: 14px;
   border-left: 3px solid var(--amber);
   color: var(--cream);
-  font-size: 18px;
-  line-height: 1.55;
+  font-size: 22px;
+  line-height: 1.65;
 }
 
 .lesson-step__output span {
@@ -1883,7 +1889,7 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 }
 
 .success-box {
-  padding: 16px 18px;
+  padding: 22px 24px;
   border: 1px solid rgba(159, 210, 193, 0.36);
   border-radius: 8px;
   background: rgba(159, 210, 193, 0.07);
@@ -1892,8 +1898,8 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 .success-box h3 {
   margin: 0 0 10px;
   color: #b8e4d4;
-  font-size: 15px;
-  line-height: 1.35;
+  font-size: 20px;
+  line-height: 1.4;
 }
 
 .success-box ul {
@@ -1907,8 +1913,8 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   position: relative;
   padding-left: 18px;
   color: var(--cream);
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 19px;
+  line-height: 1.65;
 }
 
 .success-box li::before {
@@ -1925,7 +1931,7 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 
 .concept-toggles {
   display: grid;
-  gap: 8px;
+  gap: 12px;
 }
 
 .concept-toggles details {
@@ -1937,19 +1943,19 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 
 .concept-toggles summary {
   cursor: pointer;
-  padding: 13px 15px;
+  padding: 18px 20px;
   color: var(--cream);
-  font-size: 15px;
+  font-size: 21px;
   font-weight: 800;
   line-height: 1.4;
 }
 
 .concept-toggles p {
   margin: 0;
-  padding: 0 15px 15px;
+  padding: 0 20px 22px;
   color: #d8ceb9;
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 20px;
+  line-height: 1.78;
 }
 
 .skill-strip__cmds {
@@ -1963,14 +1969,14 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 .skill-strip__cmds li {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
+  padding: 8px 12px;
   border-radius: 6px;
   background: var(--panel);
   border: 1px solid var(--hairline);
   color: var(--ink-soft);
   font-family: 'SFMono-Regular', 'Menlo', 'Consolas', monospace;
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 16px;
+  line-height: 1.45;
 }
 
 .prompt-toggle {
@@ -1985,10 +1991,10 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 12px;
-  padding: 16px 18px;
+  padding: 20px 22px;
   color: var(--cream);
   font-weight: 800;
-  font-size: 17px;
+  font-size: 21px;
 }
 
 .prompt-toggle > summary::before {
@@ -2020,10 +2026,10 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   color: var(--bg);
   cursor: pointer;
   font: inherit;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 900;
   line-height: 1;
-  padding: 7px 9px;
+  padding: 10px 12px;
   transition: color .15s ease, background .15s ease;
 }
 
@@ -2035,14 +2041,14 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 .prompt-toggle pre {
   margin: 0;
   min-height: 0;
-  padding: 16px 104px 16px 18px;
+  padding: 22px 128px 22px 22px;
   overflow-x: auto;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
   color: var(--ink-soft);
   font-family: 'SFMono-Regular', 'Menlo', monospace;
-  font-size: 15.5px;
-  line-height: 1.72;
+  font-size: 18px;
+  line-height: 1.82;
 }
 
 .prompt-toggle code {
@@ -2071,7 +2077,7 @@ a:focus-visible {
   }
 
   .tutorial-shots {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .skill-strip {
@@ -2118,7 +2124,7 @@ a:focus-visible {
   }
 
   .module-shell {
-    grid-template-columns: 260px minmax(0, 1fr);
+    grid-template-columns: 300px minmax(0, 1fr);
     align-items: start;
   }
 
@@ -2136,7 +2142,7 @@ a:focus-visible {
   }
 
   .module-sidebar a {
-    padding: 7px 0;
+    padding: 10px 0;
   }
 }
 
@@ -2146,14 +2152,14 @@ a:focus-visible {
   }
 
   .module-lesson-hero h1 {
-    font-size: 40px;
-    line-height: 1.08;
+    font-size: 42px;
+    line-height: 1.1;
   }
 
   .module-page .hero__sub,
   .module-page .lede {
-    font-size: 17px;
-    line-height: 1.68;
+    font-size: 20px;
+    line-height: 1.75;
   }
 
   .module-summary div {
@@ -2177,29 +2183,29 @@ a:focus-visible {
   }
 
   .lesson-step > summary {
-    gap: 12px;
+    gap: 14px;
   }
 
   .lesson-step__num {
-    width: 36px;
-    height: 36px;
-    font-size: 12px;
+    width: 42px;
+    height: 42px;
+    font-size: 14px;
   }
 
   .lesson-step__body {
-    padding: 0 0 22px 48px;
+    padding: 0 0 28px 0;
   }
 
   .prompt-toggle > summary {
-    padding: 14px;
-    font-size: 16px;
+    padding: 18px;
+    font-size: 20px;
   }
 
   .prompt-toggle pre {
     min-height: 0;
-    padding: 52px 16px 16px;
-    font-size: 14.5px;
-    line-height: 1.72;
+    padding: 62px 18px 18px;
+    font-size: 17px;
+    line-height: 1.78;
   }
 }
 

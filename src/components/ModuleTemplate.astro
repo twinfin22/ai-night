@@ -25,14 +25,10 @@ const {
   canonicalPath,
   steps,
   summary,
-  resumePrompt,
-  resumePromptByTrack,
   toolSelector = false,
   stepsLabel = `${steps.length}단계`,
   ctaLabel = '바로 시작',
 } = Astro.props;
-
-const encodedResumeByTrack = JSON.stringify(resumePromptByTrack ?? {});
 ---
 
 <Base title={`${title} — AI 야학`} description={description} canonicalPath={canonicalPath}>
@@ -76,7 +72,6 @@ const encodedResumeByTrack = JSON.stringify(resumePromptByTrack ?? {});
         {steps.map((item) => (
           <a href={`#step-${item.step}`} data-track={item.track ?? 'both'}>{item.step}. {item.label}</a>
         ))}
-        <a href="#resume">중간에 멈출 때</a>
       </aside>
 
       <div class="module-content">
@@ -150,7 +145,9 @@ const encodedResumeByTrack = JSON.stringify(resumePromptByTrack ?? {});
                     <div class="tutorial-shots">
                       {(item.screenshots ?? []).map((shot) => (
                         <figure>
-                          <img src={shot.src} alt={shot.alt} loading="lazy" />
+                          <a class="tutorial-shot-link" href={shot.src} target="_blank" rel="noreferrer" aria-label={`${shot.alt} 크게 열기`}>
+                            <img src={shot.src} alt={shot.alt} loading="lazy" />
+                          </a>
                           <figcaption>{shot.caption}</figcaption>
                         </figure>
                       ))}
@@ -225,27 +222,12 @@ const encodedResumeByTrack = JSON.stringify(resumePromptByTrack ?? {});
           </div>
         </section>
 
-        <section id="resume" class="module-panel" aria-labelledby="resume-title">
-          <h2 id="resume-title">중간에 끊기면 이것만 남기세요.</h2>
-          <details class="prompt-toggle prompt-toggle--standalone">
-            <summary>
-              <span>다음에 이어가기 프롬프트</span>
-            </summary>
-            <div class="prompt-toggle__body">
-              <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
-              <pre><code data-resume-prompt data-codex-resume={resumePromptByTrack?.codex ?? resumePrompt} data-claude-resume={resumePromptByTrack?.claude ?? resumePrompt}>{resumePrompt}</code></pre>
-            </div>
-          </details>
-        </section>
       </div>
     </div>
   </main>
 
-  <script is:inline type="application/json" id="resume-prompts" set:html={encodedResumeByTrack} />
-
   <script>
     const setupRoot = document.querySelector('[data-tool-selector]');
-    const resumePromptData = JSON.parse(document.getElementById('resume-prompts')?.textContent || '{}');
 
     const applySetupChoice = () => {
       const selectedTool = window.localStorage.getItem('setup-tool') || '';
@@ -270,11 +252,6 @@ const encodedResumeByTrack = JSON.stringify(resumePromptByTrack ?? {});
       document.querySelectorAll('[data-os-choice]').forEach((button) => {
         button.toggleAttribute('aria-pressed', button.getAttribute('data-os-choice') === selectedOs);
       });
-
-      const resumePrompt = document.querySelector('[data-resume-prompt]');
-      if (resumePrompt && selectedTool && resumePromptData[selectedTool]) {
-        resumePrompt.textContent = resumePromptData[selectedTool];
-      }
     };
 
     document.querySelectorAll('[data-tool-choice]').forEach((button) => {
