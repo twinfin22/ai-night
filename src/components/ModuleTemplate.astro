@@ -16,7 +16,6 @@ export interface Props {
   };
   toolSelector?: boolean;
   stepsLabel?: string;
-  ctaLabel?: string;
 }
 
 const {
@@ -26,23 +25,30 @@ const {
   steps,
   summary,
   toolSelector = false,
-  stepsLabel = `${steps.length}단계`,
-  ctaLabel = '바로 시작',
 } = Astro.props;
+
+const tutorialLinks = [
+  { href: '/modules/setup/', label: 'AI 작업 환경 만들기' },
+  { href: '/modules/website/', label: '홈페이지 제작 파이프라인 만들기' },
+  { href: '/modules/blog/', label: '내 자료로 문의 받는 글 만들기' },
+  { href: '/modules/github-vercel/', label: '깃허브와 버셀 세팅' },
+];
 ---
 
 <Base title={`${title} — AI 야학`} description={description} canonicalPath={canonicalPath}>
-  <header class="masthead module-nav">
-    <div class="masthead-inner">
-      <a href="/" class="masthead__wordmark" aria-label="AI 야학 홈">
+  <header class="module-header">
+    <div class="module-header__inner">
+      <a href="/" class="module-header__brand" aria-label="AI 야학 홈">
         <img src="/favicon.svg" alt="" width="34" height="34" />
         <span>AI 야학</span>
       </a>
-      <nav class="masthead__nav" aria-label="모듈 섹션 이동">
-        <a href="#overview">시작</a>
-        <a href="#steps">{stepsLabel}</a>
-      </nav>
-      <a class="masthead__cta" href="#steps">{ctaLabel}</a>
+      <p class="module-header__title">{title}</p>
+      <label class="sr-only" for="module-jump">다른 튜토리얼로 이동</label>
+      <select id="module-jump" class="module-header__select" data-module-jump aria-label="다른 튜토리얼로 이동">
+        {tutorialLinks.map((item) => (
+          <option value={item.href} selected={item.href === canonicalPath}>{item.label}</option>
+        ))}
+      </select>
     </div>
   </header>
 
@@ -230,6 +236,13 @@ const {
   </main>
 
   <script>
+    document.querySelector('[data-module-jump]')?.addEventListener('change', (event) => {
+      const target = event.currentTarget;
+      if (target instanceof HTMLSelectElement && target.value && target.value !== window.location.pathname) {
+        window.location.href = target.value;
+      }
+    });
+
     const setupRoot = document.querySelector('[data-tool-selector]');
 
     const applySetupChoice = () => {
