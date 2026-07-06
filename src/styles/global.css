@@ -1623,7 +1623,7 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   color: var(--amber);
 }
 
-.tutorial-flow span {
+.tutorial-flow__num {
   display: grid;
   place-items: center;
   width: 46px;
@@ -1634,6 +1634,12 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   font-family: 'SFMono-Regular', 'Menlo', monospace;
   font-size: 14px;
   font-weight: 900;
+}
+
+.tutorial-flow__text {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
 }
 
 .tutorial-flow strong {
@@ -1652,6 +1658,163 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   height: 15px;
   background: var(--amber);
   opacity: .72;
+}
+
+.tutorial-flow--arrows {
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.tutorial-flow--arrows a {
+  position: relative;
+  min-height: 116px;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  align-content: stretch;
+  justify-items: stretch;
+  gap: 8px;
+  padding: 18px;
+  background:
+    linear-gradient(135deg, rgba(244, 184, 96, 0.08), rgba(255, 255, 255, 0.035) 44%),
+    rgba(255, 255, 255, 0.045);
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+
+.tutorial-flow--arrows a:hover {
+  background:
+    linear-gradient(135deg, rgba(244, 184, 96, 0.14), rgba(255, 255, 255, 0.045) 48%),
+    rgba(244, 184, 96, 0.08);
+  transform: translateY(-1px);
+}
+
+.tutorial-flow--arrows .tutorial-flow__num {
+  position: absolute;
+  top: -10px;
+  left: -1px;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  border-color: rgba(244, 184, 96, 0.68);
+  border-radius: 5px;
+  background: rgba(244, 184, 96, 0.12);
+  font-size: 9px;
+}
+
+.tutorial-flow--arrows [data-actor='human'] a {
+  border-color: rgba(244, 184, 96, 0.62);
+  background:
+    linear-gradient(135deg, rgba(244, 184, 96, 0.18), rgba(244, 184, 96, 0.045) 52%),
+    rgba(255, 255, 255, 0.05);
+}
+
+.tutorial-flow--arrows [data-actor='human'] .tutorial-flow__num {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #101114;
+}
+
+.tutorial-flow--arrows [data-actor='ai'] a {
+  border-color: rgba(127, 202, 210, 0.42);
+  background:
+    linear-gradient(135deg, rgba(127, 202, 210, 0.12), rgba(255, 255, 255, 0.035) 48%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.tutorial-flow--arrows [data-actor='ai'] .tutorial-flow__num {
+  border-color: rgba(127, 202, 210, 0.7);
+  color: #9bdbe3;
+}
+
+.tutorial-flow--arrows [data-actor='human-ai'] a {
+  border-color: rgba(244, 184, 96, 0.52);
+  background:
+    linear-gradient(135deg, rgba(244, 184, 96, 0.16), rgba(127, 202, 210, 0.08) 58%),
+    rgba(255, 255, 255, 0.045);
+}
+
+.tutorial-flow__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.tutorial-flow__actor,
+.tutorial-flow__loop {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.tutorial-flow__actor {
+  background: rgba(244, 184, 96, 0.16);
+  color: var(--amber);
+}
+
+[data-actor='ai'] .tutorial-flow__actor,
+.tutorial-flow__actor--ai {
+  background: rgba(127, 202, 210, 0.13);
+  color: #9bdbe3;
+}
+
+.tutorial-flow__loop {
+  border: 1px solid rgba(244, 184, 96, 0.5);
+  color: var(--cream);
+}
+
+.tutorial-flow--arrows em {
+  display: -webkit-box;
+  color: #cfc4b0;
+  font-size: 14.5px;
+  font-style: normal;
+  font-weight: 650;
+  line-height: 1.45;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.tutorial-flow--arrows li:not(:last-child)::after {
+  content: '↓';
+  left: 25px;
+  bottom: -24px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(244, 184, 96, 0.45);
+  border-radius: 999px;
+  background: #101114;
+  color: var(--amber);
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.tutorial-flow--arrows li:nth-child(3)::after {
+  display: none;
+}
+
+.tutorial-flow--arrows [data-loop='true']::before {
+  content: '→';
+  position: absolute;
+  top: -24px;
+  left: 25px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(244, 184, 96, 0.54);
+  border-radius: 999px;
+  background: #101114;
+  color: var(--amber);
+  font-size: 16px;
+  font-weight: 900;
 }
 
 .module-ai-note {
@@ -1862,6 +2025,18 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   line-height: 1.72;
 }
 
+.skill-strip a {
+  color: var(--amber);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.skill-strip a:hover {
+  color: var(--cream);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .skill-strip {
   display: grid;
   gap: 20px;
@@ -1973,6 +2148,12 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   line-height: 1.4;
 }
 
+.skill-strip__cmds a {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
 .prompt-toggle {
   overflow: hidden;
   background: var(--panel);
@@ -2082,6 +2263,11 @@ a:focus-visible {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 
+  .tutorial-flow--arrows {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px 34px;
+  }
+
   .module-page--tool-selector .tutorial-flow {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -2100,6 +2286,28 @@ a:focus-visible {
 
   .tutorial-flow li:not(:last-child)::after {
     display: none;
+  }
+
+  .tutorial-flow--arrows li:not(:last-child)::after {
+    content: '→';
+    top: 50%;
+    right: -30px;
+    bottom: auto;
+    left: auto;
+    display: grid;
+    transform: translateY(-50%);
+  }
+
+  .tutorial-flow--arrows li:nth-child(3)::after {
+    display: none;
+  }
+
+  .tutorial-flow--arrows [data-loop='true']::before {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: -30px;
+    transform: translateY(-50%);
   }
 
   .submission-grid {
@@ -2200,6 +2408,24 @@ a:focus-visible {
     padding: 52px 16px 16px;
     font-size: 14.5px;
     line-height: 1.72;
+  }
+
+  .tutorial-flow--arrows a {
+    min-height: 108px;
+  }
+
+  .tutorial-flow--arrows .tutorial-flow__num {
+    width: 24px;
+    height: 24px;
+    font-size: 9px;
+  }
+
+  .tutorial-flow--arrows strong {
+    font-size: 18px;
+  }
+
+  .tutorial-flow--arrows em {
+    font-size: 14px;
   }
 }
 

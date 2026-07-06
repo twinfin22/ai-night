@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { parseSkillReference } from '../data/skill-links';
 import type { SummaryItem, TutorialStep } from '../data/tutorial-types';
 
 export interface Props {
@@ -29,10 +30,16 @@ const {
   resumePromptByTrack,
   toolSelector = false,
   stepsLabel = `${steps.length}단계`,
-  ctaLabel = '바로 시작',
+  ctaLabel = '실습 시작',
 } = Astro.props;
 
 const encodedResumeByTrack = JSON.stringify(resumePromptByTrack ?? {});
+const overviewFlow = canonicalPath === '/modules/website/';
+const actorFallback = {
+  human: '사람',
+  ai: 'AI',
+  'human-ai': '사람',
+};
 ---
 
 <Base title={`${title} — AI 야학`} description={description} canonicalPath={canonicalPath}>
@@ -104,12 +111,20 @@ const encodedResumeByTrack = JSON.stringify(resumePromptByTrack ?? {});
               <p class="setup-selector__hint">선택한 도구에 맞는 단계만 보여줍니다.</p>
             </div>
           )}
-          <ol class="tutorial-flow">
+          <ol class:list={['tutorial-flow', overviewFlow && 'tutorial-flow--arrows']}>
             {steps.map((item) => (
-              <li data-track={item.track ?? 'both'}>
+              <li data-track={item.track ?? 'both'} data-actor={item.actor ?? 'human-ai'} data-loop={item.loop ? 'true' : undefined}>
                 <a href={`#step-${item.step}`} data-track={item.track ?? 'both'}>
-                  <span>{item.step}</span>
-                  <strong>{item.label}</strong>
+                  <span class="tutorial-flow__num">{item.step}</span>
+                  <span class="tutorial-flow__text">
+                    {overviewFlow && (
+                      <span class="tutorial-flow__meta">
+                        <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human-ai']}</span>
+                      </span>
+                    )}
+                    <strong>{item.label}</strong>
+                    {overviewFlow && <em>{item.output}</em>}
+                  </span>
                 </a>
               </li>
             ))}
@@ -161,13 +176,32 @@ const encodedResumeByTrack = JSON.stringify(resumePromptByTrack ?? {});
                     {item.recommended.length > 0 && (
                       <div>
                         <span>추천 스킬</span>
-                        <ul class="skill-strip__cmds">{item.recommended.map((skill) => <li>{skill}</li>)}</ul>
+                        <ul class="skill-strip__cmds">
+                          {item.recommended.map((item) => {
+                            const skill = parseSkillReference(item);
+                            return (
+                              <li>
+                                {skill.url ? <a href={skill.url} target="_blank" rel="noreferrer">{skill.name}</a> : skill.name}
+                              </li>
+                            );
+                          })}
+                        </ul>
                       </div>
                     )}
                     {item.useful.length > 0 && (
                       <div>
                         <span>같이 쓰면 좋은 기능</span>
-                        <ul>{item.useful.map((skill) => <li>{skill}</li>)}</ul>
+                        <ul>
+                          {item.useful.map((item) => {
+                            const skill = parseSkillReference(item);
+                            return (
+                              <li>
+                                {skill.url ? <a href={skill.url} target="_blank" rel="noreferrer">{skill.name}</a> : skill.name}
+                                {skill.description && <>: {skill.description}</>}
+                              </li>
+                            );
+                          })}
+                        </ul>
                       </div>
                     )}
                   </div>
