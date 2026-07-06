@@ -9,9 +9,12 @@ export interface Props {
   markdownPath: string;
   steps: TutorialStep[];
   summary: SummaryItem[];
-  prepItems: string[];
-  prepNote: string;
   resumePrompt: string;
+  resumePromptByTrack?: {
+    codex: string;
+    claude: string;
+  };
+  toolSelector?: boolean;
   stepsLabel?: string;
   ctaLabel?: string;
 }
@@ -20,15 +23,16 @@ const {
   title,
   description,
   canonicalPath,
-  markdownPath,
   steps,
   summary,
-  prepItems,
-  prepNote,
   resumePrompt,
+  resumePromptByTrack,
+  toolSelector = false,
   stepsLabel = `${steps.length}단계`,
   ctaLabel = '바로 시작',
 } = Astro.props;
+
+const encodedResumeByTrack = JSON.stringify(resumePromptByTrack ?? {});
 ---
 
 <Base title={`${title} — AI 야학`} description={description} canonicalPath={canonicalPath}>
@@ -39,109 +43,117 @@ const {
         <span>AI 야학</span>
       </a>
       <nav class="masthead__nav" aria-label="모듈 섹션 이동">
-        <a href="#start">시작</a>
+        <a href="#overview">시작</a>
         <a href="#steps">{stepsLabel}</a>
       </nav>
       <a class="masthead__cta" href="#steps">{ctaLabel}</a>
     </div>
   </header>
 
-  <main class="module-page">
+  <main class={toolSelector ? 'module-page module-page--tool-selector' : 'module-page'} data-tool-selector={toolSelector ? 'true' : undefined}>
     <section class="module-lesson-hero" aria-labelledby="module-title">
       <div class="module-lesson-hero__inner">
         <div>
           <span class="eyebrow">튜토리얼</span>
           <h1 id="module-title">{title}</h1>
         </div>
-        <aside class="module-summary" aria-label="모듈 요약">
-          {summary.map((item) => (
-            <div>
-              <span>{item.label}</span>
-              <strong>{item.value}</strong>
-            </div>
-          ))}
-        </aside>
+        {summary.length > 0 && (
+          <aside class="module-summary" aria-label="모듈 요약">
+            {summary.map((item) => (
+              <div>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </div>
+            ))}
+          </aside>
+        )}
       </div>
     </section>
 
     <div class="module-shell">
       <aside class="module-sidebar" aria-label="모듈 빠른 이동">
-        <a href="#start">시작 전 준비</a>
         <a href="#overview">전체 흐름</a>
         {steps.map((item) => (
-          <a href={`#step-${item.step}`}>{item.step}. {item.label}</a>
+          <a href={`#step-${item.step}`} data-track={item.track ?? 'both'}>{item.step}. {item.label}</a>
         ))}
         <a href="#resume">중간에 멈출 때</a>
       </aside>
 
       <div class="module-content">
-        <section id="start" class="module-panel" aria-labelledby="start-title">
-          <h2 id="start-title">먼저 이것만 준비하세요.</h2>
-          <ul class="prep-list">
-            {prepItems.map((item) => <li>{item}</li>)}
-          </ul>
-          <div class="module-note">
-            <strong>중요:</strong>
-            {prepNote}
-          </div>
-        </section>
-
         <section id="overview" class="module-panel" aria-labelledby="overview-title">
           <h2 id="overview-title">이번 튜토리얼에서 하는 일</h2>
-          <p class="module-panel__intro">사람이 확인하고 결정하는 순서입니다. AI가 할 일은 각 단계 안에 같이 넣었습니다.</p>
+          {toolSelector && (
+            <div class="setup-selector" aria-labelledby="setup-selector-title">
+              <h3 id="setup-selector-title">먼저 내 환경을 골라주세요.</h3>
+              <div class="setup-selector__grid">
+                <div>
+                  <h4>컴퓨터</h4>
+                  <div class="segmented-control" role="group" aria-label="운영체제 선택">
+                    <button type="button" data-os-choice="mac">맥(Mac)</button>
+                    <button type="button" data-os-choice="windows">윈도우(Windows)</button>
+                  </div>
+                </div>
+                <div>
+                  <h4>도구</h4>
+                  <div class="segmented-control" role="group" aria-label="도구 선택">
+                    <button type="button" data-tool-choice="codex">코덱스(Codex)</button>
+                    <button type="button" data-tool-choice="claude">클로드(Claude)</button>
+                  </div>
+                </div>
+              </div>
+              <p class="setup-selector__hint">선택한 도구에 맞는 단계만 보여줍니다.</p>
+            </div>
+          )}
           <ol class="tutorial-flow">
             {steps.map((item) => (
-              <li>
-                <a href={`#step-${item.step}`}>
+              <li data-track={item.track ?? 'both'}>
+                <a href={`#step-${item.step}`} data-track={item.track ?? 'both'}>
                   <span>{item.step}</span>
                   <strong>{item.label}</strong>
                 </a>
               </li>
             ))}
           </ol>
-          <details class="module-ai-note">
-            <summary>AI에게 이 페이지를 줄 때</summary>
-            <p>
-              이 튜토리얼 전체를 텍스트로 넘기려면 <a href={markdownPath}>{markdownPath}</a> 주소를 사용하세요.
-            </p>
-          </details>
         </section>
 
         <section id="steps" class="module-panel" aria-labelledby="steps-title">
           <h2 id="steps-title">한 단계씩 열어서 따라가세요.</h2>
 
           <div class="lesson-steps">
-            {steps.map((item, index) => (
-              <details id={`step-${item.step}`} class="lesson-step" open={index === 0}>
-                <summary>
-                  <span class="lesson-step__num">{item.step}</span>
-                  <span class="lesson-step__main">
-                    <strong>{item.label}</strong>
-                    <em>{item.title}</em>
-                  </span>
-                </summary>
+            {steps.map((item, index) => {
+              const track = item.track ?? 'both';
 
-                <div class="lesson-step__body">
+              return (
+                <>
+                  <details id={`step-${item.step}`} class="lesson-step" data-track={track} open={index === 0}>
+                    <summary>
+                      <span class="lesson-step__num">{item.step}</span>
+                      <span class="lesson-step__main">
+                        <strong>{item.label}</strong>
+                        <em>{item.title}</em>
+                      </span>
+                    </summary>
+
+                    <div class="lesson-step__body">
                   <p class="lesson-step__goal">{item.goal}</p>
 
-                  {(item.learner.length > 0 || item.ai.length > 0) && (
-                    <div class="lesson-columns">
-                      {item.learner.length > 0 && (
-                        <div>
-                          <h3>내가 할 일</h3>
-                          <ul>
-                            {item.learner.map((task) => <li>{task}</li>)}
-                          </ul>
-                        </div>
-                      )}
-                      {item.ai.length > 0 && (
-                        <div>
-                          <h3>AI에게 맡길 일</h3>
-                          <ul>
-                            {item.ai.map((task) => <li>{task}</li>)}
-                          </ul>
-                        </div>
-                      )}
+                  {(item.duration || item.officialLinks?.length) && (
+                    <div class="lesson-meta">
+                      {item.duration && <span>예상 시간 {item.duration}</span>}
+                      {item.officialLinks?.map((link) => (
+                        <a href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
+                      ))}
+                    </div>
+                  )}
+
+                  {(item.screenshots ?? []).length > 0 && (
+                    <div class="tutorial-shots">
+                      {(item.screenshots ?? []).map((shot) => (
+                        <figure>
+                          <img src={shot.src} alt={shot.alt} loading="lazy" />
+                          <figcaption>{shot.caption}</figcaption>
+                        </figure>
+                      ))}
                     </div>
                   )}
 
@@ -162,18 +174,54 @@ const {
 
                   <p class="lesson-step__output"><span>이 단계 결과물</span>{item.output}</p>
 
+                  {(item.successCriteria ?? []).length > 0 && (
+                    <div class="success-box">
+                      <h3>끝났는지 확인</h3>
+                      <ul>
+                        {(item.successCriteria ?? []).map((criterion) => <li>{criterion}</li>)}
+                      </ul>
+                    </div>
+                  )}
+
+                  {(item.conceptToggles ?? []).length > 0 && (
+                    <div class="concept-toggles">
+                      {(item.conceptToggles ?? []).map((concept) => (
+                        <details>
+                          <summary>{concept.title}</summary>
+                          <p>{concept.body}</p>
+                        </details>
+                      ))}
+                    </div>
+                  )}
+
+                  {item.recoveryPrompt && (
+                    <details class="prompt-toggle">
+                      <summary>
+                        <span>막혔을 때</span>
+                      </summary>
+                      <div class="prompt-toggle__body">
+                        <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
+                        <pre><code>{item.recoveryPrompt}</code></pre>
+                      </div>
+                    </details>
+                  )}
+
                   {item.prompt && (
                     <details class="prompt-toggle">
                       <summary>
                         <span>복붙 프롬프트</span>
-                        <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
                       </summary>
-                      <pre><code>{item.prompt}</code></pre>
+                      <div class="prompt-toggle__body">
+                        <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
+                        <pre><code>{item.prompt}</code></pre>
+                      </div>
                     </details>
                   )}
-                </div>
-              </details>
-            ))}
+                    </div>
+                  </details>
+                </>
+              );
+            })}
           </div>
         </section>
 
@@ -182,16 +230,69 @@ const {
           <details class="prompt-toggle prompt-toggle--standalone">
             <summary>
               <span>다음에 이어가기 프롬프트</span>
-              <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
             </summary>
-            <pre><code>{resumePrompt}</code></pre>
+            <div class="prompt-toggle__body">
+              <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
+              <pre><code data-resume-prompt data-codex-resume={resumePromptByTrack?.codex ?? resumePrompt} data-claude-resume={resumePromptByTrack?.claude ?? resumePrompt}>{resumePrompt}</code></pre>
+            </div>
           </details>
         </section>
       </div>
     </div>
   </main>
 
+  <script is:inline type="application/json" id="resume-prompts" set:html={encodedResumeByTrack} />
+
   <script>
+    const setupRoot = document.querySelector('[data-tool-selector]');
+    const resumePromptData = JSON.parse(document.getElementById('resume-prompts')?.textContent || '{}');
+
+    const applySetupChoice = () => {
+      const selectedTool = window.localStorage.getItem('setup-tool') || '';
+      const selectedOs = window.localStorage.getItem('setup-os') || '';
+
+      if (setupRoot && selectedTool) {
+        document.documentElement.dataset.setupTool = selectedTool;
+      } else {
+        delete document.documentElement.dataset.setupTool;
+      }
+
+      if (setupRoot && selectedOs) {
+        document.documentElement.dataset.setupOs = selectedOs;
+      } else {
+        delete document.documentElement.dataset.setupOs;
+      }
+
+      document.querySelectorAll('[data-tool-choice]').forEach((button) => {
+        button.toggleAttribute('aria-pressed', button.getAttribute('data-tool-choice') === selectedTool);
+      });
+
+      document.querySelectorAll('[data-os-choice]').forEach((button) => {
+        button.toggleAttribute('aria-pressed', button.getAttribute('data-os-choice') === selectedOs);
+      });
+
+      const resumePrompt = document.querySelector('[data-resume-prompt]');
+      if (resumePrompt && selectedTool && resumePromptData[selectedTool]) {
+        resumePrompt.textContent = resumePromptData[selectedTool];
+      }
+    };
+
+    document.querySelectorAll('[data-tool-choice]').forEach((button) => {
+      button.addEventListener('click', () => {
+        window.localStorage.setItem('setup-tool', button.getAttribute('data-tool-choice') || '');
+        applySetupChoice();
+      });
+    });
+
+    document.querySelectorAll('[data-os-choice]').forEach((button) => {
+      button.addEventListener('click', () => {
+        window.localStorage.setItem('setup-os', button.getAttribute('data-os-choice') || '');
+        applySetupChoice();
+      });
+    });
+
+    applySetupChoice();
+
     const copyButtons = document.querySelectorAll('[data-copy-prompt]');
 
     const fallbackCopy = (text: string) => {

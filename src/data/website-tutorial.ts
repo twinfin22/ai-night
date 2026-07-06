@@ -9,15 +9,7 @@ export const websiteTutorial: TutorialData = {
   summary: [
     { label: '진행 방식', value: '6단계' },
     { label: '최종 결과', value: '공개 링크' },
-  ],
-  prepItems: [
-    '참고하고 싶은 홈페이지 2-3개',
-    '내 소개글, 사진, 연락처, 신청 링크',
-    '방문자가 눌러야 할 버튼 행동 1개',
-    '피하고 싶은 말투 1-2개',
-  ],
-  prepNote: '빈칸을 혼자 채우려고 오래 붙잡지 마세요. 1단계에서 AI가 먼저 물어보게 만듭니다.',
-  resumePrompt: `지금까지 한 일을 요약해줘.
+  ],  resumePrompt: `지금까지 한 일을 요약해줘.
 그리고 다음 세션 시작 때 그대로 붙여넣을 프롬프트를 만들어줘.
 
 포함할 것:
@@ -38,8 +30,6 @@ export const websiteTutorial: TutorialData = {
       goal: '내가 만들 홈페이지의 목적, 방문자, 버튼 행동을 말로 정리합니다.',
       recommended: ['office-hours'],
       useful: ['spec: 말한 내용을 한 장짜리 설계로 정리할 때'],
-      learner: ['질문에 짧게 답하기', '내가 싫어하는 톤 말하기', '최종 정리가 내 말과 맞는지 확인하기'],
-      ai: ['질문하기', '답을 묶어서 홈페이지 제작 메모(pipeline_canvas) 만들기', '빠진 정보 다시 묻기'],
       output: '홈페이지 제작 메모(pipeline_canvas) 초안',
       prompt: `/office-hours
 
@@ -61,8 +51,6 @@ export const websiteTutorial: TutorialData = {
       goal: '사진, 소개글, 참고 사이트, 연락처처럼 흩어진 자료를 한 덩어리로 만듭니다.',
       recommended: ['copywriting'],
       useful: ['GitHub(깃허브): 자료와 수정 이력을 저장할 때'],
-      learner: ['참고 사이트 2-3개 고르기', '꼭 들어갈 자료 붙여넣기', '과장된 표현 지우기'],
-      ai: ['섹션 목록 만들기', '버튼 문구 제안하기', '빼도 되는 내용 골라내기', '제작 요청서로 정리하기'],
       output: '제작 요청서',
       prompt: `/copywriting
 
@@ -85,8 +73,6 @@ export const websiteTutorial: TutorialData = {
       goal: '예쁜 시안을 만들기 전에 홈페이지 흐름이 내 목적과 맞는지 확인합니다.',
       recommended: ['frontend-design'],
       useful: ['ui-mockup: 빠른 화면 초안이 필요할 때', 'ts-react: React 기반 프로젝트일 때'],
-      learner: ['첫 화면 문구 고르기', '버튼 행동 확인하기', '내 자료가 빠지지 않았는지 보기'],
-      ai: ['홈페이지 계획 제안하기', '섹션 순서 만들기', '모바일 화면 기준으로 구조 잡기'],
       output: '확정한 홈페이지 계획',
       prompt: `/frontend-design
 
@@ -108,8 +94,6 @@ export const websiteTutorial: TutorialData = {
       goal: 'AI티 나는 문장, 흐린 버튼, 모바일 깨짐을 찾아 고칩니다.',
       recommended: ['design-review'],
       useful: ['web-design-guidelines: 화면 기본기를 점검할 때', 'copywriting: 문장만 다시 다듬을 때'],
-      learner: ['고칠 지적을 고르기', '내 말투와 맞는 문장 선택하기', '수정 전/후 차이 남기기'],
-      ai: ['첫 화면 초안 만들기', '문제 찾기', '수정 문장 제안하기', '모바일 문제 짚기'],
       output: '수정된 홈페이지 초안',
       prompt: `/design-review
 
@@ -132,8 +116,6 @@ export const websiteTutorial: TutorialData = {
       goal: '눈으로만 보지 말고, 실제 브라우저에서 버튼과 링크가 작동하는지 확인합니다.',
       recommended: ['playwright'],
       useful: ['Lighthouse(라이트하우스): 속도와 검색 노출 기본 점검', 'axe(액스): 버튼 이름과 색 대비 같은 접근성 점검'],
-      learner: ['미리보기 주소(preview) 열기', '모바일에서 읽어보기', '실패한 버튼이나 링크 고치기'],
-      ai: ['미리보기 주소(preview) 만들기', '데스크톱/모바일 확인하기', '버튼·글자 겹침·검색 기본·속도 점검하기', '문제 파일과 다음 행동 말하기'],
       output: '최종 확인된 미리보기 주소(preview)',
       prompt: `/playwright
 
@@ -158,8 +140,6 @@ export const websiteTutorial: TutorialData = {
       goal: '내 컴퓨터에서만 열리는 화면이 아니라, 남에게 보낼 수 있는 주소를 만듭니다.',
       recommended: ['@vercel', 'vercel:vercel-cli'],
       useful: ['Vercel logs(버셀 로그): 배포 실패 이유를 찾을 때', 'GitHub(깃허브): 수정하면 자동 배포되게 만들 때'],
-      learner: ['공개 링크(production) 열어보기', '안 열리면 에러를 복사해 AI에게 주기', '커뮤니티 단체방에 붙여넣기'],
-      ai: ['연결 상태 확인하기', '공개 배포하기', '배포 주소 기록하기', '실패 원인을 쉬운 말로 바꾸기'],
       output: '단체방에 공유한 최종 공개 링크(production)',
       prompt: `@vercel
 

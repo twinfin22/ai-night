@@ -5,13 +5,28 @@ export type SummaryItem = {
 
 export type TutorialStep = {
   step: string;
+  track?: 'both' | 'codex' | 'claude';
   label: string;
   title: string;
   goal: string;
+  duration?: string;
+  officialLinks?: {
+    label: string;
+    url: string;
+  }[];
+  screenshots?: {
+    src: string;
+    alt: string;
+    caption: string;
+  }[];
+  successCriteria?: string[];
+  conceptToggles?: {
+    title: string;
+    body: string;
+  }[];
+  recoveryPrompt?: string;
   recommended: string[];
   useful: string[];
-  learner: string[];
-  ai: string[];
   output: string;
   prompt?: string;
 };
@@ -24,7 +39,10 @@ export type TutorialData = {
   steps: TutorialStep[];
   stepsLabel: string;
   summary: SummaryItem[];
-  prepItems: string[];
-  prepNote: string;
   resumePrompt: string;
+  resumePromptByTrack?: {
+    codex: string;
+    claude: string;
+  };
+  toolSelector?: boolean;
 };

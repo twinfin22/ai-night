@@ -9,15 +9,7 @@ export const blogTutorial: TutorialData = {
   summary: [
     { label: '진행 방식', value: '5단계' },
     { label: '최종 결과', value: '블로그 초안' },
-  ],
-  prepItems: [
-    '기존 블로그 글, 고객 후기, FAQ, 상품 설명, 사진 설명, 웹사이트 링크 중 1개',
-    '이번 글로 얻고 싶은 결과 1개',
-    '피하고 싶은 말투 1-2개',
-    '다음에 연락받을 방법 또는 신청 링크',
-  ],
-  prepNote: '빈칸을 혼자 채우려고 오래 붙잡지 마세요. 1단계에서 AI가 먼저 물어보게 만듭니다. 자료에 없는 내용은 만들지 않습니다.',
-  resumePrompt: `지금까지 한 일을 요약해줘.
+  ],  resumePrompt: `지금까지 한 일을 요약해줘.
 그리고 다음 20분에 그대로 붙여넣고 이어갈 프롬프트를 만들어줘.
 
 포함할 것:
@@ -36,8 +28,6 @@ export const blogTutorial: TutorialData = {
       goal: '이번 글로 얻고 싶은 결과를 문의, 신뢰, 수업/서비스 신청 중 하나로 정합니다.',
       recommended: ['office-hours'],
       useful: [],
-      learner: ['질문에 짧게 답하기', '피하고 싶은 방향 말하기', '최종 목표가 내 상황과 맞는지 확인하기'],
-      ai: ['한 번에 하나씩 질문하기', '목표를 하나로 정리하기', '이 글에서 피해야 할 방향 3줄로 말하기'],
       output: '글의 방향 1개',
       prompt: `나는 내 자료를 바탕으로 블로그 글을 하나 쓰려고 해.
 
@@ -58,8 +48,6 @@ export const blogTutorial: TutorialData = {
       goal: '기존 글, 후기, FAQ, 상품 설명, 사진 설명, 웹사이트 링크 중 하나만 넣고 글로 쓰기 좋은 질문을 찾습니다.',
       recommended: ['copywriting'],
       useful: [],
-      learner: ['자료 하나만 고르기', '그대로 붙여넣기', '자료에 없는 내용이 섞였는지 확인하기'],
-      ai: ['자료 핵심 3줄 찾기', '독자 질문 3개 뽑기', '글로 쓰기 어려운 방향 말하기'],
       output: '자료 핵심 3줄과 독자 질문 3개',
       prompt: `아래 자료 하나를 블로그 글감으로 바꿔줘.
 
@@ -85,8 +73,6 @@ export const blogTutorial: TutorialData = {
       goal: '검색어처럼 짧고, 내가 실제 경험으로 답할 수 있는 질문 하나를 고릅니다.',
       recommended: ['copywriting'],
       useful: [],
-      learner: ['질문 3개 읽기', '내 경험으로 답할 수 있는 것 고르기', '네이버에서 검색할 만한 말인지 확인하기'],
-      ai: ['질문을 짧게 다듬기', '없는 내용이 필요한 질문 걸러내기', '가장 좋은 질문 1개 추천하기'],
       output: '독자 질문 1개',
       prompt: '',
     },
@@ -97,8 +83,6 @@ export const blogTutorial: TutorialData = {
       goal: '독자가 겪는 문제, 내가 가진 자료나 경험, 해결 흐름, 체크리스트, 다음 행동 순서로 짧게 씁니다.',
       recommended: ['copywriting'],
       useful: [],
-      learner: ['독자 질문 붙여넣기', '사용할 자료 요약 넣기', '과장된 표현 지우기'],
-      ai: ['짧은 초안 쓰기', '자료 밖 내용 만들지 않기', '다음 행동 문장 제안하기'],
       output: '짧은 블로그 초안',
       prompt: `아래 독자 질문과 자료를 바탕으로 블로그 초안을 써줘.
 
@@ -129,8 +113,6 @@ export const blogTutorial: TutorialData = {
       goal: '추상적인 칭찬, 근거 없는 말, 내 경험이 없는 것처럼 보이는 문장, 너무 긴 문장을 잡습니다.',
       recommended: ['copywriting'],
       useful: ['design-review: 문장과 흐름을 더 세게 점검할 때'],
-      learner: ['고칠 지적 고르기', '내 말투와 맞는 문장 선택하기', '찜찜한 부분 남기기'],
-      ai: ['문제점 찾기', '바로 고친 버전 쓰기', '수정 전/후 차이 설명하기'],
       output: '수정된 초안',
       prompt: `아래 블로그 초안을 고쳐줘.
 
