@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import type { SummaryItem, TutorialStep } from '../data/tutorial-types';
+import type { TutorialStep } from '../data/tutorial-types';
 
 export interface Props {
   title: string;
@@ -8,7 +8,6 @@ export interface Props {
   canonicalPath: string;
   markdownPath: string;
   steps: TutorialStep[];
-  summary: SummaryItem[];
   resumePrompt: string;
   resumePromptByTrack?: {
     codex: string;
@@ -24,7 +23,6 @@ const {
   description,
   canonicalPath,
   steps,
-  summary,
   toolSelector = false,
   stepsLabel = `${steps.length}단계`,
   ctaLabel = '바로 시작',
@@ -53,16 +51,6 @@ const {
           <span class="eyebrow">튜토리얼</span>
           <h1 id="module-title">{title}</h1>
         </div>
-        {summary.length > 0 && (
-          <aside class="module-summary" aria-label="모듈 요약">
-            {summary.map((item) => (
-              <div>
-                <span>{item.label}</span>
-                <strong>{item.value}</strong>
-              </div>
-            ))}
-          </aside>
-        )}
       </div>
     </section>
 
@@ -148,7 +136,11 @@ const {
                           <a class="tutorial-shot-link" href={shot.src} target="_blank" rel="noreferrer" aria-label={`${shot.alt} 크게 열기`}>
                             <img src={shot.src} alt={shot.alt} loading="lazy" />
                           </a>
-                          <figcaption>{shot.caption}</figcaption>
+                          <figcaption>
+                            {shot.captionUrl ? (
+                              <a href={shot.captionUrl} target="_blank" rel="noreferrer">{shot.caption}</a>
+                            ) : shot.caption}
+                          </figcaption>
                         </figure>
                       ))}
                     </div>

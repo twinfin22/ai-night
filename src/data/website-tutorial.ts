@@ -6,10 +6,7 @@ export const websiteTutorial: TutorialData = {
   canonicalPath: '/modules/website/',
   markdownPath: '/modules/website.md',
   stepsLabel: '6단계',
-  summary: [
-    { label: '진행 방식', value: '6단계' },
-    { label: '최종 결과', value: '공개 링크' },
-  ],  resumePrompt: `지금까지 한 일을 요약해줘.
+  resumePrompt: `지금까지 한 일을 요약해줘.
 그리고 다음 세션 시작 때 그대로 붙여넣을 프롬프트를 만들어줘.
 
 포함할 것:

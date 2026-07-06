@@ -7,7 +7,6 @@ export const setupTutorial: TutorialData = {
   markdownPath: '/modules/setup.md',
   stepsLabel: '트랙 2개',
   toolSelector: true,
-  summary: [],
   resumePrompt: `내 작업 폴더는 문서/ai-yahak-studio야. 이 폴더를 기준으로 다음 실습을 이어가자.`,
   resumePromptByTrack: {
     codex: `내 작업 폴더는 문서/ai-yahak-studio야. 이 폴더를 기준으로 다음 실습을 이어가자.`,

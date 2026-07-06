@@ -2,14 +2,10 @@ import type { TutorialData } from './tutorial-types';
 
 export const githubVercelTutorial: TutorialData = {
   title: '깃허브와 버셀 세팅',
-  description: '내 작업물을 GitHub에 저장하고 Vercel로 공개 주소를 만드는 왕초보용 AI 야학 튜토리얼.',
+  description: '내 작업물을 GitHub에 저장하고 Vercel로 공개 주소를 만든 뒤, 필요하면 Cloudflare로 내 도메인까지 연결하는 왕초보용 AI 야학 튜토리얼.',
   canonicalPath: '/modules/github-vercel/',
   markdownPath: '/modules/github-vercel.md',
-  stepsLabel: '6단계',
-  summary: [
-    { label: '진행 방식', value: '6단계' },
-    { label: '최종 결과', value: '공개 링크' },
-  ],
+  stepsLabel: '6단계 + 옵션',
   resumePrompt: `깃허브와 버셀 세팅을 하다가 중간에 멈췄어.
 내가 지금 어디까지 했는지 물어보고, 다음 한 단계만 쉬운 말로 안내해줘.
 
@@ -18,7 +14,8 @@ export const githubVercelTutorial: TutorialData = {
 2. 저장소(repository)를 만들었는지
 3. 내 파일이 GitHub에 올라갔는지
 4. Vercel에서 GitHub 저장소를 가져왔는지
-5. 공개 주소가 열리는지`,
+5. 공개 주소가 열리는지
+6. 내 도메인을 Cloudflare로 연결해야 하는 상황인지`,
   steps: [
     {
       step: '01',
@@ -30,12 +27,14 @@ export const githubVercelTutorial: TutorialData = {
         {
           src: '/assets/tutorials/github-vercel/screenshots/github-repo-files.png',
           alt: 'GitHub 저장소 파일 목록 실제 화면',
-          caption: 'GitHub 저장소는 프로젝트 파일과 수정 기록을 보관하는 온라인 작업 창고입니다.',
+          caption: 'GitHub 저장소 예시',
+          captionUrl: 'https://github.com/github/docs',
         },
         {
           src: '/assets/tutorials/github-vercel/screenshots/vercel-git-docs.png',
           alt: 'Vercel Git 저장소 배포 문서 실제 화면',
-          caption: 'Vercel은 GitHub 저장소를 가져와 공개 주소로 배포하는 서비스입니다.',
+          caption: 'Vercel Git 배포 문서',
+          captionUrl: 'https://vercel.com/docs/git',
         },
       ],
       successCriteria: [
@@ -103,12 +102,14 @@ export const githubVercelTutorial: TutorialData = {
         {
           src: '/assets/tutorials/github-vercel/screenshots/github-signup.png',
           alt: 'GitHub 가입 실제 화면',
-          caption: 'GitHub 계정을 먼저 만듭니다. 이메일, 비밀번호, 사용자 이름을 차례대로 입력합니다.',
+          caption: 'GitHub 가입',
+          captionUrl: 'https://github.com/signup',
         },
         {
           src: '/assets/tutorials/github-vercel/screenshots/vercel-signup.png',
           alt: 'Vercel 가입 실제 화면',
-          caption: 'Vercel은 GitHub 계정으로 로그인하면 저장소 연결 단계가 짧아집니다.',
+          caption: 'Vercel 가입',
+          captionUrl: 'https://vercel.com/signup',
         },
       ],
       successCriteria: [
@@ -153,7 +154,8 @@ export const githubVercelTutorial: TutorialData = {
         {
           src: '/assets/tutorials/github-vercel/screenshots/github-new-repository-docs.png',
           alt: 'GitHub 새 저장소 만들기 공식 문서 실제 화면',
-          caption: 'GitHub 권한이 연결되어 있으면 AI가 저장소 생성까지 할 수 있습니다. 안 되면 공식 문서의 순서대로 사람이 눌러 만들고, 다음 단계는 AI에게 맡깁니다.',
+          caption: 'GitHub 새 저장소 만들기 문서',
+          captionUrl: 'https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository',
         },
       ],
       successCriteria: [
@@ -208,7 +210,8 @@ export const githubVercelTutorial: TutorialData = {
         {
           src: '/assets/tutorials/github-vercel/screenshots/github-repo-files.png',
           alt: 'GitHub 저장소 파일 목록 실제 화면',
-          caption: '업로드가 끝나면 GitHub 저장소에서 파일 목록이 보입니다. 파일이 보이면 push가 된 것입니다.',
+          caption: 'GitHub 저장소 예시',
+          captionUrl: 'https://github.com/github/docs',
         },
       ],
       successCriteria: [
@@ -269,17 +272,20 @@ export const githubVercelTutorial: TutorialData = {
         {
           src: '/assets/tutorials/github-vercel/screenshots/vercel-git-docs.png',
           alt: 'Vercel Git 저장소 배포 문서 실제 화면',
-          caption: 'Vercel은 GitHub 저장소를 연결하면 branch push마다 새 배포를 만들 수 있습니다.',
+          caption: 'Vercel Git 배포 문서',
+          captionUrl: 'https://vercel.com/docs/git',
         },
         {
           src: '/assets/tutorials/github-vercel/screenshots/vercel-domain-docs.png',
           alt: 'Vercel 도메인 연결 문서 실제 화면',
-          caption: '내 도메인을 붙일 때는 Vercel의 Domains 화면에서 안내하는 DNS 값을 확인합니다.',
+          caption: 'Vercel 도메인 연결 문서',
+          captionUrl: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain',
         },
         {
           src: '/assets/tutorials/github-vercel/screenshots/cloudflare-dns-docs.png',
           alt: 'Cloudflare DNS 레코드 문서 실제 화면',
-          caption: '도메인 DNS가 Cloudflare에 있으면 Vercel이 알려준 A/CNAME 값을 Cloudflare DNS Records에 넣습니다.',
+          caption: 'Cloudflare DNS 레코드 문서',
+          captionUrl: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/',
         },
       ],
       successCriteria: [
@@ -352,12 +358,14 @@ export const githubVercelTutorial: TutorialData = {
         {
           src: '/assets/tutorials/github-vercel/screenshots/vercel-deployments-docs.png',
           alt: 'Vercel 배포 문서 실제 화면',
-          caption: 'Vercel 배포가 성공하면 공개 주소에서 새 버전을 확인할 수 있습니다.',
+          caption: 'Vercel 배포 문서',
+          captionUrl: 'https://vercel.com/docs/deployments',
         },
         {
           src: '/assets/tutorials/github-vercel/screenshots/github-repo-files.png',
           alt: 'GitHub 저장소 파일 목록 실제 화면',
-          caption: '수정한 파일이 GitHub에 올라갔는지 먼저 확인하고, 그다음 Vercel 배포 상태를 봅니다.',
+          caption: 'GitHub 저장소 예시',
+          captionUrl: 'https://github.com/github/docs',
         },
       ],
       successCriteria: [
@@ -397,6 +405,80 @@ export const githubVercelTutorial: TutorialData = {
 4. 안 보이면 캐시, 브랜치, 배포 실패 중 무엇이 의심되는지
 
 다음 행동 하나만 알려줘.`,
+    },
+    {
+      step: '07',
+      label: '(옵션) Cloudflare로 나만의 도메인 설정하기',
+      title: 'Vercel 공개 주소 대신 내가 산 도메인을 연결합니다.',
+      goal: '이미 Vercel 공개 링크가 열리는 상태에서, 필요한 사람만 Cloudflare DNS로 내 도메인을 붙입니다.',
+      duration: '15분',
+      officialLinks: [
+        { label: 'Vercel 도메인 연결', url: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain' },
+        { label: 'Cloudflare DNS 레코드 만들기', url: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/' },
+        { label: 'Cloudflare 사이트 추가', url: 'https://developers.cloudflare.com/fundamentals/setup/account-setup/add-site/' },
+      ],
+      screenshots: [
+        {
+          src: '/assets/tutorials/github-vercel/screenshots/cloudflare-dns-docs.png',
+          alt: 'Cloudflare DNS 레코드 문서 실제 화면',
+          caption: 'Cloudflare DNS 레코드 문서',
+          captionUrl: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/',
+        },
+        {
+          src: '/assets/tutorials/github-vercel/screenshots/vercel-domain-docs.png',
+          alt: 'Vercel 도메인 연결 문서 실제 화면',
+          caption: 'Vercel 도메인 연결 문서',
+          captionUrl: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain',
+        },
+      ],
+      successCriteria: [
+        'Vercel 기본 주소가 먼저 정상으로 열린다.',
+        '내 도메인의 DNS 관리 위치가 Cloudflare인지 확인했다.',
+        'Vercel Domains 화면에서 요구하는 DNS 값을 확인했다.',
+        'Cloudflare DNS에 A 또는 CNAME 레코드를 추가했다.',
+        '내 도메인 주소로 접속했을 때 Vercel 사이트가 열린다.',
+      ],
+      conceptToggles: [
+        {
+          title: '이 단계는 꼭 해야 하나요?',
+          body: '아닙니다. Vercel이 준 vercel.app 주소만 공유해도 웹사이트 공개는 끝입니다. 내 브랜드 도메인, 예를 들어 myshop.com이나 ai-night.study 같은 주소를 쓰고 싶을 때만 이 선택 단계를 진행합니다.',
+        },
+        {
+          title: 'Cloudflare는 여기서 무슨 역할인가요?',
+          body: 'Cloudflare는 도메인의 주소록입니다. 사람이 myshop.com을 입력하면, Cloudflare DNS가 “이 주소는 Vercel 사이트로 보내면 됩니다”라고 안내합니다. 웹사이트 파일은 Vercel에 있고, 도메인 안내판은 Cloudflare에 있다고 생각하면 됩니다.',
+        },
+        {
+          title: 'A 레코드와 CNAME은 뭔가요?',
+          body: 'A 레코드는 도메인을 숫자 IP 주소로 보내는 설정입니다. CNAME은 도메인을 다른 도메인 이름으로 보내는 설정입니다. Vercel이 어떤 값을 넣으라고 알려주므로 외울 필요는 없습니다. 초보자는 Vercel Domains 화면의 안내값을 그대로 Cloudflare DNS에 옮기는 것만 하면 됩니다.',
+        },
+        {
+          title: 'Cloudflare 스킬은 어떻게 쓰나요?',
+          body: 'AI에게 “Cloudflare DNS 스킬로 Vercel 도메인 연결값을 확인하고, 내가 Cloudflare 화면에서 넣어야 할 레코드를 표로 정리해줘”라고 요청합니다. 권한이 연결되어 있으면 AI가 확인을 도울 수 있고, 권한이 없으면 사람이 눌러야 할 화면과 값을 정리해줍니다.',
+        },
+        {
+          title: '기다려야 하나요?',
+          body: '네. DNS는 바로 반영될 때도 있지만 몇 분에서 몇 시간이 걸릴 수 있습니다. 설정 직후 안 열린다고 계속 값을 바꾸면 더 헷갈립니다. 먼저 Vercel의 도메인 상태와 Cloudflare DNS 값이 맞는지 확인하고, 그다음 기다립니다.',
+        },
+      ],
+      recommended: ['Cloudflare DNS'],
+      useful: ['@vercel: Vercel이 요구하는 도메인 DNS 값을 확인할 때', 'browser:control-in-app-browser: Cloudflare 화면을 같이 보며 사람이 눌러야 할 때', 'vercel:verification: 내 도메인으로 실제 접속되는지 확인할 때'],
+      output: '내 도메인으로 열리는 웹사이트 주소',
+      recoveryPrompt: 'Cloudflare에서 도메인 연결이 안 돼. Vercel Domains 화면과 Cloudflare DNS Records 화면을 보고, 빠진 값 하나만 찾아줘.',
+      prompt: `Cloudflare DNS 스킬을 써서 내 도메인을 Vercel 사이트에 연결하는 과정을 도와줘.
+나는 초보자야. 한 번에 한 단계씩 안내해줘.
+
+현재 상태:
+- Vercel 공개 주소: [vercel.app 주소 붙여넣기]
+- 연결하고 싶은 내 도메인: [예: myshop.com]
+- 도메인 DNS 관리 위치: [Cloudflare / 모름]
+
+해줄 일:
+1. Cloudflare가 지금 필요한 상황인지 먼저 판단해줘.
+2. Vercel Domains 화면에서 확인해야 할 값을 알려줘.
+3. Cloudflare DNS Records에 넣을 값을 표로 정리해줘.
+4. 내가 직접 눌러야 하는 버튼과 입력값만 알려줘.
+5. 설정 후 확인할 주소와 기다릴 시간을 알려줘.
+6. 값이 틀리면 바꾸기 전에 먼저 원인을 설명해줘.`,
     },
   ],
 };
