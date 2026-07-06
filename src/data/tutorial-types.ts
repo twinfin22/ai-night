@@ -1,8 +1,3 @@
-export type SummaryItem = {
-  label: string;
-  value: string;
-};
-
 export type TutorialStep = {
   step: string;
   track?: 'both' | 'codex' | 'claude';
@@ -30,6 +25,7 @@ export type TutorialStep = {
     src: string;
     alt: string;
     caption: string;
+    captionUrl?: string;
   }[];
   successCriteria?: string[];
   conceptToggles?: {
@@ -51,7 +47,6 @@ export type TutorialData = {
   overviewTemplate?: 'default' | 'flow';
   steps: TutorialStep[];
   stepsLabel: string;
-  summary: SummaryItem[];
   resumePrompt: string;
   resumePromptByTrack?: {
     codex: string;

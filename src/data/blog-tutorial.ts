@@ -7,10 +7,7 @@ export const blogTutorial: TutorialData = {
   markdownPath: '/modules/blog.md',
   overviewTemplate: 'flow',
   stepsLabel: '5단계',
-  summary: [
-    { label: '진행 방식', value: '5단계' },
-    { label: '최종 결과', value: '블로그 초안' },
-  ],  resumePrompt: `지금까지 한 일을 요약해줘.
+  resumePrompt: `지금까지 한 일을 요약해줘.
 그리고 다음 20분에 그대로 붙여넣고 이어갈 프롬프트를 만들어줘.
 
 포함할 것:

@@ -1365,7 +1365,7 @@ footer h2::before { content: none; }
 }
 
 .module-lesson-hero__inner {
-  max-width: 1500px;
+  max-width: var(--max-content);
   margin: 0 auto;
   display: grid;
   gap: 24px;
@@ -1377,21 +1377,6 @@ footer h2::before { content: none; }
   line-height: 1.12;
 }
 
-.module-summary {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-.module-summary div {
-  padding: 14px 0;
-  border-top: 1px solid var(--hairline);
-}
-
-.module-summary div:first-child {
-  border-top: 0;
-}
-
-.module-summary span,
 .skill-strip span,
 .lesson-step__output span {
   display: block;
@@ -1399,14 +1384,6 @@ footer h2::before { content: none; }
   font-size: 15px;
   font-weight: 700;
   letter-spacing: .04em;
-}
-
-.module-summary strong {
-  display: block;
-  margin-top: 6px;
-  color: var(--cream);
-  font-size: 24px;
-  line-height: 1.35;
 }
 
 .module-shell {
@@ -2344,10 +2321,6 @@ a:focus-visible {
 }
 
 @media (min-width: 720px) {
-  .module-summary {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .setup-selector__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2437,12 +2410,7 @@ a:focus-visible {
 
 @media (min-width: 1040px) {
   .module-lesson-hero__inner {
-    grid-template-columns: minmax(0, 1fr) 360px;
     align-items: end;
-  }
-
-  .module-summary {
-    grid-template-columns: 1fr;
   }
 
   .module-shell {
@@ -2494,12 +2462,10 @@ a:focus-visible {
     line-height: 1.1;
   }
 
-  .module-summary div {
-    padding: 12px 0;
-  }
-
-  .module-summary strong {
-    font-size: 21px;
+  .module-page .hero__sub,
+  .module-page .lede {
+    font-size: 20px;
+    line-height: 1.75;
   }
 
   .module-shell {
