@@ -1474,6 +1474,16 @@ html[data-setup-tool='claude'] .module-page--tool-selector .lesson-step[data-tra
   display: revert;
 }
 
+html[data-setup-tool='codex'] .module-page--tool-selector .lesson-meta > .lesson-link[data-track='codex'],
+html[data-setup-tool='claude'] .module-page--tool-selector .lesson-meta > .lesson-link[data-track='claude'] {
+  display: grid;
+}
+
+html[data-setup-tool='codex'] .module-page--tool-selector .tutorial-shots > figure[data-track='codex'],
+html[data-setup-tool='claude'] .module-page--tool-selector .tutorial-shots > figure[data-track='claude'] {
+  display: block;
+}
+
 html:not([data-setup-tool]) .module-page--tool-selector .tutorial-flow > [data-track='codex'],
 html:not([data-setup-tool]) .module-page--tool-selector .tutorial-flow > [data-track='claude'] {
   display: revert;
