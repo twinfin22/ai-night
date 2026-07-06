@@ -2,7 +2,7 @@ import type { TutorialData } from './tutorial-types';
 
 export const setupTutorial: TutorialData = {
   title: 'AI 작업 환경 만들기',
-  description: 'AI 야학 수업을 이어가기 위해 앱 설치, 작업 폴더 연결, 첫 정리 실습까지 끝내는 튜토리얼.',
+  description: 'AI 야학 수업을 이어가기 위해 앱 설치, 작업 폴더 지정, 첫 정리 실습까지 끝내는 튜토리얼.',
   canonicalPath: '/modules/setup/',
   markdownPath: '/modules/setup.md',
   stepsLabel: '트랙 2개',
@@ -19,22 +19,9 @@ export const setupTutorial: TutorialData = {
       label: '계정 확인',
       title: '유료 계정으로 로그인되어 있는지 확인합니다.',
       goal: '수업 중 기능 제한으로 멈추지 않게 ChatGPT 또는 Claude 유료 계정 상태를 확인합니다.',
-      duration: '3분',
       officialLinks: [
-        { label: 'ChatGPT 회원가입/로그인', url: 'https://chatgpt.com/' },
-        { label: 'Claude 회원가입/로그인', url: 'https://claude.ai/' },
-      ],
-      screenshots: [
-        {
-          src: '/assets/tutorials/setup/chatgpt-signup.png',
-          alt: 'ChatGPT 회원가입 보안 확인 화면',
-          caption: 'ChatGPT 가입/로그인에서 보안 확인이 먼저 뜰 수 있습니다. 체크 후 계정 화면으로 들어갑니다.',
-        },
-        {
-          src: '/assets/tutorials/setup/claude-download.png',
-          alt: 'Claude 공식 다운로드 페이지 화면',
-          caption: 'Claude를 쓸 사람은 Claude 계정으로 로그인합니다.',
-        },
+        { track: 'codex', label: 'ChatGPT 회원가입/로그인', url: 'https://chatgpt.com/' },
+        { track: 'claude', label: 'Claude 회원가입/로그인', url: 'https://claude.ai/' },
       ],
       successCriteria: ['내 계정으로 로그인되어 있다.', '유료 플랜 사용 가능 상태를 확인했다.'],
       conceptToggles: [
@@ -58,21 +45,22 @@ export const setupTutorial: TutorialData = {
       label: '앱 설치',
       title: '공식 앱을 설치하고 로그인합니다.',
       goal: '검색 결과의 가짜 앱을 피하고, 공식 앱에서 수업을 시작할 준비를 합니다.',
-      duration: '7분',
       officialLinks: [
-        { label: 'Codex 공식 다운로드', url: 'https://developers.openai.com/codex/app' },
-        { label: 'Claude 공식 다운로드', url: 'https://claude.ai/download' },
+        { track: 'codex', label: 'Codex 시작하기', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
+        { track: 'claude', label: 'Claude 공식 다운로드', url: 'https://claude.com/ko/download' },
       ],
       screenshots: [
         {
+          track: 'codex',
           src: '/assets/tutorials/setup/codex-download.png',
-          alt: 'Codex 공식 다운로드 페이지',
-          caption: 'Codex는 OpenAI Developers의 공식 앱 페이지에서 받습니다.',
+          alt: 'Codex 한국어 시작 안내 화면',
+          caption: 'Codex는 한국어 시작 안내에서 앱 사용법을 확인합니다.',
         },
         {
+          track: 'claude',
           src: '/assets/tutorials/setup/claude-download.png',
-          alt: 'Claude 공식 다운로드 페이지',
-          caption: 'Claude는 Claude 공식 다운로드 페이지에서 받습니다.',
+          alt: 'Claude 한국어 다운로드 페이지',
+          caption: 'Claude는 한국어 다운로드 페이지에서 macOS용 앱 버튼을 확인합니다.',
         },
       ],
       successCriteria: ['앱이 열린다.', '내 계정으로 로그인되어 있다.'],
@@ -98,7 +86,6 @@ export const setupTutorial: TutorialData = {
       label: '작업 폴더 만들기',
       title: '문서 안에 작업실 폴더 하나만 만듭니다.',
       goal: '사람이 직접 만드는 폴더는 하나로 줄이고, 나머지 정리는 AI에게 맡깁니다.',
-      duration: '5분',
       successCriteria: ['문서 폴더 안에 `ai-yahak-studio`가 보인다.', '폴더 안은 비어 있어도 괜찮다.'],
       conceptToggles: [
         {
@@ -121,15 +108,14 @@ export const setupTutorial: TutorialData = {
       label: 'Claude 시작',
       title: 'Claude에서 첫 대화와 파일 첨부 위치를 확인합니다.',
       goal: 'Claude 트랙은 폴더 자동화가 아니라 대화와 파일 첨부 중심으로 시작합니다.',
-      duration: '7분',
       officialLinks: [
-        { label: 'Claude 공식 다운로드', url: 'https://claude.ai/download' },
+        { label: 'Claude 공식 다운로드', url: 'https://claude.com/ko/download' },
       ],
       screenshots: [
         {
           src: '/assets/tutorials/setup/claude-download.png',
-          alt: 'Claude 공식 다운로드 페이지',
-          caption: 'Claude는 공식 앱을 설치한 뒤 새 대화와 파일 첨부 위치를 확인합니다.',
+          alt: 'Claude 한국어 다운로드 페이지',
+          caption: 'Claude는 한국어 다운로드 페이지에서 공식 앱을 설치한 뒤 새 대화와 파일 첨부 위치를 확인합니다.',
         },
       ],
       successCriteria: ['Claude에서 새 대화를 시작할 수 있다.', '파일 첨부 버튼 위치를 안다.', '다음 수업에 이어갈 문장을 저장했다.'],
@@ -156,30 +142,29 @@ export const setupTutorial: TutorialData = {
     },    {
       step: '04',
       track: 'codex',
-      label: 'Codex 연결',
-      title: '작업 폴더를 Codex에 연결합니다.',
-      goal: 'AI가 작업실 안에서 파일을 만들고 고칠 수 있는 상태로 만듭니다.',
-      duration: '8분',
+      label: '작업 폴더 지정',
+      title: 'Codex가 사용할 작업 폴더를 고릅니다.',
+      goal: 'AI가 수업용 폴더 안에서만 파일을 만들고 고치도록 작업 범위를 정합니다.',
       officialLinks: [
-        { label: 'Codex 시작하기', url: 'https://chatgpt.com/codex/get-started/' },
-        { label: 'Codex 앱 설명', url: 'https://developers.openai.com/codex/app' },
+        { label: 'Codex 시작하기', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
+        { label: 'Codex 앱 사용법', url: 'https://developers.openai.com/codex/app' },
       ],
       screenshots: [
         {
-          src: '/assets/tutorials/setup/codex-download.png',
-          alt: 'Codex 앱 기능 설명 화면',
-          caption: 'Codex 앱은 작업 목록, 입력창, 변경 내용(diff)을 한 화면에서 봅니다.',
+          src: '/assets/tutorials/setup/codex-project-folder.jpeg',
+          alt: 'Codex에서 기존 작업 폴더를 고르는 화면',
+          caption: '왼쪽 아래 메뉴에서 기존 폴더 사용을 골라 내가 만든 작업 폴더를 지정합니다.',
         },
       ],
-      successCriteria: ['Codex 화면에서 현재 폴더가 `ai-yahak-studio`로 보인다.', '입력창에 메시지를 쓸 수 있다.', '파일을 만들 수 있는 권한 상태다.'],
+      successCriteria: ['Codex 화면에서 현재 폴더가 `ai-yahak-studio`로 보인다.', '입력창에 메시지를 쓸 수 있다.', 'Codex가 이 폴더 안에 파일을 만들 수 있다.'],
       conceptToggles: [
         {
           title: '권한 요청은 언제 허용하나요?',
           body: '작업실 폴더 안에 파일을 만들거나 고치는 요청은 보통 괜찮습니다. 작업실 밖 파일 삭제, 개인정보 전송, 결제 관련 요청은 멈추고 물어보세요.',
         },
         {
-          title: 'Local / Worktree / Cloud 차이',
-          body: 'Local은 내 컴퓨터 폴더에서 일하는 방식입니다. Worktree와 Cloud는 여러 작업을 나눠 돌릴 때 쓰는 고급 기능이라 첫날에는 몰라도 됩니다.',
+          title: '처음에는 어떤 방식을 고르나요?',
+          body: '첫날에는 내 컴퓨터에 있는 폴더 하나만 고르면 됩니다. 여러 작업을 나눠 돌리는 기능은 나중에 배워도 됩니다.',
         },
         {
           title: '터미널 창이 보여도 괜찮나요?',
@@ -188,8 +173,8 @@ export const setupTutorial: TutorialData = {
       ],
       recommended: [],
       useful: [],
-      output: '폴더 구조와 AGENTS.md',
-      recoveryPrompt: '작업 폴더를 앱에 연결하다가 막혔어. 내가 지금 확인해야 할 것 1개만 먼저 알려줘.',
+      output: '폴더 구조와 답변 규칙 문서',
+      recoveryPrompt: 'Codex에서 작업 폴더를 고르다가 막혔어. 내가 지금 눌러야 할 것 1개만 먼저 알려줘.',
       prompt: `이 폴더는 내 AI 야학 작업실이야.
 
 먼저 클라우드 동기화 문제가 있는지 확인해줘.
@@ -200,38 +185,69 @@ export const setupTutorial: TutorialData = {
 - 메모
 
 각 폴더 안에 README.md를 만들고 한 줄 설명을 적어줘.
-마지막으로 AGENTS.md에 "쉬운 말로 짧게 설명하기" 규칙을 추가해줘.`,
+마지막으로 AGENTS.md라는 에이전트 문서를 만들고 "쉬운 말로 짧게 설명하기" 규칙을 적어줘.`,
     },
     {
       step: '05',
       track: 'codex',
-      label: '내 규칙 추가',
-      title: 'AI가 다음에도 지킬 규칙을 하나 추가합니다.',
-      goal: 'AGENTS.md에 내 취향을 넣고, 다음 대화에서 적용되는지 확인합니다.',
-      duration: '3분',
+      label: '답변 규칙 정하기',
+      title: '에이전트 문서를 만들고 답변 규칙을 정합니다.',
+      goal: 'AI가 다음에도 쉬운 말로 답하도록 이 폴더 안에 규칙 문서를 남깁니다.',
       screenshots: [
         {
           src: '/assets/tutorials/setup/codex-download.png',
-          alt: 'Codex 앱 화면 예시',
+          alt: 'Codex 한국어 시작 안내 화면',
           caption: 'Codex에서는 작업 지시, 파일 변경, 결과 확인을 한 흐름으로 봅니다.',
         },
       ],
-      successCriteria: ['AGENTS.md에 내 규칙이 추가됐다.', '다음 답변에서 그 규칙이 적용된다.'],
+      successCriteria: ['에이전트 문서가 만들어졌다.', '문서 안에 내가 원하는 답변 규칙이 들어 있다.', '다음 답변에서 그 규칙이 적용된다.'],
       conceptToggles: [
         {
-          title: 'AGENTS.md가 뭔가요?',
-          body: 'AI에게 주는 규칙 노트입니다. 이 폴더에서 다시 일할 때마다 먼저 읽고 따르는 기준입니다.',
+          title: '에이전트 문서가 뭔가요?',
+          body: 'AI에게 주는 안내문입니다. 이 폴더에서 다시 일할 때마다 AI가 먼저 읽고 따르는 기준입니다.',
         },
         {
-          title: '좋은 규칙 예시',
-          body: '답변은 짧게 해줘. 어려운 말은 쉬운 말로 바꿔줘. 먼저 할 일을 1개만 말해줘.',
+          title: '어떤 답변 규칙을 쓰면 좋나요?',
+          body: '“짧게 말해줘”, “쉬운 말로 설명해줘”, “먼저 한 단계만 알려줘”처럼 내가 실제로 원하는 말투를 쓰면 됩니다.',
         },
       ],
       recommended: [],
       useful: [],
-      output: '내 규칙 1개',
-      prompt: `AGENTS.md에 내 규칙을 추가해줘:
-- 나에게 항상 존댓말로 대답해줘.`,
+      output: '에이전트 문서와 답변 규칙',
+      prompt: `AGENTS.md라는 에이전트 문서를 만들고, 아래 답변 규칙을 적어줘:
+- 나에게 항상 쉬운 말로 짧게 설명해줘.
+- 먼저 해야 할 일 1개만 알려줘.`,
+    },
+    {
+      step: '06',
+      track: 'both',
+      label: 'AI에게 도움 요청해보기',
+      title: '막힌 화면을 설명하고 다음 행동 하나만 물어봅니다.',
+      goal: '혼자 오래 헤매지 않고, AI에게 지금 필요한 한 단계만 묻는 연습을 합니다.',
+      successCriteria: ['막힌 상황을 한 문장으로 설명했다.', 'AI에게 다음에 할 일 1개만 물어봤다.', '답이 어렵거나 길면 더 쉽게 다시 물어봤다.'],
+      conceptToggles: [
+        {
+          title: '화면을 잘 설명하지 못해도 되나요?',
+          body: '괜찮습니다. “설치 화면에서 멈췄어”, “폴더를 고르는 화면이야”처럼 지금 보이는 것만 말해도 됩니다.',
+        },
+        {
+          title: 'AI 답이 너무 길면요?',
+          body: '다시 물어보면 됩니다. “너무 길어. 내가 지금 눌러야 할 것 1개만 말해줘”라고 쓰면 됩니다.',
+        },
+        {
+          title: '개인정보를 보내도 되나요?',
+          body: '보내지 마세요. 이름, 전화번호, 주소, 결제 정보는 가리고 물어보세요.',
+        },
+      ],
+      recommended: [],
+      useful: [],
+      output: '도움 요청 문장 1개',
+      recoveryPrompt: 'AI 답이 너무 어렵게 느껴져. 지금 내가 눌러야 할 것 1개만 쉬운 말로 다시 알려줘.',
+      prompt: `지금 수업을 따라 하다가 막혔어.
+내 화면에는 이런 내용이 보여:
+- [보이는 버튼 이름이나 오류 문구]
+
+내가 지금 해야 할 일 1개만 쉬운 말로 알려줘.`,
     },
 
   ],

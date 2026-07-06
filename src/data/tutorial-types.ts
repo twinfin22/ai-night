@@ -1,15 +1,27 @@
 export type TutorialStep = {
   step: string;
   track?: 'both' | 'codex' | 'claude';
+  actor?: 'human' | 'ai' | 'human-ai';
+  actorLabel?: string;
+  overviewItems?: {
+    actor: 'human' | 'ai';
+    actorLabel: string;
+    label: string;
+    output: string;
+  }[];
+  loop?: boolean;
+  loopLabel?: string;
   label: string;
   title: string;
   goal: string;
   duration?: string;
   officialLinks?: {
+    track?: 'both' | 'codex' | 'claude';
     label: string;
     url: string;
   }[];
   screenshots?: {
+    track?: 'both' | 'codex' | 'claude';
     src: string;
     alt: string;
     caption: string;
