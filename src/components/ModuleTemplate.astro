@@ -132,11 +132,14 @@ const {
                     <div class="lesson-step__body">
                   <p class="lesson-step__goal">{item.goal}</p>
 
-                  {(item.duration || item.officialLinks?.length) && (
+                  {item.officialLinks?.length && (
                     <div class="lesson-meta">
-                      {item.duration && <span>예상 시간 {item.duration}</span>}
                       {item.officialLinks?.map((link) => (
-                        <a href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
+                        <a class="lesson-link" href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`${link.label} 새 창으로 열기`}>
+                          <span>공식 링크 / 새 창</span>
+                          <strong>{link.label} 열기</strong>
+                          <code>{link.url}</code>
+                        </a>
                       ))}
                     </div>
                   )}

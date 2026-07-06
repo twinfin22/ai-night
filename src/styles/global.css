@@ -1783,34 +1783,45 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
 }
 
 .lesson-meta {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 
-.lesson-meta span,
-.lesson-meta a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 10px 14px;
+.lesson-link {
+  display: grid;
+  gap: 6px;
+  min-height: 88px;
+  padding: 14px 16px;
   border: 1px solid var(--hairline-2);
   border-radius: 6px;
-  color: var(--ink-soft);
-  background: rgba(255, 255, 255, 0.035);
-  font-size: 16px;
-  font-weight: 800;
+  color: var(--cream);
+  background: rgba(244, 184, 96, 0.08);
   line-height: 1.25;
   text-decoration: none;
 }
 
-.lesson-meta a {
+.lesson-link span {
   color: var(--amber);
+  font-size: 14px;
+  font-weight: 900;
 }
 
-.lesson-meta a:hover {
+.lesson-link strong {
+  font-size: 18px;
+}
+
+.lesson-link code {
+  overflow-wrap: anywhere;
+  color: #d8ceb9;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.lesson-link:hover {
+  background: rgba(244, 184, 96, 0.14);
   border-color: rgba(244, 184, 96, 0.72);
-  color: var(--cream);
 }
 
 .tutorial-shots {
@@ -1832,20 +1843,25 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   cursor: zoom-in;
 }
 
+.tutorial-shots figure:only-child {
+  grid-column: 1 / -1;
+}
+
 .tutorial-shots img {
+  display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: auto;
   object-fit: contain;
   object-position: top center;
-  background: #fff;
+  background: #101010;
 }
 
 .tutorial-shots figcaption {
-  padding: 18px 20px;
+  padding: 12px 14px;
   border-top: 1px solid var(--hairline);
-  color: #d8ceb9;
-  font-size: 19px;
-  line-height: 1.65;
+  color: #b9ad96;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 .prompt-toggle {
