@@ -2,7 +2,7 @@ import type { TutorialData } from './tutorial-types';
 
 export const blogTutorial: TutorialData = {
   title: '내 자료로 문의 받는 글 만들기',
-  description: '기존 자료 하나로 독자 질문을 찾고, 네이버 블로그에 올릴 짧은 초안까지 만드는 AI 야학 튜토리얼.',
+  description: '이미 가진 후기, 설명글, 사진 설명 중 하나로 손님이 궁금해할 질문을 찾고, 네이버 블로그에 올릴 짧은 초안까지 만드는 AI 야학 튜토리얼.',
   canonicalPath: '/modules/blog/',
   markdownPath: '/modules/blog.md',
   overviewTemplate: 'flow',
@@ -23,7 +23,7 @@ export const blogTutorial: TutorialData = {
       step: '01',
       label: '목표 고르기',
       title: 'AI에게 먼저 글의 목적을 묻게 합니다.',
-      goal: '이번 글로 얻고 싶은 결과를 문의, 신뢰, 수업/서비스 신청 중 하나로 정합니다.',
+      goal: '1. 지금 할 일: 이번 글로 얻고 싶은 결과를 하나 고릅니다. 2. 필요한 이유: 목표가 없으면 글이 홍보인지 안내인지 흐려집니다. 3. 끝나면 보이는 것: 문의, 신뢰, 수업/서비스 신청 중 한 방향이 정해집니다.',
       recommended: ['office-hours'],
       useful: [],
       output: '글의 방향 1개',
@@ -43,7 +43,7 @@ export const blogTutorial: TutorialData = {
       step: '02',
       label: '자료 넣기',
       title: '내 자료 하나를 글감으로 바꿉니다.',
-      goal: '기존 글, 후기, FAQ, 상품 설명, 사진 설명, 웹사이트 링크 중 하나만 넣고 글로 쓰기 좋은 질문을 찾습니다.',
+      goal: '1. 지금 할 일: 기존 글, 후기, 자주 받은 질문, 상품 설명, 사진 설명 중 하나만 넣습니다. 2. 필요한 이유: 한 번에 많이 넣으면 글의 중심이 흐려집니다. 3. 끝나면 보이는 것: 자료 핵심 3줄과 손님 질문 3개가 생깁니다.',
       recommended: ['copywriting'],
       useful: [],
       output: '자료 핵심 3줄과 독자 질문 3개',
@@ -68,7 +68,7 @@ export const blogTutorial: TutorialData = {
       step: '03',
       label: '글감 고르기',
       title: '실제 독자가 물어볼 질문 하나를 고릅니다.',
-      goal: '검색어처럼 짧고, 내가 실제 경험으로 답할 수 있는 질문 하나를 고릅니다.',
+      goal: '1. 지금 할 일: 손님이 실제로 물어볼 질문 하나를 고릅니다. 2. 필요한 이유: 질문이 분명해야 글 제목과 첫 문장이 쉬워집니다. 3. 끝나면 보이는 것: 내 경험으로 답할 수 있는 글 주제 1개가 남습니다.',
       recommended: ['copywriting'],
       useful: [],
       output: '독자 질문 1개',
@@ -78,7 +78,7 @@ export const blogTutorial: TutorialData = {
       step: '04',
       label: '초안 쓰기',
       title: '완성형 장문이 아니라 고칠 수 있는 초안을 만듭니다.',
-      goal: '독자가 겪는 문제, 내가 가진 자료나 경험, 해결 흐름, 체크리스트, 다음 행동 순서로 짧게 씁니다.',
+      goal: '1. 지금 할 일: AI가 만든 짧은 초안을 받아봅니다. 2. 필요한 이유: 처음부터 완성하려고 하면 오래 걸리고 손이 멈춥니다. 3. 끝나면 보이는 것: 내 말로 고칠 수 있는 블로그 초안이 생깁니다.',
       recommended: ['copywriting'],
       useful: [],
       output: '짧은 블로그 초안',
@@ -90,10 +90,10 @@ export const blogTutorial: TutorialData = {
 사용할 자료:
 [자료 요약]
 
-글 구조:
+글 순서:
 1. 독자가 겪는 문제
 2. 내가 가진 자료나 경험
-3. 해결 흐름
+3. 해결 방법
 4. 따라 할 체크리스트
 5. 문의/신청/다음 행동
 
@@ -108,7 +108,7 @@ export const blogTutorial: TutorialData = {
       step: '05',
       label: 'AI티 제거',
       title: '공유 전에 한 번 고칩니다.',
-      goal: '추상적인 칭찬, 근거 없는 말, 내 경험이 없는 것처럼 보이는 문장, 너무 긴 문장을 잡습니다.',
+      goal: '1. 지금 할 일: 공유 전에 AI티 나는 문장을 지웁니다. 2. 필요한 이유: 손님은 과장된 말보다 실제 경험과 쉬운 설명을 믿습니다. 3. 끝나면 보이는 것: 네이버 블로그에 옮겨도 어색하지 않은 수정본이 남습니다.',
       recommended: ['copywriting'],
       useful: ['design-review: 문장과 흐름을 더 세게 점검할 때'],
       output: '수정된 초안',

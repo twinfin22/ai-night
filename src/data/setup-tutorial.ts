@@ -1,25 +1,25 @@
 import type { TutorialData } from './tutorial-types';
 
 export const setupTutorial: TutorialData = {
-  title: 'AI 작업 환경 만들기',
-  description: 'AI 야학 수업을 이어가기 위해 앱 설치, 작업 폴더 지정, 첫 정리 실습까지 끝내는 튜토리얼.',
+  title: '내 AI 작업실 만들기',
+  description: '수업 때 쓸 계정, 앱, 작업 폴더를 준비하고 첫 도움 요청 문장까지 만들어보는 튜토리얼.',
   canonicalPath: '/modules/setup/',
   markdownPath: '/modules/setup.md',
   overviewTemplate: 'flow',
-  stepsLabel: '트랙 2개',
+  stepsLabel: '선택 2개',
   toolSelector: true,
-  resumePrompt: `내 작업 폴더는 문서/ai-yahak-studio야. 이 폴더를 기준으로 다음 실습을 이어가자.`,
+  resumePrompt: `내 작업 폴더는 문서/ai-yahak-studio야. 이 폴더 안에서 다음 실습을 이어가자.`,
   resumePromptByTrack: {
-    codex: `내 작업 폴더는 문서/ai-yahak-studio야. 이 폴더를 기준으로 다음 실습을 이어가자.`,
-    claude: `지난 시간에 AI 야학 작업실 운영 규칙을 만들었어. 그 규칙을 기준으로 다음 실습을 이어가자.`,
+    codex: `내 작업 폴더는 문서/ai-yahak-studio야. 이 폴더 안에서 다음 실습을 이어가자.`,
+    claude: `지난 시간에 AI 야학 작업실 약속을 만들었어. 그 약속을 보고 다음 실습을 이어가자.`,
   },
   steps: [
     {
       step: '01',
       track: 'both',
       label: '계정 확인',
-      title: '유료 계정으로 로그인되어 있는지 확인합니다.',
-      goal: '수업 중 기능 제한으로 멈추지 않게 ChatGPT 또는 Claude 유료 계정 상태를 확인합니다.',
+      title: '수업에 쓸 AI 계정으로 로그인합니다.',
+      goal: '1. ChatGPT 또는 Claude에 로그인합니다. 2. 수업 중 길게 요청해도 멈추지 않도록 유료 계정인지 봅니다. 3. 끝나면 바로 질문을 입력할 수 있는 화면이 보입니다.',
       officialLinks: [
         { track: 'codex', label: 'ChatGPT 로그인', url: 'https://chatgpt.com/' },
         { track: 'claude', label: 'Claude 로그인', url: 'https://claude.ai/' },
@@ -37,11 +37,11 @@ export const setupTutorial: TutorialData = {
       conceptToggles: [
         {
           title: '무료 버전으로 하면 왜 막히나요?',
-          body: '수업 중 긴 작업, 파일 작업, 반복 요청에서 제한에 걸릴 수 있습니다. 이 튜토리얼은 유료 계정을 기준으로 진행합니다.',
+          body: '수업에서는 글을 고치고, 파일을 만들고, 여러 번 다시 부탁합니다. 무료 계정은 중간에 제한이 걸릴 수 있습니다. 오늘은 수업이 끊기지 않도록 유료 계정을 기준으로 봅니다.',
         },
         {
           title: '회사/학교 계정이면?',
-          body: '결제나 권한이 막힐 수 있습니다. 계정 메뉴에서 현재 플랜과 사용할 수 있는 기능을 먼저 확인하세요.',
+          body: '회사나 학교 계정은 결제나 앱 사용이 막혀 있을 수 있습니다. 계정 메뉴에서 현재 요금제와 사용할 수 있는 기능을 먼저 확인하세요.',
         },
       ],
       recommended: [],
@@ -52,8 +52,8 @@ export const setupTutorial: TutorialData = {
       step: '02',
       track: 'both',
       label: '앱 설치',
-      title: '공식 앱을 설치하고 로그인합니다.',
-      goal: '피싱 링크와 유사 링크를 구분하고, 공식 앱에서 수업을 시작할 준비를 합니다.',
+      title: '공식 사이트에서 앱을 설치합니다.',
+      goal: '1. 공식 링크로 들어갑니다. 2. 비슷한 가짜 사이트를 피합니다. 3. 끝나면 내 컴퓨터에서 AI 앱을 열 수 있습니다.',
       officialLinks: [
         { track: 'codex', label: 'Codex 시작 안내', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
         { track: 'claude', label: 'Claude 다운로드', url: 'https://claude.com/ko/download' },
@@ -79,11 +79,11 @@ export const setupTutorial: TutorialData = {
       conceptToggles: [
         {
           title: '피싱 링크와 유사 링크 주의',
-          body: '비슷한 이름의 유사 링크나 광고 링크가 섞일 수 있습니다. 주소를 확인하고 공식 사이트에서 확인 영역의 링크에서 시작하세요.',
+          body: '검색 결과에는 비슷한 이름의 광고나 가짜 사이트가 섞일 수 있습니다. 주소를 확인하고, 수업 화면에 있는 공식 링크에서 시작하세요.',
         },
         {
           title: '보안 경고가 뜨면',
-          body: '바로 누르지 말고 앱 이름과 받은 주소를 확인하세요. 모르면 AI에게 화면을 설명하고 한 단계만 물어보세요.',
+          body: '바로 누르지 말고 앱 이름과 주소를 확인하세요. 모르겠으면 화면에 보이는 문장을 AI에게 적어주고 “지금 눌러야 할 것 하나만 알려줘”라고 물어보세요.',
         },
       ],
       recommended: [],
@@ -94,16 +94,16 @@ export const setupTutorial: TutorialData = {
       step: '03',
       track: 'both',
       label: '작업 폴더 만들기',
-      title: '문서 안에 작업실 폴더 하나만 만듭니다.',
-      goal: '사람이 직접 만드는 폴더는 하나로 줄이고, 나머지 정리는 AI에게 맡깁니다.',
+      title: '문서 안에 수업 폴더 하나를 만듭니다.',
+      goal: '1. 문서 폴더 안에 ai-yahak-studio를 만듭니다. 2. 수업 파일이 여기저기 흩어지지 않게 합니다. 3. 끝나면 AI에게 이 폴더 안에서만 일하라고 말할 수 있습니다.',
       conceptToggles: [
         {
           title: '왜 바탕화면이나 다운로드 폴더를 피하나요?',
-          body: '나중에 파일이 섞이기 쉽고, AI가 작업할 범위가 헷갈립니다. 수업용 작업실은 문서 폴더 안에 하나만 둡니다.',
+          body: '바탕화면과 다운로드 폴더에는 사진, 영수증, 임시 파일이 쉽게 섞입니다. 수업 파일은 문서 폴더 안의 ai-yahak-studio 하나에 모아두면 나중에 다시 찾기 쉽습니다.',
         },
         {
-          title: '폴더/파일/프로젝트 차이',
-          body: '폴더는 파일을 담는 상자입니다. 프로젝트는 그 상자를 기준으로 AI가 이어서 일하는 단위입니다.',
+          title: '폴더와 파일 차이',
+          body: '폴더는 파일을 담는 상자입니다. 파일은 그 안에 들어가는 실제 문서, 사진, 글입니다. 오늘은 상자 하나만 먼저 만들고, 나머지는 AI에게 정리해달라고 부탁합니다.',
         },
       ],
       recommended: [],
@@ -113,9 +113,9 @@ export const setupTutorial: TutorialData = {
     {
       step: 'C1',
       track: 'claude',
-      label: 'Claude 앱 사용 익숙해지기',
-      title: 'Claude 화면에서 오늘 볼 메뉴만 확인합니다.',
-      goal: '처음부터 모든 기능을 쓰지 않고, 첫날 필요한 대화 입력과 사이드바 위치만 익힙니다.',
+      label: 'Claude 첫 화면 보기',
+      title: 'Claude에서 질문 입력칸과 왼쪽 메뉴만 봅니다.',
+      goal: '1. 질문을 쓰는 칸을 찾습니다. 2. 왼쪽 메뉴가 어디 있는지 봅니다. 3. 끝나면 오늘 수업 질문을 바로 넣을 수 있습니다.',
       officialLinks: [
         { label: 'Claude 다운로드', url: 'https://claude.com/ko/download' },
       ],
@@ -135,11 +135,11 @@ export const setupTutorial: TutorialData = {
         },
         {
           title: 'Cowork',
-          body: '앱이나 파일과 연결해 긴 작업을 맡기는 영역입니다. 첫날에는 위치만 확인합니다.',
+          body: '파일을 붙이거나 긴 작업을 부탁할 때 쓰는 곳입니다. 첫날에는 위치만 확인합니다.',
         },
         {
           title: 'Code',
-          body: '개발자용 코딩 작업 영역입니다. 첫날 필수 기능이 아닙니다.',
+          body: '개발 작업을 할 때 쓰는 곳입니다. 첫날에는 건드리지 않아도 됩니다.',
         },
         {
           title: '새 작업',
@@ -147,11 +147,11 @@ export const setupTutorial: TutorialData = {
         },
         {
           title: '프로젝트',
-          body: '자료와 대화를 한 묶음으로 관리하는 공간입니다. 오늘은 새로 만들지 않습니다.',
+          body: '자료와 대화를 한곳에 모아두는 공간입니다. 오늘은 새로 만들지 않습니다.',
         },
         {
           title: '아티팩트',
-          body: 'Claude가 만든 문서, 표, 코드 같은 결과물을 확인하는 곳입니다.',
+          body: 'Claude가 만든 문서, 표, 글 같은 결과물을 확인하는 곳입니다.',
         },
         {
           title: '예정됨',
@@ -173,9 +173,9 @@ export const setupTutorial: TutorialData = {
     {
       step: 'X1',
       track: 'codex',
-      label: 'Codex 앱 사용 익숙해지기',
-      title: 'Codex 화면에서 작업 폴더와 첫 지시 위치를 확인합니다.',
-      goal: 'Codex가 수업용 폴더 안에서만 파일을 만들고 고치도록 작업 범위를 정합니다.',
+      label: 'Codex 첫 화면 보기',
+      title: 'Codex에서 수업 폴더와 질문 입력칸을 찾습니다.',
+      goal: '1. 문서/ai-yahak-studio 폴더를 고릅니다. 2. AI가 이 폴더 안에서만 파일을 만들게 합니다. 3. 끝나면 첫 부탁을 입력할 준비가 됩니다.',
       officialLinks: [
         { label: 'Codex 시작하기', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
         { label: 'Codex 앱 기능', url: 'https://developers.openai.com/codex/app/features' },
@@ -212,31 +212,31 @@ export const setupTutorial: TutorialData = {
         },
         {
           title: 'Plugins',
-          body: '기능을 확장하는 메뉴입니다. 첫날에는 설치하지 않고 위치만 확인합니다.',
+          body: '추가 기능을 보는 메뉴입니다. 첫날에는 설치하지 않고 위치만 확인합니다.',
         },
         {
           title: '작업 폴더 지정',
-          body: 'New project에서 Use an existing folder를 고르고 문서/ai-yahak-studio 폴더를 선택합니다.',
+          body: 'New project에서 Use an existing folder를 고르고 문서/ai-yahak-studio 폴더를 선택합니다. 이렇게 해야 AI가 수업 폴더 안의 파일만 보고 고칩니다.',
         },
         {
           title: 'Plan mode',
-          body: '바로 파일을 고치지 않고 먼저 계획을 받는 모드입니다. 처음에는 “무엇을 할지 먼저 말해줘”라고 요청하면 됩니다.',
+          body: '바로 파일을 고치기 전에 먼저 할 일을 말해주는 선택입니다. 처음에는 “무엇을 할지 먼저 말해줘”라고 요청하면 됩니다.',
         },
         {
           title: '모델 선택',
           body: '첫날에는 기본값을 유지합니다. 막히거나 어려운 작업일 때만 바꿉니다.',
         },
         {
-          title: '속도/추론 모드',
-          body: '간단한 확인은 빠르게, 복잡한 수정은 깊게 생각하는 모드를 씁니다. 처음에는 기본값으로 둡니다.',
+          title: '생각 깊이 선택',
+          body: '간단한 확인은 빠르게, 복잡한 수정은 더 오래 생각하게 할 수 있습니다. 처음에는 기본값으로 둡니다.',
         },
         {
           title: '승인/권한 요청',
-          body: '작업실 폴더 안 파일 변경은 허용해도 됩니다. 작업실 밖 파일, 개인정보, 결제 관련 요청은 멈추고 물어보세요.',
+          body: '수업 폴더 안 파일 변경은 허용해도 됩니다. 수업 폴더 밖 파일, 개인정보, 결제 관련 요청은 멈추고 물어보세요.',
         },
         {
           title: '결과 확인',
-          body: 'Codex가 바꾼 파일, 실행한 명령, 에러 메시지를 결과 화면에서 확인합니다.',
+          body: 'Codex가 바꾼 파일과 오류 문구를 결과 화면에서 확인합니다. 모르면 “무슨 뜻인지 한 줄로 말해줘”라고 물어보세요.',
         },
       ],
       recommended: [],
@@ -247,8 +247,8 @@ export const setupTutorial: TutorialData = {
       step: 'C2',
       track: 'claude',
       label: 'Claude 첫 실습',
-      title: '작업실 운영 규칙을 대화로 정리합니다.',
-      goal: 'Claude 트랙은 첫날 파일 자동화보다 대화와 파일 첨부 흐름을 먼저 익힙니다.',
+      title: '내 수업 폴더 사용 약속을 글로 정리합니다.',
+      goal: '1. 앞으로 파일을 어디에 둘지 정합니다. 2. 사람과 AI가 맡을 일을 나눕니다. 3. 끝나면 다음 수업 때 이어서 쓸 문장이 생깁니다.',
       screenshots: [
         {
           url: 'https://claude.com/ko/download',
@@ -265,14 +265,14 @@ export const setupTutorial: TutorialData = {
         },
         {
           title: 'Codex와 다른 점',
-          body: 'Codex는 폴더 안 파일을 만들고 고치는 흐름입니다. Claude는 첫날 대화와 파일 첨부로 작업 규칙을 정리하는 흐름입니다.',
+          body: 'Codex는 폴더 안 파일을 직접 만들고 고치는 데 강합니다. Claude는 대화로 내용을 정리하고 파일을 붙여 보며 다듬는 데 익숙합니다.',
         },
       ],
       recommended: [],
       useful: [],
       output: 'Claude 첫 대화와 재개 문장',
       prompt: `나는 AI 야학 수강생이야. 앞으로 이 수업에서 자료와 결과물을 잘 정리하려고 해.
-초보자 기준으로 작업실 운영 규칙을 만들어줘.
+초보자 기준으로 수업 폴더 사용 약속을 만들어줘.
 
 조건:
 - 어려운 말은 쓰지 마.
@@ -283,12 +283,12 @@ export const setupTutorial: TutorialData = {
       step: 'X2',
       track: 'codex',
       label: 'Codex 첫 실습',
-      title: '폴더 구조와 에이전트 문서를 만듭니다.',
-      goal: 'AI가 다음에도 쉬운 말로 답하도록 이 폴더 안에 규칙 문서를 남깁니다.',
+      title: '수업 폴더 안에 기본 안내문을 만듭니다.',
+      goal: '1. 자료함, 결과물, 연습, 메모 폴더를 만듭니다. 2. AI가 다음에도 쉬운 말로 답하도록 안내문을 남깁니다. 3. 끝나면 수업 파일을 넣을 자리가 생깁니다.',
       conceptToggles: [
         {
-          title: '에이전트 문서가 뭔가요?',
-          body: 'AI에게 주는 안내문입니다. 이 폴더에서 다시 일할 때마다 AI가 먼저 읽고 따르는 기준입니다.',
+          title: 'AI 안내문이 뭔가요?',
+          body: 'AI에게 주는 짧은 약속입니다. 이 폴더에서 다시 일할 때마다 “짧게 말하기”, “쉬운 말 쓰기”, “먼저 한 단계만 말하기” 같은 기준을 보게 합니다.',
         },
         {
           title: '어떤 답변 규칙을 쓰면 좋나요?',
@@ -297,7 +297,7 @@ export const setupTutorial: TutorialData = {
       ],
       recommended: [],
       useful: [],
-      output: '폴더 구조, README, AGENTS.md',
+      output: '수업 폴더, README, AGENTS.md',
       prompt: `이 폴더는 내 AI 야학 작업실이야.
 
 먼저 이 폴더가 OneDrive나 iCloud 같은 클라우드 동기화 안에 있는지 확인해줘.
@@ -311,9 +311,9 @@ export const setupTutorial: TutorialData = {
 
 각 폴더 안에 README.md를 만들고 한 줄 설명을 적어줘.
 
-마지막으로 AGENTS.md라는 에이전트 문서를 만들고 아래 규칙을 적어줘:
-- 사용자는 터미널을 모르는 초보자다.
-- 터미널 명령이 필요하면 사용자에게 시키지 말고 네가 직접 실행해라.
+마지막으로 AGENTS.md라는 AI 안내문을 만들고 아래 규칙을 적어줘:
+- 사용자는 컴퓨터 명령어에 익숙하지 않은 초보자다.
+- 컴퓨터 명령어가 필요하면 사용자에게 시키지 말고 네가 직접 실행해라.
 - 승인이 필요하면 쉬운 말로 이유를 설명해라.
 - 사용자에게는 전문용어 없이 한두 문장으로만 설명해라.`,
     },
@@ -322,7 +322,7 @@ export const setupTutorial: TutorialData = {
       track: 'both',
       label: 'AI에게 도움 요청해보기',
       title: '막힌 화면을 설명하고 다음 행동 하나만 물어봅니다.',
-      goal: '혼자 오래 헤매지 않고, AI에게 지금 필요한 한 단계만 묻는 연습을 합니다.',
+      goal: '1. 막힌 화면의 버튼이나 오류 문구를 적습니다. 2. AI에게 지금 할 일 하나만 묻습니다. 3. 끝나면 혼자 오래 헤매지 않고 다음으로 넘어갈 수 있습니다.',
       conceptToggles: [
         {
           title: '화면을 잘 설명하지 못해도 되나요?',
