@@ -103,6 +103,20 @@ export const websiteTutorial: TutorialData = {
       step: '04',
       actor: 'human-ai',
       actorLabel: '사람',
+      overviewItems: [
+        {
+          actor: 'human',
+          actorLabel: '사람',
+          label: '피드백',
+          output: '초안에서 고칠 점',
+        },
+        {
+          actor: 'ai',
+          actorLabel: 'AI',
+          label: '계획 업데이트',
+          output: '피드백 반영한 수정 계획',
+        },
+      ],
       loop: true,
       label: '초안 보고 고치기',
       title: '첫 화면 초안을 보고 고칠 점을 말합니다.',

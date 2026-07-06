@@ -113,18 +113,37 @@ const actorFallback = {
           )}
           <ol class:list={['tutorial-flow', overviewFlow && 'tutorial-flow--arrows']}>
             {steps.map((item) => (
-              <li data-track={item.track ?? 'both'} data-actor={item.actor ?? 'human-ai'} data-loop={item.loop ? 'true' : undefined}>
+              <li
+                data-track={item.track ?? 'both'}
+                data-actor={item.actor ?? 'human-ai'}
+                data-loop={item.loop ? 'true' : undefined}
+                data-split={overviewFlow && item.overviewItems?.length ? 'true' : undefined}
+              >
                 <a href={`#step-${item.step}`} data-track={item.track ?? 'both'}>
                   <span class="tutorial-flow__num">{item.step}</span>
-                  <span class="tutorial-flow__text">
-                    {overviewFlow && (
-                      <span class="tutorial-flow__meta">
-                        <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human-ai']}</span>
-                      </span>
-                    )}
-                    <strong>{item.label}</strong>
-                    {overviewFlow && <em>{item.output}</em>}
-                  </span>
+                  {overviewFlow && item.overviewItems?.length ? (
+                    <span class="tutorial-flow__split-cards">
+                      {item.overviewItems.map((subItem) => (
+                        <span class="tutorial-flow__split-card" data-sub-actor={subItem.actor}>
+                          <span class="tutorial-flow__meta">
+                            <span class="tutorial-flow__actor">{subItem.actorLabel}</span>
+                          </span>
+                          <strong>{subItem.label}</strong>
+                          <em>{subItem.output}</em>
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    <span class="tutorial-flow__text">
+                      {overviewFlow && (
+                        <span class="tutorial-flow__meta">
+                          <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human-ai']}</span>
+                        </span>
+                      )}
+                      <strong>{item.label}</strong>
+                      {overviewFlow && <em>{item.output}</em>}
+                    </span>
+                  )}
                 </a>
               </li>
             ))}

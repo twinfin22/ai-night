@@ -1732,6 +1732,54 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
     rgba(255, 255, 255, 0.045);
 }
 
+.tutorial-flow--arrows [data-split='true'] a {
+  min-height: 116px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.tutorial-flow--arrows [data-split='true'] a:hover {
+  background: transparent;
+}
+
+.tutorial-flow__split-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  min-height: 116px;
+}
+
+.tutorial-flow__split-card {
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid rgba(244, 184, 96, 0.52);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(244, 184, 96, 0.14), rgba(255, 255, 255, 0.035) 52%),
+    rgba(255, 255, 255, 0.045);
+}
+
+.tutorial-flow__split-card[data-sub-actor='ai'] {
+  border-color: rgba(127, 202, 210, 0.48);
+  background:
+    linear-gradient(135deg, rgba(127, 202, 210, 0.12), rgba(255, 255, 255, 0.035) 52%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.tutorial-flow__split-card[data-sub-actor='ai'] .tutorial-flow__actor {
+  background: rgba(127, 202, 210, 0.13);
+  color: #9bdbe3;
+}
+
+.tutorial-flow__split-card strong {
+  font-size: 17px;
+}
+
 .tutorial-flow__meta {
   display: flex;
   flex-wrap: wrap;
