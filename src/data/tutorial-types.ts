@@ -21,9 +21,10 @@ export type TutorialStep = {
   }[];
   screenshots?: {
     track?: 'both' | 'codex' | 'claude';
+    url: string;
     src: string;
     alt: string;
-    caption: string;
+    caption?: string;
     captionUrl?: string;
   }[];
   successCriteria?: string[];
@@ -43,6 +44,7 @@ export type TutorialData = {
   description: string;
   canonicalPath: string;
   markdownPath: string;
+  overviewTemplate?: 'default' | 'flow';
   steps: TutorialStep[];
   stepsLabel: string;
   resumePrompt: string;

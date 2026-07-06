@@ -5,6 +5,7 @@ export const setupTutorial: TutorialData = {
   description: 'AI 야학 수업을 이어가기 위해 앱 설치, 작업 폴더 지정, 첫 정리 실습까지 끝내는 튜토리얼.',
   canonicalPath: '/modules/setup/',
   markdownPath: '/modules/setup.md',
+  overviewTemplate: 'flow',
   stepsLabel: '트랙 2개',
   toolSelector: true,
   resumePrompt: `내 작업 폴더는 문서/ai-yahak-studio야. 이 폴더를 기준으로 다음 실습을 이어가자.`,
@@ -23,7 +24,14 @@ export const setupTutorial: TutorialData = {
         { track: 'codex', label: 'ChatGPT 로그인', url: 'https://chatgpt.com/' },
         { track: 'claude', label: 'Claude 로그인', url: 'https://claude.ai/' },
       ],
-      successCriteria: ['내 계정으로 로그인되어 있다.', '유료 플랜 사용 가능 상태를 확인했다.'],
+      screenshots: [
+        {
+          track: 'claude',
+          url: 'https://claude.ai/',
+          src: '/assets/tutorials/setup/claude-login.jpeg',
+          alt: 'Claude 회원가입과 로그인 공식 링크 안내 카드',
+        },
+      ],
       conceptToggles: [
         {
           title: '무료 버전으로 하면 왜 막히나요?',
@@ -37,14 +45,13 @@ export const setupTutorial: TutorialData = {
       recommended: [],
       useful: [],
       output: '로그인 확인',
-      prompt: '',
     },
     {
       step: '02',
       track: 'both',
       label: '앱 설치',
       title: '공식 앱을 설치하고 로그인합니다.',
-      goal: '검색 결과의 가짜 앱을 피하고, 공식 앱에서 수업을 시작할 준비를 합니다.',
+      goal: '피싱 링크와 유사 링크를 구분하고, 공식 앱에서 수업을 시작할 준비를 합니다.',
       officialLinks: [
         { track: 'codex', label: 'Codex 시작 안내', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
         { track: 'claude', label: 'Claude 다운로드', url: 'https://claude.com/ko/download' },
@@ -52,22 +59,21 @@ export const setupTutorial: TutorialData = {
       screenshots: [
         {
           track: 'codex',
+          url: 'https://chatgpt.com/ko-KR/codex/get-started/',
           src: '/assets/tutorials/setup/codex-download.png',
           alt: 'Codex 한국어 시작 안내 화면',
-          caption: 'Codex는 한국어 시작 안내에서 앱 사용법을 확인합니다.',
         },
         {
           track: 'claude',
+          url: 'https://claude.com/ko/download',
           src: '/assets/tutorials/setup/claude-download.png',
           alt: 'Claude 한국어 다운로드 페이지',
-          caption: 'Claude는 한국어 다운로드 페이지에서 macOS용 앱 버튼을 확인합니다.',
         },
       ],
-      successCriteria: ['앱이 열린다.', '내 계정으로 로그인되어 있다.'],
       conceptToggles: [
         {
-          title: '검색 결과에서 받으면 안 되는 이유',
-          body: '비슷한 이름의 가짜 앱이나 광고 링크가 섞일 수 있습니다. 공식 사이트 주소인지 먼저 확인하고 받으세요.',
+          title: '피싱 링크와 유사 링크 주의',
+          body: '비슷한 이름의 유사 링크나 광고 링크가 섞일 수 있습니다. 주소를 확인하고 공식 사이트에서 확인 영역의 링크에서 시작하세요.',
         },
         {
           title: '보안 경고가 뜨면',
@@ -77,8 +83,6 @@ export const setupTutorial: TutorialData = {
       recommended: [],
       useful: [],
       output: '앱 설치 완료',
-      recoveryPrompt: '앱 설치 화면에서 막혔어. 지금 화면에서 무엇을 눌러야 하는지 쉬운 말로 한 단계만 알려줘.',
-      prompt: `앱 설치 중 막혔어. 지금 화면에서 무엇을 눌러야 하는지 초보자 기준으로 한 단계씩 알려줘.`,
     },
     {
       step: '03',
@@ -86,7 +90,6 @@ export const setupTutorial: TutorialData = {
       label: '작업 폴더 만들기',
       title: '문서 안에 작업실 폴더 하나만 만듭니다.',
       goal: '사람이 직접 만드는 폴더는 하나로 줄이고, 나머지 정리는 AI에게 맡깁니다.',
-      successCriteria: ['문서 폴더 안에 `ai-yahak-studio`가 보인다.', '폴더 안은 비어 있어도 괜찮다.'],
       conceptToggles: [
         {
           title: '왜 바탕화면이나 다운로드 폴더를 피하나요?',
@@ -100,32 +103,147 @@ export const setupTutorial: TutorialData = {
       recommended: [],
       useful: [],
       output: '작업 폴더 1개',
-      prompt: '',
     },
     {
       step: 'C1',
       track: 'claude',
-      label: 'Claude 시작',
-      title: 'Claude에서 첫 대화와 파일 첨부 위치를 확인합니다.',
-      goal: 'Claude 트랙은 폴더 자동화가 아니라 대화와 파일 첨부 중심으로 시작합니다.',
+      label: 'Claude 앱 사용 익숙해지기',
+      title: 'Claude 화면에서 오늘 볼 메뉴만 확인합니다.',
+      goal: '처음부터 모든 기능을 쓰지 않고, 첫날 필요한 대화 입력과 사이드바 위치만 익힙니다.',
       officialLinks: [
         { label: 'Claude 다운로드', url: 'https://claude.com/ko/download' },
       ],
       screenshots: [
         {
-          src: '/assets/tutorials/setup/claude-download.png',
-          alt: 'Claude 한국어 다운로드 페이지',
-          caption: 'Claude는 한국어 다운로드 페이지에서 공식 앱을 설치한 뒤 새 대화와 파일 첨부 위치를 확인합니다.',
+          url: 'https://claude.com/ko/download',
+          src: '/assets/tutorials/setup/claude-app-sidebar.png',
+          alt: 'Claude 앱의 Chat, Cowork, Code 상단 모드와 사이드바 메뉴',
         },
       ],
-      successCriteria: ['Claude에서 새 대화를 시작할 수 있다.', '파일 첨부 버튼 위치를 안다.', '다음 수업에 이어갈 문장을 저장했다.'],
       conceptToggles: [
         {
-          title: 'Claude Code를 첫날 쓰지 않는 이유',
-          body: '첫날 목표는 설치와 첫 성공입니다. Claude Code는 개발자 도구라 초보자에게 경로가 길어집니다.',
+          title: 'Chat',
+          body: '일반 대화입니다. 첫날에는 여기에서 질문하고 답을 받는 것만 해도 충분합니다.',
         },
         {
-          title: 'Codex와 뭐가 다른가요?',
+          title: 'Cowork',
+          body: '앱이나 파일과 연결해 긴 작업을 맡기는 영역입니다. 첫날에는 위치만 확인합니다.',
+        },
+        {
+          title: 'Code',
+          body: '개발자용 코딩 작업 영역입니다. 첫날 필수 기능이 아닙니다.',
+        },
+        {
+          title: '새 작업',
+          body: '새 대화나 새 작업을 시작하는 버튼입니다.',
+        },
+        {
+          title: '프로젝트',
+          body: '자료와 대화를 한 묶음으로 관리하는 공간입니다. 오늘은 새로 만들지 않습니다.',
+        },
+        {
+          title: '아티팩트',
+          body: 'Claude가 만든 문서, 표, 코드 같은 결과물을 확인하는 곳입니다.',
+        },
+        {
+          title: '예정됨',
+          body: '예약된 작업을 보는 메뉴입니다. 첫날에는 건드리지 않습니다.',
+        },
+        {
+          title: '발송(베타)',
+          body: '베타 기능입니다. 수업 첫날에는 사용하지 않습니다.',
+        },
+        {
+          title: '사용자 지정',
+          body: '말투나 작업 방식 같은 개인 설정을 바꾸는 곳입니다.',
+        },
+      ],
+      recommended: [],
+      useful: [],
+      output: 'Claude 메뉴 위치 확인',
+    },
+    {
+      step: 'X1',
+      track: 'codex',
+      label: 'Codex 앱 사용 익숙해지기',
+      title: 'Codex 화면에서 작업 폴더와 첫 지시 위치를 확인합니다.',
+      goal: 'Codex가 수업용 폴더 안에서만 파일을 만들고 고치도록 작업 범위를 정합니다.',
+      officialLinks: [
+        { label: 'Codex 시작하기', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
+        { label: 'Codex 앱 기능', url: 'https://developers.openai.com/codex/app/features' },
+        { label: 'Codex Plugins', url: 'https://developers.openai.com/codex/plugins' },
+      ],
+      screenshots: [
+        {
+          url: 'https://chatgpt.com/ko-KR/codex/get-started/',
+          src: '/assets/tutorials/setup/codex-folder-plan-mode.png',
+          alt: 'Codex에서 기존 작업 폴더를 고르고 첫 지시를 입력하는 화면',
+        },
+        {
+          url: 'https://developers.openai.com/codex/app/features',
+          src: '/assets/tutorials/setup/codex-app-sidebar.png',
+          alt: 'Codex 앱의 New chat, Search, Scheduled, Plugins 사이드바 메뉴',
+        },
+      ],
+      conceptToggles: [
+        {
+          title: 'New chat',
+          body: '새 작업을 시작하는 버튼입니다. 수업에서 새 실습을 시작할 때 씁니다.',
+        },
+        {
+          title: 'Search',
+          body: '지난 작업을 찾는 메뉴입니다. 전에 만든 파일이나 대화를 다시 찾을 때 씁니다.',
+        },
+        {
+          title: 'Scheduled',
+          body: '예약된 작업을 확인하는 메뉴입니다. 첫날에는 보기만 합니다.',
+        },
+        {
+          title: 'Plugins',
+          body: '기능을 확장하는 메뉴입니다. 첫날에는 설치하지 않고 위치만 확인합니다.',
+        },
+        {
+          title: '작업 폴더 지정',
+          body: 'New project에서 Use an existing folder를 고르고 문서/ai-yahak-studio 폴더를 선택합니다.',
+        },
+        {
+          title: 'Plan mode',
+          body: '바로 파일을 고치지 않고 먼저 계획을 받는 모드입니다. 처음에는 “무엇을 할지 먼저 말해줘”라고 요청하면 됩니다.',
+        },
+        {
+          title: '모델 선택',
+          body: '첫날에는 기본값을 유지합니다. 막히거나 어려운 작업일 때만 바꿉니다.',
+        },
+        {
+          title: '속도/추론 모드',
+          body: '간단한 확인은 빠르게, 복잡한 수정은 깊게 생각하는 모드를 씁니다. 처음에는 기본값으로 둡니다.',
+        },
+        {
+          title: '승인/권한 요청',
+          body: '작업실 폴더 안 파일 변경은 허용해도 됩니다. 작업실 밖 파일, 개인정보, 결제 관련 요청은 멈추고 물어보세요.',
+        },
+        {
+          title: '결과 확인',
+          body: 'Codex가 바꾼 파일, 실행한 명령, 에러 메시지를 결과 화면에서 확인합니다.',
+        },
+      ],
+      recommended: [],
+      useful: [],
+      output: 'Codex 작업 폴더와 메뉴 위치 확인',
+    },
+    {
+      step: 'C2',
+      track: 'claude',
+      label: 'Claude 첫 실습',
+      title: '작업실 운영 규칙을 대화로 정리합니다.',
+      goal: 'Claude 트랙은 첫날 파일 자동화보다 대화와 파일 첨부 흐름을 먼저 익힙니다.',
+      conceptToggles: [
+        {
+          title: '파일 첨부 위치',
+          body: '입력창 근처의 첨부 버튼을 확인합니다. 오늘 만든 파일을 나중에 Claude에 붙여 넣거나 첨부할 수 있습니다.',
+        },
+        {
+          title: 'Codex와 다른 점',
           body: 'Codex는 폴더 안 파일을 만들고 고치는 흐름입니다. Claude는 첫날 대화와 파일 첨부로 작업 규칙을 정리하는 흐름입니다.',
         },
       ],
@@ -139,68 +257,13 @@ export const setupTutorial: TutorialData = {
 - 어려운 말은 쓰지 마.
 - 내가 직접 해야 할 일과 Claude에게 맡길 일을 나눠줘.
 - 다음 수업 때 이어서 쓸 수 있는 재개 문장도 만들어줘.`,
-    },    {
-      step: '04',
-      track: 'codex',
-      label: '작업 폴더 지정',
-      title: 'Codex가 사용할 작업 폴더를 고릅니다.',
-      goal: 'AI가 수업용 폴더 안에서만 파일을 만들고 고치도록 작업 범위를 정합니다.',
-      officialLinks: [
-        { label: 'Codex 시작 안내', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
-        { label: 'Codex 앱 사용법', url: 'https://developers.openai.com/codex/app' },
-      ],
-      screenshots: [
-        {
-          src: '/assets/tutorials/setup/codex-project-folder.jpeg',
-          alt: 'Codex에서 기존 작업 폴더를 고르는 화면',
-          caption: '왼쪽 아래 메뉴에서 기존 폴더 사용을 골라 내가 만든 작업 폴더를 지정합니다.',
-        },
-      ],
-      successCriteria: ['Codex 화면에서 현재 폴더가 `ai-yahak-studio`로 보인다.', '입력창에 메시지를 쓸 수 있다.', 'Codex가 이 폴더 안에 파일을 만들 수 있다.'],
-      conceptToggles: [
-        {
-          title: '권한 요청은 언제 허용하나요?',
-          body: '작업실 폴더 안에 파일을 만들거나 고치는 요청은 보통 괜찮습니다. 작업실 밖 파일 삭제, 개인정보 전송, 결제 관련 요청은 멈추고 물어보세요.',
-        },
-        {
-          title: '처음에는 어떤 방식을 고르나요?',
-          body: '첫날에는 내 컴퓨터에 있는 폴더 하나만 고르면 됩니다. 여러 작업을 나눠 돌리는 기능은 나중에 배워도 됩니다.',
-        },
-        {
-          title: '터미널 창이 보여도 괜찮나요?',
-          body: 'AI가 파일을 만들거나 확인할 때 명령을 실행할 수 있습니다. 무엇을 하는지 설명을 읽고, 이상하면 승인하지 말고 질문하세요.',
-        },
-      ],
-      recommended: [],
-      useful: [],
-      output: '폴더 구조와 답변 규칙 문서',
-      recoveryPrompt: 'Codex에서 작업 폴더를 고르다가 막혔어. 내가 지금 눌러야 할 것 1개만 먼저 알려줘.',
-      prompt: `이 폴더는 내 AI 야학 작업실이야.
-
-먼저 클라우드 동기화 문제가 있는지 확인해줘.
-그 다음 아래 폴더를 만들어줘:
-- 자료함
-- 결과물
-- 연습
-- 메모
-
-각 폴더 안에 README.md를 만들고 한 줄 설명을 적어줘.
-마지막으로 AGENTS.md라는 에이전트 문서를 만들고 "쉬운 말로 짧게 설명하기" 규칙을 적어줘.`,
     },
     {
-      step: '05',
+      step: 'X2',
       track: 'codex',
-      label: '답변 규칙 정하기',
-      title: '에이전트 문서를 만들고 답변 규칙을 정합니다.',
+      label: 'Codex 첫 실습',
+      title: '폴더 구조와 에이전트 문서를 만듭니다.',
       goal: 'AI가 다음에도 쉬운 말로 답하도록 이 폴더 안에 규칙 문서를 남깁니다.',
-      screenshots: [
-        {
-          src: '/assets/tutorials/setup/codex-download.png',
-          alt: 'Codex 한국어 시작 안내 화면',
-          caption: 'Codex에서는 작업 지시, 파일 변경, 결과 확인을 한 흐름으로 봅니다.',
-        },
-      ],
-      successCriteria: ['에이전트 문서가 만들어졌다.', '문서 안에 내가 원하는 답변 규칙이 들어 있다.', '다음 답변에서 그 규칙이 적용된다.'],
       conceptToggles: [
         {
           title: '에이전트 문서가 뭔가요?',
@@ -213,10 +276,25 @@ export const setupTutorial: TutorialData = {
       ],
       recommended: [],
       useful: [],
-      output: '에이전트 문서와 답변 규칙',
-      prompt: `AGENTS.md라는 에이전트 문서를 만들고, 아래 답변 규칙을 적어줘:
-- 나에게 항상 쉬운 말로 짧게 설명해줘.
-- 먼저 해야 할 일 1개만 알려줘.`,
+      output: '폴더 구조, README, AGENTS.md',
+      prompt: `이 폴더는 내 AI 야학 작업실이야.
+
+먼저 이 폴더가 OneDrive나 iCloud 같은 클라우드 동기화 안에 있는지 확인해줘.
+문제가 될 수 있으면 쉬운 말 한 줄로 알려줘.
+
+그 다음 아래 폴더를 만들어줘:
+- 자료함
+- 결과물
+- 연습
+- 메모
+
+각 폴더 안에 README.md를 만들고 한 줄 설명을 적어줘.
+
+마지막으로 AGENTS.md라는 에이전트 문서를 만들고 아래 규칙을 적어줘:
+- 사용자는 터미널을 모르는 초보자다.
+- 터미널 명령이 필요하면 사용자에게 시키지 말고 네가 직접 실행해라.
+- 승인이 필요하면 쉬운 말로 이유를 설명해라.
+- 사용자에게는 전문용어 없이 한두 문장으로만 설명해라.`,
     },
     {
       step: '06',
@@ -224,7 +302,6 @@ export const setupTutorial: TutorialData = {
       label: 'AI에게 도움 요청해보기',
       title: '막힌 화면을 설명하고 다음 행동 하나만 물어봅니다.',
       goal: '혼자 오래 헤매지 않고, AI에게 지금 필요한 한 단계만 묻는 연습을 합니다.',
-      successCriteria: ['막힌 상황을 한 문장으로 설명했다.', 'AI에게 다음에 할 일 1개만 물어봤다.', '답이 어렵거나 길면 더 쉽게 다시 물어봤다.'],
       conceptToggles: [
         {
           title: '화면을 잘 설명하지 못해도 되나요?',
@@ -249,6 +326,5 @@ export const setupTutorial: TutorialData = {
 
 내가 지금 해야 할 일 1개만 쉬운 말로 알려줘.`,
     },
-
   ],
 };

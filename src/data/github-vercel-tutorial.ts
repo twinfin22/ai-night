@@ -5,6 +5,7 @@ export const githubVercelTutorial: TutorialData = {
   description: '내 작업물을 GitHub에 저장하고 Vercel로 공개 주소를 만든 뒤, 필요하면 Cloudflare로 내 도메인까지 연결하는 왕초보용 AI 야학 튜토리얼.',
   canonicalPath: '/modules/github-vercel/',
   markdownPath: '/modules/github-vercel.md',
+  overviewTemplate: 'flow',
   stepsLabel: '6단계 + 옵션',
   resumePrompt: `깃허브와 버셀 세팅을 하다가 중간에 멈췄어.
 내가 지금 어디까지 했는지 물어보고, 다음 한 단계만 쉬운 말로 안내해줘.
@@ -24,16 +25,14 @@ export const githubVercelTutorial: TutorialData = {
       goal: '아직 필요 없는 세팅을 억지로 하지 않고, 공개 링크가 필요한 작업인지 판단합니다.',
       screenshots: [
         {
+          url: 'https://github.com/',
           src: '/assets/tutorials/github-vercel/screenshots/github-repo-files.png',
           alt: 'GitHub 저장소 파일 목록 실제 화면',
-          caption: 'GitHub 저장소 예시',
-          captionUrl: 'https://github.com/github/docs',
         },
         {
+          url: 'https://vercel.com/docs/git',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-git-docs.png',
           alt: 'Vercel Git 저장소 배포 문서 실제 화면',
-          caption: 'Vercel Git 배포 문서',
-          captionUrl: 'https://vercel.com/docs/git',
         },
       ],
       successCriteria: [
@@ -98,16 +97,14 @@ export const githubVercelTutorial: TutorialData = {
       ],
       screenshots: [
         {
+          url: 'https://github.com/signup',
           src: '/assets/tutorials/github-vercel/screenshots/github-signup.png',
           alt: 'GitHub 가입 실제 화면',
-          caption: 'GitHub 가입',
-          captionUrl: 'https://github.com/signup',
         },
         {
+          url: 'https://vercel.com/signup',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-signup.png',
           alt: 'Vercel 가입 실제 화면',
-          caption: 'Vercel 가입',
-          captionUrl: 'https://vercel.com/signup',
         },
       ],
       successCriteria: [
@@ -149,10 +146,9 @@ export const githubVercelTutorial: TutorialData = {
       ],
       screenshots: [
         {
+          url: 'https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository',
           src: '/assets/tutorials/github-vercel/screenshots/github-new-repository-docs.png',
           alt: 'GitHub 새 저장소 만들기 공식 문서 실제 화면',
-          caption: 'GitHub 새 저장소 만들기 문서',
-          captionUrl: 'https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository',
         },
       ],
       successCriteria: [
@@ -204,10 +200,9 @@ export const githubVercelTutorial: TutorialData = {
       goal: '터미널 명령을 외우지 않고, 현재 작업 폴더를 GitHub 저장소와 연결합니다.',
       screenshots: [
         {
+          url: 'https://github.com/',
           src: '/assets/tutorials/github-vercel/screenshots/github-repo-files.png',
           alt: 'GitHub 저장소 파일 목록 실제 화면',
-          caption: 'GitHub 저장소 예시',
-          captionUrl: 'https://github.com/github/docs',
         },
       ],
       successCriteria: [
@@ -265,22 +260,19 @@ export const githubVercelTutorial: TutorialData = {
       ],
       screenshots: [
         {
+          url: 'https://vercel.com/docs/git',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-git-docs.png',
           alt: 'Vercel Git 저장소 배포 문서 실제 화면',
-          caption: 'Vercel Git 배포 문서',
-          captionUrl: 'https://vercel.com/docs/git',
         },
         {
+          url: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-domain-docs.png',
           alt: 'Vercel 도메인 연결 문서 실제 화면',
-          caption: 'Vercel 도메인 연결 문서',
-          captionUrl: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain',
         },
         {
+          url: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/',
           src: '/assets/tutorials/github-vercel/screenshots/cloudflare-dns-docs.png',
           alt: 'Cloudflare DNS 레코드 문서 실제 화면',
-          caption: 'Cloudflare DNS 레코드 문서',
-          captionUrl: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/',
         },
       ],
       successCriteria: [
@@ -350,16 +342,14 @@ export const githubVercelTutorial: TutorialData = {
       goal: '한 번 공개하고 끝나는 것이 아니라, 수정하면 다시 반영되는 흐름을 확인합니다.',
       screenshots: [
         {
+          url: 'https://vercel.com/docs/deployments',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-deployments-docs.png',
           alt: 'Vercel 배포 문서 실제 화면',
-          caption: 'Vercel 배포 문서',
-          captionUrl: 'https://vercel.com/docs/deployments',
         },
         {
+          url: 'https://github.com/',
           src: '/assets/tutorials/github-vercel/screenshots/github-repo-files.png',
           alt: 'GitHub 저장소 파일 목록 실제 화면',
-          caption: 'GitHub 저장소 예시',
-          captionUrl: 'https://github.com/github/docs',
         },
       ],
       successCriteria: [
@@ -412,16 +402,14 @@ export const githubVercelTutorial: TutorialData = {
       ],
       screenshots: [
         {
+          url: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/',
           src: '/assets/tutorials/github-vercel/screenshots/cloudflare-dns-docs.png',
           alt: 'Cloudflare DNS 레코드 문서 실제 화면',
-          caption: 'Cloudflare DNS 레코드 문서',
-          captionUrl: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/',
         },
         {
+          url: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain',
           src: '/assets/tutorials/github-vercel/screenshots/vercel-domain-docs.png',
           alt: 'Vercel 도메인 연결 문서 실제 화면',
-          caption: 'Vercel 도메인 연결 문서',
-          captionUrl: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain',
         },
       ],
       successCriteria: [

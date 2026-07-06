@@ -9,6 +9,7 @@ export interface Props {
   canonicalPath: string;
   markdownPath: string;
   steps: TutorialStep[];
+  overviewTemplate?: 'default' | 'flow';
   resumePrompt: string;
   resumePromptByTrack?: {
     codex: string;
@@ -23,6 +24,7 @@ const {
   description,
   canonicalPath,
   steps,
+  overviewTemplate = 'default',
   toolSelector = false,
 } = Astro.props;
 
@@ -33,7 +35,7 @@ const tutorialLinks = [
   { href: '/modules/github-vercel/', label: '깃허브와 버셀 세팅' },
 ];
 
-const overviewFlow = canonicalPath === '/modules/website/';
+const overviewFlow = overviewTemplate === 'flow';
 const actorFallback = {
   human: '사람',
   ai: 'AI',
@@ -105,7 +107,7 @@ const actorFallback = {
             {steps.map((item) => (
               <li
                 data-track={item.track ?? 'both'}
-                data-actor={item.actor ?? 'human-ai'}
+                data-actor={item.actor ?? 'human'}
                 data-loop={item.loop ? 'true' : undefined}
                 data-split={overviewFlow && item.overviewItems?.length ? 'true' : undefined}
               >
@@ -125,9 +127,9 @@ const actorFallback = {
                     </span>
                   ) : (
                     <span class="tutorial-flow__text">
-                      {overviewFlow && (
+                      {overviewFlow && (item.actor || item.actorLabel) && (
                         <span class="tutorial-flow__meta">
-                          <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human-ai']}</span>
+                          <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human']}</span>
                         </span>
                       )}
                       <strong>{item.label}</strong>
@@ -192,8 +194,12 @@ const actorFallback = {
                           </a>
                           <figcaption>
                             {shot.captionUrl ? (
-                              <a href={shot.captionUrl} target="_blank" rel="noreferrer">{shot.caption}</a>
-                            ) : shot.caption}
+                              <a href={shot.captionUrl} target="_blank" rel="noopener noreferrer">{shot.caption ?? shot.captionUrl}</a>
+                            ) : shot.caption ? (
+                              shot.caption
+                            ) : (
+                              <a href={shot.url} target="_blank" rel="noopener noreferrer">{shot.url}</a>
+                            )}
                           </figcaption>
                         </figure>
                       ))}

@@ -30,7 +30,7 @@ ${step.goal}
 ${officialLinkList(step.officialLinks)}${sectionList('끝났는지 확인', step.successCriteria ?? [])}${sectionList('추천 스킬', step.recommended, { skillLinks: true })}${sectionList('같이 쓰면 좋은 기능', step.useful, { skillLinks: true })}
 ### 이 단계 결과물
 ${step.output}
-${step.conceptToggles?.length ? `\n### 어려운 개념\n${step.conceptToggles.map((item) => `- ${item.title}: ${item.body}`).join('\n')}\n` : ''}
+${step.conceptToggles?.length ? `\n### 더 알아보기\n${step.conceptToggles.map((item) => `- ${item.title}: ${item.body}`).join('\n')}\n` : ''}
 ${step.recoveryPrompt ? `\n### 막혔을 때\n\n\`\`\`text\n${step.recoveryPrompt}\n\`\`\`\n` : ''}
 ${step.prompt ? `\n### 복붙 프롬프트\n\n\`\`\`text\n${step.prompt}\n\`\`\`\n` : ''}`;
 
