@@ -5,6 +5,7 @@ export const websiteTutorial: TutorialData = {
   description: 'AI와 함께 홈페이지 제작 순서를 설계하고, 실제 Vercel 배포 주소를 커뮤니티 단체방에 공유하는 AI 야학 튜토리얼.',
   canonicalPath: '/modules/website/',
   markdownPath: '/modules/website.md',
+  overviewTemplate: 'flow',
   stepsLabel: '6단계',
   summary: [
     { label: '진행 방식', value: '6단계' },

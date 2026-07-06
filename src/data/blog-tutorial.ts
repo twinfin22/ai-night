@@ -5,6 +5,7 @@ export const blogTutorial: TutorialData = {
   description: '기존 자료 하나로 독자 질문을 찾고, 네이버 블로그에 올릴 짧은 초안까지 만드는 AI 야학 튜토리얼.',
   canonicalPath: '/modules/blog/',
   markdownPath: '/modules/blog.md',
+  overviewTemplate: 'flow',
   stepsLabel: '5단계',
   summary: [
     { label: '진행 방식', value: '5단계' },

@@ -10,6 +10,7 @@ export interface Props {
   markdownPath: string;
   steps: TutorialStep[];
   summary: SummaryItem[];
+  overviewTemplate?: 'default' | 'flow';
   resumePrompt: string;
   resumePromptByTrack?: {
     codex: string;
@@ -26,12 +27,13 @@ const {
   canonicalPath,
   steps,
   summary,
+  overviewTemplate = 'default',
   toolSelector = false,
   stepsLabel = `${steps.length}단계`,
   ctaLabel = '실습 시작',
 } = Astro.props;
 
-const overviewFlow = canonicalPath === '/modules/website/';
+const overviewFlow = overviewTemplate === 'flow';
 const actorFallback = {
   human: '사람',
   ai: 'AI',
@@ -111,7 +113,7 @@ const actorFallback = {
             {steps.map((item) => (
               <li
                 data-track={item.track ?? 'both'}
-                data-actor={item.actor ?? 'human-ai'}
+                data-actor={item.actor ?? 'human'}
                 data-loop={item.loop ? 'true' : undefined}
                 data-split={overviewFlow && item.overviewItems?.length ? 'true' : undefined}
               >
@@ -131,9 +133,9 @@ const actorFallback = {
                     </span>
                   ) : (
                     <span class="tutorial-flow__text">
-                      {overviewFlow && (
+                      {overviewFlow && (item.actor || item.actorLabel) && (
                         <span class="tutorial-flow__meta">
-                          <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human-ai']}</span>
+                          <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human']}</span>
                         </span>
                       )}
                       <strong>{item.label}</strong>

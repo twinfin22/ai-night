@@ -5,6 +5,7 @@ export const githubVercelTutorial: TutorialData = {
   description: '내 작업물을 GitHub에 저장하고 Vercel로 공개 주소를 만드는 왕초보용 AI 야학 튜토리얼.',
   canonicalPath: '/modules/github-vercel/',
   markdownPath: '/modules/github-vercel.md',
+  overviewTemplate: 'flow',
   stepsLabel: '6단계',
   summary: [
     { label: '진행 방식', value: '6단계' },

@@ -46,6 +46,7 @@ export type TutorialData = {
   description: string;
   canonicalPath: string;
   markdownPath: string;
+  overviewTemplate?: 'default' | 'flow';
   steps: TutorialStep[];
   stepsLabel: string;
   summary: SummaryItem[];
