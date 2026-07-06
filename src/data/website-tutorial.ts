@@ -25,27 +25,37 @@ export const websiteTutorial: TutorialData = {
   steps: [
     {
       step: '01',
-      label: '내 상황 말하기',
-      title: '질문에 답하며 홈페이지 목적을 말합니다.',
-      goal: '내가 만들 홈페이지의 목적, 방문자, 버튼 행동을 말로 정리합니다.',
-      recommended: ['office-hours'],
-      useful: ['spec: 말한 내용을 한 장짜리 설계로 정리할 때'],
-      output: '홈페이지 제작 메모(pipeline_canvas) 초안',
-      prompt: `/office-hours
+      actor: 'human',
+      actorLabel: '사람',
+      label: '스킬로 인터뷰 받기',
+      title: 'office-hours나 grill-with-docs로 홈페이지 목적을 질문받습니다.',
+      goal: '내 상황을 혼자 길게 쓰지 않고, 인터뷰 스킬을 설치하고 실행해서 목적, 방문자, 버튼 행동을 정리합니다.',
+      recommended: ['office-hours', 'grill-with-docs'],
+      useful: ['skill-installer: grill-with-docs 설치가 필요할 때', 'spec: 인터뷰 결과를 한 장짜리 설계로 정리할 때'],
+      output: '스킬 인터뷰로 정리한 홈페이지 제작 메모(pipeline_canvas) 초안',
+      prompt: `먼저 내가 쓸 수 있는 인터뷰 스킬을 확인해줘.
 
+1. gstack office-hours가 설치되어 있으면 /office-hours로 시작하게 안내해줘.
+2. office-hours를 쓸 수 없으면 grill-with-docs를 설치하거나 활성화하는 방법을 알려줘.
+3. 둘 중 하나가 준비되면 그 스킬로 인터뷰를 시작하게 해줘.
+4. 마지막에는 홈페이지 제작 메모(pipeline_canvas)를 정리해줘.
+
+내 상황:
 나는 홈페이지를 만들고 싶지만, 아직 구조가 흐릿해.
-나를 인터뷰해서 홈페이지 제작 메모(pipeline_canvas)를 정리해줘.
 
 규칙:
 1. 한 번에 질문 2개만 해줘.
-2. 내가 빈칸을 채우게 하지 말고, 내 답을 바탕으로 네가 정리해줘.
+2. 내가 처음부터 상황 설명을 길게 쓰게 하지 말고, 네가 질문해서 필요한 정보를 끌어내줘.
 3. 대상 방문자, 버튼 문구, 참고 사이트, 피하고 싶은 톤을 꼭 물어봐줘.
-4. 마지막에는 홈페이지 제작자가 바로 쓸 수 있는 홈페이지 제작 메모(pipeline_canvas)로 정리해줘.
+4. 답이 짧거나 흐리면 예시를 보여주고 고르게 해줘.
+5. 홈페이지 제작자가 바로 쓸 수 있는 홈페이지 제작 메모(pipeline_canvas)로 정리해줘.
 
 어려운 말은 쉽게 풀어서 설명해줘.`,
     },
     {
       step: '02',
+      actor: 'human',
+      actorLabel: '사람',
       label: '자료 주기',
       title: '참고 사이트와 내 자료를 AI에게 줍니다.',
       goal: '사진, 소개글, 참고 사이트, 연락처처럼 흩어진 자료를 한 덩어리로 만듭니다.',
@@ -68,6 +78,8 @@ export const websiteTutorial: TutorialData = {
     },
     {
       step: '03',
+      actor: 'ai',
+      actorLabel: 'AI',
       label: '계획 검토',
       title: 'AI가 제안한 계획을 맞다/아니다로 봅니다.',
       goal: '예쁜 시안을 만들기 전에 홈페이지 흐름이 내 목적과 맞는지 확인합니다.',
@@ -89,6 +101,23 @@ export const websiteTutorial: TutorialData = {
     },
     {
       step: '04',
+      actor: 'human-ai',
+      actorLabel: '사람',
+      overviewItems: [
+        {
+          actor: 'human',
+          actorLabel: '사람',
+          label: '피드백',
+          output: '초안에서 고칠 점',
+        },
+        {
+          actor: 'ai',
+          actorLabel: 'AI',
+          label: '계획 업데이트',
+          output: '피드백 반영한 수정 계획',
+        },
+      ],
+      loop: true,
       label: '초안 보고 고치기',
       title: '첫 화면 초안을 보고 고칠 점을 말합니다.',
       goal: 'AI티 나는 문장, 흐린 버튼, 모바일 깨짐을 찾아 고칩니다.',
@@ -111,6 +140,8 @@ export const websiteTutorial: TutorialData = {
     },
     {
       step: '05',
+      actor: 'human',
+      actorLabel: '사람',
       label: '미리보기 확인',
       title: '미리보기 주소(preview)를 열어 최종 확인합니다.',
       goal: '눈으로만 보지 말고, 실제 브라우저에서 버튼과 링크가 작동하는지 확인합니다.',
@@ -135,6 +166,8 @@ export const websiteTutorial: TutorialData = {
     },
     {
       step: '06',
+      actor: 'human',
+      actorLabel: '사람',
       label: '공개 링크 공유',
       title: '최종 공개 링크(production)를 단체방에 공유합니다.',
       goal: '내 컴퓨터에서만 열리는 화면이 아니라, 남에게 보낼 수 있는 주소를 만듭니다.',

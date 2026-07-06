@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { parseSkillReference } from '../data/skill-links';
 import type { SummaryItem, TutorialStep } from '../data/tutorial-types';
 
 export interface Props {
@@ -33,6 +34,13 @@ const tutorialLinks = [
   { href: '/modules/blog/', label: '내 자료로 문의 받는 글 만들기' },
   { href: '/modules/github-vercel/', label: '깃허브와 버셀 세팅' },
 ];
+
+const overviewFlow = canonicalPath === '/modules/website/';
+const actorFallback = {
+  human: '사람',
+  ai: 'AI',
+  'human-ai': '사람',
+};
 ---
 
 <Base title={`${title} — AI 야학`} description={description} canonicalPath={canonicalPath}>
@@ -105,12 +113,39 @@ const tutorialLinks = [
               <p class="setup-selector__hint">선택한 도구에 맞는 단계만 보여줍니다.</p>
             </div>
           )}
-          <ol class="tutorial-flow">
+          <ol class:list={['tutorial-flow', overviewFlow && 'tutorial-flow--arrows']}>
             {steps.map((item) => (
-              <li data-track={item.track ?? 'both'}>
+              <li
+                data-track={item.track ?? 'both'}
+                data-actor={item.actor ?? 'human-ai'}
+                data-loop={item.loop ? 'true' : undefined}
+                data-split={overviewFlow && item.overviewItems?.length ? 'true' : undefined}
+              >
                 <a href={`#step-${item.step}`} data-track={item.track ?? 'both'}>
-                  <span>{item.step}</span>
-                  <strong>{item.label}</strong>
+                  <span class="tutorial-flow__num">{item.step}</span>
+                  {overviewFlow && item.overviewItems?.length ? (
+                    <span class="tutorial-flow__split-cards">
+                      {item.overviewItems.map((subItem) => (
+                        <span class="tutorial-flow__split-card" data-sub-actor={subItem.actor}>
+                          <span class="tutorial-flow__meta">
+                            <span class="tutorial-flow__actor">{subItem.actorLabel}</span>
+                          </span>
+                          <strong>{subItem.label}</strong>
+                          <em>{subItem.output}</em>
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    <span class="tutorial-flow__text">
+                      {overviewFlow && (
+                        <span class="tutorial-flow__meta">
+                          <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human-ai']}</span>
+                        </span>
+                      )}
+                      <strong>{item.label}</strong>
+                      {overviewFlow && <em>{item.output}</em>}
+                    </span>
+                  )}
                 </a>
               </li>
             ))}
@@ -167,13 +202,32 @@ const tutorialLinks = [
                     {item.recommended.length > 0 && (
                       <div>
                         <span>추천 스킬</span>
-                        <ul class="skill-strip__cmds">{item.recommended.map((skill) => <li>{skill}</li>)}</ul>
+                        <ul class="skill-strip__cmds">
+                          {item.recommended.map((item) => {
+                            const skill = parseSkillReference(item);
+                            return (
+                              <li>
+                                {skill.url ? <a href={skill.url} target="_blank" rel="noreferrer">{skill.name}</a> : skill.name}
+                              </li>
+                            );
+                          })}
+                        </ul>
                       </div>
                     )}
                     {item.useful.length > 0 && (
                       <div>
                         <span>같이 쓰면 좋은 기능</span>
-                        <ul>{item.useful.map((skill) => <li>{skill}</li>)}</ul>
+                        <ul>
+                          {item.useful.map((item) => {
+                            const skill = parseSkillReference(item);
+                            return (
+                              <li>
+                                {skill.url ? <a href={skill.url} target="_blank" rel="noreferrer">{skill.name}</a> : skill.name}
+                                {skill.description && <>: {skill.description}</>}
+                              </li>
+                            );
+                          })}
+                        </ul>
                       </div>
                     )}
                   </div>
