@@ -161,16 +161,26 @@ const actorFallback = {
                     <div class="lesson-step__body">
                   <p class="lesson-step__goal">{item.goal}</p>
 
-                  {item.officialLinks?.length && (
-                    <div class="lesson-meta">
-                      {item.officialLinks?.map((link) => (
-                        <a class="lesson-link" href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`${link.label} 새 창으로 열기`} data-track={link.track ?? 'both'}>
-                          <span>공식 링크 / 새 창</span>
-                          <strong>{link.label} 열기</strong>
-                          <code>{link.url}</code>
-                        </a>
-                      ))}
-                    </div>
+                  {(item.officialLinks ?? []).length > 0 && (
+                    <nav class="official-links" aria-label="공식 사이트 링크">
+                      <p>공식 사이트에서 확인</p>
+                      <div class="official-links__list">
+                        {(item.officialLinks ?? []).map((link) => {
+                          const domain = new URL(link.url).hostname.replace(/^www\./, '');
+
+                          return (
+                            <a class="official-link" href={link.url} target="_blank" rel="noopener noreferrer" data-track={link.track ?? 'both'}>
+                              <span class="official-link__icon" aria-hidden="true">↗</span>
+                              <span class="official-link__text">
+                                <strong>{link.label}</strong>
+                                <em>{domain}</em>
+                              </span>
+                              <span class="official-link__action">열기</span>
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </nav>
                   )}
 
                   {(item.screenshots ?? []).length > 0 && (

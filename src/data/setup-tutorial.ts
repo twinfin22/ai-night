@@ -20,8 +20,8 @@ export const setupTutorial: TutorialData = {
       title: '유료 계정으로 로그인되어 있는지 확인합니다.',
       goal: '수업 중 기능 제한으로 멈추지 않게 ChatGPT 또는 Claude 유료 계정 상태를 확인합니다.',
       officialLinks: [
-        { track: 'codex', label: 'ChatGPT 회원가입/로그인', url: 'https://chatgpt.com/' },
-        { track: 'claude', label: 'Claude 회원가입/로그인', url: 'https://claude.ai/' },
+        { track: 'codex', label: 'ChatGPT 로그인', url: 'https://chatgpt.com/' },
+        { track: 'claude', label: 'Claude 로그인', url: 'https://claude.ai/' },
       ],
       successCriteria: ['내 계정으로 로그인되어 있다.', '유료 플랜 사용 가능 상태를 확인했다.'],
       conceptToggles: [
@@ -46,8 +46,8 @@ export const setupTutorial: TutorialData = {
       title: '공식 앱을 설치하고 로그인합니다.',
       goal: '검색 결과의 가짜 앱을 피하고, 공식 앱에서 수업을 시작할 준비를 합니다.',
       officialLinks: [
-        { track: 'codex', label: 'Codex 시작하기', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
-        { track: 'claude', label: 'Claude 공식 다운로드', url: 'https://claude.com/ko/download' },
+        { track: 'codex', label: 'Codex 시작 안내', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
+        { track: 'claude', label: 'Claude 다운로드', url: 'https://claude.com/ko/download' },
       ],
       screenshots: [
         {
@@ -67,7 +67,7 @@ export const setupTutorial: TutorialData = {
       conceptToggles: [
         {
           title: '검색 결과에서 받으면 안 되는 이유',
-          body: '비슷한 이름의 가짜 앱이나 광고 링크가 섞일 수 있습니다. 위 공식 링크에서만 받으세요.',
+          body: '비슷한 이름의 가짜 앱이나 광고 링크가 섞일 수 있습니다. 공식 사이트 주소인지 먼저 확인하고 받으세요.',
         },
         {
           title: '보안 경고가 뜨면',
@@ -109,7 +109,7 @@ export const setupTutorial: TutorialData = {
       title: 'Claude에서 첫 대화와 파일 첨부 위치를 확인합니다.',
       goal: 'Claude 트랙은 폴더 자동화가 아니라 대화와 파일 첨부 중심으로 시작합니다.',
       officialLinks: [
-        { label: 'Claude 공식 다운로드', url: 'https://claude.com/ko/download' },
+        { label: 'Claude 다운로드', url: 'https://claude.com/ko/download' },
       ],
       screenshots: [
         {
@@ -146,7 +146,7 @@ export const setupTutorial: TutorialData = {
       title: 'Codex가 사용할 작업 폴더를 고릅니다.',
       goal: 'AI가 수업용 폴더 안에서만 파일을 만들고 고치도록 작업 범위를 정합니다.',
       officialLinks: [
-        { label: 'Codex 시작하기', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
+        { label: 'Codex 시작 안내', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
         { label: 'Codex 앱 사용법', url: 'https://developers.openai.com/codex/app' },
       ],
       screenshots: [
