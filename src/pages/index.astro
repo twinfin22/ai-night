@@ -76,9 +76,16 @@ const practiceModules = [
   {
     label: '환경설정',
     title: 'AI 작업 환경 만들기',
-    body: '앱 설치, 작업 폴더 연결, 첫 정리 실습까지 끝내고 다음 수업을 이어갈 준비를 만듭니다.',
-    outputs: ['작업 폴더', 'AGENTS.md', '재개 문장'],
+    body: '앱 설치, 작업 폴더 지정, 첫 정리 실습까지 끝내고 다음 수업을 이어갈 준비를 만듭니다.',
+    outputs: ['작업 폴더', '답변 규칙 문서', '도움 요청 문장'],
     href: '/modules/setup/',
+  },
+  {
+    label: '배포세팅',
+    title: '깃허브와 버셀 세팅',
+    body: '내 작업물을 GitHub에 저장하고 Vercel 공개 링크로 배포하는 흐름을 만듭니다.',
+    outputs: ['GitHub 저장소', 'Vercel 공개 주소', '수정 반영 확인'],
+    href: '/modules/github-vercel/',
   },
   {
     label: '웹사이트',
@@ -264,7 +271,7 @@ const sections = [
         <h2 id="modules-title">수업 뒤에 혼자 이어갈 수 있는 작은 모듈.</h2>
         <p class="lede">
           긴 강의자료 대신 바로 복사해서 쓰는 흐름입니다.
-          웹사이트와 블로그처럼 결과물이 분명한 작업부터 엽니다.
+          환경설정, 배포, 웹사이트, 블로그처럼 혼자 막히기 쉬운 작업부터 엽니다.
         </p>
 
         <ul class="practice-grid">
