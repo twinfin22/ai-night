@@ -31,11 +31,11 @@ const {
 } = Astro.props;
 
 const tutorialLinks = [
-  { href: '/modules/setup/', label: '내 AI 작업실 만들기' },
-  { href: '/modules/first-prompt/', label: 'AI에게 내 일 시켜보기' },
-  { href: '/modules/website/', label: '내 사업 소개 페이지 만들기' },
-  { href: '/modules/blog/', label: '내 자료로 문의 받는 글 만들기' },
-  { href: '/modules/github-vercel/', label: '내 작업물 보관하고 링크 만들기' },
+  { href: '/modules/setup/', label: '1. AI 사용 설정하기' },
+  { href: '/modules/first-prompt/', label: '2. 첫 프롬프트 만들기' },
+  { href: '/modules/website/', label: '3. 웹사이트 만들기' },
+  { href: '/modules/github-vercel/', label: '3+a. 웹사이트 공유하기 (깃허브&버셀)' },
+  { href: '/modules/blog/', label: '4. 블로그 글쓰기 자동화' },
 ];
 
 const overviewFlow = overviewTemplate === 'flow';
@@ -164,23 +164,23 @@ const actorFallback = {
               <div class="first-prompt-builder__grid">
                 <label>
                   <span>내 상황</span>
-                  <textarea data-first-prompt-field="context" rows="4">청도 읍내에서 점심 장사를 하는 작은 식당입니다. 단골은 많지만 새 손님에게 가게 분위기를 잘 알리지 못하고 있습니다.</textarea>
+                  <textarea data-first-prompt-field="context" rows="4" placeholder="청도 읍내에서 점심 장사를 하는 작은 식당입니다. 단골은 많지만 새 손님에게 가게 분위기를 잘 알리지 못하고 있습니다."></textarea>
                 </label>
                 <label>
                   <span>AI가 맡을 역할</span>
-                  <textarea data-first-prompt-field="role" rows="4">동네 가게 홍보글을 잘 쓰는 사람처럼 도와주세요.</textarea>
+                  <textarea data-first-prompt-field="role" rows="4" placeholder="동네 가게 홍보글을 잘 쓰는 사람처럼 도와주세요."></textarea>
                 </label>
                 <label>
                   <span>해달라는 일</span>
-                  <textarea data-first-prompt-field="task" rows="4">오늘 인스타그램에 올릴 점심 메뉴 홍보글을 써주세요.</textarea>
+                  <textarea data-first-prompt-field="task" rows="4" placeholder="오늘 인스타그램에 올릴 점심 메뉴 홍보글을 써주세요."></textarea>
                 </label>
                 <label>
                   <span>말투</span>
-                  <textarea data-first-prompt-field="style" rows="4">너무 광고처럼 보이지 않게, 동네 손님에게 말하듯 편하게 써주세요.</textarea>
+                  <textarea data-first-prompt-field="style" rows="4" placeholder="너무 광고처럼 보이지 않게, 동네 손님에게 말하듯 편하게 써주세요."></textarea>
                 </label>
                 <label>
                   <span>지켜야 할 조건</span>
-                  <textarea data-first-prompt-field="rules" rows="4">첫 문장은 짧게 써주세요. 메뉴 이름, 가격, 오늘만 좋은 점을 넣어주세요. 문장은 5줄 안으로 써주세요.</textarea>
+                  <textarea data-first-prompt-field="rules" rows="4" placeholder="첫 문장은 짧게 써주세요. 메뉴 이름, 가격, 오늘만 좋은 점을 넣어주세요. 문장은 5줄 안으로 써주세요."></textarea>
                 </label>
               </div>
 
@@ -491,6 +491,7 @@ const actorFallback = {
 
     const firstPromptFields = document.querySelectorAll('[data-first-prompt-field]');
     const firstPromptOutput = document.querySelector('[data-first-prompt-output]');
+    const firstPromptHiddenPlaceholders = new WeakMap<HTMLTextAreaElement, string>();
 
     const buildFirstPromptText = () => {
       const taskField = document.querySelector('[data-first-prompt-field="task"]');
@@ -513,7 +514,21 @@ const actorFallback = {
     };
 
     firstPromptFields.forEach((field) => {
+      if (!(field instanceof HTMLTextAreaElement)) return;
       field.addEventListener('input', updateFirstPromptOutput);
+      field.addEventListener('focus', () => {
+        if (field.value.trim()) return;
+        const placeholder = field.getAttribute('placeholder') || '';
+        if (!placeholder) return;
+        firstPromptHiddenPlaceholders.set(field, placeholder);
+        field.setAttribute('placeholder', '');
+      });
+      field.addEventListener('blur', () => {
+        if (field.value.trim() || field.getAttribute('placeholder')) return;
+        const placeholder = firstPromptHiddenPlaceholders.get(field);
+        if (!placeholder) return;
+        field.setAttribute('placeholder', placeholder);
+      });
     });
 
     document.querySelectorAll('[data-first-prompt-sample]').forEach((button) => {
@@ -526,7 +541,12 @@ const actorFallback = {
         firstPromptFields.forEach((field) => {
           if (!(field instanceof HTMLTextAreaElement)) return;
           const key = field.dataset.firstPromptField as keyof typeof sample;
-          field.value = sample[key] || '';
+          const placeholder = sample[key] || '';
+          field.value = '';
+          field.setAttribute('placeholder', placeholder);
+          if (placeholder) {
+            firstPromptHiddenPlaceholders.set(field, placeholder);
+          }
         });
 
         document.querySelectorAll('[data-first-prompt-sample]').forEach((sampleButton) => {

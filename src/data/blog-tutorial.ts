@@ -1,7 +1,7 @@
 import type { TutorialData } from './tutorial-types';
 
 export const blogTutorial: TutorialData = {
-  title: '내 자료로 문의 받는 글 만들기',
+  title: '4. 블로그 글쓰기 자동화',
   description: '이미 가진 후기, 설명글, 사진 설명 중 하나로 손님이 궁금해할 질문을 찾고, 네이버 블로그에 올릴 짧은 초안까지 만드는 AI 야학 튜토리얼.',
   canonicalPath: '/modules/blog/',
   markdownPath: '/modules/blog.md',

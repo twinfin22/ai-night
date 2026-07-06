@@ -1,7 +1,7 @@
 import type { TutorialData } from './tutorial-types';
 
 export const githubVercelTutorial: TutorialData = {
-  title: '내 작업물 보관하고 링크 만들기',
+  title: '3+a. 웹사이트 공유하기 (깃허브&버셀)',
   description: '내 가게 소개 페이지나 행사 안내 페이지를 GitHub에 보관하고, Vercel로 남에게 보낼 수 있는 주소를 만드는 튜토리얼.',
   canonicalPath: '/modules/github-vercel/',
   markdownPath: '/modules/github-vercel.md',

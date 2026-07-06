@@ -1,7 +1,7 @@
 import type { TutorialData } from './tutorial-types';
 
 export const firstPromptTutorial: TutorialData = {
-  title: 'AI에게 내 일 시켜보기',
+  title: '2. 첫 프롬프트 만들기',
   description: '대충 말했을 때와 제대로 말했을 때 결과가 어떻게 달라지는지 직접 비교하고, 내 첫 AI 작업 지시서를 만드는 튜토리얼.',
   canonicalPath: '/modules/first-prompt/',
   markdownPath: '/modules/first-prompt.md',
