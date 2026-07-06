@@ -5,11 +5,9 @@ export const blogTutorial: TutorialData = {
   description: '기존 자료 하나로 독자 질문을 찾고, 네이버 블로그에 올릴 짧은 초안까지 만드는 AI 야학 튜토리얼.',
   canonicalPath: '/modules/blog/',
   markdownPath: '/modules/blog.md',
+  overviewTemplate: 'flow',
   stepsLabel: '5단계',
-  summary: [
-    { label: '진행 방식', value: '5단계' },
-    { label: '최종 결과', value: '블로그 초안' },
-  ],  resumePrompt: `지금까지 한 일을 요약해줘.
+  resumePrompt: `지금까지 한 일을 요약해줘.
 그리고 다음 20분에 그대로 붙여넣고 이어갈 프롬프트를 만들어줘.
 
 포함할 것:

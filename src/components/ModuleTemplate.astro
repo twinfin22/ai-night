@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { parseSkillReference } from '../data/skill-links';
-import type { SummaryItem, TutorialStep } from '../data/tutorial-types';
+import type { TutorialStep } from '../data/tutorial-types';
 
 export interface Props {
   title: string;
@@ -9,7 +9,7 @@ export interface Props {
   canonicalPath: string;
   markdownPath: string;
   steps: TutorialStep[];
-  summary: SummaryItem[];
+  overviewTemplate?: 'default' | 'flow';
   resumePrompt: string;
   resumePromptByTrack?: {
     codex: string;
@@ -24,7 +24,7 @@ const {
   description,
   canonicalPath,
   steps,
-  summary,
+  overviewTemplate = 'default',
   toolSelector = false,
 } = Astro.props;
 
@@ -35,7 +35,7 @@ const tutorialLinks = [
   { href: '/modules/github-vercel/', label: '깃허브와 버셀 세팅' },
 ];
 
-const overviewFlow = canonicalPath === '/modules/website/';
+const overviewFlow = overviewTemplate === 'flow';
 const actorFallback = {
   human: '사람',
   ai: 'AI',
@@ -67,16 +67,6 @@ const actorFallback = {
           <span class="eyebrow">튜토리얼</span>
           <h1 id="module-title">{title}</h1>
         </div>
-        {summary.length > 0 && (
-          <aside class="module-summary" aria-label="모듈 요약">
-            {summary.map((item) => (
-              <div>
-                <span>{item.label}</span>
-                <strong>{item.value}</strong>
-              </div>
-            ))}
-          </aside>
-        )}
       </div>
     </section>
 
@@ -117,7 +107,7 @@ const actorFallback = {
             {steps.map((item) => (
               <li
                 data-track={item.track ?? 'both'}
-                data-actor={item.actor ?? 'human-ai'}
+                data-actor={item.actor ?? 'human'}
                 data-loop={item.loop ? 'true' : undefined}
                 data-split={overviewFlow && item.overviewItems?.length ? 'true' : undefined}
               >
@@ -137,9 +127,9 @@ const actorFallback = {
                     </span>
                   ) : (
                     <span class="tutorial-flow__text">
-                      {overviewFlow && (
+                      {overviewFlow && (item.actor || item.actorLabel) && (
                         <span class="tutorial-flow__meta">
-                          <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human-ai']}</span>
+                          <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human']}</span>
                         </span>
                       )}
                       <strong>{item.label}</strong>
@@ -193,7 +183,13 @@ const actorFallback = {
                             <img src={shot.src} alt={shot.alt} loading="lazy" />
                           </a>
                           <figcaption>
-                            <a href={shot.url} target="_blank" rel="noopener noreferrer">{shot.url}</a>
+                            {shot.captionUrl ? (
+                              <a href={shot.captionUrl} target="_blank" rel="noopener noreferrer">{shot.caption ?? shot.captionUrl}</a>
+                            ) : shot.caption ? (
+                              shot.caption
+                            ) : (
+                              <a href={shot.url} target="_blank" rel="noopener noreferrer">{shot.url}</a>
+                            )}
                           </figcaption>
                         </figure>
                       ))}

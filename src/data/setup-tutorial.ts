@@ -5,9 +5,9 @@ export const setupTutorial: TutorialData = {
   description: 'AI 야학 수업을 이어가기 위해 앱 설치, 작업 폴더 지정, 첫 정리 실습까지 끝내는 튜토리얼.',
   canonicalPath: '/modules/setup/',
   markdownPath: '/modules/setup.md',
+  overviewTemplate: 'flow',
   stepsLabel: '트랙 2개',
   toolSelector: true,
-  summary: [],
   resumePrompt: `내 작업 폴더는 문서/ai-yahak-studio야. 이 폴더를 기준으로 다음 실습을 이어가자.`,
   resumePromptByTrack: {
     codex: `내 작업 폴더는 문서/ai-yahak-studio야. 이 폴더를 기준으로 다음 실습을 이어가자.`,
