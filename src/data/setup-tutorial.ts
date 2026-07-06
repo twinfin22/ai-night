@@ -21,8 +21,8 @@ export const setupTutorial: TutorialData = {
       title: '유료 계정으로 로그인되어 있는지 확인합니다.',
       goal: '수업 중 기능 제한으로 멈추지 않게 ChatGPT 또는 Claude 유료 계정 상태를 확인합니다.',
       officialLinks: [
-        { track: 'codex', label: 'ChatGPT 회원가입/로그인', url: 'https://chatgpt.com/' },
-        { track: 'claude', label: 'Claude 회원가입/로그인', url: 'https://claude.ai/' },
+        { track: 'codex', label: 'ChatGPT 로그인', url: 'https://chatgpt.com/' },
+        { track: 'claude', label: 'Claude 로그인', url: 'https://claude.ai/' },
       ],
       screenshots: [
         {
@@ -55,8 +55,8 @@ export const setupTutorial: TutorialData = {
       title: '공식 앱을 설치하고 로그인합니다.',
       goal: '피싱 링크와 유사 링크를 구분하고, 공식 앱에서 수업을 시작할 준비를 합니다.',
       officialLinks: [
-        { track: 'codex', label: 'Codex 시작하기', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
-        { track: 'claude', label: 'Claude 공식 다운로드', url: 'https://claude.com/ko/download' },
+        { track: 'codex', label: 'Codex 시작 안내', url: 'https://chatgpt.com/ko-KR/codex/get-started/' },
+        { track: 'claude', label: 'Claude 다운로드', url: 'https://claude.com/ko/download' },
       ],
       screenshots: [
         {
@@ -79,7 +79,7 @@ export const setupTutorial: TutorialData = {
       conceptToggles: [
         {
           title: '피싱 링크와 유사 링크 주의',
-          body: '비슷한 이름의 유사 링크나 광고 링크가 섞일 수 있습니다. 주소를 확인하고 위 공식 링크에서 시작하세요.',
+          body: '비슷한 이름의 유사 링크나 광고 링크가 섞일 수 있습니다. 주소를 확인하고 공식 사이트에서 확인 영역의 링크에서 시작하세요.',
         },
         {
           title: '보안 경고가 뜨면',
@@ -117,7 +117,7 @@ export const setupTutorial: TutorialData = {
       title: 'Claude 화면에서 오늘 볼 메뉴만 확인합니다.',
       goal: '처음부터 모든 기능을 쓰지 않고, 첫날 필요한 대화 입력과 사이드바 위치만 익힙니다.',
       officialLinks: [
-        { label: 'Claude 공식 다운로드', url: 'https://claude.com/ko/download' },
+        { label: 'Claude 다운로드', url: 'https://claude.com/ko/download' },
       ],
       screenshots: [
         {

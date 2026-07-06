@@ -23,7 +23,6 @@ export const githubVercelTutorial: TutorialData = {
       label: '언제 쓰는지 정하기',
       title: 'GitHub와 Vercel이 필요한 순간을 먼저 고릅니다.',
       goal: '아직 필요 없는 세팅을 억지로 하지 않고, 공개 링크가 필요한 작업인지 판단합니다.',
-      duration: '5분',
       screenshots: [
         {
           url: 'https://github.com/',
@@ -92,10 +91,9 @@ export const githubVercelTutorial: TutorialData = {
       label: '계정 만들기',
       title: 'GitHub와 Vercel 계정을 준비합니다.',
       goal: '나중에 권한 연결에서 막히지 않도록 두 서비스를 같은 이메일로 준비합니다.',
-      duration: '10분',
       officialLinks: [
-        { label: 'GitHub 가입', url: 'https://github.com/signup' },
-        { label: 'Vercel 가입', url: 'https://vercel.com/signup' },
+        { label: 'GitHub 가입하러 가기', url: 'https://github.com/signup' },
+        { label: 'Vercel 가입하러 가기', url: 'https://vercel.com/signup' },
       ],
       screenshots: [
         {
@@ -143,9 +141,8 @@ export const githubVercelTutorial: TutorialData = {
       label: '저장소 만들기',
       title: 'AI에게 GitHub 저장소를 만들 수 있는지 먼저 맡겨봅니다.',
       goal: '사람이 직접 누르기 전에, AI agent/skill이 저장소 생성까지 처리할 수 있는지 확인합니다.',
-      duration: '8분',
       officialLinks: [
-        { label: 'GitHub 새 저장소 만들기', url: 'https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository' },
+        { label: 'GitHub 저장소 만들기 문서', url: 'https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository' },
       ],
       screenshots: [
         {
@@ -201,7 +198,6 @@ export const githubVercelTutorial: TutorialData = {
       label: '파일 올리기',
       title: 'AI 앱에 저장소 연결과 파일 업로드를 맡깁니다.',
       goal: '터미널 명령을 외우지 않고, 현재 작업 폴더를 GitHub 저장소와 연결합니다.',
-      duration: '10분',
       screenshots: [
         {
           url: 'https://github.com/',
@@ -255,13 +251,12 @@ export const githubVercelTutorial: TutorialData = {
       label: 'Vercel 연결',
       title: 'Vercel에서 GitHub 저장소를 가져와 배포합니다.',
       goal: 'GitHub에 올라간 웹사이트를 남에게 보낼 수 있는 공개 주소로 만듭니다.',
-      duration: '12분',
       officialLinks: [
         { label: 'Vercel Git 배포 문서', url: 'https://vercel.com/docs/git' },
-        { label: 'Vercel 시작하기', url: 'https://vercel.com/docs/getting-started-with-vercel' },
-        { label: 'Vercel 도메인 연결', url: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain' },
-        { label: 'Cloudflare DNS 레코드', url: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/' },
-        { label: 'Astro Vercel 배포', url: 'https://docs.astro.build/en/guides/deploy/vercel/' },
+        { label: 'Vercel 시작하기 문서', url: 'https://vercel.com/docs/getting-started-with-vercel' },
+        { label: 'Vercel 도메인 연결 문서', url: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain' },
+        { label: 'Cloudflare DNS 레코드 문서', url: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/' },
+        { label: 'Astro Vercel 배포 문서', url: 'https://docs.astro.build/en/guides/deploy/vercel/' },
       ],
       screenshots: [
         {
@@ -345,7 +340,6 @@ export const githubVercelTutorial: TutorialData = {
       label: '수정 반영 확인',
       title: '작게 고친 뒤 자동 배포되는지 확인합니다.',
       goal: '한 번 공개하고 끝나는 것이 아니라, 수정하면 다시 반영되는 흐름을 확인합니다.',
-      duration: '8분',
       screenshots: [
         {
           url: 'https://vercel.com/docs/deployments',
@@ -401,11 +395,10 @@ export const githubVercelTutorial: TutorialData = {
       label: '(옵션) Cloudflare로 나만의 도메인 설정하기',
       title: 'Vercel 공개 주소 대신 내가 산 도메인을 연결합니다.',
       goal: '이미 Vercel 공개 링크가 열리는 상태에서, 필요한 사람만 Cloudflare DNS로 내 도메인을 붙입니다.',
-      duration: '15분',
       officialLinks: [
-        { label: 'Vercel 도메인 연결', url: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain' },
+        { label: 'Vercel 도메인 연결 문서', url: 'https://vercel.com/docs/domains/working-with-domains/add-a-domain' },
         { label: 'Cloudflare DNS 레코드 만들기', url: 'https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/' },
-        { label: 'Cloudflare 사이트 추가', url: 'https://developers.cloudflare.com/fundamentals/setup/account-setup/add-site/' },
+        { label: 'Cloudflare 사이트 추가 문서', url: 'https://developers.cloudflare.com/fundamentals/setup/account-setup/add-site/' },
       ],
       screenshots: [
         {

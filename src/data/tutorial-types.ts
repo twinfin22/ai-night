@@ -14,7 +14,6 @@ export type TutorialStep = {
   label: string;
   title: string;
   goal: string;
-  duration?: string;
   officialLinks?: {
     track?: 'both' | 'codex' | 'claude';
     label: string;

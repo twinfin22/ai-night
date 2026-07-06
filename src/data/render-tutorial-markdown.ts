@@ -9,9 +9,9 @@ const sectionList = (title: string, items: string[], options?: { skillLinks?: bo
   return `\n### ${title}\n${options?.skillLinks ? skillList(items) : list(items)}\n`;
 };
 
-const linkList = (links: TutorialStep['officialLinks']) => {
+const officialLinkList = (links: TutorialStep['officialLinks']) => {
   if (!links?.length) return '';
-  return `\n### 공식 링크\n${links.map((link) => `- [${link.label}](${link.url})`).join('\n')}\n`;
+  return `\n### 공식 사이트에서 확인\n${links.map((link) => `- [${link.label}](${link.url})`).join('\n')}\n`;
 };
 
 const trackLabel = (track: TutorialStep['track']) => {
@@ -27,7 +27,7 @@ ${step.title}
 트랙: ${trackLabel(step.track)}
 
 ${step.goal}
-${step.duration ? `\n예상 시간: ${step.duration}\n` : ''}${linkList(step.officialLinks)}${sectionList('끝났는지 확인', step.successCriteria ?? [])}${sectionList('추천 스킬', step.recommended, { skillLinks: true })}${sectionList('같이 쓰면 좋은 기능', step.useful, { skillLinks: true })}
+${officialLinkList(step.officialLinks)}${sectionList('끝났는지 확인', step.successCriteria ?? [])}${sectionList('추천 스킬', step.recommended, { skillLinks: true })}${sectionList('같이 쓰면 좋은 기능', step.useful, { skillLinks: true })}
 ### 이 단계 결과물
 ${step.output}
 ${step.conceptToggles?.length ? `\n### 더 알아보기\n${step.conceptToggles.map((item) => `- ${item.title}: ${item.body}`).join('\n')}\n` : ''}

@@ -1429,8 +1429,8 @@ footer h2::before { content: none; }
 .module-page--tool-selector .module-sidebar [data-track='claude'],
 .module-page--tool-selector .tutorial-flow > [data-track='codex'],
 .module-page--tool-selector .tutorial-flow > [data-track='claude'],
-.module-page--tool-selector .lesson-meta > [data-track='codex'],
-.module-page--tool-selector .lesson-meta > [data-track='claude'],
+.module-page--tool-selector .official-links__list > [data-track='codex'],
+.module-page--tool-selector .official-links__list > [data-track='claude'],
 .module-page--tool-selector .tutorial-shots > [data-track='codex'],
 .module-page--tool-selector .tutorial-shots > [data-track='claude'],
 .module-page--tool-selector .lesson-step[data-track='codex'],
@@ -1440,19 +1440,19 @@ footer h2::before { content: none; }
 
 html[data-setup-tool='codex'] .module-page--tool-selector .module-sidebar [data-track='codex'],
 html[data-setup-tool='codex'] .module-page--tool-selector .tutorial-flow > [data-track='codex'],
-html[data-setup-tool='codex'] .module-page--tool-selector .lesson-meta > [data-track='codex'],
+html[data-setup-tool='codex'] .module-page--tool-selector .official-links__list > [data-track='codex'],
 html[data-setup-tool='codex'] .module-page--tool-selector .tutorial-shots > [data-track='codex'],
 html[data-setup-tool='codex'] .module-page--tool-selector .lesson-step[data-track='codex'],
 html[data-setup-tool='claude'] .module-page--tool-selector .module-sidebar [data-track='claude'],
 html[data-setup-tool='claude'] .module-page--tool-selector .tutorial-flow > [data-track='claude'],
-html[data-setup-tool='claude'] .module-page--tool-selector .lesson-meta > [data-track='claude'],
+html[data-setup-tool='claude'] .module-page--tool-selector .official-links__list > [data-track='claude'],
 html[data-setup-tool='claude'] .module-page--tool-selector .tutorial-shots > [data-track='claude'],
 html[data-setup-tool='claude'] .module-page--tool-selector .lesson-step[data-track='claude'] {
   display: revert;
 }
 
-html[data-setup-tool='codex'] .module-page--tool-selector .lesson-meta > .lesson-link[data-track='codex'],
-html[data-setup-tool='claude'] .module-page--tool-selector .lesson-meta > .lesson-link[data-track='claude'] {
+html[data-setup-tool='codex'] .module-page--tool-selector .official-links__list > .official-link[data-track='codex'],
+html[data-setup-tool='claude'] .module-page--tool-selector .official-links__list > .official-link[data-track='claude'] {
   display: grid;
 }
 
@@ -2001,46 +2001,80 @@ html:not([data-setup-tool]) .module-page--tool-selector .module-shell {
   font-weight: 700;
 }
 
-.lesson-meta {
+.official-links {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 
-.lesson-link {
-  display: grid;
-  gap: 6px;
-  min-height: 88px;
-  padding: 14px 16px;
-  border: 1px solid var(--hairline-2);
-  border-radius: 6px;
-  color: var(--cream);
-  background: rgba(244, 184, 96, 0.08);
-  line-height: 1.25;
-  text-decoration: none;
-}
-
-.lesson-link span {
+.official-links p {
+  margin: 0;
   color: var(--amber);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 900;
 }
 
-.lesson-link strong {
-  font-size: 18px;
+.official-links__list {
+  display: grid;
+  gap: 10px;
 }
 
-.lesson-link code {
-  overflow-wrap: anywhere;
-  color: #d8ceb9;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 14px;
-  font-weight: 700;
+.official-link {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 70px;
+  padding: 12px 14px;
+  border: 1px solid rgba(244, 184, 96, 0.48);
+  border-radius: 8px;
+  color: var(--cream);
+  background: rgba(244, 184, 96, 0.08);
+  text-decoration: none;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
 }
 
-.lesson-link:hover {
+.official-link:hover {
+  border-color: rgba(244, 184, 96, 0.82);
   background: rgba(244, 184, 96, 0.14);
-  border-color: rgba(244, 184, 96, 0.72);
+  transform: translateY(-1px);
+}
+
+.official-link__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  color: #101010;
+  background: var(--amber);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.official-link__text {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.official-link__text strong {
+  overflow-wrap: anywhere;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.official-link__text em {
+  overflow-wrap: anywhere;
+  color: #b9ad96;
+  font-size: 14px;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.official-link__action {
+  color: var(--amber);
+  font-size: 15px;
+  font-weight: 900;
 }
 
 .tutorial-shots {
