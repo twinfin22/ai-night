@@ -101,6 +101,7 @@ const actorFallback = {
                 </div>
               </div>
               <p class="setup-selector__hint">선택한 도구에 맞는 단계만 보여줍니다.</p>
+              <p class="setup-selector__empty" role="status">도구를 고르면 내 단계가 아래에 열립니다.</p>
             </div>
           )}
           <ol class:list={['tutorial-flow', overviewFlow && 'tutorial-flow--arrows']}>
@@ -324,11 +325,11 @@ const actorFallback = {
       }
 
       document.querySelectorAll('[data-tool-choice]').forEach((button) => {
-        button.toggleAttribute('aria-pressed', button.getAttribute('data-tool-choice') === selectedTool);
+        button.setAttribute('aria-pressed', String(button.getAttribute('data-tool-choice') === selectedTool));
       });
 
       document.querySelectorAll('[data-os-choice]').forEach((button) => {
-        button.toggleAttribute('aria-pressed', button.getAttribute('data-os-choice') === selectedOs);
+        button.setAttribute('aria-pressed', String(button.getAttribute('data-os-choice') === selectedOs));
       });
     };
 
