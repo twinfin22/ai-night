@@ -30,6 +30,8 @@ export const setupTutorial: TutorialData = {
           url: 'https://claude.ai/',
           src: '/assets/tutorials/setup/claude-login.jpeg',
           alt: 'Claude 회원가입과 로그인 공식 링크 안내 카드',
+          caption: 'Claude 계정 확인 화면',
+          captionUrl: 'https://claude.ai/',
         },
       ],
       conceptToggles: [
@@ -62,12 +64,16 @@ export const setupTutorial: TutorialData = {
           url: 'https://chatgpt.com/ko-KR/codex/get-started/',
           src: '/assets/tutorials/setup/codex-download.png',
           alt: 'Codex 한국어 시작 안내 화면',
+          caption: 'Codex 한국어 시작 안내',
+          captionUrl: 'https://chatgpt.com/ko-KR/codex/get-started/',
         },
         {
           track: 'claude',
           url: 'https://claude.com/ko/download',
           src: '/assets/tutorials/setup/claude-download.png',
           alt: 'Claude 한국어 다운로드 페이지',
+          caption: 'Claude 한국어 다운로드 페이지',
+          captionUrl: 'https://claude.com/ko/download',
         },
       ],
       conceptToggles: [
@@ -118,6 +124,8 @@ export const setupTutorial: TutorialData = {
           url: 'https://claude.com/ko/download',
           src: '/assets/tutorials/setup/claude-app-sidebar.png',
           alt: 'Claude 앱의 Chat, Cowork, Code 상단 모드와 사이드바 메뉴',
+          caption: 'Claude 앱 메뉴 화면',
+          captionUrl: 'https://claude.com/ko/download',
         },
       ],
       conceptToggles: [
@@ -178,11 +186,15 @@ export const setupTutorial: TutorialData = {
           url: 'https://chatgpt.com/ko-KR/codex/get-started/',
           src: '/assets/tutorials/setup/codex-folder-plan-mode.png',
           alt: 'Codex에서 기존 작업 폴더를 고르고 첫 지시를 입력하는 화면',
+          caption: 'Codex 작업 폴더 선택 화면',
+          captionUrl: 'https://chatgpt.com/ko-KR/codex/get-started/',
         },
         {
           url: 'https://developers.openai.com/codex/app/features',
           src: '/assets/tutorials/setup/codex-app-sidebar.png',
           alt: 'Codex 앱의 New chat, Search, Scheduled, Plugins 사이드바 메뉴',
+          caption: 'Codex 앱 사이드바 메뉴',
+          captionUrl: 'https://developers.openai.com/codex/app/features',
         },
       ],
       conceptToggles: [
@@ -237,6 +249,15 @@ export const setupTutorial: TutorialData = {
       label: 'Claude 첫 실습',
       title: '작업실 운영 규칙을 대화로 정리합니다.',
       goal: 'Claude 트랙은 첫날 파일 자동화보다 대화와 파일 첨부 흐름을 먼저 익힙니다.',
+      screenshots: [
+        {
+          url: 'https://claude.com/ko/download',
+          src: '/assets/tutorials/setup/claude-chat-input-attach.png',
+          alt: 'Claude 입력창과 파일 첨부 위치를 확인하는 안내 이미지',
+          caption: 'Claude 입력창과 파일 첨부 위치',
+          captionUrl: 'https://claude.com/ko/download',
+        },
+      ],
       conceptToggles: [
         {
           title: '파일 첨부 위치',
