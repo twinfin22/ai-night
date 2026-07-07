@@ -1,7 +1,8 @@
 import type { TutorialData } from './tutorial-types';
+import { tutorialMeta } from './tutorial-meta';
 
 export const websiteTutorial: TutorialData = {
-  title: '3. 웹사이트 만들기',
+  title: tutorialMeta.website.title,
   description: '내 가게를 처음 보는 사람이 바로 이해하도록 홈페이지 내용을 만들고, Vercel 공개 링크를 단체방에 공유하는 AI 야학 튜토리얼.',
   canonicalPath: '/modules/website/',
   markdownPath: '/modules/website.md',

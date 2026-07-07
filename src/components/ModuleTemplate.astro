@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { parseSkillReference } from '../data/skill-links';
+import { tutorialModules } from '../data/tutorial-meta';
 import type { TutorialStep } from '../data/tutorial-types';
 
 export interface Props {
@@ -30,14 +31,6 @@ const {
   firstPromptBuilder = false,
 } = Astro.props;
 
-const tutorialLinks = [
-  { href: '/modules/setup/', label: '1. AI 사용 설정하기' },
-  { href: '/modules/first-prompt/', label: '2. 첫 프롬프트 만들기' },
-  { href: '/modules/website/', label: '3. 웹사이트 만들기' },
-  { href: '/modules/github-vercel/', label: '3+a. 웹사이트 공유하기 (깃허브&버셀)' },
-  { href: '/modules/blog/', label: '4. 블로그 글쓰기 자동화' },
-];
-
 const overviewFlow = overviewTemplate === 'flow';
 const actorFallback = {
   human: '사람',
@@ -56,8 +49,8 @@ const actorFallback = {
       <p class="module-header__title">{title}</p>
       <label class="sr-only" for="module-jump">다른 튜토리얼로 이동</label>
       <select id="module-jump" class="module-header__select" data-module-jump aria-label="다른 튜토리얼로 이동">
-        {tutorialLinks.map((item) => (
-          <option value={item.href} selected={item.href === canonicalPath}>{item.label}</option>
+        {tutorialModules.map((item) => (
+          <option value={item.href} selected={item.href === canonicalPath}>{item.title}</option>
         ))}
       </select>
     </div>

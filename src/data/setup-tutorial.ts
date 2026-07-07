@@ -1,7 +1,8 @@
 import type { TutorialData } from './tutorial-types';
+import { tutorialMeta } from './tutorial-meta';
 
 export const setupTutorial: TutorialData = {
-  title: '1. AI 사용 설정하기',
+  title: tutorialMeta.setup.title,
   description: '수업 때 쓸 계정, 앱, 작업 폴더를 준비하고 첫 도움 요청 문장까지 만들어보는 튜토리얼.',
   canonicalPath: '/modules/setup/',
   markdownPath: '/modules/setup.md',
