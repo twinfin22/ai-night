@@ -15,17 +15,34 @@ const gallery = [
   { src: '/assets/ai-yahak-metal-room-session.webp', variant: 'portrait', alt: '금속 벽 강의장에서 진행한 AI 야학 현장' },
   { src: '/assets/photo_2026-06-16_17-36-00.jpg', variant: 'standard', alt: '참가자와 함께한 현장' },
   { src: '/assets/photo_2026-06-02_22-17-02.jpg', variant: 'standard', alt: '라운지 그룹 세션' },
-  { src: '/assets/ai-bookclub.png', variant: 'poster', href: bookclubHref, alt: 'AI 야학 독서클럽 인스타그램 포스터' },
+  {
+    src: '/assets/ai-bookclub.png',
+    srcset: '/assets/ai-bookclub-520.webp 520w, /assets/ai-bookclub-800.webp 800w',
+    variant: 'poster',
+    href: bookclubHref,
+    alt: 'AI 야학 독서클럽 인스타그램 포스터',
+  },
   { src: '/assets/DSC05866.jpg', variant: 'landscape', alt: '강의실 참가자' },
   { src: '/assets/DSC05669.jpg', variant: 'portrait', alt: '강의 연단 발표' },
   { src: '/assets/DSC07506.jpg', variant: 'landscape', alt: '패널 토크 현장' },
-  { src: '/assets/ai-yahak-recruit.png', variant: 'poster', alt: 'AI 야학 참여자 모집 포스터' },
+  {
+    src: '/assets/ai-yahak-recruit.png',
+    srcset: '/assets/ai-yahak-recruit-520.webp 520w, /assets/ai-yahak-recruit-800.webp 800w',
+    variant: 'poster',
+    alt: 'AI 야학 참여자 모집 포스터',
+  },
   { src: '/assets/WhatsApp_Image_2026-03-20_at_19.16.32.jpg', variant: 'standard', alt: '워크숍 네트워킹 현장' },
   { src: '/assets/photo_2024-11-13_14-09-03.jpg', variant: 'standard', alt: '무대 대담 현장' },
   { src: '/assets/onboarding-cheongdo.jpg', variant: 'poster', alt: '고향올래 온보딩청도 — 내 아이디어를 AI로 구현해보는 워크숍 포스터' },
   { src: '/assets/photo_2025-01-25_14-56-40.jpg', variant: 'portrait', alt: '컨퍼런스 발표 현장' },
 ];
 const galleryLoop = [...gallery, ...gallery, ...gallery];
+const gallerySizes: Record<string, string> = {
+  landscape: '(max-width: 719px) 86vw, 630px',
+  portrait: '(max-width: 719px) 68vw, 300px',
+  poster: '(max-width: 719px) 68vw, 260px',
+  standard: '(max-width: 719px) 74vw, 560px',
+};
 const journey = [
   {
     step: '01',
@@ -79,6 +96,13 @@ const practiceModules = [
     body: '수업 때 쓸 앱을 켜고, 내 파일을 모아둘 폴더를 하나 만듭니다. 다음에 다시 열어도 이어서 일할 수 있게 해둡니다.',
     outputs: ['작업 폴더', '내 말투 규칙', '막혔을 때 물어볼 문장'],
     href: '/modules/setup/',
+  },
+  {
+    label: '첫 지시',
+    title: 'AI에게 내 일 시켜보기',
+    body: '대충 말했을 때와 제대로 말했을 때 결과가 어떻게 달라지는지 직접 비교합니다.',
+    outputs: ['내 첫 AI 작업 지시서'],
+    href: '/modules/first-prompt/',
   },
   {
     label: '공개 링크',
@@ -243,7 +267,7 @@ const sections = [
         <span class="eyebrow">교육 주제</span>
         <h2 id="outputs-title">참가자의 업무와 필요에 맞춰 수업을 설계합니다.</h2>
         <p class="lede">
-          로컬 창업, 소상공인 디지털 전환, 로컬브랜드 고도화 사업에 맞춰
+          로컬 창업, 소상공인 디지털 전환, 로컬브랜드 개선 사업에 맞춰
           필요한 트랙만 골라 1일 워크숍, 코호트, 마켓톤으로 설계합니다.
         </p>
         <ul class="program-grid">
@@ -317,25 +341,57 @@ const sections = [
       <div class="studio__carousel" role="region" aria-label="강의 현장 사진">
         <button class="studio__arrow studio__arrow--prev" type="button" aria-label="이전 사진" data-carousel-prev>‹</button>
         <div class="studio__track" tabindex="0" aria-label="강의 현장 사진 목록" data-loop-size={gallery.length}>
-          {gallery.map((item, i) => (
+          {gallery.map((item) => (
             <figure class={`studio__cell studio__cell--${item.variant}`} data-carousel-cell>
               {item.href ? (
                 <a class="studio__link" href={item.href} target="_blank" rel="noreferrer" aria-label="AI 북클럽 인스타그램 게시물 열기">
-                  <img src={item.src} alt={item.alt} loading={i < 4 ? 'eager' : 'lazy'} />
+                  <img
+                    src={item.src}
+                    srcset={item.srcset}
+                    sizes={gallerySizes[item.variant]}
+                    alt={item.alt}
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                  />
                 </a>
               ) : (
-                <img src={item.src} alt={item.alt} loading={i < 4 ? 'eager' : 'lazy'} />
+                <img
+                  src={item.src}
+                  srcset={item.srcset}
+                  sizes={gallerySizes[item.variant]}
+                  alt={item.alt}
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                />
               )}
             </figure>
           ))}
-          {galleryLoop.slice(gallery.length).map((item, i) => (
+          {galleryLoop.slice(gallery.length).map((item) => (
             <figure class={`studio__cell studio__cell--${item.variant}`} data-carousel-cell aria-hidden="true">
               {item.href ? (
                 <a class="studio__link" href={item.href} target="_blank" rel="noreferrer" tabindex="-1">
-                  <img src={item.src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
+                  <img
+                    src={item.src}
+                    srcset={item.srcset}
+                    sizes={gallerySizes[item.variant]}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                  />
                 </a>
               ) : (
-                <img src={item.src} alt="" loading={i < 4 ? 'eager' : 'lazy'} />
+                <img
+                  src={item.src}
+                  srcset={item.srcset}
+                  sizes={gallerySizes[item.variant]}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                />
               )}
             </figure>
           ))}
@@ -537,14 +593,17 @@ const sections = [
     studioTrack?.addEventListener('pointerenter', () => {
       studioPausedUntil = Date.now() + 2500;
     });
-    setInterval(() => {
-      if (!(studioTrack instanceof HTMLElement)) return;
-      if (Date.now() < studioPausedUntil) return;
-      syncStudioLoop();
-      const step = getStudioCellStep();
-      if (!step) return;
-      studioTrack.scrollBy({ left: step, behavior: 'smooth' });
-    }, 3200);
+    const canAutoAdvanceStudio = window.matchMedia('(min-width: 720px) and (hover: hover) and (pointer: fine)').matches;
+    if (canAutoAdvanceStudio) {
+      setInterval(() => {
+        if (!(studioTrack instanceof HTMLElement)) return;
+        if (Date.now() < studioPausedUntil) return;
+        syncStudioLoop();
+        const step = getStudioCellStep();
+        if (!step) return;
+        studioTrack.scrollBy({ left: step, behavior: 'smooth' });
+      }, 3200);
+    }
 
     const form = document.querySelector('.contact-form');
     const formStatus = document.querySelector('.contact-form__status');

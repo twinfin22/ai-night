@@ -63,4 +63,5 @@ export type TutorialData = {
     claude: string;
   };
   toolSelector?: boolean;
+  firstPromptBuilder?: boolean;
 };
