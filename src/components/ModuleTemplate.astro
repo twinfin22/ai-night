@@ -189,9 +189,27 @@ const actorFallback = {
                     <div class="tutorial-shots">
                       {(item.screenshots ?? []).map((shot) => (
                         <figure data-track={shot.track ?? 'both'}>
-                          <a class="tutorial-shot-link" href={shot.src} target="_blank" rel="noreferrer" aria-label={`${shot.alt} 크게 열기`}>
-                            <img src={shot.src} alt={shot.alt} loading="lazy" />
-                          </a>
+                          <div class="tutorial-shot-frame">
+                            <a class="tutorial-shot-link" href={shot.src} target="_blank" rel="noreferrer" aria-label={`${shot.alt} 크게 열기`}>
+                              <img src={shot.src} alt={shot.alt} loading="lazy" />
+                            </a>
+                            {(shot.hotspots ?? []).map((hotspot) => (
+                              <button
+                                type="button"
+                                class="tutorial-hotspot"
+                                style={`--hotspot-x: ${hotspot.x}%; --hotspot-y: ${hotspot.y}%;${hotspot.width ? ` --hotspot-w: ${hotspot.width}%;` : ''}${hotspot.height ? ` --hotspot-h: ${hotspot.height}%;` : ''}`}
+                                data-placement={hotspot.placement ?? 'right'}
+                                data-highlight={hotspot.width && hotspot.height ? 'area' : undefined}
+                                aria-label={`${hotspot.title}: ${hotspot.body}`}
+                              >
+                                <span class="tutorial-hotspot__dot">{hotspot.label}</span>
+                                <span class="tutorial-hotspot__tip" role="tooltip">
+                                  <strong>{hotspot.title}</strong>
+                                  <span>{hotspot.body}</span>
+                                </span>
+                              </button>
+                            ))}
+                          </div>
                           <figcaption>
                             {shot.captionUrl ? (
                               <a href={shot.captionUrl} target="_blank" rel="noopener noreferrer">{shot.caption ?? shot.captionUrl}</a>
@@ -201,6 +219,17 @@ const actorFallback = {
                               <a href={shot.url} target="_blank" rel="noopener noreferrer">{shot.url}</a>
                             )}
                           </figcaption>
+                          {(shot.hotspots ?? []).length > 0 && (
+                            <ul class="tutorial-hotspot-list" aria-label="화면 번호 설명">
+                              {(shot.hotspots ?? []).map((hotspot) => (
+                                <li>
+                                  <span>{hotspot.label}</span>
+                                  <strong>{hotspot.title}</strong>
+                                  <em>{hotspot.body}</em>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </figure>
                       ))}
                     </div>

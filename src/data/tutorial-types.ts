@@ -26,6 +26,16 @@ export type TutorialStep = {
     alt: string;
     caption?: string;
     captionUrl?: string;
+    hotspots?: {
+      label: string;
+      title: string;
+      body: string;
+      x: number;
+      y: number;
+      width?: number;
+      height?: number;
+      placement?: 'top' | 'right' | 'bottom' | 'left';
+    }[];
   }[];
   successCriteria?: string[];
   conceptToggles?: {
