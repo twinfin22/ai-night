@@ -1063,7 +1063,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 .wizard-screen h2 {
-  max-width: 780px;
+  max-width: none;
   margin-bottom: 16px;
 }
 
@@ -1072,7 +1072,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 .wizard-screen p {
-  max-width: 760px;
+  max-width: none;
   font-size: 19px;
   word-break: normal;
   overflow-wrap: anywhere;
@@ -1086,7 +1086,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .success-check,
 .copy-box {
   min-width: 0;
-  max-width: 780px;
+  width: 100%;
+  max-width: none;
   margin-top: 20px;
   padding: 18px;
   background: var(--bg-soft);
