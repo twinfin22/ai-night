@@ -50,7 +50,6 @@ const totalSteps = introSteps.length + 3;
         <span>{item.theme}</span>
         <span>Day {item.day}</span>
         <span>{item.time}</span>
-        {item.requiresDesktop && <span>컴퓨터 앞에서</span>}
       </div>
 
       <div class="wizard-progress" aria-label={`총 ${totalSteps}단계`}>
@@ -81,11 +80,37 @@ const totalSteps = introSteps.length + 3;
             </div>
           </div>
         )}
-        <div class="wizard-preview">
-          <strong>준비물</strong>
-          <span>{item.requiresDesktop ? '컴퓨터가 필요합니다.' : '휴대폰으로도 볼 수 있습니다.'}</span>
-          <span>예상 시간 {item.time}</span>
-          <span>{item.status === 'coming-soon' ? '아직 준비 중입니다.' : '지금 시작할 수 있습니다.'}</span>
+        <div class="wizard-overview">
+          <strong>오늘 할 일</strong>
+          {trackSteps ? (
+            <>
+              <ol data-overview-track="claude" aria-label="클로드 수업 흐름">
+                {trackSteps.claude.map((step, index) => (
+                  <li>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <em>{step.action}</em>
+                  </li>
+                ))}
+              </ol>
+              <ol data-overview-track="codex" aria-label="코덱스 수업 흐름" hidden>
+                {trackSteps.codex.map((step, index) => (
+                  <li>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <em>{step.action}</em>
+                  </li>
+                ))}
+              </ol>
+            </>
+          ) : (
+            <ol>
+              {(unifiedSteps ?? []).map((step, index) => (
+                <li>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <em>{step.action}</em>
+                </li>
+              ))}
+            </ol>
+          )}
         </div>
       </article>
 
@@ -189,6 +214,7 @@ const totalSteps = introSteps.length + 3;
     const next = document.querySelector('[data-next]');
     const appLabel = document.querySelector('[data-app-label]');
     const dots = Array.from(document.querySelectorAll('[data-dot]'));
+    const overviewLists = Array.from(document.querySelectorAll('[data-overview-track]'));
 
     const readJson = (key, fallback) => {
       try {
@@ -226,6 +252,9 @@ const totalSteps = introSteps.length + 3;
     const updateAppUi = () => {
       document.querySelectorAll('[data-app-choice]').forEach((button) => {
         button.setAttribute('aria-pressed', String(button.getAttribute('data-app-choice') === app));
+      });
+      overviewLists.forEach((list) => {
+        list.hidden = list.getAttribute('data-overview-track') !== app;
       });
       if (appLabel) appLabel.textContent = `${app === 'claude' ? '클로드' : '코덱스'} 단계가 열립니다.`;
     };
