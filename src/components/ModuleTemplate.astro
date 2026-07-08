@@ -19,6 +19,7 @@ export interface Props {
   toolSelector?: boolean;
   stepsLabel?: string;
   firstPromptBuilder?: boolean;
+  feedbackPromptBuilder?: boolean;
 }
 
 const {
@@ -29,6 +30,7 @@ const {
   overviewTemplate = 'default',
   toolSelector = false,
   firstPromptBuilder = false,
+  feedbackPromptBuilder = false,
 } = Astro.props;
 
 const overviewFlow = overviewTemplate === 'flow';
@@ -186,6 +188,55 @@ const actorFallback = {
                 <div>
                   <span>5칸으로 말하면</span>
                   <pre><code data-first-prompt-output></code></pre>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {feedbackPromptBuilder && (
+            <section class="first-prompt-builder" aria-labelledby="feedback-prompt-builder-title">
+              <div class="first-prompt-builder__head">
+                <div>
+                  <h3 id="feedback-prompt-builder-title">내 피드백 요청문</h3>
+                  <p>샘플을 고른 뒤 내 아이디어에 맞게 4칸만 고치세요.</p>
+                </div>
+                <button type="button" data-feedback-prompt-copy aria-live="polite">복사하기</button>
+              </div>
+
+              <div class="sample-picker" role="group" aria-label="피드백 샘플로 채우기">
+                <button type="button" data-feedback-prompt-sample="restaurant">동네 식당</button>
+                <button type="button" data-feedback-prompt-sample="farm">농산물</button>
+                <button type="button" data-feedback-prompt-sample="stay">숙소</button>
+                <button type="button" data-feedback-prompt-sample="class">체험 수업</button>
+              </div>
+
+              <div class="first-prompt-builder__grid">
+                <label>
+                  <span>내 아이디어</span>
+                  <textarea data-feedback-prompt-field="idea" rows="4" placeholder="점심시간에 회사와 공방으로 도시락을 배달하는 서비스를 시작하려고 합니다."></textarea>
+                </label>
+                <label>
+                  <span>비평가 역할</span>
+                  <textarea data-feedback-prompt-field="critic" rows="4" placeholder="까다로운 단골 손님처럼 봐주세요. 마음에 안 드는 점을 돌려 말하지 말아주세요."></textarea>
+                </label>
+                <label>
+                  <span>혹평 주문</span>
+                  <textarea data-feedback-prompt-field="roast" rows="4" placeholder="실패할 이유, 내가 깔고 있는 가정, 놓치고 있는 부분을 각각 짚어주세요. 어느 부분이 문제인지 정확히 말해주세요."></textarea>
+                </label>
+                <label>
+                  <span>뒤집기 주문</span>
+                  <textarea data-feedback-prompt-field="refine" rows="4" placeholder="가장 아픈 지적 3개를 골라서, 우리 가게가 바로 해볼 수 있는 개선 아이디어로 바꿔주세요. 마지막에는 다음에 할 일 하나만 정해주세요."></textarea>
+                </label>
+              </div>
+
+              <div class="compare-box" aria-label="피드백 요청문 완성본">
+                <div>
+                  <span>대충 말하면</span>
+                  <p>이 아이디어 어때?</p>
+                </div>
+                <div>
+                  <span>4칸으로 말하면</span>
+                  <pre><code data-feedback-prompt-output></code></pre>
                 </div>
               </div>
             </section>
@@ -607,5 +658,140 @@ const actorFallback = {
     });
 
     updateFirstPromptOutput();
+
+    const feedbackPromptSamples = {
+      restaurant: {
+        idea: '점심시간에 회사와 공방으로 도시락을 배달하는 서비스를 시작하려고 합니다.',
+        critic: '까다로운 단골 손님처럼 봐주세요. 마음에 안 드는 점을 돌려 말하지 말아주세요.',
+        roast: '실패할 이유, 내가 깔고 있는 가정, 놓치고 있는 부분을 각각 짚어주세요. 어느 부분이 문제인지 정확히 말해주세요.',
+        refine: '가장 아픈 지적 3개를 골라서, 우리 가게가 바로 해볼 수 있는 개선 아이디어로 바꿔주세요. 마지막에는 다음에 할 일 하나만 정해주세요.',
+      },
+      farm: {
+        idea: '못난이 과일을 한 상자에 섞어 저렴하게 파는 꾸러미 상품을 만들려고 합니다.',
+        critic: '옆 가게 사장처럼 봐주세요. 실제로 팔기 어려운 이유를 먼저 말해주세요.',
+        roast: '손님이 왜 안 살지, 포장과 배송에서 무엇이 터질지, 가격에서 어떤 오해가 생길지 짚어주세요.',
+        refine: '가장 위험한 지적 3개를 골라서, 농장에서 이번 주에 시험할 수 있는 개선안으로 바꿔주세요.',
+      },
+      stay: {
+        idea: '조용한 숙소에 2주 이상 머무는 장기 투숙 할인 상품을 만들려고 합니다.',
+        critic: '회의적인 투자자처럼 봐주세요. 좋아 보이는 말보다 숫자와 운영 문제를 봐주세요.',
+        roast: '수익이 줄어들 이유, 손님 관리에서 생길 문제, 홍보 문구가 흐린 부분을 짚어주세요.',
+        refine: '가장 큰 문제 3개를 골라서, 예약 전에 확인할 조건과 작은 실험으로 바꿔주세요.',
+      },
+      class: {
+        idea: '주말마다 부모와 아이가 함께 오는 원데이 만들기 수업을 열려고 합니다.',
+        critic: '까다로운 학부모처럼 봐주세요. 신청하기 전에 걸리는 점을 솔직히 말해주세요.',
+        roast: '가격, 안전, 결과물, 아이 연령대에서 생길 불만을 짚어주세요.',
+        refine: '가장 아픈 지적 3개를 골라서, 안내문과 수업 운영에서 바로 고칠 점으로 바꿔주세요.',
+      },
+    };
+
+    const feedbackPromptLabels = {
+      idea: '내 아이디어',
+      critic: '비평가 역할',
+      roast: '혹평 주문',
+      refine: '뒤집기 주문',
+    };
+
+    const feedbackPromptFields = document.querySelectorAll('[data-feedback-prompt-field]');
+    const feedbackPromptOutput = document.querySelector('[data-feedback-prompt-output]');
+    const feedbackPromptHiddenPlaceholders = new WeakMap<HTMLTextAreaElement, string>();
+
+    const feedbackFieldText = (field: HTMLTextAreaElement) => field.value.trim() || field.getAttribute('placeholder')?.trim() || '';
+
+    const buildFeedbackPromptText = () => {
+      const lines = [
+        '아래 아이디어를 친절하지만 가차없이 봐주세요.',
+        '',
+      ];
+      feedbackPromptFields.forEach((field) => {
+        if (!(field instanceof HTMLTextAreaElement)) return;
+        const key = field.dataset.feedbackPromptField || '';
+        const label = feedbackPromptLabels[key as keyof typeof feedbackPromptLabels];
+        if (!label) return;
+        lines.push(`${label}: ${feedbackFieldText(field)}`);
+      });
+      lines.push('', '규칙: 칭찬으로 시작하지 마세요. 아이디어는 세게 비판해도 사람은 공격하지 마세요. 무른 표현 대신 바로 고칠 수 있는 말로 써주세요.');
+      return lines.join('\n');
+    };
+
+    const updateFeedbackPromptOutput = () => {
+      if (!feedbackPromptOutput) return;
+      feedbackPromptOutput.textContent = buildFeedbackPromptText();
+    };
+
+    feedbackPromptFields.forEach((field) => {
+      if (!(field instanceof HTMLTextAreaElement)) return;
+      field.addEventListener('input', updateFeedbackPromptOutput);
+      field.addEventListener('focus', () => {
+        if (field.value.trim()) return;
+        const placeholder = field.getAttribute('placeholder') || '';
+        if (!placeholder) return;
+        feedbackPromptHiddenPlaceholders.set(field, placeholder);
+        field.setAttribute('placeholder', '');
+        updateFeedbackPromptOutput();
+      });
+      field.addEventListener('blur', () => {
+        if (field.value.trim() || field.getAttribute('placeholder')) return;
+        const placeholder = feedbackPromptHiddenPlaceholders.get(field);
+        if (!placeholder) return;
+        field.setAttribute('placeholder', placeholder);
+        updateFeedbackPromptOutput();
+      });
+    });
+
+    document.querySelectorAll('[data-feedback-prompt-sample]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const sampleName = button.dataset.feedbackPromptSample as keyof typeof feedbackPromptSamples;
+        const sample = feedbackPromptSamples[sampleName];
+        if (!sample) return;
+
+        feedbackPromptFields.forEach((field) => {
+          if (!(field instanceof HTMLTextAreaElement)) return;
+          const key = field.dataset.feedbackPromptField as keyof typeof sample;
+          const placeholder = sample[key] || '';
+          field.value = '';
+          field.setAttribute('placeholder', placeholder);
+          if (placeholder) {
+            feedbackPromptHiddenPlaceholders.set(field, placeholder);
+          }
+        });
+
+        document.querySelectorAll('[data-feedback-prompt-sample]').forEach((sampleButton) => {
+          sampleButton.toggleAttribute('aria-pressed', sampleButton === button);
+        });
+        updateFeedbackPromptOutput();
+      });
+    });
+
+    document.querySelector('[data-feedback-prompt-copy]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      if (!(button instanceof HTMLButtonElement)) return;
+      const text = buildFeedbackPromptText();
+
+      try {
+        if (navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch {
+            fallbackCopy(text);
+          }
+        } else {
+          fallbackCopy(text);
+        }
+        button.textContent = '복사됨';
+        window.setTimeout(() => {
+          button.textContent = '복사하기';
+        }, 1400);
+      } catch {
+        button.textContent = '복사 실패';
+        window.setTimeout(() => {
+          button.textContent = '복사하기';
+        }, 1400);
+      }
+    });
+
+    updateFeedbackPromptOutput();
   </script>
 </Base>

@@ -64,4 +64,5 @@ export type TutorialData = {
   };
   toolSelector?: boolean;
   firstPromptBuilder?: boolean;
+  feedbackPromptBuilder?: boolean;
 };
