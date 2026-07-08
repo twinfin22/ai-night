@@ -1,3 +1,10 @@
+import { blogTutorial } from './blog-tutorial';
+import { feedbackTutorial } from './feedback-tutorial';
+import { firstPromptTutorial } from './first-prompt-tutorial';
+import { skillTutorial } from './skill-tutorial';
+import type { TutorialStep as ModuleTutorialStep } from './tutorial-types';
+import { websiteTutorial } from './website-tutorial';
+
 export type AppChoice = 'claude' | 'codex';
 export type TutorialStatus = 'ready' | 'coming-soon';
 export type AppTrack = 'both' | 'unified';
@@ -56,6 +63,24 @@ const closingStep = (day: number): TutorialStep => ({
     different: '파일이 바로 안 생기면 실패가 아닙니다. AI가 보여준 마크다운을 복사해 수업일지 폴더에 직접 저장하세요.',
   },
 });
+
+const moduleStepToCourseStep = (step: ModuleTutorialStep): TutorialStep => ({
+  action: step.title,
+  detail: step.goal,
+  copyText: step.prompt?.trim() ? step.prompt : undefined,
+  success: step.successCriteria?.length
+    ? `완료 기준: ${step.successCriteria.join(' / ')}`
+    : `“${step.output}”이 나오면 성공입니다.`,
+  stuck: {
+    ...defaultStuck,
+    different: step.recoveryPrompt ?? defaultStuck.different,
+  },
+});
+
+const reuseModuleSteps = (steps: ModuleTutorialStep[], day: number): TutorialStep[] => [
+  ...steps.map(moduleStepToCourseStep),
+  closingStep(day),
+];
 
 const comingSoonStep: TutorialStep = {
   action: '이 수업은 준비 중입니다.',
@@ -215,13 +240,13 @@ export const courseDays: TutorialDay[] = [
     theme: '차리기',
     title: '첫 프롬프트 만들기',
     outcome: '목표, 맥락, 제약, 완료 기준이 들어간 첫 지시문을 만듭니다.',
-    status: 'coming-soon',
+    status: 'ready',
     requiresDesktop: false,
     appTrack: 'unified',
     time: '25분',
     challenge: '내 가게 말투로 같은 부탁을 한 번 더 바꿔보세요.',
     tomorrow: '내일은 나만의 말투 규칙을 정합니다.',
-    steps: [comingSoonStep],
+    steps: reuseModuleSteps(firstPromptTutorial.steps, 4),
   },
   {
     day: 5,
@@ -243,13 +268,13 @@ export const courseDays: TutorialDay[] = [
     theme: '시키기',
     title: 'AI에게 혹평 받기',
     outcome: '내 전단지나 공지문을 AI 피드백으로 고칩니다.',
-    status: 'coming-soon',
+    status: 'ready',
     requiresDesktop: false,
     appTrack: 'unified',
     time: '25분',
     challenge: '고친 문장을 손님 말투로 더 쉽게 바꿔보세요.',
     tomorrow: '내일은 첫 스킬을 씁니다.',
-    steps: [comingSoonStep],
+    steps: reuseModuleSteps(feedbackTutorial.steps, 6),
   },
   {
     day: 7,
@@ -314,13 +339,13 @@ export const courseDays: TutorialDay[] = [
     theme: '시키기',
     title: '내 스킬 만들기',
     outcome: '반복해서 시키던 부탁 하나를 스킬로 저장합니다.',
-    status: 'coming-soon',
+    status: 'ready',
     requiresDesktop: true,
     appTrack: 'unified',
     time: '30분',
     challenge: '스킬 이름을 손님도 이해할 말로 바꿔보세요.',
     tomorrow: '다음 주는 자동화 흐름을 굴립니다.',
-    steps: [comingSoonStep],
+    steps: reuseModuleSteps(skillTutorial.steps, 10),
   },
   {
     day: 11,
@@ -378,13 +403,13 @@ export const courseDays: TutorialDay[] = [
     theme: '굴리기',
     title: '내 가게 웹사이트 만들기',
     outcome: '사업 소개 페이지를 만듭니다.',
-    status: 'coming-soon',
+    status: 'ready',
     requiresDesktop: true,
     appTrack: 'unified',
     time: '30분',
     challenge: '첫 화면 문장을 손님 말투로 바꿔보세요.',
     tomorrow: '내일은 블로그 자동화입니다.',
-    steps: [comingSoonStep],
+    steps: reuseModuleSteps(websiteTutorial.steps, 13),
   },
   {
     day: 14,
@@ -392,13 +417,13 @@ export const courseDays: TutorialDay[] = [
     theme: '굴리기',
     title: '블로그 콘텐츠 자동화 파이프라인',
     outcome: '주제만 넣으면 초안이 나오는 글쓰기 흐름을 만듭니다.',
-    status: 'coming-soon',
+    status: 'ready',
     requiresDesktop: true,
     appTrack: 'unified',
     time: '30분',
     challenge: '후기 글 주제 하나를 넣어 초안을 만들어보세요.',
     tomorrow: '내일은 카드뉴스입니다.',
-    steps: [comingSoonStep],
+    steps: reuseModuleSteps(blogTutorial.steps, 14),
   },
   {
     day: 15,
