@@ -87,6 +87,12 @@ const totalSteps = introSteps.length + 3;
               <h2>{step.action}</h2>
               <p>{step.detail}</p>
               {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
+              {step.download && (
+                <p class="download-row">
+                  <a href={step.download.href} download={step.download.fileName}>{step.download.label}</a>
+                  <a href={step.download.href}>파일 열기</a>
+                </p>
+              )}
               {step.copyText && (
                 <div class="copy-box">
                   <button type="button" data-copy>복사하기</button>
@@ -110,6 +116,12 @@ const totalSteps = introSteps.length + 3;
               <h2>{step.action}</h2>
               <p>{step.detail}</p>
               {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
+              {step.download && (
+                <p class="download-row">
+                  <a href={step.download.href} download={step.download.fileName}>{step.download.label}</a>
+                  <a href={step.download.href}>파일 열기</a>
+                </p>
+              )}
               {step.copyText && (
                 <div class="copy-box">
                   <button type="button" data-copy>복사하기</button>
@@ -135,6 +147,12 @@ const totalSteps = introSteps.length + 3;
             <h2>{step.action}</h2>
             <p>{step.detail}</p>
             {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
+            {step.download && (
+              <p class="download-row">
+                <a href={step.download.href} download={step.download.fileName}>{step.download.label}</a>
+                <a href={step.download.href}>파일 열기</a>
+              </p>
+            )}
             {step.copyText && (
               <div class="copy-box">
                 <button type="button" data-copy>복사하기</button>
@@ -308,5 +326,7 @@ const totalSteps = introSteps.length + 3;
 
   <style>
     .wizard-shot { width: 100%; border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.1); margin: 12px 0; }
+    .download-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+    .download-row a { border: 1px solid rgba(0, 0, 0, 0.14); border-radius: 8px; padding: 8px 12px; color: inherit; text-decoration: none; font-weight: 700; }
   </style>
 </Base>

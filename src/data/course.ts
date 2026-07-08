@@ -12,6 +12,7 @@ export interface TutorialStep {
   action: string;
   detail: string;
   copyText?: string;
+  download?: { href: string; label: string; fileName?: string };
   image?: { src: string; alt: string };
   success: string;
   stuck: StuckHelp;
@@ -49,7 +50,7 @@ const defaultStuck: StuckHelp = {
 
 const wrapUpStep = (day: number): TutorialStep => ({
   action: '/wrap-up으로 오늘을 기록하세요.',
-  detail: '오늘 만든 것과 잘 통한 부탁 방식을 수업일지로 남깁니다. 파일 저장이 안 되면 복사해서 직접 저장합니다.',
+  detail: '설치한 /wrap-up 스킬로 오늘 만든 것과 잘 통한 부탁 방식을 수업일지로 남깁니다. 파일 저장이 안 되면 복사해서 직접 저장합니다.',
   copyText: `오늘은 Day ${day}입니다. /wrap-up\n\n아래 형식으로 정리해 주세요. 파일을 만들 수 있으면 ai-study/journal/day-${String(day).padStart(2, '0')}.md로 저장하고, 파일을 만들 수 없으면 제가 복사할 수 있게 마크다운만 보여주세요.\n\n# Day ${day} 수업일지\n\n## 오늘 만든 것\n-\n\n## 잘 통한 부탁 방식\n-\n\n## 안 통한 부탁 방식\n-\n\n## AI가 나에 대해 새로 알게 된 사실 1개\n-\n\n## 내일 이어할 말\n-`,
   success: `day-${String(day).padStart(2, '0')}.md 파일이 생기거나, 복사해서 저장할 수 있는 마크다운이 나오면 성공입니다.`,
   stuck: {
@@ -91,7 +92,7 @@ export const courseDays: TutorialDay[] = [
   {
     day: 1, week: 1, theme: '차리기',
     title: '시작하기 — 설치, 가입, 화면 투어',
-    outcome: '앱 설치, ai-study 폴더, 첫 대화, /wrap-up 임시 등록까지 끝냅니다.',
+    outcome: '앱 설치, ai-study 폴더, 첫 대화, /wrap-up 스킬 설치까지 끝냅니다.',
     status: 'ready', requiresDesktop: true, appTrack: 'both', time: '30분',
     challenge: '화면 투어에서 배운 버튼 3개의 이름을 내 말로 적어보세요.',
     tomorrow: '내일은 첫 프롬프트를 만듭니다.',
@@ -138,10 +139,11 @@ export const courseDays: TutorialDay[] = [
           stuck: defaultStuck,
         },
         {
-          action: '임시 /wrap-up 프롬프트를 등록하세요.',
-          detail: '매일 수업 끝에 일지를 남기는 반복 부탁입니다. 실제 스킬 파일은 후속 phase에서 만들고, 지금은 아래를 복사해 보내 등록합니다.',
-          copyText: '앞으로 제가 "/wrap-up"이라고 말하면, 오늘 배운 것을 수업일지로 정리해 주세요. 형식은 이렇습니다: 오늘 만든 것 / 잘 통한 부탁 방식 / 안 통한 부탁 방식 / AI가 나에 대해 새로 알게 된 사실 1개 / 내일 이어할 말. 파일을 만들 수 있으면 ai-study/journal/day-XX.md로 저장하고, 안 되면 제가 복사할 수 있게 마크다운만 보여주세요.',
-          success: 'AI가 "파일 저장이 안 되면 복사용 마크다운을 보여주겠다"고 답하면 성공입니다.',
+          action: '/wrap-up 스킬을 설치하세요.',
+          detail: '매일 수업 끝에 일지를 남기는 스킬입니다. 파일을 내려받거나 열어서 내용을 복사한 뒤, 앱에 설치합니다.',
+          download: { href: '/skills/wrap-up/SKILL.md', label: 'SKILL.md 다운로드', fileName: 'SKILL.md' },
+          copyText: '아래 스킬 파일을 /wrap-up 스킬로 설치해 주세요.\n\n스킬 파일: https://www.ai-night.study/skills/wrap-up/SKILL.md\n\n설치가 끝나면 제가 /wrap-up이라고 말했을 때 ai-study/journal/day-XX.md 수업일지를 만들 수 있어야 합니다. 주간 모드 /wrap-up 주간은 AGENTS.md에 넣을 후보를 제안하되, 제가 승인한 것만 반영해야 합니다.',
+          success: 'SKILL.md 파일을 받았고, /wrap-up 스킬로 설치할 준비가 되면 성공입니다.',
           stuck: defaultStuck,
         },
         wrapUpStep(1),
@@ -186,10 +188,11 @@ export const courseDays: TutorialDay[] = [
           stuck: defaultStuck,
         },
         {
-          action: '임시 /wrap-up 프롬프트를 등록하세요.',
-          detail: '매일 수업 끝에 일지를 남기는 반복 부탁입니다. 실제 스킬 파일은 후속 phase에서 만들고, 지금은 아래를 복사해 보내 등록합니다.',
-          copyText: '앞으로 제가 "/wrap-up"이라고 말하면, 오늘 배운 것을 수업일지로 정리해 주세요. 형식은 이렇습니다: 오늘 만든 것 / 잘 통한 부탁 방식 / 안 통한 부탁 방식 / AI가 나에 대해 새로 알게 된 사실 1개 / 내일 이어할 말. 파일을 만들 수 있으면 ai-study/journal/day-XX.md로 저장하고, 안 되면 제가 복사할 수 있게 마크다운만 보여주세요.',
-          success: 'AI가 "파일 저장이 안 되면 복사용 마크다운을 보여주겠다"고 답하면 성공입니다.',
+          action: '/wrap-up 스킬을 설치하세요.',
+          detail: '매일 수업 끝에 일지를 남기는 스킬입니다. 파일을 내려받거나 열어서 내용을 복사한 뒤, 앱에 설치합니다.',
+          download: { href: '/skills/wrap-up/SKILL.md', label: 'SKILL.md 다운로드', fileName: 'SKILL.md' },
+          copyText: '아래 스킬 파일을 /wrap-up 스킬로 설치해 주세요.\n\n스킬 파일: https://www.ai-night.study/skills/wrap-up/SKILL.md\n\n설치가 끝나면 제가 /wrap-up이라고 말했을 때 ai-study/journal/day-XX.md 수업일지를 만들 수 있어야 합니다. 주간 모드 /wrap-up 주간은 AGENTS.md에 넣을 후보를 제안하되, 제가 승인한 것만 반영해야 합니다.',
+          success: 'SKILL.md 파일을 받았고, /wrap-up 스킬로 설치할 준비가 되면 성공입니다.',
           stuck: defaultStuck,
         },
         wrapUpStep(1),
@@ -345,9 +348,9 @@ AI가 맡을 역할:
     tomorrow: '내일은 아침 브리핑을 자동화합니다.',
     steps: [
       {
-        action: 'Day 1에서 등록한 /wrap-up을 떠올리세요.',
-        detail: '매일 쓰는 /wrap-up은 스킬로 만들 수 있는 반복 부탁입니다. 스킬은 반복 부탁을 문서로 저장해 둔 것입니다.',
-        copyText: '제가 Day 1에서 등록한 /wrap-up 프롬프트를 기준으로, 반복 부탁을 스킬 파일로 저장한다는 말이 무슨 뜻인지 쉬운 말로 설명해 주세요.',
+        action: 'Day 1에서 설치한 /wrap-up을 떠올리세요.',
+        detail: '매일 쓰는 /wrap-up은 실제 스킬 파일로 설치한 반복 부탁입니다. 스킬은 반복 부탁을 문서로 저장해 둔 것입니다.',
+        copyText: '제가 Day 1에서 설치한 /wrap-up 스킬 파일을 기준으로, 반복 부탁을 스킬 파일로 저장한다는 말이 무슨 뜻인지 쉬운 말로 설명해 주세요.',
         success: '"스킬 = 저장해 둔 부탁문"이라고 내 말로 설명할 수 있으면 성공입니다.',
         stuck: defaultStuck,
       },
