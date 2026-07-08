@@ -1,0 +1,146 @@
+---
+import Base from '../../layouts/Base.astro';
+import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
+---
+
+<Base
+  title="AI 야학 20일 실습 교재"
+  description="로그인 없이 브라우저에 진도를 저장하며 따라가는 AI 야학 20일 완주형 실습 교재."
+  canonicalPath="/tutorials/"
+>
+  <header class="tutorials-header">
+    <div class="tutorials-header__inner">
+      <a href="/" class="tutorials-brand" aria-label="AI 야학 홈">
+        <img src="/favicon.svg" alt="" width="34" height="34" />
+        <span>AI 야학</span>
+      </a>
+      <a class="tutorials-header__link" href="/">기존 소개 보기</a>
+    </div>
+  </header>
+
+  <main class="tutorials-home" data-tutorials-home data-storage={JSON.stringify(storageKeys)}>
+    <section class="tutorials-hero" aria-labelledby="tutorials-title">
+      <div class="tutorials-hero__copy">
+        <span class="eyebrow">20일 완주형 실습 교재</span>
+        <h1 id="tutorials-title">오늘 할 일만 보고 따라오세요.</h1>
+        <p>
+          로그인도, 긴 영상도 없습니다. 같은 컴퓨터, 같은 브라우저로 들어오면
+          마지막으로 하던 곳부터 이어집니다.
+        </p>
+      </div>
+      <aside class="progress-board" aria-live="polite">
+        <p data-progress-text>진도를 확인하고 있습니다.</p>
+        <div class="progress-board__bar" aria-hidden="true"><span data-progress-bar></span></div>
+        <a class="btn btn--primary" href="/tutorials/day-01/" data-next-link>여기서 시작하세요</a>
+      </aside>
+    </section>
+
+    <div class="browser-warning" data-kakao-warning hidden>
+      카카오톡 안에서 열면 도장이 따로 저장될 수 있어요. 기본 브라우저로 다시 열어주세요.
+    </div>
+
+    <div class="local-note">
+      <strong>중요:</strong> 진도는 이 브라우저에만 저장됩니다. 도장이 사라져도 수업은 다시 열 수 있습니다.
+    </div>
+
+    <div class="course-weeks">
+      {weeks.map((week) => {
+        const days = courseDays.filter((day) => day.week === week.week);
+        return (
+          <section class="course-week" aria-labelledby={`week-${week.week}`}>
+            <div class="course-week__head">
+              <p>{week.week}주차</p>
+              <h2 id={`week-${week.week}`}>{week.theme}</h2>
+              <span>{week.subtitle}</span>
+            </div>
+            <ol class="day-grid">
+              {days.map((day) => (
+                <li>
+                  <a
+                    class="day-card"
+                    href={dayPath(day.day)}
+                    data-day-card
+                    data-day={day.day}
+                    data-status={day.status}
+                    aria-label={`Day ${day.day}. ${day.title}`}
+                  >
+                    <span class="day-card__top">
+                      <span>Day {day.day}</span>
+                      {day.requiresDesktop && <em>컴퓨터 앞에서</em>}
+                    </span>
+                    <strong>{day.title}</strong>
+                    <small>{day.outcome}</small>
+                    <span class="day-card__state" data-card-state>
+                      {day.status === 'coming-soon' ? '준비 중' : day.readyLabel ?? '시작 가능'}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        );
+      })}
+    </div>
+  </main>
+
+  <script>
+    // @ts-nocheck
+    const root = document.querySelector('[data-tutorials-home]');
+    const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
+    const cards = Array.from(document.querySelectorAll('[data-day-card]'));
+    const readJson = (key, fallback) => {
+      try {
+        return JSON.parse(window.localStorage.getItem(key) || '') || fallback;
+      } catch {
+        return fallback;
+      }
+    };
+
+    const isKakao = /KAKAOTALK/i.test(window.navigator.userAgent || '');
+    const kakaoWarning = document.querySelector('[data-kakao-warning]');
+    if (kakaoWarning) kakaoWarning.hidden = !isKakao;
+
+    window.localStorage.setItem(keys.version, '1');
+    const done = readJson(keys.done, []);
+    const position = readJson(keys.position, {});
+    const last = Number(window.localStorage.getItem(keys.last) || '0');
+    const readyCards = cards.filter((card) => card.getAttribute('data-status') === 'ready');
+    const readyDays = readyCards.map((card) => Number(card.getAttribute('data-day')));
+    const inProgressDay = last && position[String(last)] !== undefined ? last : 0;
+    const firstUndoneReady = readyDays.find((day) => !done.includes(day)) || readyDays[0] || 1;
+    const nextDay = inProgressDay || firstUndoneReady;
+
+    cards.forEach((card) => {
+      const day = Number(card.getAttribute('data-day'));
+      const status = card.getAttribute('data-status');
+      const state = card.querySelector('[data-card-state]');
+
+      card.classList.toggle('is-done', done.includes(day));
+      card.classList.toggle('is-current', day === nextDay && status === 'ready' && !done.includes(day));
+      card.classList.toggle('is-coming-soon', status === 'coming-soon');
+
+      if (state) {
+        if (done.includes(day)) state.textContent = '도장 완료';
+        else if (day === nextDay && status === 'ready' && inProgressDay) state.textContent = '이어서 하기';
+        else if (day === nextDay && status === 'ready') state.textContent = day === 1 ? '여기서 시작하세요' : '다음 수업';
+        else if (status === 'coming-soon') state.textContent = '준비 중';
+        else state.textContent = '시작 가능';
+      }
+    });
+
+    const progressText = document.querySelector('[data-progress-text]');
+    const progressBar = document.querySelector('[data-progress-bar]');
+    const nextLink = document.querySelector('[data-next-link]');
+    const doneCount = done.length;
+    if (progressText) {
+      progressText.textContent = doneCount === 20
+        ? '20일 완주. 수료증을 받을 차례입니다.'
+        : `20일 중 ${doneCount}일 완료. 오늘은 Day ${nextDay}로 가면 됩니다.`;
+    }
+    if (progressBar) progressBar.style.width = `${Math.min(100, Math.round((doneCount / 20) * 100))}%`;
+    if (nextLink instanceof HTMLAnchorElement) {
+      nextLink.href = `/tutorials/day-${String(nextDay).padStart(2, '0')}/`;
+      nextLink.textContent = inProgressDay ? '이어서 하기' : '오늘 수업 열기';
+    }
+  </script>
+</Base>

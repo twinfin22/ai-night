@@ -592,9 +592,615 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   text-decoration: none;
 }
 
+.tutorial-section-cta {
+  margin: 0 0 22px;
+}
+
 @media (min-width: 720px) {
   .practice-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ====== 20-day tutorial course ====== */
+.tutorials-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(14, 15, 18, 0.86);
+  border-bottom: 1px solid var(--hairline);
+  backdrop-filter: blur(14px);
+}
+
+.tutorials-header__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.tutorials-brand,
+.tutorials-header__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--cream);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.tutorials-brand {
+  gap: 10px;
+  font-size: 20px;
+}
+
+.tutorials-brand img {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+}
+
+.tutorials-header__link {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.tutorials-home,
+.wizard-page {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 34px 20px 86px;
+  overflow-x: hidden;
+}
+
+.tutorials-hero {
+  min-height: 420px;
+  padding: 52px 0 46px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: end;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.tutorials-hero h1 {
+  max-width: 11ch;
+  margin-bottom: 18px;
+  overflow-wrap: anywhere;
+}
+
+.tutorials-hero p {
+  max-width: 680px;
+  font-size: 19px;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.tutorials-hero > * {
+  min-width: 0;
+}
+
+.progress-board {
+  min-width: 0;
+  padding: 24px;
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+
+.progress-board p {
+  margin: 0 0 16px;
+  color: var(--cream);
+  font-size: 18px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.progress-board__bar {
+  height: 14px;
+  margin-bottom: 18px;
+  overflow: hidden;
+  background: var(--bg-soft);
+  border: 1px solid var(--hairline-2);
+  border-radius: 999px;
+}
+
+.progress-board__bar span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--amber);
+}
+
+.browser-warning,
+.local-note {
+  margin: 18px 0 0;
+  padding: 16px 18px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.browser-warning {
+  background: rgba(245, 162, 90, 0.13);
+  border: 1px solid rgba(245, 162, 90, 0.48);
+  color: var(--cream);
+}
+
+.local-note {
+  background: rgba(159, 210, 193, 0.09);
+  border: 1px solid rgba(159, 210, 193, 0.32);
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.local-note strong {
+  color: var(--cream);
+}
+
+.course-weeks {
+  display: grid;
+  gap: 34px;
+  margin-top: 38px;
+  min-width: 0;
+}
+
+.course-week {
+  padding: 0 0 34px;
+  border-bottom: 1px solid var(--hairline);
+  min-width: 0;
+}
+
+.course-week__head {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.course-week__head p,
+.course-week__head span {
+  margin: 0;
+  color: var(--ink-mute);
+}
+
+.course-week__head p {
+  color: var(--amber);
+  font-weight: 800;
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+}
+
+.day-card {
+  min-width: 0;
+  min-height: 230px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.day-card:hover,
+.day-card:focus-visible {
+  border-color: var(--amber-deep);
+  background: var(--panel-2);
+  color: inherit;
+}
+
+.day-card.is-current {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 2px rgba(244, 184, 96, 0.22);
+}
+
+.day-card.is-done {
+  border-color: rgba(159, 210, 193, 0.52);
+}
+
+.day-card.is-coming-soon {
+  background: rgba(27, 30, 37, 0.58);
+}
+
+.day-card__top {
+  display: flex;
+  min-height: 26px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--amber);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.day-card__top em {
+  color: #9fd2c1;
+  font-style: normal;
+  font-size: 12px;
+}
+
+.day-card strong {
+  color: var(--cream);
+  font-size: 20px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.day-card small {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.day-card__state {
+  width: fit-content;
+  margin-top: auto;
+  padding: 9px 12px;
+  border: 1px solid var(--hairline-2);
+  border-radius: 999px;
+  color: var(--cream);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.day-card.is-done .day-card__state {
+  border-color: rgba(159, 210, 193, 0.5);
+  color: #9fd2c1;
+}
+
+.day-card.is-coming-soon .day-card__state {
+  color: var(--ink-mute);
+}
+
+.wizard-back {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.wizard-back a {
+  min-height: 48px;
+  padding: 10px 14px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--hairline-2);
+  border-radius: 8px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.wizard-shell {
+  min-width: 0;
+  padding: 24px;
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+
+.wizard-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.wizard-status span {
+  padding: 7px 10px;
+  background: var(--bg-soft);
+  border: 1px solid var(--hairline-2);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.app-choice {
+  margin-bottom: 18px;
+  padding: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-soft);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+
+.app-choice p {
+  margin: 0;
+  color: var(--cream);
+  font-weight: 800;
+}
+
+.app-choice div {
+  display: flex;
+  gap: 8px;
+}
+
+.app-choice button,
+.wizard-actions button,
+.copy-box button {
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid var(--hairline-2);
+  border-radius: 8px;
+  background: var(--panel-2);
+  color: var(--cream);
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.app-choice button[aria-pressed='true'] {
+  background: var(--amber);
+  color: var(--bg);
+  border-color: var(--amber);
+}
+
+.wizard-progress {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18px, 1fr));
+  gap: 7px;
+  margin-bottom: 24px;
+}
+
+.wizard-progress span {
+  height: 9px;
+  background: var(--bg-soft);
+  border-radius: 999px;
+}
+
+.wizard-progress span.is-filled {
+  background: rgba(244, 184, 96, 0.45);
+}
+
+.wizard-progress span.is-current {
+  background: var(--amber);
+}
+
+.wizard-screen {
+  display: none;
+  min-height: 430px;
+  min-width: 0;
+}
+
+.wizard-screen.is-active {
+  display: block;
+}
+
+.wizard-screen h1,
+.wizard-screen h2 {
+  max-width: 780px;
+  margin-bottom: 16px;
+}
+
+.wizard-screen h2 {
+  font-size: clamp(28px, 5vw, 48px);
+}
+
+.wizard-screen p {
+  max-width: 760px;
+  font-size: 19px;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.wizard-outcome {
+  color: var(--cream);
+}
+
+.wizard-preview,
+.success-check,
+.copy-box,
+.stuck-help {
+  min-width: 0;
+  max-width: 780px;
+  margin-top: 20px;
+  padding: 18px;
+  background: var(--bg-soft);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+
+.wizard-preview {
+  display: grid;
+  gap: 10px;
+}
+
+.wizard-preview strong,
+.success-check strong {
+  color: var(--amber);
+}
+
+.screen-count {
+  display: inline-flex;
+  margin-bottom: 14px;
+  color: var(--amber);
+  font-weight: 900;
+}
+
+.copy-box {
+  display: grid;
+  gap: 12px;
+}
+
+.copy-box pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  color: var(--cream);
+  font-size: 16px;
+}
+
+.stuck-help summary {
+  min-height: 48px;
+  color: var(--cream);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.stuck-help ul {
+  display: grid;
+  gap: 12px;
+}
+
+.stuck-help li {
+  display: grid;
+  gap: 4px;
+  color: var(--ink-soft);
+}
+
+.stuck-help strong {
+  color: var(--cream);
+}
+
+.tomorrow {
+  color: var(--amber);
+  font-weight: 800;
+}
+
+.wizard-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.wizard-actions button {
+  min-width: 120px;
+}
+
+.wizard-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@media (min-width: 760px) {
+  .tutorials-hero {
+    grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.55fr);
+  }
+
+  .day-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .tutorials-home,
+  .wizard-page {
+    max-width: 100vw;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .tutorials-hero {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    min-height: auto;
+  }
+
+  .tutorials-hero h1 {
+    max-width: 9ch;
+    font-size: 38px;
+    line-height: 1.08;
+  }
+
+  .tutorials-hero p,
+  .progress-board p,
+  .local-note {
+    font-size: 16px;
+    line-height: 1.72;
+  }
+
+  .progress-board {
+    padding: 20px 32px 20px 16px;
+  }
+
+  .local-note,
+  .day-card,
+  .wizard-shell {
+    padding-right: 32px;
+  }
+
+  .day-card__top {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .progress-board,
+  .local-note,
+  .course-weeks,
+  .course-week,
+  .day-grid,
+  .day-card,
+  .wizard-shell {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+  }
+
+  .wizard-shell {
+    padding: 18px;
+    overflow: hidden;
+  }
+
+  .wizard-screen h1,
+  .wizard-screen h2 {
+    font-size: 34px;
+    line-height: 1.12;
+  }
+
+  .wizard-screen p {
+    font-size: 17px;
+  }
+
+  .app-choice {
+    align-items: stretch;
+  }
+
+  .app-choice p {
+    width: 100%;
+  }
+
+  .app-choice div {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .app-choice button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .wizard-actions {
+    position: sticky;
+    bottom: 12px;
+    z-index: 30;
+    padding: 10px;
+    background: rgba(14, 15, 18, 0.9);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+  }
+
+  .wizard-actions button {
+    min-width: 0;
+    flex: 1 1 0;
   }
 }
 

@@ -1,0 +1,301 @@
+---
+import Base from '../../layouts/Base.astro';
+import { courseDays, dayPath, storageKeys, type AppChoice, type TutorialStep } from '../../data/course';
+
+export function getStaticPaths() {
+  return courseDays.map((item) => ({
+    params: { day: `day-${String(item.day).padStart(2, '0')}` },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const stepsByTrack = item.steps as TutorialStep[] | Record<AppChoice, TutorialStep[]>;
+const trackSteps = item.appTrack === 'both' ? stepsByTrack as Record<AppChoice, TutorialStep[]> : null;
+const unifiedSteps = item.appTrack === 'unified' ? stepsByTrack as TutorialStep[] : null;
+const introSteps = trackSteps ? trackSteps.claude : unifiedSteps ?? [];
+const totalSteps = introSteps.length + 3;
+---
+
+<Base
+  title={`Day ${item.day}. ${item.title} — AI 야학`}
+  description={item.outcome}
+  canonicalPath={dayPath(item.day)}
+>
+  <header class="tutorials-header">
+    <div class="tutorials-header__inner">
+      <a href="/tutorials/" class="tutorials-brand" aria-label="AI 야학 20일 교재">
+        <img src="/favicon.svg" alt="" width="34" height="34" />
+        <span>20일 교재</span>
+      </a>
+      <a class="tutorials-header__link" href="/tutorials/">출석부</a>
+    </div>
+  </header>
+
+  <main
+    class="wizard-page"
+    data-wizard
+    data-day={item.day}
+    data-track-mode={item.appTrack}
+    data-storage={JSON.stringify(storageKeys)}
+  >
+    <nav class="wizard-back" aria-label="수업 이동">
+      {item.day > 1 && <a href={dayPath(item.day - 1)}>이전 날</a>}
+      <a href="/tutorials/">출석부</a>
+      {item.day < 20 && <a href={dayPath(item.day + 1)}>다음 날</a>}
+    </nav>
+
+    <section class="wizard-shell" aria-labelledby="wizard-title">
+      <div class="wizard-status">
+        <span>{item.theme}</span>
+        <span>Day {item.day}</span>
+        <span>{item.time}</span>
+        {item.requiresDesktop && <span>컴퓨터 앞에서</span>}
+      </div>
+
+      {item.appTrack === 'both' && (
+        <div class="app-choice" aria-label="앱 선택">
+          <p data-app-label>앱을 골라주세요.</p>
+          <div>
+            <button type="button" data-app-choice="claude">클로드</button>
+            <button type="button" data-app-choice="codex">코덱스</button>
+          </div>
+        </div>
+      )}
+
+      <div class="wizard-progress" aria-label={`총 ${totalSteps}단계`}>
+        {Array.from({ length: totalSteps }).map((_, index) => <span data-dot={index}></span>)}
+      </div>
+
+      <article class="wizard-screen is-active" data-screen data-index="-1">
+        <span class="eyebrow">오늘 만들 것</span>
+        <h1 id="wizard-title">{item.title}</h1>
+        <p class="wizard-outcome">{item.outcome}</p>
+        <div class="wizard-preview">
+          <strong>준비물</strong>
+          <span>{item.requiresDesktop ? '컴퓨터가 필요합니다.' : '휴대폰으로도 볼 수 있습니다.'}</span>
+          <span>예상 시간 {item.time}</span>
+          <span>{item.status === 'coming-soon' ? '아직 준비 중입니다.' : '지금 시작할 수 있습니다.'}</span>
+        </div>
+      </article>
+
+      {item.appTrack === 'both' ? (
+        <>
+          {trackSteps?.claude.map((step, index) => (
+            <article class="wizard-screen" data-screen data-index={index} data-track="claude">
+              <span class="screen-count">따라하기 {index + 1}</span>
+              <h2>{step.action}</h2>
+              <p>{step.detail}</p>
+              {step.copyText && (
+                <div class="copy-box">
+                  <button type="button" data-copy>복사하기</button>
+                  <pre><code>{step.copyText}</code></pre>
+                </div>
+              )}
+              <div class="success-check"><strong>이렇게 보이면 성공</strong><p>{step.success}</p></div>
+              <details class="stuck-help">
+                <summary>막혔을 때</summary>
+                <ul>
+                  <li><strong>화면이 다르게 보여요</strong>{step.stuck.different}</li>
+                  <li><strong>버튼이 안 보여요</strong>{step.stuck.missing}</li>
+                  {step.stuck.skip && <li><strong>일단 다음으로 넘어갈래요</strong>괜찮습니다. 다음 단계로 가고 수업 끝에 다시 봅니다.</li>}
+                </ul>
+              </details>
+            </article>
+          ))}
+          {trackSteps?.codex.map((step, index) => (
+            <article class="wizard-screen" data-screen data-index={index} data-track="codex">
+              <span class="screen-count">따라하기 {index + 1}</span>
+              <h2>{step.action}</h2>
+              <p>{step.detail}</p>
+              {step.copyText && (
+                <div class="copy-box">
+                  <button type="button" data-copy>복사하기</button>
+                  <pre><code>{step.copyText}</code></pre>
+                </div>
+              )}
+              <div class="success-check"><strong>이렇게 보이면 성공</strong><p>{step.success}</p></div>
+              <details class="stuck-help">
+                <summary>막혔을 때</summary>
+                <ul>
+                  <li><strong>화면이 다르게 보여요</strong>{step.stuck.different}</li>
+                  <li><strong>버튼이 안 보여요</strong>{step.stuck.missing}</li>
+                  {step.stuck.skip && <li><strong>일단 다음으로 넘어갈래요</strong>괜찮습니다. 다음 단계로 가고 수업 끝에 다시 봅니다.</li>}
+                </ul>
+              </details>
+            </article>
+          ))}
+        </>
+      ) : (
+        unifiedSteps?.map((step, index) => (
+          <article class="wizard-screen" data-screen data-index={index}>
+            <span class="screen-count">따라하기 {index + 1}</span>
+            <h2>{step.action}</h2>
+            <p>{step.detail}</p>
+            {step.copyText && (
+              <div class="copy-box">
+                <button type="button" data-copy>복사하기</button>
+                <pre><code>{step.copyText}</code></pre>
+              </div>
+            )}
+            <div class="success-check"><strong>이렇게 보이면 성공</strong><p>{step.success}</p></div>
+            <details class="stuck-help">
+              <summary>막혔을 때</summary>
+              <ul>
+                <li><strong>화면이 다르게 보여요</strong>{step.stuck.different}</li>
+                <li><strong>버튼이 안 보여요</strong>{step.stuck.missing}</li>
+                {step.stuck.skip && <li><strong>일단 다음으로 넘어갈래요</strong>괜찮습니다. 다음 단계로 가고 수업 끝에 다시 봅니다.</li>}
+              </ul>
+            </details>
+          </article>
+        ))
+      )}
+
+      <article class="wizard-screen" data-screen data-kind="challenge">
+        <span class="eyebrow">오늘의 도전</span>
+        <h2>정답 없는 응용 미션입니다.</h2>
+        <p>{item.challenge}</p>
+        <div class="success-check"><strong>완료 기준</strong><p>내 상황에 맞게 한 번 바꿔보면 충분합니다.</p></div>
+      </article>
+
+      <article class="wizard-screen" data-screen data-kind="finish">
+        <span class="eyebrow">완료</span>
+        <h2>도장을 찍습니다.</h2>
+        <p>잘하셨어요. 브라우저에 Day {item.day} 완료가 저장됩니다.</p>
+        <p class="tomorrow">다음: {item.tomorrow}</p>
+      </article>
+
+      <div class="wizard-actions">
+        <button type="button" data-prev>이전</button>
+        <button type="button" class="btn btn--primary" data-next>{item.status === 'coming-soon' ? '확인' : '시작하기'}</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // @ts-nocheck
+    const root = document.querySelector('[data-wizard]');
+    const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
+    const day = Number(root?.getAttribute('data-day') || '0');
+    const trackMode = root?.getAttribute('data-track-mode') || 'unified';
+    const prev = document.querySelector('[data-prev]');
+    const next = document.querySelector('[data-next]');
+    const appLabel = document.querySelector('[data-app-label]');
+    const dots = Array.from(document.querySelectorAll('[data-dot]'));
+
+    const readJson = (key, fallback) => {
+      try {
+        return JSON.parse(window.localStorage.getItem(key) || '') || fallback;
+      } catch {
+        return fallback;
+      }
+    };
+    const writeJson = (key, value) => window.localStorage.setItem(key, JSON.stringify(value));
+    const fallbackCopy = (text) => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+    };
+
+    window.localStorage.setItem(keys.version, '1');
+    let app = window.localStorage.getItem(keys.app) || 'claude';
+    let activeIndex = -1;
+
+    const positionKey = () => trackMode === 'both' ? `${day}.${app}` : String(day);
+    const getVisibleScreens = () => Array.from(document.querySelectorAll('[data-screen]')).filter((screen) => {
+      const track = screen.getAttribute('data-track');
+      return !track || track === app;
+    });
+    const updateAppUi = () => {
+      document.querySelectorAll('[data-app-choice]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.getAttribute('data-app-choice') === app));
+      });
+      if (appLabel) appLabel.textContent = `${app === 'claude' ? '클로드' : '코덱스'}로 진행 중`;
+    };
+    const savePosition = () => {
+      const position = readJson(keys.position, {});
+      if (activeIndex >= 0) position[positionKey()] = activeIndex;
+      writeJson(keys.position, position);
+      window.localStorage.setItem(keys.last, String(day));
+    };
+    const markDone = () => {
+      const done = readJson(keys.done, []);
+      if (!done.includes(day)) done.push(day);
+      writeJson(keys.done, done.sort((a, b) => a - b));
+    };
+    const render = () => {
+      const visible = getVisibleScreens();
+      visible.forEach((screen, index) => {
+        screen.classList.toggle('is-active', index === activeIndex + 1);
+      });
+      document.querySelectorAll('[data-screen]').forEach((screen) => {
+        const track = screen.getAttribute('data-track');
+        if (track && track !== app) screen.classList.remove('is-active');
+      });
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('is-filled', index <= activeIndex + 1);
+        dot.classList.toggle('is-current', index === activeIndex + 1);
+      });
+      if (prev instanceof HTMLButtonElement) prev.disabled = activeIndex < 0;
+      if (next instanceof HTMLButtonElement) {
+        const isFinish = activeIndex >= visible.length - 2;
+        next.textContent = activeIndex < 0 ? '시작하기' : isFinish ? '완료하고 도장 찍기' : '다음';
+      }
+      savePosition();
+    };
+
+    const restore = () => {
+      updateAppUi();
+      const position = readJson(keys.position, {});
+      activeIndex = Number(position[positionKey()] ?? -1);
+      render();
+    };
+
+    document.querySelectorAll('[data-app-choice]').forEach((button) => {
+      button.addEventListener('click', () => {
+        app = button.getAttribute('data-app-choice') || 'claude';
+        window.localStorage.setItem(keys.app, app);
+        restore();
+      });
+    });
+
+    prev?.addEventListener('click', () => {
+      activeIndex = Math.max(-1, activeIndex - 1);
+      render();
+    });
+    next?.addEventListener('click', () => {
+      const visible = getVisibleScreens();
+      if (activeIndex >= visible.length - 2) {
+        markDone();
+        window.location.href = '/tutorials/';
+        return;
+      }
+      activeIndex += 1;
+      render();
+    });
+
+    document.querySelectorAll('[data-copy]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const text = button.closest('.copy-box')?.querySelector('code')?.textContent || '';
+        try {
+          if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
+          else fallbackCopy(text);
+          button.textContent = '복사됨';
+        } catch {
+          fallbackCopy(text);
+          button.textContent = '복사됨';
+        }
+        window.setTimeout(() => button.textContent = '복사하기', 1200);
+      });
+    });
+
+    restore();
+  </script>
+</Base>

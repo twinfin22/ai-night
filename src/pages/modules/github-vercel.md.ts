@@ -1,8 +1,6 @@
-import { githubVercelTutorial } from '../../data/github-vercel-tutorial';
-import { renderTutorialMarkdown } from '../../data/render-tutorial-markdown';
-
-export const GET = () => new Response(renderTutorialMarkdown(githubVercelTutorial), {
+export const GET = () => new Response(null, {
+  status: 301,
   headers: {
-    'Content-Type': 'text/markdown; charset=utf-8',
+    Location: '/tutorials/day-13/',
   },
 });

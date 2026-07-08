@@ -1,8 +1,6 @@
-import { renderTutorialMarkdown } from '../../data/render-tutorial-markdown';
-import { websiteTutorial } from '../../data/website-tutorial';
-
-export const GET = () => new Response(renderTutorialMarkdown(websiteTutorial), {
+export const GET = () => new Response(null, {
+  status: 301,
   headers: {
-    'Content-Type': 'text/markdown; charset=utf-8',
+    Location: '/tutorials/day-13/',
   },
 });

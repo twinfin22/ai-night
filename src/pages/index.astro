@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { tutorialModules } from '../data/tutorial-meta';
+import { courseDays, dayPath } from '../data/course';
 
 const ctaHref = 'https://calendly.com/ai-night/15min';
 const mailAddr = 'hello@ai-night.study';
@@ -90,7 +90,7 @@ const programTracks = [
   },
 ];
 
-const practiceModules = tutorialModules;
+const practiceModules = courseDays.filter((day) => day.status === 'ready');
 
 const expertiseGroups = [
   {
@@ -257,36 +257,28 @@ const sections = [
       <!-- Practice modules -->
       <section id="modules" aria-labelledby="modules-title">
         <span class="eyebrow">튜토리얼</span>
-        <h2 id="modules-title">내 사업에 바로 남길 작은 결과물.</h2>
+        <h2 id="modules-title">20일 동안 내 가게용 AI 흐름을 만듭니다.</h2>
         <p class="lede">
-          1. 먼저 지금 해야 할 일을 봅니다.
-          2. 왜 필요한지 확인합니다.
-          3. 끝나면 무엇이 남는지 보고 다음으로 넘어갑니다.
+          긴 설명 대신 오늘 할 일만 봅니다. 진도는 로그인 없이 이 브라우저에 저장됩니다.
         </p>
+
+        <a class="btn btn--primary tutorial-section-cta" href="/tutorials/" data-ga="cta" data-loc="modules">
+          20일 출석부 열기 →
+        </a>
 
         <ul class="practice-grid">
           {practiceModules.map((module) => (
-            <li class={`practice-card${module.href ? ' practice-card--link' : ''}`}>
-              {module.href ? (
-                <a class="practice-card__body practice-card__body--link" href={module.href} aria-label={`${module.title} 튜토리얼`}>
-                  <div class="practice-card__label">{module.label}</div>
+            <li class="practice-card practice-card--link">
+                <a class="practice-card__body practice-card__body--link" href={dayPath(module.day)} aria-label={`Day ${module.day}. ${module.title}`}>
+                  <div class="practice-card__label">Day {module.day} · {module.theme}</div>
                   <h3>{module.title}</h3>
-                  <p>{module.body}</p>
+                  <p>{module.outcome}</p>
                   <ul class="practice-card__outputs">
-                    {module.outputs.map((output) => <li>{output}</li>)}
+                    <li>{module.time}</li>
+                    <li>{module.requiresDesktop ? '컴퓨터 앞에서' : '휴대폰 가능'}</li>
+                    <li>{module.appTrack === 'both' ? '앱 선택' : '통합'}</li>
                   </ul>
                 </a>
-              ) : (
-                <div class="practice-card__body">
-                  <div class="practice-card__label">{module.label}</div>
-                  <h3>{module.title}</h3>
-                  <p>{module.body}</p>
-                  <ul class="practice-card__outputs">
-                    {module.outputs.map((output) => <li>{output}</li>)}
-                  </ul>
-                  <span class="practice-card__soon">준비 중</span>
-                </div>
-              )}
             </li>
           ))}
         </ul>
@@ -484,7 +476,7 @@ const sections = [
       </p>
       <div class="footer-links">
         <a href={`mailto:${mailAddr}`} data-ga="mail" data-loc="footer">{mailAddr}</a>
-        <a href="/modules/blog/">튜토리얼</a>
+        <a href="/tutorials/">튜토리얼</a>
       </div>
     </div>
   </footer>
