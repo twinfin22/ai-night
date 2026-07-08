@@ -39,7 +39,6 @@ ${officialLinkList(step.officialLinks)}${screenshotNotes(step.screenshots)}${sec
 ### 이 단계 결과물
 ${step.output}
 ${step.conceptToggles?.length ? `\n### 더 알아보기\n${step.conceptToggles.map((item) => `- ${item.title}: ${item.body}`).join('\n')}\n` : ''}
-${step.recoveryPrompt ? `\n### 막혔을 때\n\n\`\`\`text\n${step.recoveryPrompt}\n\`\`\`\n` : ''}
 ${step.prompt ? `\n### 복사해서 쓸 말\n\n\`\`\`text\n${step.prompt}\n\`\`\`\n` : ''}`;
 
 export const renderTutorialMarkdown = (tutorial: TutorialData) => `# ${tutorial.title}

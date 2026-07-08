@@ -13,7 +13,7 @@ const setupModule: TutorialModuleMeta = {
   label: '작업 준비',
   title: '1. AI 사용 설정하기',
   body: '수업 때 쓸 앱을 켜고, 내 파일을 모아둘 폴더를 하나 만듭니다. 다음에 다시 열어도 이어서 일할 수 있게 해둡니다.',
-  outputs: ['작업 폴더', '내 말투 규칙', '막혔을 때 물어볼 문장'],
+  outputs: ['작업 폴더', '내 말투 규칙'],
 };
 
 const firstPromptModule: TutorialModuleMeta = {

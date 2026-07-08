@@ -392,18 +392,6 @@ const actorFallback = {
                     </div>
                   )}
 
-                  {item.recoveryPrompt && (
-                    <details class="prompt-toggle">
-                      <summary>
-                        <span>막혔을 때</span>
-                      </summary>
-                      <div class="prompt-toggle__body">
-                        <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
-                        <pre><code>{item.recoveryPrompt}</code></pre>
-                      </div>
-                    </details>
-                  )}
-
                   {item.prompt && (
                     <details class="prompt-toggle">
                       <summary>
