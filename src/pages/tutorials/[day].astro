@@ -86,6 +86,7 @@ const totalSteps = introSteps.length + 3;
               <span class="screen-count">따라하기 {index + 1}</span>
               <h2>{step.action}</h2>
               <p>{step.detail}</p>
+              {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
               {step.copyText && (
                 <div class="copy-box">
                   <button type="button" data-copy>복사하기</button>
@@ -108,6 +109,7 @@ const totalSteps = introSteps.length + 3;
               <span class="screen-count">따라하기 {index + 1}</span>
               <h2>{step.action}</h2>
               <p>{step.detail}</p>
+              {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
               {step.copyText && (
                 <div class="copy-box">
                   <button type="button" data-copy>복사하기</button>
@@ -132,6 +134,7 @@ const totalSteps = introSteps.length + 3;
             <span class="screen-count">따라하기 {index + 1}</span>
             <h2>{step.action}</h2>
             <p>{step.detail}</p>
+            {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
             {step.copyText && (
               <div class="copy-box">
                 <button type="button" data-copy>복사하기</button>
@@ -203,7 +206,11 @@ const totalSteps = introSteps.length + 3;
       textarea.remove();
     };
 
-    window.localStorage.setItem(keys.version, '1');
+    const COURSE_VERSION = '2';
+    if (window.localStorage.getItem(keys.version) !== COURSE_VERSION) {
+      [keys.done, keys.position, keys.last].forEach((key) => window.localStorage.removeItem(key));
+    }
+    window.localStorage.setItem(keys.version, COURSE_VERSION);
     let app = window.localStorage.getItem(keys.app) || 'claude';
     let activeIndex = -1;
 
@@ -298,4 +305,8 @@ const totalSteps = introSteps.length + 3;
 
     restore();
   </script>
+
+  <style>
+    .wizard-shot { width: 100%; border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.1); margin: 12px 0; }
+  </style>
 </Base>

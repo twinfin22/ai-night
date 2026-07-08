@@ -100,7 +100,11 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
     const kakaoWarning = document.querySelector('[data-kakao-warning]');
     if (kakaoWarning) kakaoWarning.hidden = !isKakao;
 
-    window.localStorage.setItem(keys.version, '1');
+    const COURSE_VERSION = '2';
+    if (window.localStorage.getItem(keys.version) !== COURSE_VERSION) {
+      [keys.done, keys.position, keys.last].forEach((key) => window.localStorage.removeItem(key));
+    }
+    window.localStorage.setItem(keys.version, COURSE_VERSION);
     const done = readJson(keys.done, []);
     const position = readJson(keys.position, {});
     const last = Number(window.localStorage.getItem(keys.last) || '0');
