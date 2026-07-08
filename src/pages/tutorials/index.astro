@@ -23,10 +23,6 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
       <div class="tutorials-hero__copy">
         <span class="eyebrow">20일 완주형 실습 교재</span>
         <h1 id="tutorials-title">오늘 할 일만 보고 따라오세요.</h1>
-        <p>
-          로그인도, 긴 영상도 없습니다. 같은 컴퓨터, 같은 브라우저로 들어오면
-          마지막으로 하던 곳부터 이어집니다.
-        </p>
       </div>
       <aside class="progress-board" aria-live="polite">
         <p data-progress-text>진도를 확인하고 있습니다.</p>
@@ -37,10 +33,6 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
 
     <div class="browser-warning" data-kakao-warning hidden>
       카카오톡 안에서 열면 도장이 따로 저장될 수 있어요. 기본 브라우저로 다시 열어주세요.
-    </div>
-
-    <div class="local-note">
-      <strong>중요:</strong> 진도는 이 브라우저에만 저장됩니다. 도장이 사라져도 수업은 다시 열 수 있습니다.
     </div>
 
     <div class="course-weeks">
@@ -66,12 +58,11 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
                   >
                     <span class="day-card__top">
                       <span>Day {day.day}</span>
-                      {day.requiresDesktop && <em>컴퓨터 앞에서</em>}
                     </span>
                     <strong>{day.title}</strong>
                     <small>{day.outcome}</small>
                     <span class="day-card__state" data-card-state>
-                      {day.status === 'coming-soon' ? '준비 중' : day.readyLabel ?? '시작 가능'}
+                      {day.status === 'coming-soon' ? '준비 중' : day.readyLabel ?? '시작하기'}
                     </span>
                   </a>
                 </li>
@@ -128,7 +119,7 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
         else if (day === nextDay && status === 'ready' && inProgressDay) state.textContent = '이어서 하기';
         else if (day === nextDay && status === 'ready') state.textContent = day === 1 ? '여기서 시작하세요' : '다음 수업';
         else if (status === 'coming-soon') state.textContent = '준비 중';
-        else state.textContent = '시작 가능';
+        else state.textContent = '시작하기';
       }
     });
 

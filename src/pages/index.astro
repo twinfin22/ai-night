@@ -275,7 +275,7 @@ const sections = [
                   <p>{module.outcome}</p>
                   <ul class="practice-card__outputs">
                     <li>{module.time}</li>
-                    <li>{module.requiresDesktop ? '컴퓨터 앞에서' : '휴대폰 가능'}</li>
+                    {!module.requiresDesktop && <li>휴대폰 가능</li>}
                     <li>{module.appTrack === 'both' ? '앱 선택' : '통합'}</li>
                   </ul>
                 </a>
