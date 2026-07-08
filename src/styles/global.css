@@ -1053,7 +1053,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   display: block;
 }
 
-.wizard-screen h1,
+.wizard-screen h1 {
+  max-width: none;
+  margin-bottom: 16px;
+  font-size: clamp(46px, 5.25vw, 64px);
+}
+
 .wizard-screen h2 {
   max-width: 780px;
   margin-bottom: 16px;
