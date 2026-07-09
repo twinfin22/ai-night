@@ -7,3 +7,4 @@ dist
 .omc/
 .claude/
 .playwright-cli/
+.gstack/
