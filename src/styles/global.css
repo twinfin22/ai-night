@@ -323,6 +323,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .btn--primary:hover {
   background: var(--cream);
+  color: var(--bg);
   transform: translateY(-1px);
   box-shadow: 0 14px 40px -16px rgba(244,184,96,0.6);
 }
@@ -692,12 +693,32 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   border-radius: 8px;
 }
 
+.progress-board__label {
+  display: inline-flex;
+  margin-bottom: 10px;
+  color: var(--amber);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.progress-board h2 {
+  margin-bottom: 10px;
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.2;
+}
+
 .progress-board p {
   margin: 0 0 16px;
-  color: var(--cream);
-  font-size: 18px;
-  font-weight: 800;
+  max-width: none;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-soft);
   overflow-wrap: anywhere;
+}
+
+.progress-board__count {
+  color: var(--cream);
+  font-weight: 800;
 }
 
 .progress-board__bar {
@@ -716,6 +737,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   background: var(--amber);
 }
 
+.progress-board .btn--primary:hover,
+.progress-board .btn--primary:focus-visible {
+  color: var(--bg);
+}
+
 .browser-warning {
   margin: 18px 0 0;
   padding: 16px 18px;
@@ -726,15 +752,22 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   color: var(--cream);
 }
 
+.week-jumps {
+  display: none;
+}
+
 .course-weeks {
   display: grid;
-  gap: 34px;
+  gap: 18px;
   margin-top: 38px;
   min-width: 0;
 }
 
 .course-week {
-  padding: 0 0 34px;
+  padding: 22px;
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
   border-bottom: 1px solid var(--hairline);
   min-width: 0;
 }
@@ -773,12 +806,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   width: 100%;
   height: 100%;
   min-width: 0;
-  min-height: 300px;
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  background: var(--panel);
+  min-height: 0;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: minmax(92px, auto) minmax(0, 1fr);
+  gap: 6px 14px;
+  align-items: start;
+  background: var(--bg-soft);
   border: 1px solid var(--hairline);
   border-radius: 8px;
   color: inherit;
@@ -803,14 +837,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .day-card.is-coming-soon {
   background: rgba(27, 30, 37, 0.58);
+  opacity: 0.68;
 }
 
 .day-card__top {
   display: flex;
   min-height: 26px;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  gap: 6px;
   color: var(--amber);
   font-size: 13px;
   font-weight: 900;
@@ -826,34 +861,32 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .day-card strong {
   display: block;
-  min-height: 4.05em;
   color: var(--cream);
-  font-size: 20px;
+  font-size: 17px;
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
 
 .day-card small {
   display: block;
-  flex: 1;
+  grid-column: 2;
   color: var(--ink-soft);
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
 
 .day-card__state {
   width: fit-content;
-  min-height: 44px;
-  margin-top: auto;
-  padding: 9px 12px;
+  min-height: 24px;
+  padding: 3px 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--hairline-2);
   border-radius: 999px;
   color: var(--cream);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 900;
 }
 
@@ -908,6 +941,57 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   color: var(--ink-soft);
   font-size: 13px;
   font-weight: 800;
+}
+
+.course-progress {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+
+.course-progress > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.course-progress span {
+  color: var(--ink-mute);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.course-progress strong {
+  color: var(--cream);
+  font-size: 14px;
+  font-weight: 900;
+  text-align: right;
+}
+
+.course-progress__bar {
+  height: 8px;
+  overflow: hidden;
+  background: var(--panel);
+  border-radius: 999px;
+}
+
+.course-progress__bar span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--amber);
+}
+
+.lesson-progress {
+  margin: 0 0 10px;
+  color: var(--cream);
+  font-size: 15px;
+  font-weight: 900;
 }
 
 .app-choice {
@@ -1181,6 +1265,17 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   min-width: 120px;
 }
 
+.wizard-actions .btn--primary {
+  background: var(--amber);
+  color: var(--bg);
+}
+
+.wizard-actions .btn--primary:hover,
+.wizard-actions .btn--primary:focus-visible {
+  background: var(--cream);
+  color: var(--bg);
+}
+
 .wizard-actions button:disabled {
   cursor: not-allowed;
   opacity: 0.45;
@@ -1190,15 +1285,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .tutorials-hero {
     grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.55fr);
   }
-
-  .day-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (min-width: 1100px) {
-  .day-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+  .course-weeks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
   }
 }
 
@@ -1232,6 +1324,29 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     padding: 20px 32px 20px 16px;
   }
 
+  .week-jumps {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .week-jumps a {
+    min-height: 40px;
+    padding: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--hairline-2);
+    border-radius: 999px;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
   .day-card,
   .wizard-shell {
     padding-right: 32px;
@@ -1239,7 +1354,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
   .day-card__top {
     align-items: flex-start;
-    flex-direction: column;
     gap: 4px;
   }
 
@@ -1249,7 +1363,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
   .day-card {
     height: auto;
-    min-height: 220px;
+    min-height: 0;
+    grid-template-columns: 1fr;
   }
 
   .day-card strong {
@@ -1257,6 +1372,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   }
 
   .day-card small {
+    grid-column: auto;
     flex: none;
   }
 
@@ -1277,7 +1393,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
   .wizard-screen h1,
   .wizard-screen h2 {
-    font-size: 34px;
+    font-size: 30px;
     line-height: 1.12;
   }
 

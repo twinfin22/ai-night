@@ -24,7 +24,6 @@ export interface TutorialDay {
   title: string;
   outcome: string;
   status: TutorialStatus;
-  requiresDesktop: boolean;
   appTrack: AppTrack;
   time: string;
   challenge: string;
@@ -41,6 +40,8 @@ export const storageKeys = {
   app: 'ainight.app',
 };
 
+export const courseVersion = '2';
+
 const defaultStuck: StuckHelp = {
   different: '화면 이름이 조금 달라도 괜찮습니다. 지금 단계에서 찾는 말만 다시 확인하세요.',
   missing: '버튼이 안 보이면 창을 넓히거나, 왼쪽 위와 오른쪽 위를 먼저 보세요.',
@@ -48,13 +49,13 @@ const defaultStuck: StuckHelp = {
 };
 
 const saveResultStep = (day: number): TutorialStep => ({
-  action: '오늘 결과물을 저장하고 이어 할 말 1줄을 남기세요.',
-  detail: '오늘 만든 결과물을 ai-study/outputs에 저장합니다. 파일 저장이 안 되면 복사해서 저장할 수 있는 글로 받습니다.',
-  copyText: `오늘은 Day ${day}입니다.\n\n오늘 만든 결과물을 정리해 주세요.\n\n가능하면 ai-study/outputs/day-${String(day).padStart(2, '0')}-result.md 파일로 저장해 주세요.\n파일 저장이 안 되면 제가 복사해서 저장할 수 있게 마크다운으로 보여 주세요.\n\n마지막에는 다음에 이어 할 말 1줄만 남겨 주세요.`,
-  success: `Day ${day} 결과물이 파일로 저장되거나, 복사해서 저장할 수 있는 글과 이어 할 말 1줄이 나오면 성공입니다.`,
+  action: '오늘 만든 것과 이어 할 말 1줄을 남기세요.',
+  detail: '파일 저장을 억지로 하지 않습니다. 지금 대화에 오늘 만든 것과 다음에 이어 할 말만 짧게 남깁니다.',
+  copyText: `오늘은 Day ${day}입니다.\n\n오늘 만든 것을 짧게 정리해 주세요.\n\n형식:\n- 오늘 만든 것:\n- 다음에 이어 할 말:\n\n파일 저장이 꼭 필요한 결과물은 앞 단계 안내를 따릅니다. 오늘 대화에서 확인되지 않는 내용은 지어내지 말고 "확인 필요"라고 표시해 주세요.`,
+  success: `Day ${day}에서 만든 것과 다음에 이어 할 말 1줄이 대화에 남으면 성공입니다.`,
   stuck: {
     ...defaultStuck,
-    different: '파일이 바로 안 생기면 실패가 아닙니다. AI가 보여준 글을 복사해 ai-study/outputs에 직접 저장하세요.',
+    different: '파일이 없어도 실패가 아닙니다. 주간 정리는 앱 히스토리와 현재 대화를 먼저 확인합니다.',
   },
 });
 
@@ -92,7 +93,7 @@ export const courseDays: TutorialDay[] = [
     day: 1, week: 1, theme: '차리기',
     title: '시작하기 — 설치, 가입, 화면 투어',
     outcome: '앱 설치, ai-study 폴더, 첫 대화까지 끝냅니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'both', time: '30분',
+    status: 'ready', appTrack: 'both', time: '30분',
     challenge: '화면 투어에서 배운 버튼 3개의 이름을 내 말로 적어보세요.',
     tomorrow: '내일은 첫 프롬프트를 만듭니다.',
     readyLabel: '여기서 시작하세요',
@@ -127,9 +128,9 @@ export const courseDays: TutorialDay[] = [
         },
         {
           action: 'ai-study 작업 폴더를 만들고 연결하세요.',
-          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만들고, 그 안에 outputs 폴더도 만듭니다. 앱에서 이 폴더를 작업 폴더로 지정합니다.',
-          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들고, 그 안에 outputs 폴더를 만들어 주세요. 앞으로 수업 결과물은 모두 여기에 저장할 거예요.',
-          success: 'ai-study 폴더와 그 안의 outputs 폴더가 보이면 성공입니다.',
+          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만듭니다. 파일 저장이 필요한 날에만 outputs 폴더를 보조로 씁니다.',
+          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들어 주세요. 파일 저장이 필요한 수업을 위해 outputs 폴더도 함께 만들어 주세요.',
+          success: 'ai-study 폴더가 보이고, 필요할 때 쓸 outputs 폴더도 있으면 성공입니다.',
           stuck: defaultStuck,
         },
         {
@@ -170,9 +171,9 @@ export const courseDays: TutorialDay[] = [
         },
         {
           action: 'ai-study 작업 폴더를 만들고 연결하세요.',
-          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만들고, 그 안에 outputs 폴더도 만듭니다. 앱에서 이 폴더를 작업 폴더로 엽니다.',
-          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들고, 그 안에 outputs 폴더를 만들어 주세요. 앞으로 수업 결과물은 모두 여기에 저장할 거예요.',
-          success: 'ai-study 폴더와 그 안의 outputs 폴더가 보이면 성공입니다.',
+          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만듭니다. 파일 저장이 필요한 날에만 outputs 폴더를 보조로 씁니다.',
+          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들어 주세요. 파일 저장이 필요한 수업을 위해 outputs 폴더도 함께 만들어 주세요.',
+          success: 'ai-study 폴더가 보이고, 필요할 때 쓸 outputs 폴더도 있으면 성공입니다.',
           stuck: defaultStuck,
         },
         {
@@ -190,7 +191,7 @@ export const courseDays: TutorialDay[] = [
     day: 2, week: 1, theme: '차리기',
     title: '첫 프롬프트 만들기',
     outcome: '나쁜 예와 좋은 예를 비교하고, CRISP 5칸 지시서를 만듭니다.',
-    status: 'ready', requiresDesktop: false, appTrack: 'unified', time: '25분',
+    status: 'ready', appTrack: 'unified', time: '25분',
     challenge: '오늘 만든 5칸 지시서에서 말투 칸만 바꿔 다시 시켜보세요.',
     tomorrow: '내일은 메뉴판과 가격표를 만듭니다.',
     steps: [
@@ -258,7 +259,7 @@ AI가 맡을 역할:
     day: 3, week: 1, theme: '차리기',
     title: '제대로 시키기 — 메뉴판·가격표',
     outcome: 'AI가 제안한 참고 디자인 중 하나를 골라, 인쇄 가능한 메뉴판을 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '같은 메뉴판을 계절 한정판 버전으로 바꿔보세요.',
     tomorrow: '내일은 한 번 설정하면 계속 적용되는 것들을 배웁니다.',
     steps: [
@@ -283,7 +284,7 @@ AI가 맡을 역할:
         action: '4가지를 넣어 메뉴판 제작을 부탁하세요.',
         detail: '가게 종류, 손님, 참고 메뉴판 모양, 꼭 지킬 조건을 한 번에 알려줍니다. 모르는 정보는 AI가 물어보게 합니다.',
         copyText: `가게 종류: [예: 분식집, 미용실, 카페]
-주 손님: [예: 동네 주민, 직장인, 어르신]
+주 손님: [예: 동네 주민, 직장인, 단골 손님]
 참고 메뉴판 모양: [방금 고른 메뉴판 모양]
 지켜야 할 조건: A4 한 장에 인쇄할 수 있게, 메뉴 이름과 가격이 크게 보이게, 모르는 내용은 만들지 말고 질문하기
 
@@ -315,7 +316,7 @@ AI가 맡을 역할:
     day: 4, week: 1, theme: '차리기',
     title: 'AI 기본 설정 — 시스템 프롬프트와 가게 설명서',
     outcome: '개인 설정과 ai-study/AGENTS.md 내 가게 설명서를 만들어, 같은 부탁의 전과 후를 비교합니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '설명서에 손님이 자주 묻는 질문 1개를 더해보세요.',
     tomorrow: '내일은 12가지 습관을 한눈에 정리합니다.',
     steps: [
@@ -325,7 +326,7 @@ AI가 맡을 역할:
         copyText: `제 개인 설정 또는 시스템 프롬프트에 아래 규칙을 넣고 싶습니다. 더 짧고 자연스럽게 다듬어 주세요.
 
 규칙:
-- 저는 50대 이상 소상공인 초보자입니다.
+- 저는 작은 가게를 운영하는 초보자입니다.
 - 어려운 말은 쓰지 말고, 꼭 필요하면 쉬운 예를 붙여 주세요.
 - 답은 존댓말로, 바로 따라 할 수 있는 순서로 써 주세요.
 - 모르는 내용은 지어내지 말고 먼저 질문해 주세요.
@@ -417,7 +418,7 @@ AI가 맡을 역할:
     day: 5, week: 1, theme: '차리기',
     title: '[이론] AI 잘 시키는 12가지 습관',
     outcome: '지난 4일의 습관에 이름을 붙이고, 습관 카드와 첫 설명서 업데이트를 만듭니다.',
-    status: 'ready', requiresDesktop: false, appTrack: 'unified', time: '25분',
+    status: 'ready', appTrack: 'unified', time: '25분',
     challenge: '12가지 중 나에게 제일 어려운 습관 1개를 골라보세요.',
     tomorrow: '다음 주는 서류와 돈 계산을 맡깁니다.',
     steps: [
@@ -438,7 +439,7 @@ AI가 맡을 역할:
       {
         action: '남은 습관 8개를 미리 보세요.',
         detail: '긴 설명은 건너뜁니다. 다음 주부터 어떤 행동을 하게 될지만 한 줄씩 봅니다.',
-        copyText: `AI를 더 잘 쓰기 위해 앞으로 배울 남은 습관 8개를 50대 이상 소상공인도 바로 이해할 말로 바꿔 주세요.
+        copyText: `AI를 더 잘 쓰기 위해 앞으로 배울 남은 습관 8개를 처음 보는 사장님도 바로 이해할 말로 바꿔 주세요.
 
 5. 만들기 전 계획부터
 6. 검증시키고 증거 요구하기
@@ -460,7 +461,7 @@ AI가 맡을 역할:
 
 조건:
 - A4 한 장에 들어가게 짧게
-- 50대 이상 소상공인이 이해할 쉬운 존댓말
+- 작은 가게 사장님이 이해할 쉬운 존댓말
 - 각 습관마다 "확인 질문" 1개 포함
 - 각 습관마다 바로 복사해서 쓸 수 있는 짧은 부탁문 1개 포함
 - 파일 저장이 가능하면 ai-study/outputs/day-05-habit-card.md로 저장
@@ -496,7 +497,7 @@ AI가 맡을 역할:
     day: 6, week: 2, theme: '시키기',
     title: '인보이스 만들기 — 계획 먼저',
     outcome: '견적서/인보이스 양식 + 실전 발행 1건',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '견적서를 영수증 겸용 버전으로 바꿔보세요.',
     tomorrow: '내일은 영수증 사진으로 장부를 만듭니다.',
     steps: [
@@ -507,7 +508,7 @@ AI가 맡을 역할:
 
 목표: 작은 가게에서 바로 쓸 견적서/인보이스 양식 만들기
 필요한 항목: 발행일, 거래처, 품목, 수량, 단가, 공급가액, 세금, 합계, 입금 계좌, 메모
-말투: 50대 초보 사장님도 이해할 수 있게 쉽게
+말투: 초보 사장님도 이해할 수 있게 쉽게
 조건: 빠진 항목이 있으면 먼저 질문하고, 제가 승인하기 전에는 제작하지 마세요.`,
         success: 'AI가 항목 목록과 양식 순서를 계획으로만 보여주면 성공입니다.',
         stuck: {
@@ -582,7 +583,7 @@ AI가 맡을 역할:
     day: 7, week: 2, theme: '시키기',
     title: '영수증 사진 → 지출 장부',
     outcome: '영수증 사진을 표로 정리하고, 원본과 대조해 이번 달 지출 장부를 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '25분',
+    status: 'ready', appTrack: 'unified', time: '25분',
     challenge: '가장 큰 지출 3건을 AI에게 찾아달라고 해보세요.',
     tomorrow: '내일은 매출 정리를 자동화합니다.',
     steps: [
@@ -677,7 +678,7 @@ AI가 맡을 역할:
     day: 8, week: 2, theme: '시키기',
     title: '매출 정리 자동화',
     outcome: '매출 자료를 단계별로 정리해 시트와 차트 1장을 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '차트를 월별에서 요일별로 바꿔보세요.',
     tomorrow: '내일은 크롬·드라이브·지메일을 연결합니다.',
     steps: [
@@ -766,7 +767,7 @@ AI가 맡을 역할:
     day: 9, week: 2, theme: '시키기',
     title: '도구 연결 — 크롬·드라이브·지메일 (MCP)',
     outcome: '커넥터를 연결해 우리 가게 리뷰 정리표와 답글 초안을 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '자주 쓰는 도구 1개를 더 연결해보세요.',
     tomorrow: '내일은 재미의 날, 남이 만든 스킬을 씁니다.',
     steps: [
@@ -862,7 +863,7 @@ AI가 맡을 역할:
     day: 10, week: 2, theme: '시키기',
     title: '재미의 날 — k-skill 골라 쓰기',
     outcome: 'k-skill에서 스킬 하나를 설치해 실행하고, 스킬의 정체를 확인합니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '25분',
+    status: 'ready', appTrack: 'unified', time: '25분',
     challenge: '설치한 스킬의 파일을 열어 한 줄만 내 취향대로 바꿔보세요.',
     tomorrow: '다음 주는 내 스킬을 직접 만듭니다.',
     steps: [
@@ -872,7 +873,7 @@ AI가 맡을 역할:
         copyText: `k-skill 목록을 같이 구경하고 싶습니다.
 
 제가 고를 수 있게 아래 기준으로 5개만 추천해 주세요.
-- 50대 이상 소상공인이 써볼 만한 것
+- 작은 가게 사장님이 써볼 만한 것
 - 실행 결과가 눈에 보이는 것
 - 설치가 너무 어렵지 않은 것
 - 기차표 조회, 동네 실거래가, 맞춤법 같은 생활 예시 포함
@@ -932,7 +933,7 @@ AI가 맡을 역할:
     day: 11, week: 3, theme: '굴리기',
     title: '내 스킬 만들기',
     outcome: 'Day 6에서 만든 인보이스 흐름을 /인보이스 스킬로 저장해 새 대화에서 불러 씁니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '매주 반복하는 부탁 하나를 더 찾아 이름을 붙이세요.',
     tomorrow: '내일은 아침 브리핑을 자동화합니다.',
     steps: [
@@ -967,7 +968,7 @@ AI가 맡을 역할:
     day: 12, week: 3, theme: '굴리기',
     title: '아침 브리핑 자동화',
     outcome: '매일 아침 폰으로 도착하는 업종 브리핑을 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '브리핑 끝에 "오늘 할 일 1개"를 붙여보세요.',
     tomorrow: '내일은 재고 시트를 만듭니다.',
     steps: [
@@ -998,7 +999,7 @@ AI가 맡을 역할:
     day: 13, week: 3, theme: '굴리기',
     title: '스프레드시트 재고 관리',
     outcome: '품목 5개로 작게 시험한 뒤 전체로 키운 재고 시트를 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '재고가 3개 이하면 눈에 띄게 표시해달라고 해보세요.',
     tomorrow: '내일은 카드뉴스를 만듭니다.',
     steps: [
@@ -1082,7 +1083,7 @@ AI가 맡을 역할:
     day: 14, week: 3, theme: '굴리기',
     title: '카드뉴스 만들기',
     outcome: '피드백을 반복해 인스타용 카드뉴스 1세트를 만들고, 꼬이면 새 대화로 리셋합니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '표지 문장을 3가지 버전으로 뽑아보세요.',
     tomorrow: '내일은 내 가게 웹페이지를 계획합니다.',
     steps: [
@@ -1093,7 +1094,7 @@ AI가 맡을 역할:
 
 먼저 참고 스타일 후보를 5개만 제안해 주세요.
 조건:
-- 50대 이상 소상공인이 보기 쉬운 스타일
+- 처음 보는 사람도 읽기 쉬운 스타일
 - 글자가 너무 작지 않은 스타일
 - 과한 디자인보다 읽기 쉬운 스타일
 - 제가 고를 수 있게 장점과 어울리는 업종을 한 줄씩 설명
@@ -1158,7 +1159,7 @@ AI가 맡을 역할:
       {
         action: '이미지 특화 도구는 이름만 알아두세요.',
         detail: 'Higgsfield, Canva AI 같은 도구도 있지만 오늘은 소개만 합니다. 핵심은 좋은 원고와 수정 흐름입니다.',
-        copyText: 'Higgsfield, Canva AI 같은 이미지 특화 도구가 무엇인지 50대 초보자도 이해할 수 있게 한 줄씩만 설명해 주세요. 오늘 바로 가입하거나 결제하지는 않습니다.',
+        copyText: 'Higgsfield, Canva AI 같은 이미지 특화 도구가 무엇인지 처음 보는 사람도 이해할 수 있게 한 줄씩만 설명해 주세요. 오늘 바로 가입하거나 결제하지는 않습니다.',
         success: '이미지 도구가 따로 있다는 것만 이해하면 성공입니다.',
         stuck: defaultStuck,
       },
@@ -1169,7 +1170,7 @@ AI가 맡을 역할:
     day: 15, week: 3, theme: '굴리기',
     title: '내 가게 웹페이지 (상) — 계획 먼저',
     outcome: 'AI 인터뷰와 플랜 모드로 계획서를 확정하고 첫 화면을 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '첫 화면 문장을 손님 말투로 바꿔보세요.',
     tomorrow: '내일은 웹페이지를 세상에 공개합니다.',
     steps: [
@@ -1227,7 +1228,7 @@ AI가 맡을 역할:
     day: 16, week: 4, theme: '홀로서기',
     title: '웹페이지 (하) — GitHub·Vercel로 공개',
     outcome: '남에게 보낼 수 있는 링크를 만들고 내 폰으로 확인합니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '링크를 지인 1명에게 보내 첫인상 한 줄을 받아보세요.',
     tomorrow: '내일은 블로그 글 공장을 만듭니다.',
     steps: [
@@ -1309,7 +1310,7 @@ AI가 맡을 역할:
     day: 17, week: 4, theme: '홀로서기',
     title: '블로그 글 공장',
     outcome: '주제만 넣으면 초안이 나오는 글쓰기 파이프라인을 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '후기 글 주제 하나를 넣어 초안을 만들어보세요.',
     tomorrow: '내일은 텔레그램 봇을 연결합니다.',
     steps: [
@@ -1381,7 +1382,7 @@ AGENTS.md와 가게 자료
     day: 18, week: 4, theme: '홀로서기',
     title: '텔레그램 봇 연결',
     outcome: '폰으로 "오늘 마감 리포트"를 보내주는 봇을 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '리포트에 내일 날씨 한 줄을 붙여보세요.',
     tomorrow: '내일은 나만의 비서 에이전트를 조립합니다.',
     steps: [
@@ -1465,7 +1466,7 @@ AGENTS.md와 가게 자료
     day: 19, week: 4, theme: '홀로서기',
     title: '나만의 비서 에이전트',
     outcome: '설명서·스킬·연결·예약을 조립해 내 가게 전담 비서를 만듭니다.',
-    status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '비서에게 맡길 일을 다음 달에 1개 더 늘려보세요.',
     tomorrow: '내일은 수료입니다.',
     steps: [
@@ -1550,7 +1551,7 @@ AGENTS.md와 가게 자료
     day: 20, week: 4, theme: '홀로서기',
     title: '도구함 + 커뮤니티 + 수료',
     outcome: '지금까지의 결과물 목록, 30일 계획, 커뮤니티 질문 1개, 수료증 초안을 만듭니다.',
-    status: 'ready', requiresDesktop: false, appTrack: 'unified', time: '30분',
+    status: 'ready', appTrack: 'unified', time: '30분',
     challenge: '다음 30일 동안 매주 반복할 일 1개를 정하세요.',
     tomorrow: '수료했습니다. 이제 내 일에 계속 붙여 씁니다.',
     steps: [

@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { courseDays, dayPath, storageKeys, type AppChoice, type TutorialStep } from '../../data/course';
+import { courseDays, courseVersion, dayPath, storageKeys, type AppChoice, type TutorialStep } from '../../data/course';
 
 export function getStaticPaths() {
   return courseDays.map((item) => ({
@@ -14,7 +14,10 @@ const stepsByTrack = item.steps as TutorialStep[] | Record<AppChoice, TutorialSt
 const trackSteps = item.appTrack === 'both' ? stepsByTrack as Record<AppChoice, TutorialStep[]> : null;
 const unifiedSteps = item.appTrack === 'unified' ? stepsByTrack as TutorialStep[] : null;
 const introSteps = trackSteps ? trackSteps.claude : unifiedSteps ?? [];
-const totalSteps = introSteps.length + 3;
+const lessonStepCount = trackSteps ? Math.max(trackSteps.claude.length, trackSteps.codex.length) : introSteps.length;
+const totalSteps = lessonStepCount + 3;
+const readyDayCount = courseDays.filter((day) => day.status === 'ready').length;
+const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
 ---
 
 <Base
@@ -28,7 +31,7 @@ const totalSteps = introSteps.length + 3;
         <img src="/favicon.svg" alt="" width="34" height="34" />
         <span>20일 교재</span>
       </a>
-      <a class="tutorials-header__link" href="/tutorials/">출석부</a>
+      <a class="tutorials-header__link" href="/tutorials/">20일 목록</a>
     </div>
   </header>
 
@@ -36,27 +39,35 @@ const totalSteps = introSteps.length + 3;
     class="wizard-page"
     data-wizard
     data-day={item.day}
+    data-status={item.status}
     data-track-mode={item.appTrack}
     data-storage={JSON.stringify(storageKeys)}
+    data-course-version={courseVersion}
   >
     <nav class="wizard-back" aria-label="수업 이동">
-      {item.day > 1 && <a href={dayPath(item.day - 1)}>이전 날</a>}
-      <a href="/tutorials/">출석부</a>
-      {item.day < 20 && <a href={dayPath(item.day + 1)}>다음 날</a>}
+      <a href="/tutorials/">20일 목록</a>
     </nav>
 
     <section class="wizard-shell" aria-labelledby="wizard-title">
       <div class="wizard-status">
         <span>{item.theme}</span>
         <span>Day {item.day}</span>
-        <span>{item.time}</span>
       </div>
 
+      <div class="course-progress" aria-label="20일 과정 진도">
+        <div>
+          <span>20일 과정</span>
+          <strong data-course-progress>{readyDayCount}일 수업 중 진도 확인 중</strong>
+        </div>
+        <div class="course-progress__bar" aria-hidden="true"><span data-course-progress-bar></span></div>
+      </div>
+
+      <p class="lesson-progress" data-lesson-progress>수업 단계 1 / {totalSteps} · {item.title}</p>
       <div class="wizard-progress" aria-label={`총 ${totalSteps}단계`}>
         {Array.from({ length: totalSteps }).map((_, index) => <span data-dot={index}></span>)}
       </div>
 
-      <article class="wizard-screen is-active" data-screen data-index="-1">
+      <article class="wizard-screen is-active" data-screen data-index="-1" data-title={item.title}>
         <span class="eyebrow">오늘 만들 것</span>
         <h1 id="wizard-title">{item.title}</h1>
         <p class="wizard-outcome">{item.outcome}</p>
@@ -117,7 +128,7 @@ const totalSteps = introSteps.length + 3;
       {item.appTrack === 'both' ? (
         <>
           {trackSteps?.claude.map((step, index) => (
-            <article class="wizard-screen" data-screen data-index={index} data-track="claude">
+            <article class="wizard-screen" data-screen data-index={index} data-track="claude" data-title={step.action}>
               <span class="screen-count">따라하기 {index + 1}</span>
               <h2>{step.action}</h2>
               <p>{step.detail}</p>
@@ -132,7 +143,7 @@ const totalSteps = introSteps.length + 3;
             </article>
           ))}
           {trackSteps?.codex.map((step, index) => (
-            <article class="wizard-screen" data-screen data-index={index} data-track="codex">
+            <article class="wizard-screen" data-screen data-index={index} data-track="codex" data-title={step.action}>
               <span class="screen-count">따라하기 {index + 1}</span>
               <h2>{step.action}</h2>
               <p>{step.detail}</p>
@@ -149,7 +160,7 @@ const totalSteps = introSteps.length + 3;
         </>
       ) : (
         unifiedSteps?.map((step, index) => (
-          <article class="wizard-screen" data-screen data-index={index}>
+          <article class="wizard-screen" data-screen data-index={index} data-title={step.action}>
             <span class="screen-count">따라하기 {index + 1}</span>
             <h2>{step.action}</h2>
             <p>{step.detail}</p>
@@ -165,23 +176,32 @@ const totalSteps = introSteps.length + 3;
         ))
       )}
 
-      <article class="wizard-screen" data-screen data-kind="challenge">
+      <article class="wizard-screen" data-screen data-kind="challenge" data-title="오늘의 도전">
         <span class="eyebrow">오늘의 도전</span>
         <h2>정답 없는 응용 미션입니다.</h2>
         <p>{item.challenge}</p>
         <div class="success-check"><strong>완료 기준</strong><p>내 상황에 맞게 한 번 바꿔보면 충분합니다.</p></div>
       </article>
 
-      <article class="wizard-screen" data-screen data-kind="finish">
+      <article class="wizard-screen" data-screen data-kind="finish" data-title="완료">
         <span class="eyebrow">완료</span>
-        <h2>도장을 찍습니다.</h2>
-        <p>잘하셨어요. 브라우저에 Day {item.day} 완료가 저장됩니다.</p>
-        <p class="tomorrow">다음: {item.tomorrow}</p>
+        {item.status === 'ready' ? (
+          <>
+            <h2>마지막 버튼을 누르면 도장이 찍힙니다.</h2>
+            <p>아직 저장 전입니다. 아래의 <strong>완료하고 도장 찍기</strong>를 눌러야 브라우저에 Day {item.day} 완료가 저장됩니다.</p>
+            <p class="tomorrow">다음: {item.tomorrow}</p>
+          </>
+        ) : (
+          <>
+            <h2>이 수업은 아직 준비 중입니다.</h2>
+            <p>주소는 열리지만 도장은 찍히지 않습니다. 20일 목록에서 준비된 수업을 골라주세요.</p>
+          </>
+        )}
       </article>
 
       <div class="wizard-actions">
         <button type="button" data-prev>이전</button>
-        <button type="button" class="btn btn--primary" data-next>{item.status === 'coming-soon' ? '확인' : '시작하기'}</button>
+        <button type="button" class={nextButtonClass} data-next>{item.status === 'coming-soon' ? '내용 보기' : '시작하기'}</button>
       </div>
     </section>
   </main>
@@ -191,10 +211,16 @@ const totalSteps = introSteps.length + 3;
     const root = document.querySelector('[data-wizard]');
     const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
     const day = Number(root?.getAttribute('data-day') || '0');
+    const status = root?.getAttribute('data-status') || 'coming-soon';
+    const isReady = status === 'ready';
     const trackMode = root?.getAttribute('data-track-mode') || 'unified';
+    const courseVersion = root?.getAttribute('data-course-version') || '2';
     const prev = document.querySelector('[data-prev]');
     const next = document.querySelector('[data-next]');
     const appLabel = document.querySelector('[data-app-label]');
+    const lessonProgress = document.querySelector('[data-lesson-progress]');
+    const courseProgress = document.querySelector('[data-course-progress]');
+    const courseProgressBar = document.querySelector('[data-course-progress-bar]');
     const dots = Array.from(document.querySelectorAll('[data-dot]'));
     const overviewLists = Array.from(document.querySelectorAll('[data-overview-track]'));
 
@@ -218,11 +244,7 @@ const totalSteps = introSteps.length + 3;
       textarea.remove();
     };
 
-    const COURSE_VERSION = '2';
-    if (window.localStorage.getItem(keys.version) !== COURSE_VERSION) {
-      [keys.done, keys.position, keys.last].forEach((key) => window.localStorage.removeItem(key));
-    }
-    window.localStorage.setItem(keys.version, COURSE_VERSION);
+    window.localStorage.setItem(keys.version, courseVersion);
     let app = window.localStorage.getItem(keys.app) || 'claude';
     let activeIndex = -1;
 
@@ -241,15 +263,25 @@ const totalSteps = introSteps.length + 3;
       if (appLabel) appLabel.textContent = `${app === 'claude' ? '클로드' : '코덱스'} 단계가 열립니다.`;
     };
     const savePosition = () => {
+      if (!isReady) return;
       const position = readJson(keys.position, {});
       if (activeIndex >= 0) position[positionKey()] = activeIndex;
       writeJson(keys.position, position);
       window.localStorage.setItem(keys.last, String(day));
     };
     const markDone = () => {
+      if (!isReady) return;
       const done = readJson(keys.done, []);
       if (!done.includes(day)) done.push(day);
       writeJson(keys.done, done.sort((a, b) => a - b));
+    };
+    const renderCourseProgress = () => {
+      const done = readJson(keys.done, []);
+      const doneCount = Math.min(20, done.filter((value) => Number(value) >= 1 && Number(value) <= 20).length);
+      if (courseProgress) courseProgress.textContent = `20일 중 ${doneCount}일 완료`;
+      if (courseProgressBar instanceof HTMLElement) {
+        courseProgressBar.style.width = `${Math.round((doneCount / 20) * 100)}%`;
+      }
     };
     const render = () => {
       const visible = getVisibleScreens();
@@ -261,21 +293,39 @@ const totalSteps = introSteps.length + 3;
         if (track && track !== app) screen.classList.remove('is-active');
       });
       dots.forEach((dot, index) => {
+        dot.hidden = index >= visible.length;
         dot.classList.toggle('is-filled', index <= activeIndex + 1);
         dot.classList.toggle('is-current', index === activeIndex + 1);
       });
+      const visibleIndex = Math.max(0, activeIndex + 1);
+      const currentScreen = visible[visibleIndex];
+      const currentTitle = currentScreen?.getAttribute('data-title') || '';
+      if (lessonProgress) lessonProgress.textContent = `수업 단계 ${visibleIndex + 1} / ${visible.length} · ${currentTitle}`;
       if (prev instanceof HTMLButtonElement) prev.disabled = activeIndex < 0;
       if (next instanceof HTMLButtonElement) {
         const isFinish = activeIndex >= visible.length - 2;
-        next.textContent = activeIndex < 0 ? '시작하기' : isFinish ? '완료하고 도장 찍기' : '다음';
+        if (!isReady && isFinish) next.textContent = '20일 목록으로 돌아가기';
+        else if (!isReady) next.textContent = activeIndex < 0 ? '내용 보기' : '다음';
+        else next.textContent = activeIndex < 0 ? '시작하기' : isFinish ? '완료하고 도장 찍기' : '다음';
       }
+      renderCourseProgress();
       savePosition();
     };
 
     const restore = () => {
       updateAppUi();
       const position = readJson(keys.position, {});
-      activeIndex = Number(position[positionKey()] ?? -1);
+      if (trackMode === 'both' && position[positionKey()] === undefined) {
+        const savedTrack = ['claude', 'codex'].find((choice) => position[`${day}.${choice}`] !== undefined);
+        if (savedTrack) {
+          app = savedTrack;
+          window.localStorage.setItem(keys.app, app);
+          updateAppUi();
+        }
+      }
+      const restoredIndex = Number(position[positionKey()] ?? -1);
+      const maxIndex = Math.max(-1, getVisibleScreens().length - 2);
+      activeIndex = Number.isFinite(restoredIndex) ? Math.min(restoredIndex, maxIndex) : -1;
       render();
     };
 

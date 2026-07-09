@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
+import { courseDays, courseVersion, dayPath, storageKeys, weeks } from '../../data/course';
+
+const fallbackDay = courseDays.find((day) => day.status === 'ready') ?? courseDays[0];
 ---
 
 <Base
@@ -18,14 +20,18 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
     </div>
   </header>
 
-  <main class="tutorials-home" data-tutorials-home data-storage={JSON.stringify(storageKeys)}>
+  <main class="tutorials-home" data-tutorials-home data-storage={JSON.stringify(storageKeys)} data-course-version={courseVersion}>
     <section class="tutorials-hero" aria-labelledby="tutorials-title">
       <div class="tutorials-hero__copy">
-        <span class="eyebrow">20일 완주형 실습 교재</span>
-        <h1 id="tutorials-title">오늘 할 일만 보고 따라오세요.</h1>
+        <span class="eyebrow">오늘 수업 먼저</span>
+        <h1 id="tutorials-title">멈춘 곳에서 바로 이어갑니다.</h1>
+        <p>카드는 찾기용입니다. 오늘은 오른쪽 버튼 하나만 누르면 됩니다.</p>
       </div>
       <aside class="progress-board" aria-live="polite">
-        <p data-progress-text>진도를 확인하고 있습니다.</p>
+        <span class="progress-board__label" data-next-label>오늘 수업</span>
+        <h2 data-next-title>Day {fallbackDay.day}. {fallbackDay.title}</h2>
+        <p data-next-summary>{fallbackDay.outcome}</p>
+        <p class="progress-board__count" data-progress-text>20일 중 0일 완료</p>
         <div class="progress-board__bar" aria-hidden="true"><span data-progress-bar></span></div>
         <a class="btn btn--primary" href="/tutorials/day-01/" data-next-link>여기서 시작하세요</a>
       </aside>
@@ -34,6 +40,12 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
     <div class="browser-warning" data-kakao-warning hidden>
       카카오톡 안에서 열면 도장이 따로 저장될 수 있어요. 기본 브라우저로 다시 열어주세요.
     </div>
+
+    <nav class="week-jumps" aria-label="주차 바로가기">
+      {weeks.map((week) => (
+        <a href={`#week-${week.week}`}>{week.week}주차</a>
+      ))}
+    </nav>
 
     <div class="course-weeks">
       {weeks.map((week) => {
@@ -54,16 +66,16 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
                     data-day-card
                     data-day={day.day}
                     data-status={day.status}
+                    data-title={day.title}
+                    data-outcome={day.outcome}
                     aria-label={`Day ${day.day}. ${day.title}`}
                   >
                     <span class="day-card__top">
                       <span>Day {day.day}</span>
+                      <span class="day-card__state" data-card-state hidden></span>
                     </span>
                     <strong>{day.title}</strong>
                     <small>{day.outcome}</small>
-                    <span class="day-card__state" data-card-state>
-                      {day.status === 'coming-soon' ? '준비 중' : day.readyLabel ?? '시작하기'}
-                    </span>
                   </a>
                 </li>
               ))}
@@ -78,6 +90,7 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
     // @ts-nocheck
     const root = document.querySelector('[data-tutorials-home]');
     const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
+    const courseVersion = root?.getAttribute('data-course-version') || '2';
     const cards = Array.from(document.querySelectorAll('[data-day-card]'));
     const readJson = (key, fallback) => {
       try {
@@ -91,51 +104,58 @@ import { courseDays, dayPath, storageKeys, weeks } from '../../data/course';
     const kakaoWarning = document.querySelector('[data-kakao-warning]');
     if (kakaoWarning) kakaoWarning.hidden = !isKakao;
 
-    const COURSE_VERSION = '2';
-    if (window.localStorage.getItem(keys.version) !== COURSE_VERSION) {
-      [keys.done, keys.position, keys.last].forEach((key) => window.localStorage.removeItem(key));
-    }
-    window.localStorage.setItem(keys.version, COURSE_VERSION);
+    window.localStorage.setItem(keys.version, courseVersion);
     const done = readJson(keys.done, []);
     const position = readJson(keys.position, {});
     const last = Number(window.localStorage.getItem(keys.last) || '0');
     const readyCards = cards.filter((card) => card.getAttribute('data-status') === 'ready');
     const readyDays = readyCards.map((card) => Number(card.getAttribute('data-day')));
-    const inProgressDay = last && position[String(last)] !== undefined ? last : 0;
-    const firstUndoneReady = readyDays.find((day) => !done.includes(day)) || readyDays[0] || 1;
+    const doneReady = [...new Set(done.map(Number).filter((day) => readyDays.includes(day)))];
+    const hasPosition = (day) => (
+      position[String(day)] !== undefined ||
+      Object.keys(position).some((key) => key.startsWith(`${day}.`))
+    );
+    const inProgressDay = last && readyDays.includes(last) && !doneReady.includes(last) && hasPosition(last) ? last : 0;
+    const firstUndoneReady = readyDays.find((day) => !doneReady.includes(day)) || readyDays[0] || 1;
     const nextDay = inProgressDay || firstUndoneReady;
+    const allReadyDone = readyDays.length > 0 && doneReady.length >= readyDays.length;
 
     cards.forEach((card) => {
       const day = Number(card.getAttribute('data-day'));
       const status = card.getAttribute('data-status');
       const state = card.querySelector('[data-card-state]');
 
-      card.classList.toggle('is-done', done.includes(day));
-      card.classList.toggle('is-current', day === nextDay && status === 'ready' && !done.includes(day));
+      card.classList.toggle('is-done', doneReady.includes(day));
+      card.classList.toggle('is-current', !allReadyDone && day === nextDay && status === 'ready' && !doneReady.includes(day));
       card.classList.toggle('is-coming-soon', status === 'coming-soon');
 
       if (state) {
-        if (done.includes(day)) state.textContent = '도장 완료';
-        else if (day === nextDay && status === 'ready' && inProgressDay) state.textContent = '이어서 하기';
-        else if (day === nextDay && status === 'ready') state.textContent = day === 1 ? '여기서 시작하세요' : '다음 수업';
+        if (!allReadyDone && day === nextDay && status === 'ready' && !doneReady.includes(day)) state.textContent = '오늘은 여기';
+        else if (doneReady.includes(day)) state.textContent = '완료';
         else if (status === 'coming-soon') state.textContent = '준비 중';
-        else state.textContent = '시작하기';
+        else state.textContent = '';
+        state.hidden = !state.textContent;
       }
     });
 
     const progressText = document.querySelector('[data-progress-text]');
     const progressBar = document.querySelector('[data-progress-bar]');
     const nextLink = document.querySelector('[data-next-link]');
-    const doneCount = done.length;
-    if (progressText) {
-      progressText.textContent = doneCount === 20
-        ? '20일 완주. 수료증을 받을 차례입니다.'
-        : `20일 중 ${doneCount}일 완료. 오늘은 Day ${nextDay}로 가면 됩니다.`;
-    }
+    const nextLabel = document.querySelector('[data-next-label]');
+    const nextTitle = document.querySelector('[data-next-title]');
+    const nextSummary = document.querySelector('[data-next-summary]');
+    const nextCard = cards.find((card) => Number(card.getAttribute('data-day')) === nextDay);
+    const doneCount = Math.min(20, doneReady.length);
+    if (progressText) progressText.textContent = `20일 중 ${doneCount}일 완료`;
     if (progressBar) progressBar.style.width = `${Math.min(100, Math.round((doneCount / 20) * 100))}%`;
+    if (nextLabel) nextLabel.textContent = allReadyDone ? '완주 완료' : inProgressDay ? '이어서 할 수업' : '오늘 수업';
+    if (nextTitle) nextTitle.textContent = `Day ${nextDay}. ${nextCard?.getAttribute('data-title') || ''}`.trim();
+    if (nextSummary) nextSummary.textContent = allReadyDone
+      ? '다시 보고 싶은 날을 아래 목록에서 고르세요.'
+      : nextCard?.getAttribute('data-outcome') || '';
     if (nextLink instanceof HTMLAnchorElement) {
       nextLink.href = `/tutorials/day-${String(nextDay).padStart(2, '0')}/`;
-      nextLink.textContent = inProgressDay ? '이어서 하기' : '오늘 수업 열기';
+      nextLink.textContent = allReadyDone ? 'Day 1 다시 보기' : inProgressDay ? '이어서 하기' : '오늘 수업 열기';
     }
   </script>
 </Base>
