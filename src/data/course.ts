@@ -12,7 +12,6 @@ export interface TutorialStep {
   action: string;
   detail: string;
   copyText?: string;
-  download?: { href: string; label: string; fileName?: string };
   image?: { src: string; alt: string };
   success: string;
   stuck: StuckHelp;
@@ -48,25 +47,25 @@ const defaultStuck: StuckHelp = {
   skip: true,
 };
 
-const wrapUpStep = (day: number): TutorialStep => ({
-  action: '/wrap-up으로 오늘을 기록하세요.',
-  detail: '설치한 /wrap-up 스킬로 오늘 만든 것과 잘 통한 부탁 방식을 수업일지로 남깁니다. 파일 저장이 안 되면 복사해서 직접 저장합니다.',
-  copyText: `오늘은 Day ${day}입니다. /wrap-up\n\n아래 형식으로 정리해 주세요. 파일을 만들 수 있으면 ai-study/journal/day-${String(day).padStart(2, '0')}.md로 저장하고, 파일을 만들 수 없으면 제가 복사할 수 있게 마크다운만 보여주세요.\n\n# Day ${day} 수업일지\n\n## 오늘 만든 것\n-\n\n## 잘 통한 부탁 방식\n-\n\n## 안 통한 부탁 방식\n-\n\n## AI가 나에 대해 새로 알게 된 사실 1개\n-\n\n## 내일 이어할 말\n-`,
-  success: `day-${String(day).padStart(2, '0')}.md 파일이 생기거나, 복사해서 저장할 수 있는 마크다운이 나오면 성공입니다.`,
+const saveResultStep = (day: number): TutorialStep => ({
+  action: '오늘 결과물을 저장하고 이어 할 말 1줄을 남기세요.',
+  detail: '오늘 만든 결과물을 ai-study/outputs에 저장합니다. 파일 저장이 안 되면 복사해서 저장할 수 있는 글로 받습니다.',
+  copyText: `오늘은 Day ${day}입니다.\n\n오늘 만든 결과물을 정리해 주세요.\n\n가능하면 ai-study/outputs/day-${String(day).padStart(2, '0')}-result.md 파일로 저장해 주세요.\n파일 저장이 안 되면 제가 복사해서 저장할 수 있게 마크다운으로 보여 주세요.\n\n마지막에는 다음에 이어 할 말 1줄만 남겨 주세요.`,
+  success: `Day ${day} 결과물이 파일로 저장되거나, 복사해서 저장할 수 있는 글과 이어 할 말 1줄이 나오면 성공입니다.`,
   stuck: {
     ...defaultStuck,
-    different: '파일이 바로 안 생기면 실패가 아닙니다. AI가 보여준 마크다운을 복사해 ai-study/journal 폴더에 직접 저장하세요.',
+    different: '파일이 바로 안 생기면 실패가 아닙니다. AI가 보여준 글을 복사해 ai-study/outputs에 직접 저장하세요.',
   },
 });
 
-const wrapUpWeeklyStep = (): TutorialStep => ({
-  action: '/wrap-up 주간 — 내 가게 설명서를 업데이트하세요.',
-  detail: '이번 주 일지에서 AI가 나에 대해 알게 된 사실을 모아 설명서에 반영합니다. 반영 여부는 내가 정합니다.',
-  copyText: `/wrap-up 주간\n\n이번 주 ai-study/journal의 수업일지를 읽고, 내 가게 설명서(ai-study/AGENTS.md)에 추가하거나 고칠 내용을 제안해 주세요. 하나씩 보여주고, 제가 승인한 것만 반영해 주세요.`,
-  success: 'AI가 제안 목록을 보여주고, 내가 승인한 것만 설명서에 반영되면 성공입니다.',
+const weeklyHistoryStep = (week: number, dayRange: string): TutorialStep => ({
+  action: `Week ${week} 대화 히스토리에서 설명서 후보를 뽑으세요.`,
+  detail: 'Claude/Codex 앱의 최근 대화와 작업 히스토리를 우선 확인합니다. 접근이 안 되면 ai-study/outputs와 현재 대화에서 확인 가능한 내용만 씁니다.',
+  copyText: `Week ${week}(${dayRange})를 돌아보고, ai-study/AGENTS.md에 추가하거나 고칠 후보를 뽑아 주세요.\n\n반드시 지킬 것:\n- 먼저 Claude/Codex의 최근 대화와 작업 히스토리를 읽을 수 있는지 확인하기\n- 읽기 전에 어떤 히스토리 또는 폴더를 볼지 저에게 말하기\n- 비밀번호, 토큰, 결제정보, 개인정보는 후보에 넣지 않기\n- 히스토리 접근이 안 되면 ai-study/outputs와 지금 대화에서 확인 가능한 내용만 쓰기\n- 확실하지 않은 내용은 "확인 필요"로 표시하기\n- ai-study/AGENTS.md에는 제가 승인한 후보만 반영하기\n\n출력은 후보 5개 이하로, 각 후보마다 이유를 한 줄씩 붙여 주세요.`,
+  success: '설명서 후보가 5개 이하로 나오고, 내가 승인한 것만 반영되면 성공입니다.',
   stuck: {
     ...defaultStuck,
-    different: '아직 AGENTS.md가 없다면 "지금 만들어줘"라고 하면 됩니다. 일지가 부족해도 1개 제안만 받으면 충분합니다.',
+    different: '히스토리 접근이 안 되면 실패가 아닙니다. ai-study/outputs와 지금 대화에서 확인되는 내용만 쓰면 됩니다.',
   },
 });
 
@@ -92,7 +91,7 @@ export const courseDays: TutorialDay[] = [
   {
     day: 1, week: 1, theme: '차리기',
     title: '시작하기 — 설치, 가입, 화면 투어',
-    outcome: '앱 설치, ai-study 폴더, 첫 대화, /wrap-up 스킬 설치까지 끝냅니다.',
+    outcome: '앱 설치, ai-study 폴더, 첫 대화까지 끝냅니다.',
     status: 'ready', requiresDesktop: true, appTrack: 'both', time: '30분',
     challenge: '화면 투어에서 배운 버튼 3개의 이름을 내 말로 적어보세요.',
     tomorrow: '내일은 첫 프롬프트를 만듭니다.',
@@ -128,9 +127,9 @@ export const courseDays: TutorialDay[] = [
         },
         {
           action: 'ai-study 작업 폴더를 만들고 연결하세요.',
-          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만들고, 그 안에 journal 폴더도 만듭니다. 앱에서 이 폴더를 작업 폴더로 지정합니다.',
-          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들고, 그 안에 journal 폴더를 만들어 주세요. 앞으로 수업 파일은 모두 여기에 저장할 거예요.',
-          success: 'ai-study 폴더와 그 안의 journal 폴더가 보이면 성공입니다.',
+          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만들고, 그 안에 outputs 폴더도 만듭니다. 앱에서 이 폴더를 작업 폴더로 지정합니다.',
+          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들고, 그 안에 outputs 폴더를 만들어 주세요. 앞으로 수업 결과물은 모두 여기에 저장할 거예요.',
+          success: 'ai-study 폴더와 그 안의 outputs 폴더가 보이면 성공입니다.',
           stuck: defaultStuck,
         },
         {
@@ -140,15 +139,7 @@ export const courseDays: TutorialDay[] = [
           success: 'AI가 답장을 하면 성공입니다.',
           stuck: defaultStuck,
         },
-        {
-          action: '/wrap-up 스킬을 설치하세요.',
-          detail: '매일 수업 끝에 일지를 남기는 스킬입니다. 파일을 내려받거나 열어서 내용을 복사한 뒤, 앱에 설치합니다.',
-          download: { href: '/skills/wrap-up/SKILL.md', label: 'SKILL.md 다운로드', fileName: 'SKILL.md' },
-          copyText: '아래 스킬 파일을 /wrap-up 스킬로 설치해 주세요.\n\n스킬 파일: https://www.ai-night.study/skills/wrap-up/SKILL.md\n\n설치가 끝나면 제가 /wrap-up이라고 말했을 때 ai-study/journal/day-XX.md 수업일지를 만들 수 있어야 합니다. 주간 모드 /wrap-up 주간은 AGENTS.md에 넣을 후보를 제안하되, 제가 승인한 것만 반영해야 합니다.',
-          success: 'SKILL.md 파일을 받았고, /wrap-up 스킬로 설치할 준비가 되면 성공입니다.',
-          stuck: defaultStuck,
-        },
-        wrapUpStep(1),
+        saveResultStep(1),
       ],
       codex: [
         {
@@ -179,9 +170,9 @@ export const courseDays: TutorialDay[] = [
         },
         {
           action: 'ai-study 작업 폴더를 만들고 연결하세요.',
-          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만들고, 그 안에 journal 폴더도 만듭니다. 앱에서 이 폴더를 작업 폴더로 엽니다.',
-          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들고, 그 안에 journal 폴더를 만들어 주세요. 앞으로 수업 파일은 모두 여기에 저장할 거예요.',
-          success: 'ai-study 폴더와 그 안의 journal 폴더가 보이면 성공입니다.',
+          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만들고, 그 안에 outputs 폴더도 만듭니다. 앱에서 이 폴더를 작업 폴더로 엽니다.',
+          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들고, 그 안에 outputs 폴더를 만들어 주세요. 앞으로 수업 결과물은 모두 여기에 저장할 거예요.',
+          success: 'ai-study 폴더와 그 안의 outputs 폴더가 보이면 성공입니다.',
           stuck: defaultStuck,
         },
         {
@@ -191,15 +182,7 @@ export const courseDays: TutorialDay[] = [
           success: 'AI가 답장을 하면 성공입니다.',
           stuck: defaultStuck,
         },
-        {
-          action: '/wrap-up 스킬을 설치하세요.',
-          detail: '매일 수업 끝에 일지를 남기는 스킬입니다. 파일을 내려받거나 열어서 내용을 복사한 뒤, 앱에 설치합니다.',
-          download: { href: '/skills/wrap-up/SKILL.md', label: 'SKILL.md 다운로드', fileName: 'SKILL.md' },
-          copyText: '아래 스킬 파일을 /wrap-up 스킬로 설치해 주세요.\n\n스킬 파일: https://www.ai-night.study/skills/wrap-up/SKILL.md\n\n설치가 끝나면 제가 /wrap-up이라고 말했을 때 ai-study/journal/day-XX.md 수업일지를 만들 수 있어야 합니다. 주간 모드 /wrap-up 주간은 AGENTS.md에 넣을 후보를 제안하되, 제가 승인한 것만 반영해야 합니다.',
-          success: 'SKILL.md 파일을 받았고, /wrap-up 스킬로 설치할 준비가 되면 성공입니다.',
-          stuck: defaultStuck,
-        },
-        wrapUpStep(1),
+        saveResultStep(1),
       ],
     },
   },
@@ -268,7 +251,7 @@ AI가 맡을 역할:
         success: '내가 바로 답할 수 있는 질문 3개를 받으면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(2),
+      saveResultStep(2),
     ],
   },
   {
@@ -325,7 +308,7 @@ AI가 맡을 역할:
           different: '바로 PDF가 안 나와도 괜찮습니다. 오늘은 인쇄 전에 쓸 수 있는 메뉴판 원고를 만드는 것이 목표입니다.',
         },
       },
-      wrapUpStep(3),
+      saveResultStep(3),
     ],
   },
   {
@@ -427,7 +410,7 @@ AI가 맡을 역할:
           different: '차이가 별로 없으면 설명서에 주 손님, 자주 파는 상품, 피하고 싶은 표현을 한 줄씩 더 넣어 보세요.',
         },
       },
-      wrapUpStep(4),
+      saveResultStep(4),
     ],
   },
   {
@@ -493,9 +476,11 @@ AI가 맡을 역할:
       {
         action: '첫 설명서 업데이트 후보를 받으세요.',
         detail: '이번 주에 배운 내용을 AGENTS.md에 바로 덮어쓰지 않습니다. 먼저 후보만 보고 내가 고릅니다.',
-        copyText: `Day 1부터 Day 5까지의 수업일지와 오늘 만든 습관 카드를 바탕으로, ai-study/AGENTS.md에 추가하면 좋은 문장 후보를 골라 주세요.
+        copyText: `Day 1부터 Day 5까지의 대화 히스토리와 오늘 만든 습관 카드를 바탕으로, ai-study/AGENTS.md에 추가하면 좋은 문장 후보를 골라 주세요.
 
 반드시 지킬 것:
+- 읽기 전에 어떤 히스토리 또는 폴더를 볼지 저에게 말하기
+- 히스토리 접근이 안 되면 ai-study/outputs와 지금 대화에서 확인 가능한 내용만 쓰기
 - 제가 승인한 것만 반영하기
 - 후보는 5개 이하
 - 각 후보마다 왜 필요한지 한 줄로 설명
@@ -504,7 +489,7 @@ AI가 맡을 역할:
         success: '설명서에 넣을 후보가 5개 이하로 나오고, 승인 전에는 반영하지 않으면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpWeeklyStep(),
+      weeklyHistoryStep(1, 'Day 1-5'),
     ],
   },
   {
@@ -590,7 +575,7 @@ AI가 맡을 역할:
           different: '실제 거래를 바로 쓰기 부담스러우면 이름만 가리고 진행하세요. 금액 검산은 꼭 합니다.',
         },
       },
-      wrapUpStep(6),
+      saveResultStep(6),
     ],
   },
   {
@@ -685,7 +670,7 @@ AI가 맡을 역할:
           different: '합계가 이상하면 "확인 끝난 금액만 다시 더하고 계산 과정을 보여 주세요"라고 말하세요.',
         },
       },
-      wrapUpStep(7),
+      saveResultStep(7),
     ],
   },
   {
@@ -774,7 +759,7 @@ AI가 맡을 역할:
         success: '차트 1장과 다음에도 쓸 반복용 지시문이 나오면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(8),
+      saveResultStep(8),
     ],
   },
   {
@@ -862,7 +847,7 @@ AI가 맡을 역할:
         success: '리뷰 답글 초안과 저장할 문서가 나오면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(9),
+      saveResultStep(9),
     ],
   },
   {
@@ -932,7 +917,7 @@ AI가 맡을 역할:
         success: '바꿀 후보 1개를 고르고, 승인 전에는 반영하지 않으면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpWeeklyStep(),
+      weeklyHistoryStep(2, 'Day 6-10'),
     ],
   },
   {
@@ -944,9 +929,9 @@ AI가 맡을 역할:
     tomorrow: '내일은 아침 브리핑을 자동화합니다.',
     steps: [
       {
-        action: 'Day 1에서 설치한 /wrap-up을 떠올리세요.',
-        detail: '매일 쓰는 /wrap-up은 실제 스킬 파일로 설치한 반복 부탁입니다. 스킬은 반복 부탁을 문서로 저장해 둔 것입니다.',
-        copyText: '제가 Day 1에서 설치한 /wrap-up 스킬 파일을 기준으로, 반복 부탁을 스킬 파일로 저장한다는 말이 무슨 뜻인지 쉬운 말로 설명해 주세요.',
+        action: 'k-skill 예시를 떠올리세요.',
+        detail: 'Day 10에서 본 k-skill처럼 스킬은 반복 부탁을 문서로 저장해 둔 것입니다.',
+        copyText: '제가 Day 10에서 본 k-skill 예시를 기준으로, 반복 부탁을 스킬 파일로 저장한다는 말이 무슨 뜻인지 쉬운 말로 설명해 주세요.',
         success: '"스킬 = 저장해 둔 부탁문"이라고 내 말로 설명할 수 있으면 성공입니다.',
         stuck: defaultStuck,
       },
@@ -967,7 +952,7 @@ AI가 맡을 역할:
           different: '새 대화에서 기억을 못 하면, 스킬 문서를 복사해 두었다가 붙여넣고 다시 저장을 부탁하세요.',
         },
       },
-      wrapUpStep(11),
+      saveResultStep(11),
     ],
   },
   {
@@ -998,7 +983,7 @@ AI가 맡을 역할:
         success: '테스트 브리핑이 한 번 도착하면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(12),
+      saveResultStep(12),
     ],
   },
   {
@@ -1082,7 +1067,7 @@ AI가 맡을 역할:
         success: '입력 규칙과 저장할 재고 시트 초안이 나오면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(13),
+      saveResultStep(13),
     ],
   },
   {
@@ -1169,7 +1154,7 @@ AI가 맡을 역할:
         success: '이미지 도구가 따로 있다는 것만 이해하면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(14),
+      saveResultStep(14),
     ],
   },
   {
@@ -1227,7 +1212,7 @@ AI가 맡을 역할:
         success: '페이지 계획서와 첫 화면 초안이 나오면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpWeeklyStep(),
+      weeklyHistoryStep(3, 'Day 11-15'),
     ],
   },
   {
@@ -1297,7 +1282,7 @@ AI가 맡을 역할:
         success: '폰에서 링크가 열리고, 확인 결과가 저장되면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(16),
+      saveResultStep(16),
     ],
   },
   {
@@ -1369,7 +1354,7 @@ AGENTS.md와 가게 자료
         success: '블로그 글 공장 흐름과 저장할 문서가 나오면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(17),
+      saveResultStep(17),
     ],
   },
   {
@@ -1387,7 +1372,7 @@ AGENTS.md와 가게 자료
 
 반드시 지킬 것:
 - 한 번에 한 단계씩 안내
-- 토큰은 절대 대화나 일지에 그대로 쓰지 않기
+- 토큰은 절대 대화나 파일에 그대로 쓰지 않기
 - 계정 정보와 인증번호는 제가 직접 입력
 - 봇 이름과 사용자 이름 후보만 제안
 - 토큰 화면이 나오면 "복사해서 안전한 곳에 보관하세요"까지만 말하기`,
@@ -1445,7 +1430,7 @@ AGENTS.md와 가게 자료
         success: '예약 내용이 정리되고, 테스트 성공 뒤 예약까지 끝나면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(18),
+      saveResultStep(18),
     ],
   },
   {
@@ -1501,7 +1486,8 @@ AGENTS.md와 가게 자료
 - 지금까지 만든 스킬
 - 연결된 도구
 - 예약된 마감 리포트
-- 수업일지
+- ai-study/outputs의 결과물
+- 앱 대화 히스토리에서 확인한 반복 패턴
 
 출력:
 1. 비서가 먼저 읽을 것
@@ -1529,7 +1515,7 @@ AGENTS.md와 가게 자료
         success: '실제 부탁 1개가 처리되고, 사용한 자료와 확인할 것이 나오면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpStep(19),
+      saveResultStep(19),
     ],
   },
   {
@@ -1543,7 +1529,7 @@ AGENTS.md와 가게 자료
       {
         action: '지금까지 만든 것을 목록으로 정리하세요.',
         detail: '이 phase에서는 준비된 일차만 먼저 기록합니다. 전체 20일 완주 뒤 같은 흐름을 다시 씁니다.',
-        copyText: 'ai-study 폴더와 journal의 수업일지를 읽고, 지금까지 제가 만든 결과물을 표로 정리해 주세요. 결과물 이름, 만든 날, 앞으로 쓸 곳 세 칸으로요.',
+        copyText: 'ai-study/outputs와 앱 대화 히스토리에서 확인 가능한 내용을 바탕으로, 지금까지 제가 만든 결과물을 표로 정리해 주세요. 결과물 이름, 만든 날, 앞으로 쓸 곳 세 칸으로요. 확실하지 않은 것은 "확인 필요"라고 표시해 주세요.',
         success: '내 결과물 표가 나오면 성공입니다.',
         stuck: defaultStuck,
       },
@@ -1575,7 +1561,7 @@ AGENTS.md와 가게 자료
         success: '인쇄하거나 나중에 최종본으로 고칠 수 있는 수료증 초안이 나오면 성공입니다.',
         stuck: defaultStuck,
       },
-      wrapUpWeeklyStep(),
+      weeklyHistoryStep(4, 'Day 16-20'),
     ],
   },
 ];
