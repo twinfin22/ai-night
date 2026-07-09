@@ -48,13 +48,13 @@ const defaultStuck: StuckHelp = {
 };
 
 const saveResultStep = (day: number): TutorialStep => ({
-  action: '오늘 결과물을 저장하고 이어 할 말 1줄을 남기세요.',
-  detail: '오늘 만든 결과물을 ai-study/outputs에 저장합니다. 파일 저장이 안 되면 복사해서 저장할 수 있는 글로 받습니다.',
-  copyText: `오늘은 Day ${day}입니다.\n\n오늘 만든 결과물을 정리해 주세요.\n\n가능하면 ai-study/outputs/day-${String(day).padStart(2, '0')}-result.md 파일로 저장해 주세요.\n파일 저장이 안 되면 제가 복사해서 저장할 수 있게 마크다운으로 보여 주세요.\n\n마지막에는 다음에 이어 할 말 1줄만 남겨 주세요.`,
-  success: `Day ${day} 결과물이 파일로 저장되거나, 복사해서 저장할 수 있는 글과 이어 할 말 1줄이 나오면 성공입니다.`,
+  action: '오늘 만든 것과 이어 할 말 1줄을 남기세요.',
+  detail: '파일 저장을 억지로 하지 않습니다. 지금 대화에 오늘 만든 것과 다음에 이어 할 말만 짧게 남깁니다.',
+  copyText: `오늘은 Day ${day}입니다.\n\n오늘 만든 것을 짧게 정리해 주세요.\n\n형식:\n- 오늘 만든 것:\n- 다음에 이어 할 말:\n\n파일 저장이 꼭 필요한 결과물은 앞 단계 안내를 따릅니다. 오늘 대화에서 확인되지 않는 내용은 지어내지 말고 "확인 필요"라고 표시해 주세요.`,
+  success: `Day ${day}에서 만든 것과 다음에 이어 할 말 1줄이 대화에 남으면 성공입니다.`,
   stuck: {
     ...defaultStuck,
-    different: '파일이 바로 안 생기면 실패가 아닙니다. AI가 보여준 글을 복사해 ai-study/outputs에 직접 저장하세요.',
+    different: '파일이 없어도 실패가 아닙니다. 주간 정리는 앱 히스토리와 현재 대화를 먼저 확인합니다.',
   },
 });
 
@@ -127,9 +127,9 @@ export const courseDays: TutorialDay[] = [
         },
         {
           action: 'ai-study 작업 폴더를 만들고 연결하세요.',
-          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만들고, 그 안에 outputs 폴더도 만듭니다. 앱에서 이 폴더를 작업 폴더로 지정합니다.',
-          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들고, 그 안에 outputs 폴더를 만들어 주세요. 앞으로 수업 결과물은 모두 여기에 저장할 거예요.',
-          success: 'ai-study 폴더와 그 안의 outputs 폴더가 보이면 성공입니다.',
+          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만듭니다. 파일 저장이 필요한 날에만 outputs 폴더를 보조로 씁니다.',
+          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들어 주세요. 파일 저장이 필요한 수업을 위해 outputs 폴더도 함께 만들어 주세요.',
+          success: 'ai-study 폴더가 보이고, 필요할 때 쓸 outputs 폴더도 있으면 성공입니다.',
           stuck: defaultStuck,
         },
         {
@@ -170,9 +170,9 @@ export const courseDays: TutorialDay[] = [
         },
         {
           action: 'ai-study 작업 폴더를 만들고 연결하세요.',
-          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만들고, 그 안에 outputs 폴더도 만듭니다. 앱에서 이 폴더를 작업 폴더로 엽니다.',
-          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들고, 그 안에 outputs 폴더를 만들어 주세요. 앞으로 수업 결과물은 모두 여기에 저장할 거예요.',
-          success: 'ai-study 폴더와 그 안의 outputs 폴더가 보이면 성공입니다.',
+          detail: '바탕화면이나 문서 폴더 안에 ai-study 폴더를 만듭니다. 파일 저장이 필요한 날에만 outputs 폴더를 보조로 씁니다.',
+          copyText: '제 컴퓨터에 ai-study라는 작업 폴더를 만들어 주세요. 파일 저장이 필요한 수업을 위해 outputs 폴더도 함께 만들어 주세요.',
+          success: 'ai-study 폴더가 보이고, 필요할 때 쓸 outputs 폴더도 있으면 성공입니다.',
           stuck: defaultStuck,
         },
         {
