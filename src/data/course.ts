@@ -773,6 +773,10 @@ AI가 맡을 역할:
       {
         action: '커넥터 설정 화면을 찾으세요.',
         detail: '오늘은 AI에게 내 도구를 쥐여주는 날입니다. 먼저 연결 화면만 찾고, 로그인은 강사와 함께 확인합니다.',
+        image: {
+          src: '/assets/tutorials/connectors/screenshots/connector-settings.png',
+          alt: '커넥터 또는 MCP 설정 화면에서 Chrome, Google Drive, Gmail 연결 항목을 확인하는 예시 화면',
+        },
         copyText: `제가 쓰는 AI 앱에서 커넥터 또는 MCP 설정 화면을 찾고 싶습니다.
 
 제 상황을 기준으로 천천히 안내해 주세요.
@@ -790,6 +794,10 @@ AI가 맡을 역할:
       {
         action: '크롬·드라이브·지메일 중 필요한 도구를 연결하세요.',
         detail: '모두 연결하려다 막히지 않습니다. 오늘 리뷰 정리에 필요한 도구부터 연결합니다.',
+        image: {
+          src: '/assets/tutorials/connectors/screenshots/connector-permissions.png',
+          alt: 'Google Drive 또는 Gmail 연결 권한 화면에서 허용 전에 접근 범위를 확인하는 예시 화면',
+        },
         copyText: `리뷰 정리를 위해 필요한 도구 연결 순서를 정해 주세요.
 
 후보:
@@ -923,7 +931,7 @@ AI가 맡을 역할:
   {
     day: 11, week: 3, theme: '굴리기',
     title: '내 스킬 만들기',
-    outcome: '샘플 인보이스 부탁을 /인보이스 스킬로 저장해 새 대화에서 불러 씁니다.',
+    outcome: 'Day 6에서 만든 인보이스 흐름을 /인보이스 스킬로 저장해 새 대화에서 불러 씁니다.',
     status: 'ready', requiresDesktop: true, appTrack: 'unified', time: '30분',
     challenge: '매주 반복하는 부탁 하나를 더 찾아 이름을 붙이세요.',
     tomorrow: '내일은 아침 브리핑을 자동화합니다.',
@@ -936,9 +944,9 @@ AI가 맡을 역할:
         stuck: defaultStuck,
       },
       {
-        action: '샘플 인보이스 부탁을 /인보이스 스킬로 저장하세요.',
-        detail: 'Day 6이 아직 준비 중이므로, 이 phase에서는 샘플 양식으로 먼저 스킬 구조를 익힙니다.',
-        copyText: '아래 내용을 "/인보이스"라는 스킬로 저장해 주세요. 다음부터 제가 /인보이스라고 하면, 거래처 이름·품목·금액·입금 계좌만 물어보고 간단한 인보이스 초안을 만들어 주세요.\n\n샘플 양식:\n거래처:\n품목:\n수량:\n금액:\n입금 계좌:\n메모:',
+        action: 'Day 6 인보이스 흐름을 /인보이스 스킬로 저장하세요.',
+        detail: 'Day 6에서 만든 인보이스 양식과 검산 규칙을 반복해서 쓰는 스킬로 바꿉니다. Day 6 결과 파일이 없으면 먼저 샘플 양식으로 시작해도 됩니다.',
+        copyText: 'ai-study/outputs/day-06-invoice.md를 바탕으로 "/인보이스"라는 스킬을 만들어 주세요.\n\n다음부터 제가 /인보이스라고 하면 아래 순서로 진행하게 해 주세요.\n1. 거래처 이름, 품목, 수량, 단가, 세금, 입금 계좌를 물어보기\n2. 빠진 정보는 추측하지 않고 다시 질문하기\n3. 간단한 인보이스 초안 만들기\n4. 수량×단가, 세금, 최종 합계를 검산표로 확인하기\n5. 보내기 전 확인표를 붙이기\n\nDay 6 파일을 읽을 수 없으면 아래 샘플 양식으로 먼저 만들어 주세요.\n거래처:\n품목:\n수량:\n금액:\n입금 계좌:\n메모:',
         success: 'AI가 /인보이스로 부를 수 있다고 확인하면 성공입니다.',
         stuck: defaultStuck,
       },
@@ -1239,6 +1247,10 @@ AI가 맡을 역할:
       {
         action: 'GitHub 저장소를 만들 준비를 하세요.',
         detail: '계정, 비밀번호, 인증번호는 AI에게 쓰지 않습니다. 저장소 이름과 공개 여부만 확인합니다.',
+        image: {
+          src: '/assets/tutorials/github-vercel/screenshots/github-new-repository-docs.png',
+          alt: 'GitHub 새 저장소 만들기 공식 도움말 화면',
+        },
         copyText: `웹페이지를 GitHub에 올릴 준비를 도와주세요.
 
 조건:
@@ -1253,6 +1265,10 @@ AI가 맡을 역할:
       {
         action: 'Vercel에 연결하고 배포 링크를 확인하세요.',
         detail: '배포 URL은 AI가 만들면 안 됩니다. 실제 화면에 나온 링크만 기록합니다.',
+        image: {
+          src: '/assets/tutorials/github-vercel/screenshots/vercel-git-docs.png',
+          alt: 'Vercel에서 GitHub 저장소를 연결해 배포하는 공식 도움말 화면',
+        },
         copyText: `GitHub 저장소를 Vercel에 연결해 배포하려고 합니다.
 
 반드시 지킬 것:
@@ -1270,6 +1286,10 @@ AI가 맡을 역할:
       {
         action: '내 폰으로 열어 최종 확인하세요.',
         detail: '컴퓨터에서만 보면 놓치는 것이 있습니다. 폰에서 링크를 열고 글자, 버튼, 연락 정보를 확인합니다.',
+        image: {
+          src: '/assets/tutorials/github-vercel/screenshots/vercel-deployments-docs.png',
+          alt: 'Vercel 배포 목록에서 실제 배포 링크를 확인하는 공식 도움말 화면',
+        },
         copyText: `배포된 웹페이지를 제 폰으로 확인할 체크리스트를 만들어 주세요.
 
 확인할 것:
@@ -1368,6 +1388,10 @@ AGENTS.md와 가게 자료
       {
         action: 'BotFather에서 봇 만들 준비를 하세요.',
         detail: '토큰은 비밀번호처럼 다룹니다. AI에게 그대로 붙여넣지 않습니다.',
+        image: {
+          src: '/assets/tutorials/telegram/screenshots/botfather-setup.png',
+          alt: 'Telegram BotFather에서 새 봇을 만들고 토큰을 비공개로 보관하는 예시 화면',
+        },
         copyText: `텔레그램 BotFather로 봇을 만들 준비를 도와주세요.
 
 반드시 지킬 것:
@@ -1402,6 +1426,10 @@ AGENTS.md와 가게 자료
       {
         action: '테스트 메시지를 폰으로 보내세요.',
         detail: '연결은 말로만 끝내지 않습니다. 내 폰에 실제 메시지가 도착해야 합니다.',
+        image: {
+          src: '/assets/tutorials/telegram/screenshots/telegram-test-message.png',
+          alt: '텔레그램 봇 테스트 메시지가 폰에 도착한 것을 확인하는 예시 화면',
+        },
         copyText: `텔레그램 봇 연결을 테스트하려고 합니다.
 
 진행 조건:
