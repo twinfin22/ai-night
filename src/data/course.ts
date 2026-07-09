@@ -100,12 +100,6 @@ export const courseDays: TutorialDay[] = [
     steps: {
       claude: [
         {
-          action: '오늘 쓸 앱으로 클로드를 고르세요.',
-          detail: '아래 선택 버튼에서 클로드를 누릅니다. 이 선택은 이 브라우저에 저장됩니다.',
-          success: '상단에 "클로드로 진행 중"이라고 보이면 성공입니다.',
-          stuck: defaultStuck,
-        },
-        {
           action: 'Claude 앱을 설치하고 로그인하세요.',
           detail: '새 창에서 claude.ai를 열고 앱 설치 안내를 따라간 뒤, 강사와 함께 유료 가입까지 확인합니다.',
           copyText: 'https://claude.ai/download',
@@ -115,13 +109,21 @@ export const courseDays: TutorialDay[] = [
         {
           action: '화면 투어 1 — 대화와 세션을 찾으세요.',
           detail: '새 대화 버튼, 지난 대화(세션) 목록, 프로젝트를 하나씩 직접 눌러봅니다.',
+          image: {
+            src: '/assets/tutorials/setup/claude-app-sidebar.png',
+            alt: 'Claude 앱의 Chat, Cowork, Code 모드와 왼쪽 메뉴 화면',
+          },
           success: '새 대화 버튼과 지난 대화 목록을 직접 눌러봤으면 성공입니다.',
           stuck: defaultStuck,
         },
         {
           action: '화면 투어 2 — 모델과 모드를 찾으세요.',
-          detail: '모델 선택 메뉴, 빠름/생각(fast/think) 게이지, 플랜 모드 스위치의 위치를 확인합니다. 지금은 위치만 알면 됩니다.',
-          success: '모델 선택, 빠름/생각 게이지, 플랜 모드 세 가지의 위치를 말할 수 있으면 성공입니다.',
+          detail: '모델 선택, 생각 깊이, 질문 모드, 프로젝트 또는 폴더에서 작업하기 위치를 확인합니다. 지금은 위치만 알면 됩니다.',
+          image: {
+            src: '/assets/tutorials/setup/claude-chat-input-attach.png',
+            alt: 'Claude 앱의 입력창, 파일 첨부, 모델 선택 위치 화면',
+          },
+          success: '모델 선택, 생각 깊이, 질문 모드, 폴더 작업 위치를 말할 수 있으면 성공입니다.',
           stuck: defaultStuck,
         },
         {
@@ -150,12 +152,6 @@ export const courseDays: TutorialDay[] = [
       ],
       codex: [
         {
-          action: '오늘 쓸 앱으로 코덱스를 고르세요.',
-          detail: '아래 선택 버튼에서 코덱스를 누릅니다. 이 선택은 이 브라우저에 저장됩니다.',
-          success: '상단에 "코덱스로 진행 중"이라고 보이면 성공입니다.',
-          stuck: defaultStuck,
-        },
-        {
           action: 'Codex 앱을 설치하고 로그인하세요.',
           detail: '설치된 Codex를 실행하고, 강사와 함께 계정과 결제 상태를 확인합니다.',
           success: '새 작업을 만들 수 있으면 성공입니다.',
@@ -164,12 +160,20 @@ export const courseDays: TutorialDay[] = [
         {
           action: '화면 투어 1 — 대화와 작업 공간을 찾으세요.',
           detail: '새 작업 버튼, 지난 작업 목록을 하나씩 직접 눌러봅니다.',
+          image: {
+            src: '/assets/tutorials/setup/codex-app-sidebar.png',
+            alt: 'Codex 앱의 New chat, Search, Scheduled, Plugins 왼쪽 메뉴 화면',
+          },
           success: '새 작업 버튼과 지난 작업 목록을 직접 눌러봤으면 성공입니다.',
           stuck: defaultStuck,
         },
         {
           action: '화면 투어 2 — 모델과 모드를 찾으세요.',
           detail: '모델 선택 메뉴와 계획(Plan) 모드의 위치를 확인합니다. 지금은 위치만 알면 됩니다.',
+          image: {
+            src: '/assets/tutorials/setup/codex-folder-plan-mode.png',
+            alt: 'Codex 앱의 작업 폴더 선택, 모델 선택, 계획 모드 위치 화면',
+          },
           success: '모델 선택과 계획 모드의 위치를 말할 수 있으면 성공입니다.',
           stuck: defaultStuck,
         },
