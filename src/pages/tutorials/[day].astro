@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { courseDays, courseVersion, dayPath, storageKeys, type AppChoice, type TutorialStep } from '../../data/course';
+import OneActionTutorial from '../../components/OneActionTutorial.astro';
+import { courseDays, courseVersion, dayPath, storageKeys, type AppChoice, type TutorialStep, type OneActionTutorialDay } from '../../data/course';
 
 export function getStaticPaths() {
   return courseDays.map((item) => ({
@@ -10,7 +11,9 @@ export function getStaticPaths() {
 }
 
 const { item } = Astro.props;
-const stepsByTrack = item.steps as TutorialStep[] | Record<AppChoice, TutorialStep[]>;
+const isOneAction = item.experience === 'one-action';
+const legacyItem = item as { steps: TutorialStep[] | Record<AppChoice, TutorialStep[]> };
+const stepsByTrack = legacyItem.steps;
 const trackSteps = item.appTrack === 'both' ? stepsByTrack as Record<AppChoice, TutorialStep[]> : null;
 const unifiedSteps = item.appTrack === 'unified' ? stepsByTrack as TutorialStep[] : null;
 const introSteps = trackSteps ? trackSteps.claude : unifiedSteps ?? [];
@@ -21,10 +24,11 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
 ---
 
 <Base
-  title={`Day ${item.day}. ${item.title} — AI 야학`}
+  title={`${item.day}일차. ${item.title} — AI 야학`}
   description={item.outcome}
   canonicalPath={dayPath(item.day)}
 >
+  {isOneAction ? <OneActionTutorial item={item as OneActionTutorialDay} /> : <>
   <header class="tutorials-header">
     <div class="tutorials-header__inner">
       <a href="/tutorials/" class="tutorials-brand" aria-label="AI 야학 20일 교재">
@@ -205,10 +209,12 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
       </div>
     </section>
   </main>
+  </>}
 
   <script>
     // @ts-nocheck
     const root = document.querySelector('[data-wizard]');
+    if (root) {
     const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
     const day = Number(root?.getAttribute('data-day') || '0');
     const status = root?.getAttribute('data-status') || 'coming-soon';
@@ -369,6 +375,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
     });
 
     restore();
+    }
   </script>
 
   <style>

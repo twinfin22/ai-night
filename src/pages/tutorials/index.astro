@@ -29,7 +29,7 @@ const fallbackDay = courseDays.find((day) => day.status === 'ready') ?? courseDa
       </div>
       <aside class="progress-board" aria-live="polite">
         <span class="progress-board__label" data-next-label>오늘 수업</span>
-        <h2 data-next-title>Day {fallbackDay.day}. {fallbackDay.title}</h2>
+        <h2 data-next-title>{fallbackDay.day}일차. {fallbackDay.title}</h2>
         <p data-next-summary>{fallbackDay.outcome}</p>
         <p class="progress-board__count" data-progress-text>20일 중 0일 완료</p>
         <div class="progress-board__bar" aria-hidden="true"><span data-progress-bar></span></div>
@@ -68,10 +68,10 @@ const fallbackDay = courseDays.find((day) => day.status === 'ready') ?? courseDa
                     data-status={day.status}
                     data-title={day.title}
                     data-outcome={day.outcome}
-                    aria-label={`Day ${day.day}. ${day.title}`}
+                    aria-label={`${day.day}일차. ${day.title}`}
                   >
                     <span class="day-card__top">
-                      <span>Day {day.day}</span>
+                      <span>{day.day}일차</span>
                       <span class="day-card__state" data-card-state hidden></span>
                     </span>
                     <strong>{day.title}</strong>
@@ -104,7 +104,18 @@ const fallbackDay = courseDays.find((day) => day.status === 'ready') ?? courseDa
     const kakaoWarning = document.querySelector('[data-kakao-warning]');
     if (kakaoWarning) kakaoWarning.hidden = !isKakao;
 
-    window.localStorage.setItem(keys.version, courseVersion);
+    try {
+      if (window.localStorage.getItem(keys.version) !== '3') {
+        const oldDone = readJson(keys.done, []).map(Number).filter((day) => day >= 6 && day <= 20);
+        const oldPosition = readJson(keys.position, {});
+        Object.keys(oldPosition).filter((key) => /^[1-5](?:\.(?:claude|codex))?$/.test(key)).forEach((key) => delete oldPosition[key]);
+        window.localStorage.setItem(keys.done, JSON.stringify([...new Set(oldDone)].sort((a, b) => a - b)));
+        window.localStorage.setItem(keys.position, JSON.stringify(oldPosition));
+        if (Number(window.localStorage.getItem(keys.last)) <= 5) window.localStorage.removeItem(keys.last);
+        if (!['claude', 'codex'].includes(window.localStorage.getItem(keys.app))) window.localStorage.removeItem(keys.app);
+        window.localStorage.setItem(keys.version, '3');
+      }
+    } catch { /* Continue without persistence. */ }
     const done = readJson(keys.done, []);
     const position = readJson(keys.position, {});
     const last = Number(window.localStorage.getItem(keys.last) || '0');
@@ -149,13 +160,13 @@ const fallbackDay = courseDays.find((day) => day.status === 'ready') ?? courseDa
     if (progressText) progressText.textContent = `20일 중 ${doneCount}일 완료`;
     if (progressBar) progressBar.style.width = `${Math.min(100, Math.round((doneCount / 20) * 100))}%`;
     if (nextLabel) nextLabel.textContent = allReadyDone ? '완주 완료' : inProgressDay ? '이어서 할 수업' : '오늘 수업';
-    if (nextTitle) nextTitle.textContent = `Day ${nextDay}. ${nextCard?.getAttribute('data-title') || ''}`.trim();
+    if (nextTitle) nextTitle.textContent = `${nextDay}일차. ${nextCard?.getAttribute('data-title') || ''}`.trim();
     if (nextSummary) nextSummary.textContent = allReadyDone
       ? '다시 보고 싶은 날을 아래 목록에서 고르세요.'
       : nextCard?.getAttribute('data-outcome') || '';
     if (nextLink instanceof HTMLAnchorElement) {
       nextLink.href = `/tutorials/day-${String(nextDay).padStart(2, '0')}/`;
-      nextLink.textContent = allReadyDone ? 'Day 1 다시 보기' : inProgressDay ? '이어서 하기' : '오늘 수업 열기';
+      nextLink.textContent = allReadyDone ? '1일차 다시 보기' : inProgressDay ? '이어서 하기' : '오늘 수업 열기';
     }
   </script>
 </Base>

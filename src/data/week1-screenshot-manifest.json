@@ -1,0 +1,17 @@
+{
+  "source": {
+    "workbook": "AI야학 튜토리얼",
+    "spreadsheetId": "1aT28MPd8RuqsNzRwK77ZM2Zp5vZDKH7Bfgt59Aj2gqM",
+    "sheet": "1주차 세부 강의안",
+    "gid": 20260710,
+    "readAt": "2026-07-14T17:44:00+09:00"
+  },
+  "items": [
+    { "pageId": "d01-codex-download", "track": "codex", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/setup/d01-codex-download-official.png", "deploy": "/assets/tutorials/week1/d01-codex-download-official.png", "alt": "ChatGPT 데스크톱 앱 공식 다운로드 화면", "capturedAt": "2026-07-13", "status": "verified" },
+    { "pageId": "d01-claude-download", "track": "claude", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/setup/d01-claude-download-official.png", "deploy": "/assets/tutorials/week1/d01-claude-download-official.png", "alt": "Claude 앱 공식 다운로드 화면", "capturedAt": "2026-07-13", "status": "verified" },
+    { "pageId": "d02-codex-usage", "track": "codex", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/app-features/screenshots/d02-codex-usage-live.png", "deploy": "/assets/tutorials/week1/d02-codex-usage-live.png", "alt": "Codex 사용량 설정 화면", "capturedAt": "2026-07-13", "status": "verified" },
+    { "pageId": "d02-claude-usage", "track": "claude", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/app-features/screenshots/d02-claude-usage-official.png", "deploy": "/assets/tutorials/week1/d02-claude-usage-official.png", "alt": "Claude Code 사용량 화면", "capturedAt": "2026-07-13", "status": "verified" },
+    { "pageId": "d05-open-codex", "track": "codex", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/automations/screenshots/d05-codex-automations-official.png", "deploy": "/assets/tutorials/week1/d05-codex-automations-official.png", "alt": "Codex Automations 공식 화면", "capturedAt": "2026-07-10", "status": "verified" },
+    { "pageId": "d05-open-claude", "track": "claude", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png", "deploy": "/assets/tutorials/week1/d05-claude-schedule-official.png", "alt": "Claude 예약 작업 공식 화면", "capturedAt": "2026-07-10", "status": "verified" }
+  ]
+}
