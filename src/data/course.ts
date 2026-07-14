@@ -1,3 +1,5 @@
+import { week1Days } from './course-week1';
+
 export type AppChoice = 'claude' | 'codex';
 export type TutorialStatus = 'ready' | 'coming-soon';
 export type AppTrack = 'both' | 'unified';
@@ -32,6 +34,38 @@ export interface TutorialDay {
   steps: TutorialStep[] | Record<AppChoice, TutorialStep[]>;
 }
 
+export type OneActionKind = 'START' | 'CHOICE' | 'ACTION' | 'RETRO';
+export type OneActionView = 'FOCUS' | 'WORKBENCH' | 'SPOTLIGHT' | 'PROMPT' | 'COMPARISON' | 'WORKBOOK';
+
+export interface OneActionPage {
+  id: string;
+  kind: OneActionKind;
+  view: OneActionView;
+  title: string;
+  description: string;
+  action: string;
+  track?: AppChoice;
+  subtitle?: string;
+  outcome?: string;
+  flow?: string[];
+  prompt?: string;
+  image?: { src: string; alt: string };
+  supporting?: string;
+  choices?: { value: string; label: string; description: string }[];
+  comparison?: { label: string; content: string }[];
+}
+
+export interface OneActionTutorialDay extends Omit<TutorialDay, 'appTrack' | 'steps' | 'challenge' | 'tomorrow'> {
+  experience: 'one-action';
+  appTrack: AppTrack;
+  pages: OneActionPage[];
+  challenge?: string;
+  tomorrow?: string;
+}
+
+export type LegacyTutorialDay = TutorialDay & { experience?: never };
+export type CourseDay = LegacyTutorialDay | OneActionTutorialDay;
+
 export const storageKeys = {
   version: 'ainight.version',
   done: 'ainight.done',
@@ -40,7 +74,7 @@ export const storageKeys = {
   app: 'ainight.app',
 };
 
-export const courseVersion = '2';
+export const courseVersion = '3';
 
 const defaultStuck: StuckHelp = {
   different: '화면 이름이 조금 달라도 괜찮습니다. 지금 단계에서 찾는 말만 다시 확인하세요.',
@@ -88,7 +122,7 @@ export const weeks = [
   { week: 4, theme: '홀로서기', subtitle: '배운 것을 조합해 나만의 시스템을 만듭니다.' },
 ];
 
-export const courseDays: TutorialDay[] = [
+const legacyCourseDays: LegacyTutorialDay[] = [
   {
     day: 1, week: 1, theme: '차리기',
     title: '시작하기 — 설치, 가입, 화면 투어',
@@ -1593,6 +1627,11 @@ AGENTS.md와 가게 자료
       weeklyHistoryStep(4, 'Day 16-20'),
     ],
   },
+];
+
+export const courseDays: CourseDay[] = [
+  ...week1Days,
+  ...legacyCourseDays.filter((day) => day.day >= 6),
 ];
 
 export function getDay(day: number) {

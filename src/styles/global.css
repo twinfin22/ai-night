@@ -604,6 +604,68 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 /* ====== 20-day tutorial course ====== */
+:root {
+  --workboard-bg: var(--cream);
+  --workboard-ink: var(--panel);
+  --workboard-ink-soft: #594a32;
+  --workboard-border: var(--ink-mute);
+  --workboard-accent-ink: #694414;
+  --workboard-action-bg: var(--amber);
+  --workboard-action-ink: var(--bg);
+}
+
+.one-action { min-height: 100dvh; background: var(--bg); }
+.one-action__shell { min-height: 100dvh; display: grid; grid-template-rows: 64px minmax(0, 1fr) 76px; }
+.one-action__header { min-width: 0; padding: 0 24px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 20px; border-bottom: 1px solid var(--hairline); }
+.one-action__brand { color: var(--cream); font-weight: 800; text-decoration: none; white-space: nowrap; }
+.one-action__header > strong { min-width: 0; overflow: hidden; color: var(--cream); font-size: 16px; text-overflow: ellipsis; white-space: nowrap; }
+.one-action__header > strong span { color: var(--amber); }
+.one-action__progress { min-width: 62px; color: var(--cream); font-size: 14px; font-weight: 800; text-align: right; }
+.one-action__body { min-height: 0; display: grid; grid-template-columns: clamp(360px, 31vw, 420px) minmax(0, 1fr); }
+.one-action__brief { min-height: 0; padding: 42px 34px; overflow: auto; background: var(--panel); border-right: 1px solid var(--hairline); }
+.one-action__brief > p:first-child { margin: 0 0 16px; color: var(--amber); font-size: 14px; font-weight: 800; }
+.one-action__brief h1 { margin: 0 0 20px; color: var(--cream); font-size: 28px; line-height: 1.25; }
+.one-action__brief p { color: var(--ink-soft); line-height: 1.7; }
+.one-action__brief > strong { display: block; margin-top: 26px; color: var(--cream); font-size: 17px; line-height: 1.6; }
+.one-action__workboard { min-width: 0; min-height: 0; padding: clamp(24px, 4vw, 58px); overflow: auto; background: var(--workboard-bg); color: var(--workboard-ink); }
+.workboard-focus { max-width: 720px; font-size: 19px; line-height: 1.7; }
+.workboard-focus ol { padding-left: 1.3em; }
+.workboard-focus li { padding: 8px 0; }
+.workboard-focus strong { display: block; margin-top: 30px; color: var(--workboard-accent-ink); }
+.workboard-image { max-width: 900px; margin: 0; }
+.workboard-image button { display: block; width: 100%; padding: 0; border: 1px solid var(--workboard-border); border-radius: 8px; background: transparent; cursor: zoom-in; }
+.workboard-image img { display: block; width: 100%; height: auto; }
+.workboard-image figcaption { margin-top: 14px; color: var(--workboard-ink-soft); line-height: 1.6; }
+.workboard-prompt { max-width: 900px; }
+.workboard-prompt button, .one-action__actions button, .one-action__primary { min-width: 110px; min-height: 48px; padding: 12px 18px; border: 1px solid var(--workboard-border); border-radius: 8px; background: transparent; color: inherit; font: inherit; font-weight: 800; cursor: pointer; }
+.workboard-prompt button { float: right; margin-bottom: 12px; background: var(--workboard-action-bg); border-color: var(--workboard-action-bg); color: var(--workboard-action-ink); }
+.workboard-prompt pre { clear: both; margin: 0; padding: 24px; overflow: auto; border: 1px solid var(--workboard-border); border-radius: 8px; background: #fffaf0; color: var(--workboard-ink); font: 500 15px/1.7 Pretendard, system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif; white-space: pre-wrap; }
+.workboard-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 900px; }
+.workboard-comparison section, .workboard-choice label { padding: 22px; border: 1px solid var(--workboard-border); border-radius: 8px; }
+.workboard-comparison strong { color: var(--workboard-accent-ink); }
+.workboard-comparison p { line-height: 1.6; }
+.workboard-choice { display: grid; gap: 12px; max-width: 760px; border: 0; padding: 0; }
+.workboard-choice legend { margin-bottom: 10px; color: var(--workboard-ink); font-weight: 800; }
+.workboard-choice label { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; cursor: pointer; }
+.workboard-choice label span { grid-column: 2; color: var(--workboard-ink-soft); }
+.one-action__actions { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; border-top: 1px solid var(--hairline); background: var(--panel); }
+.one-action__actions button { color: var(--cream); border-color: var(--hairline-2); background: transparent; }
+.one-action__actions button:last-child, .one-action__primary { background: var(--amber); border-color: var(--amber); color: var(--bg); }
+.one-action__actions button:disabled { opacity: .45; cursor: default; }
+.one-action__preflight { width: min(680px, calc(100% - 40px)); margin: 10dvh auto; padding: 34px; border: 1px solid var(--hairline); border-radius: 8px; background: var(--panel); }
+.one-action__preflight h1 { color: var(--cream); }
+.one-action__app-options { display: grid; gap: 12px; margin: 28px 0; border: 0; padding: 0; }
+.one-action__app-options legend { margin-bottom: 10px; color: var(--ink-soft); font-weight: 800; }
+.one-action__app-options label { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; padding: 18px; border: 1px solid var(--hairline-2); border-radius: 8px; color: var(--cream); cursor: pointer; }
+.one-action__app-options label span { grid-column: 2; color: var(--ink-soft); }
+.image-dialog { width: min(96vw, 1200px); max-height: 96dvh; padding: 16px; border: 1px solid var(--hairline-2); border-radius: 8px; background: var(--panel); }
+.image-dialog::backdrop { background: rgba(0,0,0,.75); }
+.image-dialog button { display: block; margin: 0 0 12px auto; min-height: 44px; border: 0; background: transparent; color: var(--cream); font: inherit; font-weight: 800; }
+.image-dialog img { display: block; max-width: 100%; max-height: calc(96dvh - 70px); margin: 0 auto; }
+@media (max-width: 1023px) { .one-action__shell { display: block; min-height: 100dvh; } .one-action__header { position: sticky; top: 0; z-index: 3; height: 64px; background: var(--bg); } .one-action__body { display: block; } .one-action__brief, .one-action__workboard { overflow: visible; } .one-action__brief { border-right: 0; border-bottom: 1px solid var(--hairline); } .one-action__actions { position: sticky; bottom: 0; z-index: 3; } }
+@media (max-width: 560px) { .one-action__header { padding: 0 14px; gap: 10px; } .one-action__brand { font-size: 14px; } .one-action__header > strong { font-size: 14px; } .one-action__brief, .one-action__workboard { padding: 26px 20px; } .workboard-comparison { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; } }
+
 .tutorials-header {
   position: sticky;
   top: 0;
