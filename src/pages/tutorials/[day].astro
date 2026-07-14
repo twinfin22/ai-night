@@ -203,6 +203,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
             {extraText(step.toggle) && <details class="tutorial-toggle"><summary>{extraLabel(step.toggle)}</summary><p>{extraText(step.toggle)}</p></details>}
             {(step.screenType === 'RETRO' || step.kind === 'RETRO') && <aside class="human-reflection-card"><strong>이 답은 내가 직접 합니다</strong><p>AI가 대신 쓰거나 평가하지 않습니다. 내 말로 답한 뒤 정리만 맡기세요.</p></aside>}
             {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
+            {step.images?.map((image) => <img class="wizard-shot" src={image.src} alt={image.alt} loading="lazy" />)}
             {step.copyText && (
               <div class="copy-box">
                 <button type="button" data-copy>복사하기</button>

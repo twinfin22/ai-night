@@ -10,12 +10,18 @@ export interface StuckHelp {
   skip: boolean;
 }
 
+export interface TutorialImage {
+  src: string;
+  alt: string;
+}
+
 export interface TutorialStep {
   kind?: 'FOCUS' | 'PROMPT' | 'WORKBENCH' | 'SPOTLIGHT' | 'RETRO';
   action: string;
   detail: string;
   copyText?: string;
-  image?: { src: string; alt: string };
+  image?: TutorialImage;
+  images?: TutorialImage[];
   success: string;
   stuck: StuckHelp;
 }
