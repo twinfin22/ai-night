@@ -2,6 +2,25 @@
 import Base from '../../layouts/Base.astro';
 import { courseDays, courseVersion, dayPath, storageKeys, type AppChoice, type TutorialStep } from '../../data/course';
 
+type StepAudience = 'COMMON' | 'CLAUDE' | 'CODEX';
+type StepKind = 'ACTION' | 'PROMPT' | 'COMPARISON' | 'RETRO';
+type ExtraText = string | { title?: string; label?: string; body?: string; text?: string };
+type SheetStep = TutorialStep & {
+  audience?: StepAudience;
+  screenType?: StepKind;
+  note?: ExtraText;
+  toggle?: ExtraText;
+};
+
+const audienceTrack = (step: SheetStep): AppChoice | undefined => {
+  if (step.audience === 'CLAUDE') return 'claude';
+  if (step.audience === 'CODEX') return 'codex';
+  return undefined;
+};
+
+const extraText = (value?: ExtraText) => typeof value === 'string' ? value : value?.body || value?.text || '';
+const extraLabel = (value?: ExtraText, fallback = '보충 설명 보기') => typeof value === 'string' ? fallback : value?.title || value?.label || fallback;
+
 export function getStaticPaths() {
   return courseDays.map((item) => ({
     params: { day: `day-${String(item.day).padStart(2, '0')}` },
@@ -10,12 +29,19 @@ export function getStaticPaths() {
 }
 
 const { item } = Astro.props;
-const stepsByTrack = item.steps as TutorialStep[] | Record<AppChoice, TutorialStep[]>;
-const trackSteps = item.appTrack === 'both' ? stepsByTrack as Record<AppChoice, TutorialStep[]> : null;
-const unifiedSteps = item.appTrack === 'unified' ? stepsByTrack as TutorialStep[] : null;
+const stepsByTrack = item.steps as SheetStep[] | Record<AppChoice, SheetStep[]>;
+const trackSteps = Array.isArray(stepsByTrack) ? null : stepsByTrack;
+const unifiedSteps = Array.isArray(stepsByTrack) ? stepsByTrack : null;
+const hasAudienceTracks = (unifiedSteps ?? []).some((step) => audienceTrack(step));
+const hasTrackChoice = Boolean(trackSteps) || hasAudienceTracks;
 const introSteps = trackSteps ? trackSteps.claude : unifiedSteps ?? [];
-const lessonStepCount = trackSteps ? Math.max(trackSteps.claude.length, trackSteps.codex.length) : introSteps.length;
-const totalSteps = lessonStepCount + 3;
+const lessonStepCount = trackSteps
+  ? Math.max(trackSteps.claude.length, trackSteps.codex.length)
+  : hasAudienceTracks
+    ? Math.max(...(['claude', 'codex'] as AppChoice[]).map((app) => (unifiedSteps ?? []).filter((step) => !audienceTrack(step) || audienceTrack(step) === app).length))
+    : introSteps.length;
+const isWeek3 = item.week === 3;
+const totalSteps = lessonStepCount + (isWeek3 ? 1 : 3);
 const readyDayCount = courseDays.filter((day) => day.status === 'ready').length;
 const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
 ---
@@ -40,7 +66,8 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
     data-wizard
     data-day={item.day}
     data-status={item.status}
-    data-track-mode={item.appTrack}
+    data-track-mode={hasTrackChoice ? 'both' : 'unified'}
+    data-week3={String(isWeek3)}
     data-storage={JSON.stringify(storageKeys)}
     data-course-version={courseVersion}
   >
@@ -68,10 +95,10 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
       </div>
 
       <article class="wizard-screen is-active" data-screen data-index="-1" data-title={item.title}>
-        <span class="eyebrow">오늘 만들 것</span>
+        <span class="eyebrow">{isWeek3 ? '오늘 결과물' : '오늘 만들 것'}</span>
         <h1 id="wizard-title">{item.title}</h1>
         <p class="wizard-outcome">{item.outcome}</p>
-        {item.appTrack === 'both' && (
+        {hasTrackChoice && (
           <div class="app-choice" aria-label="오늘 쓸 앱 선택">
             <div class="app-choice__head">
               <strong>오늘 쓸 앱</strong>
@@ -115,7 +142,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
           ) : (
             <ol>
               {(unifiedSteps ?? []).map((step, index) => (
-                <li>
+                <li data-overview-step data-track={audienceTrack(step)}>
                   <span>{String(index + 1).padStart(2, '0')}</span>
                   <em>{step.action}</em>
                 </li>
@@ -125,18 +152,22 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
         </div>
       </article>
 
-      {item.appTrack === 'both' ? (
+      {trackSteps ? (
         <>
           {trackSteps?.claude.map((step, index) => (
             <article class="wizard-screen" data-screen data-index={index} data-track="claude" data-title={step.action}>
               <span class="screen-count">따라하기 {index + 1}</span>
               <h2>{step.action}</h2>
               <p>{step.detail}</p>
+              {extraText(step.note) && <aside class="tutorial-note"><strong>알아두세요</strong><p>{extraText(step.note)}</p></aside>}
+              {extraText(step.toggle) && <details class="tutorial-toggle"><summary>{extraLabel(step.toggle)}</summary><p>{extraText(step.toggle)}</p></details>}
+              {(step.screenType === 'RETRO' || step.kind === 'RETRO') && <aside class="human-reflection-card"><strong>이 답은 내가 직접 합니다</strong><p>AI가 대신 쓰거나 평가하지 않습니다. 내 말로 답한 뒤 정리만 맡기세요.</p></aside>}
               {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
               {step.copyText && (
                 <div class="copy-box">
                   <button type="button" data-copy>복사하기</button>
-                  <pre><code>{step.copyText}</code></pre>
+                  {step.copyText.includes('[') && <p class="prompt-personalization-guide">노란 칸은 내 상황에 맞게 바꾸세요.</p>}
+                  <pre><code>{step.copyText.split(/(\[[^\]\n]+\])/).map((part) => part.startsWith('[') && part.endsWith(']') ? <mark class="prompt-personalization">{part}</mark> : part)}</code></pre>
                 </div>
               )}
               <div class="success-check"><strong>이렇게 보이면 성공</strong><p>{step.success}</p></div>
@@ -147,11 +178,15 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
               <span class="screen-count">따라하기 {index + 1}</span>
               <h2>{step.action}</h2>
               <p>{step.detail}</p>
+              {extraText(step.note) && <aside class="tutorial-note"><strong>알아두세요</strong><p>{extraText(step.note)}</p></aside>}
+              {extraText(step.toggle) && <details class="tutorial-toggle"><summary>{extraLabel(step.toggle)}</summary><p>{extraText(step.toggle)}</p></details>}
+              {(step.screenType === 'RETRO' || step.kind === 'RETRO') && <aside class="human-reflection-card"><strong>이 답은 내가 직접 합니다</strong><p>AI가 대신 쓰거나 평가하지 않습니다. 내 말로 답한 뒤 정리만 맡기세요.</p></aside>}
               {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
               {step.copyText && (
                 <div class="copy-box">
                   <button type="button" data-copy>복사하기</button>
-                  <pre><code>{step.copyText}</code></pre>
+                  {step.copyText.includes('[') && <p class="prompt-personalization-guide">노란 칸은 내 상황에 맞게 바꾸세요.</p>}
+                  <pre><code>{step.copyText.split(/(\[[^\]\n]+\])/).map((part) => part.startsWith('[') && part.endsWith(']') ? <mark class="prompt-personalization">{part}</mark> : part)}</code></pre>
                 </div>
               )}
               <div class="success-check"><strong>이렇게 보이면 성공</strong><p>{step.success}</p></div>
@@ -160,15 +195,20 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
         </>
       ) : (
         unifiedSteps?.map((step, index) => (
-          <article class="wizard-screen" data-screen data-index={index} data-title={step.action}>
-            <span class="screen-count">따라하기 {index + 1}</span>
+          <article class="wizard-screen" data-screen data-index={index} data-track={audienceTrack(step)} data-title={step.action}>
+            <span class="screen-count">{step.kind ?? '따라하기'} {index + 1}</span>
             <h2>{step.action}</h2>
             <p>{step.detail}</p>
+            {extraText(step.note) && <aside class="tutorial-note"><strong>알아두세요</strong><p>{extraText(step.note)}</p></aside>}
+            {extraText(step.toggle) && <details class="tutorial-toggle"><summary>{extraLabel(step.toggle)}</summary><p>{extraText(step.toggle)}</p></details>}
+            {(step.screenType === 'RETRO' || step.kind === 'RETRO') && <aside class="human-reflection-card"><strong>이 답은 내가 직접 합니다</strong><p>AI가 대신 쓰거나 평가하지 않습니다. 내 말로 답한 뒤 정리만 맡기세요.</p></aside>}
             {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
             {step.copyText && (
               <div class="copy-box">
                 <button type="button" data-copy>복사하기</button>
-                <pre><code>{step.copyText}</code></pre>
+                {step.copyText.includes('[') && <p class="prompt-personalization-guide">노란 칸은 내 상황에 맞게 바꾸세요.</p>}
+                {isWeek3 && <p class="prompt-personalization-guide">상황에 맞게 고쳐 사용하세요.</p>}
+                <pre><code>{step.copyText.split(/(\[[^\]\n]+\])/).map((part) => part.startsWith('[') && part.endsWith(']') ? <mark class="prompt-personalization">{part}</mark> : part)}</code></pre>
               </div>
             )}
             <div class="success-check"><strong>이렇게 보이면 성공</strong><p>{step.success}</p></div>
@@ -176,14 +216,14 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
         ))
       )}
 
-      <article class="wizard-screen" data-screen data-kind="challenge" data-title="오늘의 도전">
+      {!isWeek3 && <article class="wizard-screen" data-screen data-kind="challenge" data-title="오늘의 도전">
         <span class="eyebrow">오늘의 도전</span>
         <h2>정답 없는 응용 미션입니다.</h2>
         <p>{item.challenge}</p>
         <div class="success-check"><strong>완료 기준</strong><p>내 상황에 맞게 한 번 바꿔보면 충분합니다.</p></div>
-      </article>
+      </article>}
 
-      <article class="wizard-screen" data-screen data-kind="finish" data-title="완료">
+      {!isWeek3 && <article class="wizard-screen" data-screen data-kind="finish" data-title="완료">
         <span class="eyebrow">완료</span>
         {item.status === 'ready' ? (
           <>
@@ -197,7 +237,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
             <p>주소는 열리지만 도장은 찍히지 않습니다. 20일 목록에서 준비된 수업을 골라주세요.</p>
           </>
         )}
-      </article>
+      </article>}
 
       <div class="wizard-actions">
         <button type="button" data-prev>이전</button>
@@ -214,6 +254,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
     const status = root?.getAttribute('data-status') || 'coming-soon';
     const isReady = status === 'ready';
     const trackMode = root?.getAttribute('data-track-mode') || 'unified';
+    const isWeek3 = root?.getAttribute('data-week3') === 'true';
     const courseVersion = root?.getAttribute('data-course-version') || '2';
     const prev = document.querySelector('[data-prev]');
     const next = document.querySelector('[data-next]');
@@ -223,6 +264,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
     const courseProgressBar = document.querySelector('[data-course-progress-bar]');
     const dots = Array.from(document.querySelectorAll('[data-dot]'));
     const overviewLists = Array.from(document.querySelectorAll('[data-overview-track]'));
+    const overviewSteps = Array.from(document.querySelectorAll('[data-overview-step]'));
 
     const readJson = (key, fallback) => {
       try {
@@ -259,6 +301,10 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
       });
       overviewLists.forEach((list) => {
         list.hidden = list.getAttribute('data-overview-track') !== app;
+      });
+      overviewSteps.forEach((step) => {
+        const track = step.getAttribute('data-track');
+        step.hidden = Boolean(track && track !== app);
       });
       if (appLabel) appLabel.textContent = `${app === 'claude' ? '클로드' : '코덱스'} 단계가 열립니다.`;
     };
@@ -303,7 +349,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
       if (lessonProgress) lessonProgress.textContent = `수업 단계 ${visibleIndex + 1} / ${visible.length} · ${currentTitle}`;
       if (prev instanceof HTMLButtonElement) prev.disabled = activeIndex < 0;
       if (next instanceof HTMLButtonElement) {
-        const isFinish = activeIndex >= visible.length - 2;
+        const isFinish = activeIndex >= visible.length - (isWeek3 ? 1 : 2);
         if (!isReady && isFinish) next.textContent = '20일 목록으로 돌아가기';
         else if (!isReady) next.textContent = activeIndex < 0 ? '내용 보기' : '다음';
         else next.textContent = activeIndex < 0 ? '시작하기' : isFinish ? '완료하고 도장 찍기' : '다음';
@@ -324,7 +370,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
         }
       }
       const restoredIndex = Number(position[positionKey()] ?? -1);
-      const maxIndex = Math.max(-1, getVisibleScreens().length - 2);
+      const maxIndex = Math.max(-1, getVisibleScreens().length - (isWeek3 ? 1 : 2));
       activeIndex = Number.isFinite(restoredIndex) ? Math.min(restoredIndex, maxIndex) : -1;
       render();
     };
@@ -343,7 +389,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
     });
     next?.addEventListener('click', () => {
       const visible = getVisibleScreens();
-      if (activeIndex >= visible.length - 2) {
+      if (activeIndex >= visible.length - (isWeek3 ? 1 : 2)) {
         markDone();
         window.location.href = '/tutorials/';
         return;
@@ -373,5 +419,12 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
 
   <style>
     .wizard-shot { width: 100%; border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.1); margin: 12px 0; }
+    .tutorial-note, .human-reflection-card, .tutorial-toggle { margin-top: 16px; padding: 16px; border: 1px solid var(--hairline); border-radius: 8px; background: var(--bg-soft); }
+    .tutorial-note strong, .human-reflection-card strong { color: var(--amber); }
+    .tutorial-note p, .human-reflection-card p, .tutorial-toggle p { margin: 8px 0 0; font-size: 16px; }
+    .tutorial-toggle summary { cursor: pointer; color: var(--cream); font-weight: 800; }
+    .human-reflection-card { border-color: rgba(244, 184, 96, 0.65); background: rgba(244, 184, 96, 0.08); }
+    .prompt-personalization-guide { margin: 0; color: var(--amber); font-size: 14px; font-weight: 800; }
+    .prompt-personalization { padding: 0 3px; border-radius: 3px; background: rgba(244, 184, 96, 0.25); color: var(--cream); }
   </style>
 </Base>

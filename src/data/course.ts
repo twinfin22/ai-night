@@ -1,3 +1,5 @@
+import { week3CourseDays } from './course-week3';
+
 export type AppChoice = 'claude' | 'codex';
 export type TutorialStatus = 'ready' | 'coming-soon';
 export type AppTrack = 'both' | 'unified';
@@ -9,6 +11,7 @@ export interface StuckHelp {
 }
 
 export interface TutorialStep {
+  kind?: 'FOCUS' | 'PROMPT' | 'WORKBENCH' | 'SPOTLIGHT' | 'RETRO';
   action: string;
   detail: string;
   copyText?: string;
@@ -88,7 +91,7 @@ export const weeks = [
   { week: 4, theme: '홀로서기', subtitle: '배운 것을 조합해 나만의 시스템을 만듭니다.' },
 ];
 
-export const courseDays: TutorialDay[] = [
+const baseCourseDays: TutorialDay[] = [
   {
     day: 1, week: 1, theme: '차리기',
     title: '시작하기 — 설치, 가입, 화면 투어',
@@ -1594,6 +1597,13 @@ AGENTS.md와 가게 자료
     ],
   },
 ];
+
+// Week 3 is a static transcription of the approved workbook, kept separate so
+// its one-action screens cannot drift back to the legacy course copy above.
+export const courseDays: TutorialDay[] = [
+  ...baseCourseDays.filter((day) => day.week !== 3),
+  ...week3CourseDays,
+].sort((left, right) => left.day - right.day);
 
 export function getDay(day: number) {
   return courseDays.find((item) => item.day === day);
