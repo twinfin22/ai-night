@@ -213,6 +213,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
 
   <script>
     // @ts-nocheck
+    import { runCourseMigrations } from '../../lib/tutorial-progress';
     const root = document.querySelector('[data-wizard]');
     if (root) {
     const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
@@ -250,7 +251,7 @@ const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
       textarea.remove();
     };
 
-    window.localStorage.setItem(keys.version, courseVersion);
+    try { runCourseMigrations(window.localStorage); } catch { /* Continue without persistence. */ }
     let app = window.localStorage.getItem(keys.app) || 'claude';
     let activeIndex = -1;
 

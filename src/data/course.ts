@@ -1,4 +1,5 @@
 import { week1Days } from './course-week1';
+import { week4Days } from './course-week4';
 
 export type AppChoice = 'claude' | 'codex';
 export type TutorialStatus = 'ready' | 'coming-soon';
@@ -36,6 +37,19 @@ export interface TutorialDay {
 
 export type OneActionKind = 'START' | 'CHOICE' | 'ACTION' | 'RETRO';
 export type OneActionView = 'FOCUS' | 'WORKBENCH' | 'SPOTLIGHT' | 'PROMPT' | 'COMPARISON' | 'WORKBOOK';
+export type OneActionControlType = 'text' | 'radio' | 'checkbox' | 'check';
+
+export interface OneActionControl {
+  id: string;
+  type: OneActionControlType;
+  label: string;
+  required?: boolean;
+  min?: number;
+  max?: number;
+  exact?: number;
+  options?: { value: string; label: string; description?: string }[];
+  persist?: 'local' | 'session';
+}
 
 export interface OneActionPage {
   id: string;
@@ -49,10 +63,15 @@ export interface OneActionPage {
   outcome?: string;
   flow?: string[];
   prompt?: string;
+  highlightTokens?: string[];
   image?: { src: string; alt: string };
+  images?: { src: string; alt: string }[];
+  officialLinks?: { label: string; href: string }[];
   supporting?: string;
   choices?: { value: string; label: string; description: string }[];
   comparison?: { label: string; content: string }[];
+  controls?: OneActionControl[];
+  advanceWhen?: 'started' | 'copied' | 'controls' | 'confirmed';
 }
 
 export interface OneActionTutorialDay extends Omit<TutorialDay, 'appTrack' | 'steps' | 'challenge' | 'tomorrow'> {
@@ -72,9 +91,10 @@ export const storageKeys = {
   position: 'ainight.position',
   last: 'ainight.last',
   app: 'ainight.app',
+  draft: 'ainight.draft',
 };
 
-export const courseVersion = '3';
+export const courseVersion = '4';
 
 const defaultStuck: StuckHelp = {
   different: '화면 이름이 조금 달라도 괜찮습니다. 지금 단계에서 찾는 말만 다시 확인하세요.',
@@ -1631,7 +1651,8 @@ AGENTS.md와 가게 자료
 
 export const courseDays: CourseDay[] = [
   ...week1Days,
-  ...legacyCourseDays.filter((day) => day.day >= 6),
+  ...legacyCourseDays.filter((day) => day.day >= 6 && day.day <= 15),
+  ...week4Days,
 ];
 
 export function getDay(day: number) {

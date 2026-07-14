@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "week": 4,
+  "generatedAt": "2026-07-14",
+  "policy": {
+    "screenshots": "Blocked entries require a real, current, redacted capture. No placeholder or synthetic UI image is shipped.",
+    "syntheticSamples": "CSV samples are fictional, UTF-8, contain no personal information, and are only for Day 18 upload practice."
+  },
+  "assets": [
+    {
+      "pageId": "d18-action-02",
+      "type": "synthetic-csv",
+      "status": "ready",
+      "sourceUrl": null,
+      "deployPath": "/assets/tutorials/week4/samples/d18-cafe-sales-synthetic.csv",
+      "contentType": "text/csv; charset=utf-8",
+      "recordCount": 42,
+      "dateRange": "2026-05-04 to 2026-06-14",
+      "privacyReview": "pass: fictional aggregate sales only; no identifiers",
+      "patterns": [
+        "Saturday and Sunday iced americano quantity is 25 and 22 each week (47 per weekend).",
+        "Friday croissant quantity is 20 each week.",
+        "Delivery appears only on Monday and Thursday rows (12 and 9 units)."
+      ],
+      "evidence": "Six identical seven-day cycles; the stated values are directly visible in the 42 rows."
+    },
+    {
+      "pageId": "d18-action-02",
+      "type": "synthetic-csv",
+      "status": "ready",
+      "sourceUrl": null,
+      "deployPath": "/assets/tutorials/week4/samples/d18-retail-orders-synthetic.csv",
+      "contentType": "text/csv; charset=utf-8",
+      "recordCount": 42,
+      "dateRange": "2026-05-04 to 2026-06-14",
+      "privacyReview": "pass: fictional aggregate orders only; no customer or order identifiers",
+      "patterns": [
+        "Saturday and Sunday gift-set quantity is 30 and 26 each week (56 per weekend).",
+        "Friday gift-set revenue is 270000 every week.",
+        "Marketplace appears only on Saturday and Sunday."
+      ],
+      "evidence": "Six identical seven-day cycles; the stated values are directly visible in the 42 rows."
+    },
+    {
+      "pageId": "d18-action-02",
+      "type": "synthetic-csv",
+      "status": "ready",
+      "sourceUrl": null,
+      "deployPath": "/assets/tutorials/week4/samples/d18-salon-reservations-synthetic.csv",
+      "contentType": "text/csv; charset=utf-8",
+      "recordCount": 42,
+      "dateRange": "2026-05-04 to 2026-06-14",
+      "privacyReview": "pass: fictional daily aggregates only; no client or appointment data",
+      "patterns": [
+        "Saturday reservations are 12 with 10 attendees and 2 cancellations every week.",
+        "Monday has 2 cancellations every week, higher than Tuesday through Friday (1) and Sunday (0).",
+        "Sunday clinic reservations are 6 with all 6 attendees every week."
+      ],
+      "evidence": "Six identical seven-day cycles; the stated values are directly visible in the 42 rows."
+    },
+    {
+      "pageId": "d18-action-02",
+      "type": "synthetic-csv",
+      "status": "ready",
+      "sourceUrl": null,
+      "deployPath": "/assets/tutorials/week4/samples/d18-store-reviews-synthetic.csv",
+      "contentType": "text/csv; charset=utf-8",
+      "recordCount": 42,
+      "dateRange": "2026-05-04 to 2026-06-14",
+      "privacyReview": "pass: fictional generic reviews only; no people, contacts, order details, or identifiers",
+      "patterns": [
+        "Every Friday review is rating 3 in the wait-time category.",
+        "Every Saturday and Sunday review is rating 5 in the kindness category.",
+        "Every Wednesday review is rating 5 in the taste category."
+      ],
+      "evidence": "Six identical seven-day cycles; the stated values are directly visible in the 42 rows."
+    },
+    {
+      "pageId": "d17-action-01",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d17-file-attach-live.png",
+      "sourceUrl": "https://claude.ai/",
+      "alt": "AI 앱에서 파일을 첨부하는 실제 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Live app capture and redaction are required; no account-bound or fake screenshot is available."
+    },
+    {
+      "pageId": "d18-action-03",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d18-file-attach-live.png",
+      "sourceUrl": "https://claude.ai/",
+      "alt": "AI 앱에서 분석할 자료를 첨부하는 실제 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Live app capture and redaction are required; no account-bound or fake screenshot is available."
+    },
+    {
+      "pageId": "d18-action-06",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d18-dashboard-layout-example.png",
+      "sourceUrl": "https://claude.ai/",
+      "alt": "AI가 만든 대시보드 결과를 확인하는 실제 예시 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "A real result screen must be captured after running a sample and redacting it; synthetic dashboard UI is prohibited."
+    },
+    {
+      "pageId": "d18-action-07",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d18-dashboard-layout-example.png",
+      "sourceUrl": "https://claude.ai/",
+      "alt": "AI가 만든 대시보드 결과를 확인하는 실제 예시 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Same shared image as d18-action-06; a real result screen must be captured and redacted."
+    },
+    {
+      "pageId": "d19-action-community",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d19-gpters-official.png",
+      "sourceUrl": "https://www.gpters.org/",
+      "alt": "GPTers 공식 웹사이트 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Current official page must be opened, captured, and reviewed for personal data before publishing."
+    },
+    {
+      "pageId": "d19-action-community",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d19-modulabs-official.png",
+      "sourceUrl": "https://modulabs.co.kr/",
+      "alt": "모두의연구소 공식 웹사이트 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Current official page must be opened, captured, and reviewed for personal data before publishing."
+    },
+    {
+      "pageId": "d19-action-community",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d19-koding-official.png",
+      "sourceUrl": "https://koding.kr/",
+      "alt": "코딩 교육 커뮤니티 공식 웹사이트 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Current official page must be opened, captured, and reviewed for personal data before publishing."
+    },
+    {
+      "pageId": "d19-action-newsletter",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d19-modulet-official.png",
+      "sourceUrl": "https://modulet.io/",
+      "alt": "모듈렛 공식 웹사이트 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Current official page must be opened, captured, and reviewed for personal data before publishing."
+    },
+    {
+      "pageId": "d19-action-newsletter",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d19-aiground-official.png",
+      "sourceUrl": "https://aiground.co.kr/",
+      "alt": "AI Ground 공식 웹사이트 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Current official page must be opened, captured, and reviewed for personal data before publishing."
+    },
+    {
+      "pageId": "d19-action-newsletter",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/week4/screenshots/d19-aimatters-official.png",
+      "sourceUrl": "https://aimatters.co.kr/",
+      "alt": "AI Matters 공식 웹사이트 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Current official page must be opened, captured, and reviewed for personal data before publishing."
+    },
+    {
+      "pageId": "d19-action-schedule",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/automations/screenshots/d05-codex-automations-official.png",
+      "sourceUrl": "https://developers.openai.com/codex/",
+      "alt": "Codex 예약 작업 공식 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Week 1 asset was not found at the shared automations path; a current official capture and redaction are required."
+    },
+    {
+      "pageId": "d19-action-schedule",
+      "type": "screenshot",
+      "status": "blocked",
+      "deployPath": "/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png",
+      "sourceUrl": "https://support.anthropic.com/",
+      "alt": "Claude 예약 작업 공식 화면",
+      "captureDate": null,
+      "verifiedAt": "2026-07-14",
+      "privacyReview": "pending",
+      "blocker": "Week 1 asset was not found at the shared automations path; a current official capture and redaction are required."
+    }
+  ]
+}

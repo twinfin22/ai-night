@@ -88,6 +88,7 @@ const fallbackDay = courseDays.find((day) => day.status === 'ready') ?? courseDa
 
   <script>
     // @ts-nocheck
+    import { runCourseMigrations } from '../../lib/tutorial-progress';
     const root = document.querySelector('[data-tutorials-home]');
     const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
     const courseVersion = root?.getAttribute('data-course-version') || '2';
@@ -104,18 +105,7 @@ const fallbackDay = courseDays.find((day) => day.status === 'ready') ?? courseDa
     const kakaoWarning = document.querySelector('[data-kakao-warning]');
     if (kakaoWarning) kakaoWarning.hidden = !isKakao;
 
-    try {
-      if (window.localStorage.getItem(keys.version) !== '3') {
-        const oldDone = readJson(keys.done, []).map(Number).filter((day) => day >= 6 && day <= 20);
-        const oldPosition = readJson(keys.position, {});
-        Object.keys(oldPosition).filter((key) => /^[1-5](?:\.(?:claude|codex))?$/.test(key)).forEach((key) => delete oldPosition[key]);
-        window.localStorage.setItem(keys.done, JSON.stringify([...new Set(oldDone)].sort((a, b) => a - b)));
-        window.localStorage.setItem(keys.position, JSON.stringify(oldPosition));
-        if (Number(window.localStorage.getItem(keys.last)) <= 5) window.localStorage.removeItem(keys.last);
-        if (!['claude', 'codex'].includes(window.localStorage.getItem(keys.app))) window.localStorage.removeItem(keys.app);
-        window.localStorage.setItem(keys.version, '3');
-      }
-    } catch { /* Continue without persistence. */ }
+    try { runCourseMigrations(window.localStorage); } catch { /* Continue without persistence. */ }
     const done = readJson(keys.done, []);
     const position = readJson(keys.position, {});
     const last = Number(window.localStorage.getItem(keys.last) || '0');

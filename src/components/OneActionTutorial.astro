@@ -1,122 +1,98 @@
 ---
 import type { OneActionTutorialDay } from '../data/course';
-
 const { item } = Astro.props as { item: OneActionTutorialDay };
 ---
 
-<main class="one-action" data-one-action data-day={item.day} data-storage={JSON.stringify({ version: 'ainight.version', done: 'ainight.done', position: 'ainight.position', last: 'ainight.last', app: 'ainight.app' })}>
+<main class="one-action" data-one-action data-day={item.day} data-pages={JSON.stringify(item.pages)} data-storage={JSON.stringify({ version: 'ainight.version', done: 'ainight.done', position: 'ainight.position', last: 'ainight.last', app: 'ainight.app', draft: 'ainight.draft' })}>
   <section class="one-action__preflight" data-preflight hidden aria-labelledby="app-choice-title">
-    <p class="eyebrow">수업 시작 전</p>
-    <h1 id="app-choice-title">이번 주에 쓸 앱을 고르세요</h1>
-    <fieldset class="one-action__app-options">
-      <legend>내가 쓰는 앱</legend>
+    <p class="eyebrow">수업 시작 전</p><h1 id="app-choice-title">이번 주에 쓸 앱을 고르세요</h1>
+    <fieldset class="one-action__app-options"><legend>내가 쓰는 앱</legend>
       <label><input type="radio" name="app" value="codex" /> <strong>Codex</strong><span>작업 폴더를 열고 파일을 다룰 때</span></label>
       <label><input type="radio" name="app" value="claude" /> <strong>Claude</strong><span>대화와 첨부 파일을 보며 따라갈 때</span></label>
-    </fieldset>
-    <button class="one-action__primary" type="button" data-start disabled>수업 시작</button>
+    </fieldset><button class="one-action__primary" type="button" data-start disabled>수업 시작</button>
   </section>
-
   <section class="one-action__shell" data-lesson hidden aria-label={`${item.day}일차 수업`}>
-    <header class="one-action__header">
-      <a href="/tutorials/" class="one-action__brand" aria-label="AI 야학 수업 목록">AI 야학</a>
-      <strong title={`${item.day}일차 · ${item.title}`}><span>{item.day}일차</span> · {item.title}</strong>
-      <div class="one-action__progress" role="progressbar" aria-valuemin="1" data-progress><span data-progress-label>1 / {item.pages.length}</span></div>
-    </header>
-    <div class="one-action__body">
-      <aside class="one-action__brief" data-brief>
-        <p>지금 할 일</p>
-        <h1 tabindex="-1" data-title></h1>
-        <p data-description></p>
-        <strong data-action></strong>
-      </aside>
-      <section class="one-action__workboard" data-workboard aria-live="polite"></section>
-    </div>
-    <footer class="one-action__actions">
-      <button type="button" data-prev>이전</button>
-      <button type="button" data-next>다음</button>
-    </footer>
+    <header class="one-action__header"><a href="/tutorials/" class="one-action__brand" aria-label="AI 야학 수업 목록">AI 야학</a><strong title={`${item.day}일차 · ${item.title}`}><span>{item.day}일차</span> · {item.title}</strong><div class="one-action__progress" role="progressbar" aria-valuemin="1" data-progress><span data-progress-label>1 / {item.pages.length}</span></div></header>
+    <div class="one-action__body"><aside class="one-action__brief"><p>지금 할 일</p><h1 tabindex="-1" data-title></h1><p data-description></p><strong data-action></strong></aside><section class="one-action__workboard" data-workboard aria-live="polite"></section></div>
+    <footer class="one-action__actions"><button type="button" data-prev>이전</button><button type="button" data-next disabled>다음</button></footer>
   </section>
 </main>
 
-<script is:inline define:vars={{ pages: item.pages, day: item.day }}>
+<script>
+  // @ts-nocheck
+  import { runCourseMigrations } from '../lib/tutorial-progress';
   const root = document.querySelector('[data-one-action]');
+  const pages = JSON.parse(root?.getAttribute('data-pages') || '[]');
+  const day = Number(root?.getAttribute('data-day') || '0');
   const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
-  try {
-    if (localStorage.getItem(keys.version) !== '3') {
-      const done = JSON.parse(localStorage.getItem(keys.done) || '[]').map(Number).filter((value) => value >= 6 && value <= 20);
-      const position = JSON.parse(localStorage.getItem(keys.position) || '{}');
-      Object.keys(position).filter((key) => /^[1-5](?:\.(?:claude|codex))?$/.test(key)).forEach((key) => delete position[key]);
-      localStorage.setItem(keys.done, JSON.stringify([...new Set(done)].sort((a, b) => a - b)));
-      localStorage.setItem(keys.position, JSON.stringify(position));
-      if (Number(localStorage.getItem(keys.last)) <= 5) localStorage.removeItem(keys.last);
-      if (!['claude', 'codex'].includes(localStorage.getItem(keys.app))) localStorage.removeItem(keys.app);
-      localStorage.setItem(keys.version, '3');
-    }
-  } catch { /* The lesson still works for this browser session. */ }
-  const preflight = root?.querySelector('[data-preflight]');
-  const lesson = root?.querySelector('[data-lesson]');
-  const readJson = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key) || '') || fallback; } catch { return fallback; } };
-  const persist = (key, value) => { try { localStorage.setItem(key, value); return true; } catch { return false; } };
-  const appInput = root?.querySelectorAll('input[name="app"]') || [];
-  const start = root?.querySelector('[data-start]');
-  let app = localStorage.getItem(keys.app);
-  let visible = [];
-  let index = 0;
+  try { runCourseMigrations(localStorage); } catch { /* memory-only lesson */ }
+  const read = (storage, key, fallback) => { try { return JSON.parse(storage.getItem(key) || '') || fallback; } catch { return fallback; } };
+  const write = (storage, key, value) => { try { storage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } };
+  const esc = (value) => String(value ?? '').replace(/[&<>'"]/g, (ch) => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' })[ch]);
+  const preflight = root.querySelector('[data-preflight]'), lesson = root.querySelector('[data-lesson]');
+  const start = root.querySelector('[data-start]'), appInput = root.querySelectorAll('input[name="app"]');
+  let app = localStorage.getItem(keys.app), visible = [], index = 0, memoryDraft = {};
+  const pageKey = () => visible[index]?.id;
+  const drafts = () => ({ ...read(localStorage, keys.draft, {}), ...read(sessionStorage, keys.draft, {}), ...memoryDraft });
+  const values = () => drafts()[pageKey()] || {};
+  const saveValue = (control, value) => {
+    const target = control.persist === 'session' ? sessionStorage : localStorage;
+    const all = read(target, keys.draft, {}); all[pageKey()] = { ...(all[pageKey()] || {}), [control.id]: value };
+    if (!write(target, keys.draft, all)) memoryDraft = { ...memoryDraft, [pageKey()]: { ...(memoryDraft[pageKey()] || {}), [control.id]: value } };
+  };
   const getVisible = () => pages.filter((page) => !page.track || page.track === app);
-  const esc = (value) => String(value).replace(/[&<>'"]/g, (ch) => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' })[ch]);
-  const renderBoard = (page) => {
-    const board = root.querySelector('[data-workboard]');
-    let content = '';
-    if (page.view === 'FOCUS') content = `<div class="workboard-focus">${page.subtitle ? `<p>${esc(page.subtitle)}</p>` : ''}${page.flow ? `<ol>${page.flow.map((part) => `<li>${esc(part)}</li>`).join('')}</ol><strong>결과물: ${esc(page.outcome)}</strong>` : `<p>${esc(page.description)}</p>`}</div>`;
-    if (page.view === 'WORKBENCH') content = page.choices ? `<fieldset class="workboard-choice"><legend>${esc(page.title)}</legend>${page.choices.map((choice) => `<label><input type="radio" name="lesson-choice" value="${esc(choice.value)}"><strong>${esc(choice.label)}</strong><span>${esc(choice.description)}</span></label>`).join('')}</fieldset>` : `<div class="workboard-focus"><p>${esc(page.supporting || page.description)}</p></div>`;
-    if (page.view === 'SPOTLIGHT') content = `<figure class="workboard-image"><button type="button" data-image-open aria-label="스크린샷 크게 보기"><img src="${esc(page.image.src)}" alt="${esc(page.image.alt)}"></button><figcaption>${esc(page.action)}</figcaption></figure>`;
-    if (page.view === 'PROMPT' || page.view === 'WORKBOOK') content = `<div class="workboard-prompt"><button type="button" data-copy>복사하기</button><pre><code>${esc(page.prompt)}</code></pre></div>`;
-    if (page.view === 'COMPARISON') content = `<div class="workboard-comparison">${page.comparison.map((part) => `<section><strong>${esc(part.label)}</strong><p>${esc(part.content)}</p></section>`).join('')}</div>`;
-    board.innerHTML = content;
-    const copy = board.querySelector('[data-copy]');
-    copy?.addEventListener('click', async () => {
-      const text = page.prompt || '';
-      copy.disabled = true; copy.textContent = '복사 중';
-      try { await navigator.clipboard.writeText(text); copy.textContent = '복사됨'; }
-      catch { copy.textContent = '복사하지 못했습니다. 아래 문장을 직접 선택해 복사해 주세요'; }
-      window.setTimeout(() => { copy.disabled = false; copy.textContent = '복사하기'; }, 2000);
-    });
-    board.querySelector('[data-image-open]')?.addEventListener('click', () => {
-      const dialog = document.createElement('dialog'); dialog.className = 'image-dialog';
-      dialog.innerHTML = `<button type="button" aria-label="닫기">닫기</button><img src="${esc(page.image.src)}" alt="${esc(page.image.alt)}">`;
-      document.body.append(dialog); dialog.showModal(); dialog.querySelector('button')?.focus(); dialog.querySelector('button')?.addEventListener('click', () => dialog.close()); dialog.addEventListener('close', () => dialog.remove());
-    });
-  };
-  const render = (focus = false) => {
-    const page = visible[index]; if (!page) return;
-    root.querySelector('[data-title]').textContent = page.title;
-    root.querySelector('[data-description]').textContent = page.description;
-    root.querySelector('[data-action]').textContent = page.action;
-    root.querySelector('[data-progress-label]').textContent = `${index + 1} / ${visible.length}`;
-    root.querySelector('[data-progress]').setAttribute('aria-valuemax', String(visible.length));
-    root.querySelector('[data-progress]').setAttribute('aria-valuenow', String(index + 1));
-    root.querySelector('[data-prev]').disabled = index === 0;
-    root.querySelector('[data-next]').textContent = index === visible.length - 1 ? '완료하기' : '다음';
-    renderBoard(page);
-    const position = readJson(keys.position, {}); position[`${day}.${app}`] = page.id;
-    persist(keys.position, JSON.stringify(position)); persist(keys.last, String(day));
-    if (focus) root.querySelector('[data-title]')?.focus();
-  };
-  const begin = () => {
-    if (!app) return;
-    persist(keys.app, app); visible = getVisible();
-    const position = readJson(keys.position, {}); const saved = position[`${day}.${app}`];
-    index = Math.max(0, visible.findIndex((page) => page.id === saved));
-    preflight.hidden = true; lesson.hidden = false; render();
-  };
-  appInput.forEach((input) => input.addEventListener('change', () => { app = input.value; start.disabled = false; }));
-  start?.addEventListener('click', begin);
-  root.querySelector('[data-prev]')?.addEventListener('click', () => { index = Math.max(0, index - 1); render(true); });
-  root.querySelector('[data-next]')?.addEventListener('click', () => {
-    if (index < visible.length - 1) { index += 1; render(true); return; }
-    const done = readJson(keys.done, []).map(Number); if (!done.includes(day)) done.push(day);
-    persist(keys.done, JSON.stringify(done.sort((a,b) => a-b))); sessionStorage.setItem('ainight.completed', String(day)); window.location.href = '/tutorials/';
+  const selectedCount = (value) => Array.isArray(value) ? value.length : value ? 1 : 0;
+  const controlsComplete = (page) => (page.controls || []).every((control) => {
+    const count = selectedCount(values()[control.id]);
+    if (control.required && !count) return false;
+    if (control.exact !== undefined && count !== control.exact) return false;
+    if (control.min !== undefined && count < control.min) return false;
+    if (control.max !== undefined && count > control.max) return false;
+    return true;
   });
-  if (!pages.some((page) => page.track)) { app = 'common'; begin(); }
-  else if (app === 'codex' || app === 'claude') begin(); else preflight.hidden = false;
+  const isComplete = (page) => {
+    const state = values();
+    if (page.advanceWhen === 'copied') return state.__copied === true;
+    if (page.advanceWhen === 'started') return state.__started === true;
+    if (page.advanceWhen === 'confirmed') return state.__confirmed === true;
+    if (page.advanceWhen === 'controls') return controlsComplete(page);
+    return !page.controls?.length || controlsComplete(page);
+  };
+  const highlighted = (text, tokens = []) => tokens.reduce((html, token) => html.replaceAll(esc(token), `<mark>${esc(token)}</mark>`), esc(text));
+  const controlHtml = (control, current) => {
+    const name = `control-${esc(control.id)}`;
+    if (control.type === 'text') return `<label class="workboard-field"><span>${esc(control.label)}</span><textarea data-control="${esc(control.id)}" rows="3">${esc(current || '')}</textarea></label>`;
+    if (control.type === 'check') return `<label class="workboard-check"><input data-control="${esc(control.id)}" type="checkbox" ${current ? 'checked' : ''}> ${esc(control.label)}</label>`;
+    const type = control.type === 'radio' ? 'radio' : 'checkbox'; const selected = Array.isArray(current) ? current : [current];
+    return `<fieldset class="workboard-choice"><legend>${esc(control.label)}</legend>${(control.options || []).map((option) => `<label><input data-control="${esc(control.id)}" type="${type}" name="${name}" value="${esc(option.value)}" ${selected.includes(option.value) ? 'checked' : ''}><strong>${esc(option.label)}</strong>${option.description ? `<span>${esc(option.description)}</span>` : ''}</label>`).join('')}</fieldset>`;
+  };
+  const renderBoard = (page) => {
+    const board = root.querySelector('[data-workboard]'); const state = values(); let content = '';
+    if (page.view === 'FOCUS') content = `<div class="workboard-focus">${page.subtitle ? `<p>${esc(page.subtitle)}</p>` : ''}${page.flow ? `<ol>${page.flow.map((part) => `<li>${esc(part)}</li>`).join('')}</ol><strong>결과물: ${esc(page.outcome)}</strong>` : `<p>${esc(page.description)}</p>`}${page.advanceWhen === 'started' ? '<button type="button" class="one-action__primary" data-page-start>오늘의 실습 시작하기</button>' : ''}</div>`;
+    if (page.view === 'WORKBENCH') content = `<div class="workboard-focus"><p>${esc(page.supporting || page.description)}</p>${(page.controls || []).map((control) => controlHtml(control, state[control.id])).join('')}</div>`;
+    if (page.view === 'SPOTLIGHT') content = `<figure class="workboard-image">${(page.images || (page.image ? [page.image] : [])).map((image) => `<button type="button" data-image-open data-src="${esc(image.src)}" data-alt="${esc(image.alt)}" aria-label="스크린샷 크게 보기"><img src="${esc(image.src)}" alt="${esc(image.alt)}"></button>`).join('')}<figcaption>${esc(page.action)}</figcaption></figure>`;
+    if (page.view === 'PROMPT' || page.view === 'WORKBOOK') content = `<div class="workboard-prompt"><button type="button" data-copy>복사하기</button><pre><code>${highlighted(page.prompt, page.highlightTokens)}</code></pre></div>`;
+    if (page.view === 'COMPARISON') content = `<div class="workboard-comparison">${(page.comparison || []).map((part) => `<section><strong>${esc(part.label)}</strong><p>${esc(part.content)}</p></section>`).join('')}</div>`;
+    content += (page.controls || []).filter((control) => page.view !== 'WORKBENCH').map((control) => controlHtml(control, state[control.id])).join('');
+    if (page.officialLinks?.length) content += `<div class="workboard-links">${page.officialLinks.map((link) => `<a href="${esc(link.href)}" target="_blank" rel="noopener noreferrer">${esc(link.label)} <span aria-label="새 창">↗</span></a>`).join('')}</div>`;
+    if (page.advanceWhen === 'confirmed') content += `<label class="workboard-check"><input data-confirm type="checkbox" ${state.__confirmed ? 'checked' : ''}> 공식 페이지를 확인했습니다</label>`;
+    board.innerHTML = content;
+    board.querySelectorAll('[data-control]').forEach((input) => input.addEventListener('input', () => {
+      const control = page.controls.find((item) => item.id === input.dataset.control); let value;
+      if (control.type === 'checkbox') value = [...board.querySelectorAll(`[data-control="${CSS.escape(control.id)}"]:checked`)].map((item) => item.value);
+      else if (control.type === 'check') value = input.checked; else value = input.value;
+      saveValue(control, value); updateNext(page);
+    }));
+    board.querySelector('[data-page-start]')?.addEventListener('click', () => { saveValue({ id: '__started', persist: 'local' }, true); render(); });
+    board.querySelector('[data-confirm]')?.addEventListener('change', (event) => { saveValue({ id: '__confirmed', persist: 'local' }, event.target.checked); updateNext(page); });
+    board.querySelector('[data-copy]')?.addEventListener('click', async (event) => { const button = event.currentTarget; try { await navigator.clipboard.writeText(page.prompt || ''); saveValue({ id: '__copied', persist: 'local' }, true); button.textContent = '복사됨'; updateNext(page); } catch { button.textContent = '복사하지 못했습니다'; } });
+    board.querySelectorAll('[data-image-open]').forEach((button) => button.addEventListener('click', () => { const dialog = document.createElement('dialog'); dialog.className = 'image-dialog'; dialog.innerHTML = `<button type="button" aria-label="닫기">닫기</button><img src="${button.dataset.src}" alt="${button.dataset.alt}">`; document.body.append(dialog); dialog.showModal(); const close = dialog.querySelector('button'); close.focus(); close.addEventListener('click', () => dialog.close()); dialog.addEventListener('close', () => { dialog.remove(); button.focus(); }); }));
+  };
+  const updateNext = (page = visible[index]) => { const next = root.querySelector('[data-next]'); next.disabled = !isComplete(page); };
+  const render = (focus = false) => { const page = visible[index]; if (!page) return; root.querySelector('[data-title]').textContent = page.title; root.querySelector('[data-description]').textContent = page.description; root.querySelector('[data-action]').textContent = page.action; root.querySelector('[data-progress-label]').textContent = `${index + 1} / ${visible.length}`; const progress = root.querySelector('[data-progress]'); progress.setAttribute('aria-valuemax', String(visible.length)); progress.setAttribute('aria-valuenow', String(index + 1)); root.querySelector('[data-prev]').disabled = index === 0; root.querySelector('[data-next]').textContent = index === visible.length - 1 ? '완료하기' : '다음'; renderBoard(page); updateNext(page); const position = read(localStorage, keys.position, {}); position[`${day}.${app}`] = page.id; write(localStorage, keys.position, position); try { localStorage.setItem(keys.last, String(day)); } catch {} if (focus) root.querySelector('[data-title]').focus(); };
+  const begin = () => { if (!app) return; try { localStorage.setItem(keys.app, app); } catch {} visible = getVisible(); const saved = read(localStorage, keys.position, {})[`${day}.${app}`]; index = Math.max(0, visible.findIndex((page) => page.id === saved)); preflight.hidden = true; lesson.hidden = false; render(); };
+  appInput.forEach((input) => input.addEventListener('change', () => { app = input.value; start.disabled = false; })); start?.addEventListener('click', begin);
+  root.querySelector('[data-prev]')?.addEventListener('click', () => { index = Math.max(0, index - 1); render(true); });
+  root.querySelector('[data-next]')?.addEventListener('click', () => { if (!isComplete(visible[index])) return; if (index < visible.length - 1) { index += 1; render(true); return; } const done = read(localStorage, keys.done, []).map(Number); if (!done.includes(day)) done.push(day); write(localStorage, keys.done, [...new Set(done)].sort((a, b) => a - b)); try { sessionStorage.setItem('ainight.completed', String(day)); } catch {} window.location.href = '/tutorials/'; });
+  if (!pages.some((page) => page.track)) { app = 'common'; begin(); } else if (app === 'codex' || app === 'claude') begin(); else preflight.hidden = false;
 </script>
