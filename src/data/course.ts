@@ -1,5 +1,6 @@
 import { week1Days } from './course-week1';
 import { week4Days } from './course-week4';
+import { week3CourseDays } from './course-week3';
 
 export type AppChoice = 'claude' | 'codex';
 export type TutorialStatus = 'ready' | 'coming-soon';
@@ -11,11 +12,22 @@ export interface StuckHelp {
   skip: boolean;
 }
 
+export interface TutorialImage {
+  src: string;
+  alt: string;
+}
+
 export interface TutorialStep {
+  kind?: 'FOCUS' | 'PROMPT' | 'WORKBENCH' | 'SPOTLIGHT' | 'RETRO';
+  audience?: 'COMMON' | 'CLAUDE' | 'CODEX';
+  screenType?: 'ACTION' | 'PROMPT' | 'COMPARISON' | 'RETRO';
+  note?: string;
+  toggle?: string;
   action: string;
   detail: string;
   copyText?: string;
-  image?: { src: string; alt: string };
+  image?: TutorialImage;
+  images?: TutorialImage[];
   success: string;
   stuck: StuckHelp;
 }
@@ -94,7 +106,7 @@ export const storageKeys = {
   draft: 'ainight.draft',
 };
 
-export const courseVersion = '4';
+export const courseVersion = '5';
 
 const defaultStuck: StuckHelp = {
   different: '화면 이름이 조금 달라도 괜찮습니다. 지금 단계에서 찾는 말만 다시 확인하세요.',
@@ -1651,7 +1663,8 @@ AGENTS.md와 가게 자료
 
 export const courseDays: CourseDay[] = [
   ...week1Days,
-  ...legacyCourseDays.filter((day) => day.day >= 6 && day.day <= 15),
+  ...legacyCourseDays.filter((day) => day.day >= 6 && day.day <= 10),
+  ...week3CourseDays,
   ...week4Days,
 ];
 

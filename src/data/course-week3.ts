@@ -1,0 +1,150 @@
+import type { OneActionPage, OneActionTutorialDay, TutorialDay, TutorialStep } from './course';
+
+const stuck = {
+  different: '화면 이름이 조금 달라도 괜찮습니다. 지금 단계의 제목이나 버튼 이름을 다시 찾아보세요.',
+  missing: '버튼이 안 보이면 창을 넓히고, 화면의 위쪽과 오른쪽 위를 먼저 보세요.',
+  skip: true,
+};
+
+const prompt = (action: string, detail: string, copyText: string, success: string, kind: TutorialStep['kind'] = 'PROMPT', image?: TutorialStep['image'], images?: TutorialStep['images']): TutorialStep => ({
+  action, detail, copyText, success, kind, image, images, stuck,
+});
+
+const action = (action: string, detail: string, success: string, kind: TutorialStep['kind'] = 'WORKBENCH', image?: TutorialStep['image'], images?: TutorialStep['images']): TutorialStep => ({
+  action, detail, success, kind, image, images, stuck,
+});
+
+const retro = (day: number, title: string): TutorialStep => prompt(
+  '오늘의 회고',
+  'AI가 대신 회고를 쓰지 않습니다. 아래 질문에 내 경험으로 한 번에 하나씩 답하고, 내 답만 같은 일차 구역에 다시 저장합니다.',
+  `오늘 ${day}일차 수업 회고를 진행해줘. 아래 세 가지를 한 번에 하나씩 질문해.\n\n1. 새롭게 할 수 있게 된 것\n2. 막혔던 부분. 해결했다면 어떻게 했는지, 해결하지 못했다면 다음에 어떻게 시도할지\n3. 남아있는 궁금증 또는 새롭게 시도해보고 싶은 것\n\n내 답이 끝나면 Asia/Seoul 기준 현재 날짜를 YYYY-MM-DD로 확인하고, 현재 작업 폴더의 ai-study/daily_retro.md에 아래 형식으로 저장해. 폴더나 파일이 없으면 만들어.\n\n<!-- ai-study-day:${day} -->\n## YYYY-MM-DD · ${day}일차 수업 · ${title}\n\n### 새롭게 할 수 있게 된 것\n- ...\n\n### 막혔던 부분\n- 막힌 내용: ...\n- 해결했거나 다음에 시도할 방법: ...\n\n### 남아있는 궁금증 / 새롭게 시도해보고 싶은 것\n- ...\n\n같은 <!-- ai-study-day:${day} --> 구역이 이미 있으면 새 구역을 추가하지 말고 그 구역 전체와 수업일자를 최신 답변으로 바꿔. 다른 일차 구역은 그대로 둬. 답하지 않은 내용은 추측하지 말고 ‘미작성’으로 적어. 저장 후 파일을 다시 읽고 ${day}일차 구역이 하나만 있는지 확인한 다음 저장 경로를 알려줘.`,
+  `ai-study/daily_retro.md의 ${day}일차 구역이 하나만 있고, 내 답만 저장되면 성공입니다.`,
+  'RETRO',
+);
+
+const legacyWeek3Days: TutorialDay[] = [
+  {
+    day: 11, week: 3, theme: '굴리기', title: '내 방식대로 일하는 AI 만들기',
+    outcome: '반복해서 확인된 내 업무 규칙을 10개 이하로 골라 AGENTS.md 또는 CLAUDE.md에 저장합니다.',
+    status: 'ready', appTrack: 'unified', time: '24분',
+    challenge: '', tomorrow: '내일은 회의 녹음 파일을 글로 바꿉니다.',
+    steps: [
+      prompt('내 규칙 파일 찾기', 'Codex는 AGENTS.md, Claude는 CLAUDE.md를 씁니다. 이 단계에서는 기존 내용을 바꾸지 않습니다.', '지금 쓰는 앱이 Codex인지 Claude인지 확인해줘. Codex면 현재 작업 폴더의 AGENTS.md, Claude면 CLAUDE.md를 찾아줘. 없으면 만들 위치를 알려주고, 있으면 내용을 바꾸지 말고 보여줘. 다른 폴더의 규칙 파일은 건드리지 마.', '현재 작업 폴더의 규칙 파일 경로를 알면 성공입니다.', 'SPOTLIGHT', { src: '/assets/tutorials/week3/screenshots/d11-agents-md-official.png', alt: 'OpenAI 공식 AGENTS.md 안내 문서 화면' }, [{ src: '/assets/tutorials/week3/screenshots/d11-claude-md-official.png', alt: 'Anthropic 공식 CLAUDE.md 안내 문서 화면' }]),
+      prompt('반복되는 내 업무 방식 찾기', '한 번의 요청이나 AI의 추측은 규칙으로 넣지 않습니다. 근거가 두 번 이상 보인 것만 후보로 봅니다.', '이 앱에서 실제로 읽을 수 있는 작업 기록·회고 파일·결과물 목록을 먼저 보여줘. /history를 파일처럼 읽을 수 없으면 그렇다고 말하고 저장된 회고 파일과 결과물만 사용해. 반복해서 확인된 내 선호·작업 방식·자주 생긴 실수를 표로 정리하고 각 항목에 근거 날짜나 파일을 붙여줘. 한 번만 나온 요청과 네 추측은 ‘규칙 후보 아님’으로 표시해줘.', '근거가 붙은 규칙 후보 표가 나오면 성공입니다.'),
+      prompt('업무 규칙 초안 만들기', '아직 파일에는 저장하지 않습니다. 계속 지킬 약속만 짧고 분명한 행동 규칙으로 만듭니다.', '실제로 접근 가능한 기록과 저장된 회고 파일만 사용해 반복해서 확인된 선호와 작업 방식으로 규칙 파일 초안을 만들어줘. /history를 읽을 수 없으면 회고 파일과 결과물만 사용하고 그 사실을 알려줘. 일회성 요청이나 추측은 넣지 말고 10개 이하로 정리해. 삭제·결제·외부 공개·메시지 발송·계정 권한 변경 직전에만 확인하도록 써줘. 아직 파일에는 저장하지 마.', '10개 이하의 초안이 나오면 성공입니다.'),
+      prompt('남길 규칙 고르기', '모호하거나 겹치는 문장은 정리합니다. 꼭 필요한 규칙만 남기면 나중에도 관리하기 쉽습니다.', '방금 만든 규칙을 ① 반드시 유지 ② 있으면 도움 ③ 삭제 추천으로 나눠줘. ‘잘해줘’처럼 모호한 문장은 실제 행동으로 바꾸고 서로 겹치는 규칙은 합쳐서 최종 10개 이하로 다시 보여줘.', '남길 규칙을 직접 고르면 성공입니다.', 'WORKBENCH'),
+      prompt('규칙 파일에 저장하기', '내가 고른 규칙만 현재 작업 폴더에 저장합니다. 기존 내용은 지우지 않습니다.', '내가 선택한 규칙만 저장해줘. Codex면 현재 작업 폴더의 AGENTS.md, Claude면 CLAUDE.md에 반영해. 기존 내용이 있으면 보존하고 겹치는 내용만 정리해. 저장 뒤 파일 전체를 다시 읽고 경로·규칙 수·바뀐 내용을 쉬운 말로 알려줘.', '저장 경로와 바뀐 내용을 확인하면 성공입니다.'),
+      prompt('새 대화에서 규칙 확인하기', '새 대화에서 안전한 요청 하나로 확인합니다. 실제 파일 이동이나 삭제는 하지 않습니다.', '이 폴더의 파일을 보기 좋게 정리해줘. 실제로 이동하거나 삭제하기 전에는 어떤 파일을 어떻게 바꿀지 계획만 먼저 보여줘.', 'AI가 변경 계획을 먼저 보여주면 성공입니다.'),
+      retro(11, '내 방식대로 일하는 AI 만들기'),
+    ],
+  },
+  {
+    day: 12, week: 3, theme: '굴리기', title: '회의록 만들기1: 음성 파일을 글로 바꾸기',
+    outcome: '클로바노트에서 확인한 음성 기록 파일 1개를 다음 수업 재료로 준비합니다.',
+    status: 'ready', appTrack: 'unified', time: '24분',
+    challenge: '', tomorrow: '내일은 음성 기록을 회의록으로 정리하는 스킬을 만듭니다.',
+    steps: [
+      action('클로바노트 열고 새 노트 만들기', '클로바노트에 로그인하고 화면에서 ‘새 노트’를 찾습니다. 새 노트를 열면 음성 파일을 올릴 준비가 됩니다.', '새 노트 화면이 열리면 성공입니다.', 'SPOTLIGHT', { src: '/assets/tutorials/week3/screenshots/d12-clovanote-login-live.png', alt: '클로바노트 공식 시작 화면과 로그인 버튼' }),
+      action('연습 음성 파일 올리기', '제목과 인식 언어를 정한 뒤 준비한 파일을 올립니다. 한국어와 영어가 섞였다면 ‘한국어+영어’를 고릅니다.', '연습 음성 파일의 변환이 시작되면 성공입니다.', 'SPOTLIGHT'),
+      action('변환된 글 확인하기', '음성 기록에서 문장 하나를 누르고 원음과 함께 들어봅니다. 크게 다른지만 먼저 확인하면 됩니다.', '음성 기록과 원음 한 문장을 비교하면 성공입니다.', 'SPOTLIGHT', { src: '/assets/tutorials/week3/screenshots/d12-clovanote-transcript-official.png', alt: '클로바노트 공식 앱의 음성 기록과 화자 표시 화면' }),
+      action('화자 이름 고치기', '나중에 회의록을 정확하게 만들 수 있게 화자 이름 하나부터 실제 참석자 이름이나 역할로 바꿉니다.', '화자 이름 하나를 고치면 성공입니다.', 'SPOTLIGHT'),
+      action('중요한 오인식 고치기', '결정된 일, 담당자, 마감일이 있는 부분부터 원음과 비교합니다. 숫자나 단어 한 곳만 고쳐도 됩니다.', '중요한 오인식 한 곳을 고치면 성공입니다.'),
+      action('음성 기록 파일 내려받기', '‘다운로드’ 메뉴에서 텍스트 문서(.txt)를 고르고 시간 기록과 참석자 정보를 함께 포함합니다.', '음성 기록 파일을 내려받으면 성공입니다.', 'SPOTLIGHT', { src: '/assets/tutorials/week3/screenshots/d12-clovanote-download-official.png', alt: '클로바노트 공식 앱의 텍스트 문서 다운로드와 시간 기록·참석자 정보 선택 화면' }),
+      action('내려받은 음성 기록 확인하기', '다운로드 폴더에서 파일을 열어 회의 제목, 화자 이름, 본문, 시간 정보가 보이는지 확인만 합니다.', '다음 수업에 쓸 음성 기록 파일을 찾으면 성공입니다.'),
+      retro(12, '회의록 만들기1: 음성 파일을 글로 바꾸기'),
+    ],
+  },
+  {
+    day: 13, week: 3, theme: '굴리기', title: '회의록 만들기2: 원문 글을 회의록으로 정리하기',
+    outcome: '원본을 보존한 채 확인이 필요한 내용을 표시하는 회의록 스킬을 시험합니다.',
+    status: 'ready', appTrack: 'unified', time: '24분',
+    challenge: '', tomorrow: '내일은 반복 업무 하나를 AI 도우미로 설계합니다.',
+    steps: [
+      prompt('회의록 스킬 만들기', '음성 원본은 바꾸지 않습니다. 회의록 형식과 추측하지 않는 규칙을 먼저 스킬로 만듭니다.', '현재 작업 폴더에 clovanote-meeting-minutes 스킬 초안을 만들어줘. SKILL.md와 templates/meeting-minutes.md를 만들고, 음성 기록 원본은 수정하지 마. 회의 제목·일시·참석자·결정 사항·담당자·기한·논의 내용·확인 필요 항목 형식으로 정리해. 원본에 없는 내용은 추측하지 말고 [확인 필요]로 표시해. 파일을 만들기 전에는 바꿀 파일과 계획을 먼저 보여줘.', '스킬 파일 계획과 회의록 양식이 보이면 성공입니다.'),
+      prompt('만들어진 스킬 살펴보기', '스킬이 어떤 파일을 만들고, 무엇을 절대 추측하지 않는지 쉬운 말로 확인합니다.', '방금 만든 clovanote-meeting-minutes 스킬을 쉬운 말로 설명해줘. 입력으로 필요한 파일, 회의록에 나오는 항목, [확인 필요]로 남기는 경우, 원본을 보존하는 이유를 표로 보여줘. 아직 파일은 바꾸지 마.', '스킬의 동작을 내 말로 설명할 수 있으면 성공입니다.'),
+      prompt('음성 기록으로 회의록 만들기', '어제 내려받은 파일을 첨부하고 스킬을 시험합니다. 결과는 원본과 구분되는 새 파일로 만듭니다.', '첨부한 음성 기록 파일을 clovanote-meeting-minutes 스킬로 처리해줘. 원본은 수정하지 말고 ai-study/outputs/회의록-[원본파일이름].md 초안을 만들어줘. 원본에 없는 사람·날짜·결정은 추측하지 말고 [확인 필요]로 표시해.', '원본과 별도의 회의록 초안이 나오면 성공입니다.'),
+      prompt('원본과 회의록 비교하기', '결정 사항, 담당자, 기한이 원본에서 확인되는지 하나씩 비교합니다.', '음성 기록 원본과 방금 만든 회의록을 비교해줘. 결정 사항·담당자·기한·숫자마다 원본 근거가 있는지 표로 보여줘. 근거가 없거나 애매한 내용은 [확인 필요]로 바꾸고, 원본을 고치지는 마.', '근거 비교표가 나오면 성공입니다.'),
+      prompt('오류를 만든 규칙만 고치기', '결과 전체를 다시 쓰지 말고, 오류를 만든 스킬 규칙만 고칩니다.', '비교에서 찾은 오류를 만든 스킬 규칙만 찾아 수정안을 보여줘. 어떤 규칙을 왜 바꾸는지 전후 문장을 나란히 보여주고, 내가 승인하기 전에는 파일에 반영하지 마.', '고칠 규칙과 이유를 확인하면 성공입니다.'),
+      prompt('같은 파일로 다시 확인하기', '승인한 규칙만 반영한 뒤 같은 파일로 한 번 더 시험해 결과가 나아졌는지 확인합니다.', '내가 승인한 규칙만 스킬에 반영하고, 같은 음성 기록 파일로 회의록을 다시 만들어줘. 첫 결과와 달라진 점, 아직 [확인 필요]인 항목, 원본이 그대로인지 확인 결과를 보여줘.', '두 번째 결과와 확인할 항목이 보이면 성공입니다.'),
+      retro(13, '회의록 만들기2: 원문 글을 회의록으로 정리하기'),
+    ],
+  },
+  {
+    day: 14, week: 3, theme: '굴리기', title: '업무 자동화1: AI 에게 시킬 일 찾기',
+    outcome: 'BUILD 5요소와 정상 사례 시험을 갖춘 안전한 AI 도우미 스킬 초안을 만듭니다.',
+    status: 'ready', appTrack: 'unified', time: '24분',
+    challenge: '', tomorrow: '내일은 자동화의 범위와 마지막 확인을 정합니다.',
+    steps: [
+      prompt('자동화할 일 하나 고르기', '되돌리기 어려운 일은 고르지 않습니다. 반복성, 순서 설명 가능, 자료 존재, 사람 확인 가능 기준으로 하나를 고릅니다.', '지난 7일 동안 오래 걸린 일, 지루하게 반복한 일, 여러 번 같은 설명을 한 일, 다음 7일에도 다시 할 일을 한 번에 하나씩 물어봐. 내 답에서 안전한 후보 3개를 뽑고 반복성·순서 설명 가능·필요한 자료 존재·사람 확인 가능 기준으로 비교해. 삭제·결제·외부 발송·가격 변경·환불·예약 변경은 후보에서 빼. 내가 하나를 고를 때까지 다음 설계는 시작하지 마.', '후보 3개 중 하나를 직접 고르면 성공입니다.', 'WORKBENCH'),
+      prompt('B — Base Setup(기본 설정)', '이름과 짧은 설명만 정합니다. 한 스킬에는 한 가지 일만 맡깁니다.', '내가 고른 업무로 BUILD의 B — Base Setup(기본 설정)을 작성해줘. 스킬 이름, 한 줄 설명, 하지 않을 일을 쉬운 말로 보여줘. 아직 파일을 만들거나 외부 도구를 연결하지 마.', '이름과 한 가지 목적이 정해지면 성공입니다.'),
+      prompt('U — Use Case Definition(사용 사례 정의)', '누가 언제 쓰고, 어떤 결과면 좋은지 정합니다.', 'BUILD의 U — Use Case Definition(사용 사례 정의)을 작성해줘. 사용자, 시작할 때 필요한 자료, 좋은 결과의 기준, 한 번에 처리할 범위를 정리해. 모르는 사실은 추측하지 말고 질문해.', '좋은 결과 기준을 확인하면 성공입니다.'),
+      prompt('I — Instructions & Behavior(지침과 행동)', '처리 순서, 결과 형식, 금지 행동을 구체적으로 정합니다.', 'BUILD의 I — Instructions & Behavior(지침과 행동)을 작성해줘. 처리 순서, 사용할 자료, 결과 형식, 꼭 멈추고 물어볼 경우, 금지 행동을 번호로 정리해. 원본 수정과 외부 발송은 금지해.', 'AI가 할 일과 멈출 일이 나뉘면 성공입니다.'),
+      prompt('L — Learning & Examples(참고 자료와 예시)', '실제 참고 자료와 좋은 예시 3~5개만 씁니다. 없는 자료는 지어내지 않습니다.', 'BUILD의 L — Learning & Examples(참고 자료와 예시)를 작성해줘. 실제로 준비할 참고 자료와 좋은 대화 예시 3~5개를 목록으로 보여줘. 개인정보와 비공개 자료는 넣지 말고, 아직 없는 자료는 ‘준비 필요’로 표시해.', '준비할 자료와 예시가 보이면 성공입니다.'),
+      prompt('D — Deploy & Test(배포와 시험)', '기본 기능, 예외, 명확성, 일관성, 범위를 시험 기준으로 만듭니다.', 'BUILD의 D — Deploy & Test(배포와 시험)를 작성해줘. Basic(기본 기능), Edge(예외), Clarity(명확성), Consistency(일관성), Boundaries(범위) 다섯 시험을 각각 한 줄씩 만들고, 통과 기준도 적어줘. 외부 계정 연결이나 자동 실행은 넣지 마.', '다섯 시험 기준이 모두 있으면 성공입니다.'),
+      prompt('스킬 초안 만들고 기본 상황 시험하기', '승인한 BUILD만 사용해 스킬 초안을 만들고 개인정보를 지운 정상 사례 1개로 시험합니다.', '내가 승인한 BUILD를 바탕으로 현재 앱에서 재사용 가능한 스킬 초안을 만들어 먼저 보여줘. 내가 승인하면 개인정보를 지운 정상 사례 1개로만 시험하고 입력·결과·통과 여부를 보여줘. 아직 외부 계정을 연결하거나 원본을 수정하거나 외부로 보내지 마.', '스킬 초안과 정상 사례 시험 결과가 나오면 성공입니다.'),
+      retro(14, '업무 자동화1: AI 에게 시킬 일 찾기'),
+    ],
+  },
+  {
+    day: 15, week: 3, theme: '굴리기', title: '업무 자동화2: 자동화 공정 검토하기',
+    outcome: '실행 시간과 사람의 마지막 확인이 있는 안전한 반자동화 1개를 시운전합니다.',
+    status: 'ready', appTrack: 'unified', time: '30분',
+    challenge: '', tomorrow: '내일은 다음 주차 수업으로 이어갑니다.',
+    steps: [
+      prompt('예약할 업무 하나 고르기', '어제 만든 AI 도우미 중 요약·분류·초안 준비만 하는 일을 고릅니다. 저장이나 발송은 자동화하지 않습니다.', '어제 만든 AI 도우미 중 예약해도 안전한 업무 하나를 골라줘. 자동으로 할 수 있는 범위는 새 자료 찾기, 요약, 분류, 초안 준비까지만이야. 저장·수정·발송·가격·환불·예약 변경은 내 승인 뒤에만 가능하게 해.', '안전한 업무 하나가 정해지면 성공입니다.', 'WORKBENCH'),
+      prompt('예약할 시간 정하기', '정해진 시간 또는 새 자료가 있을 때만 처리 중 하나를 고릅니다.', '내 업무에 맞게 시작 조건을 둘 중 하나로 정하도록 도와줘. ① 정해진 시간에 실행 ② 정해진 시간마다 새 자료가 있을 때만 실행. 각각 장단점을 쉬운 말로 보여주고, 내가 고른 조건을 한 문장으로 정리해줘.', '시작 조건 하나를 직접 고르면 성공입니다.', 'WORKBENCH'),
+      prompt('자동 처리 범위와 멈출 조건 정하기', '개인정보, 가격, 계좌번호, 환불, 예약 변경, 판단하기 어려운 내용은 멈추고 질문하게 합니다.', '내 반자동화의 자동 처리 범위와 멈출 조건을 표로 만들어줘. 자동 처리: 새 자료 확인·요약·분류·초안. 반드시 중단하고 물어볼 것: 개인정보, 가격, 계좌번호, 환불, 예약 변경, 판단하기 어려운 내용. 원본 저장·수정·발송은 금지해.', '자동 처리와 중단 조건이 나뉘면 성공입니다.'),
+      prompt('마지막 확인 항목 정하기', 'AI가 만든 초안을 사람이 확인하고 승인한 뒤에만 다음 행동을 할 수 있게 합니다.', 'AI가 만든 결과를 내가 마지막으로 확인할 목록을 만들어줘. 사용한 자료, 빠진 정보, 개인정보, 숫자와 가격, 외부 발송 여부를 포함해 5개 이하 체크 항목으로 정리해줘.', '사람이 확인할 목록이 있으면 성공입니다.'),
+      action('예약 작업 화면 열기', '현재 쓰는 앱에서 예약 작업 또는 자동화 메뉴를 엽니다. 아직 저장하지 않습니다.', '예약 작업 화면을 열고, 지금은 저장 버튼을 누르지 않으면 성공입니다.', 'SPOTLIGHT', undefined, [
+        { src: '/assets/tutorials/setup/codex-app-sidebar.png', alt: 'Codex 왼쪽 메뉴의 Scheduled 위치' },
+        { src: '/assets/tutorials/setup/claude-app-sidebar.png', alt: 'Claude 왼쪽 메뉴의 예정됨 위치' },
+      ]),
+      prompt('예약 프롬프트 만들기', '실행 조건, 안전 범위, 멈출 조건, 마지막 확인을 한 번에 넣습니다.', '매주 [요일] [시간]에 [확인할 메일함·시트·폴더]를 확인해. [새 문의·새 주문·새 자료]가 있을 때만 [AI 업무 설명서 이름]을 실행해서 [요약·분류·답장 초안]을 준비해줘. 새 내용이 없으면 ‘새 내용 없음’이라고만 알려줘. 원본 수정과 외부 발송은 하지 말고, 사용한 자료와 초안을 함께 보여줘. 개인정보·가격·계좌번호·환불·예약 변경·판단이 어려운 내용은 멈추고 나에게 물어봐. 예약하기 전에 지금 같은 조건으로 한 번 시험 실행하고 빠진 정보나 위험한 부분을 알려줘.', '내 상황에 맞춘 예약 프롬프트가 나오면 성공입니다.'),
+      prompt('예약 전 한 번 실행하기', '바로 예약하지 않고 같은 조건으로 시험합니다. 읽은 자료와 사람이 확인할 부분을 같이 봅니다.', '예약하기 전 지금 같은 조건으로 한 번 시험 실행해줘. 읽은 자료 → AI가 한 일 → 만들어진 결과 → 내가 확인할 부분 순서로 보여줘. 원본 수정·외부 발송은 하지 마.', '시험 결과와 확인할 부분이 나오면 성공입니다.'),
+      prompt('시험 결과로 프롬프트 다듬기', '시험에서 빠진 정보나 위험한 부분을 고친 뒤 다시 확인합니다.', '방금 시험 결과에서 빠진 정보, 위험한 부분, 너무 넓게 처리한 부분을 찾아 예약 프롬프트 수정안을 보여줘. 왜 고쳤는지 한 줄씩 설명하고 내가 승인하기 전에는 저장하지 마.', '수정할 이유와 문장을 확인하면 성공입니다.'),
+      prompt('예약 작업 저장하기', '내가 승인한 프롬프트만 저장합니다. 첫 3회는 직접 결과를 검토합니다.', '내가 승인한 예약 프롬프트만 저장해줘. 저장 직전에 실행 시간, 시작 조건, 자동 처리 범위, 멈출 조건, 마지막 확인 항목을 다시 보여줘. 저장 뒤에는 첫 3회 결과를 내가 직접 검토해야 한다는 알림과 실행 기록을 확인할 위치를 알려줘.', '저장 내용과 첫 3회 검토 방법을 확인하면 성공입니다.'),
+      retro(15, '업무 자동화2: 자동화 공정 검토하기'),
+    ],
+  },
+];
+
+const toPage = (day: TutorialDay, step: TutorialStep, index: number): OneActionPage => {
+  const hasImages = Boolean(step.image || step.images?.length);
+  const isRetro = step.kind === 'RETRO';
+  const prompt = step.copyText;
+  return {
+    id: `d${day.day}-${String(index + 1).padStart(2, '0')}`,
+    kind: isRetro ? 'RETRO' : 'ACTION',
+    view: isRetro ? 'WORKBOOK' : hasImages ? 'SPOTLIGHT' : prompt ? 'PROMPT' : 'WORKBENCH',
+    title: step.action,
+    description: step.detail,
+    action: prompt ? '프롬프트를 복사해 AI 앱에서 진행합니다.' : step.action,
+    prompt,
+    image: step.image,
+    images: step.images,
+    supporting: step.detail,
+    advanceWhen: prompt ? 'copied' : 'controls',
+    controls: prompt ? undefined : [{ id: 'complete', type: 'check', label: '이 행동을 마쳤습니다', required: true, persist: 'session' }],
+  };
+};
+
+export const week3CourseDays: OneActionTutorialDay[] = legacyWeek3Days.map((day) => ({
+  day: day.day,
+  week: day.week,
+  theme: day.theme,
+  title: day.title,
+  outcome: day.outcome,
+  status: day.status,
+  appTrack: 'unified',
+  time: day.time,
+  readyLabel: day.readyLabel,
+  experience: 'one-action',
+  pages: [
+    {
+      id: `d${day.day}-start`, kind: 'START', view: 'FOCUS', title: day.title,
+      subtitle: day.outcome, description: day.outcome, action: '오늘의 실습 시작하기', outcome: day.outcome,
+      flow: (day.steps as TutorialStep[]).map((step) => step.action), advanceWhen: 'started',
+    },
+    ...(day.steps as TutorialStep[]).map((step, index) => toPage(day, step, index)),
+  ],
+}));

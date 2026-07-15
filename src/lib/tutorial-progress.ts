@@ -17,11 +17,25 @@ export function runCourseMigrations(storage: Storage): boolean {
     const markers = parse<Record<string, string>>(storage.getItem(tutorialStorage.migrations), {});
 
     // v2 -> v3: only the incompatible first-week index positions are reset.
-    if (version !== '3' && version !== '4') {
+    if (version !== '3' && version !== '4' && version !== '5') {
       for (const key of Object.keys(position)) if (/^[1-5](?:\.(?:claude|codex))?$/.test(key)) delete position[key];
       const retained = done.filter((day) => day >= 6 && day <= 20);
       storage.setItem(tutorialStorage.done, JSON.stringify([...new Set(retained)].sort((a, b) => a - b)));
       if (Number(storage.getItem(tutorialStorage.last)) <= 5) storage.removeItem(tutorialStorage.last);
+    }
+
+    // Week 3 replaces unrelated legacy lessons. Preserve weeks 1, 2, and 4.
+    if (markers['week3-one-action'] !== '5') {
+      const retained = done.filter((day) => day <= 10 || day >= 16);
+      for (const key of Object.keys(position)) if (/^(?:11|12|13|14|15)(?:\.|$)/.test(key)) delete position[key];
+      for (const pageId of Object.keys(draft)) if (/^d(?:11|12|13|14|15)(?:-|$)/.test(pageId)) delete draft[pageId];
+      const last = Number(storage.getItem(tutorialStorage.last));
+      if (last >= 11 && last <= 15) storage.removeItem(tutorialStorage.last);
+      storage.setItem(tutorialStorage.done, JSON.stringify([...new Set(retained)].sort((a, b) => a - b)));
+      storage.setItem(tutorialStorage.position, JSON.stringify(position));
+      storage.setItem(tutorialStorage.draft, JSON.stringify(draft));
+      markers['week3-one-action'] = '5';
+      storage.setItem(tutorialStorage.migrations, JSON.stringify(markers));
     }
 
     // Week 4 replaces unrelated legacy lessons. Preserve 1-15 and the app choice.
@@ -39,7 +53,7 @@ export function runCourseMigrations(storage: Storage): boolean {
     }
     const app = storage.getItem(tutorialStorage.app);
     if (app !== 'claude' && app !== 'codex') storage.removeItem(tutorialStorage.app);
-    storage.setItem(tutorialStorage.version, '4');
+    storage.setItem(tutorialStorage.version, '5');
     return true;
   } catch { return false; }
 }
