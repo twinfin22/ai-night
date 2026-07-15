@@ -1,9 +1,10 @@
 ---
 import type { OneActionTutorialDay } from '../data/course';
 const { item } = Astro.props as { item: OneActionTutorialDay };
+const clientPages = item.pages.map(({ source: _source, ...page }) => page);
 ---
 
-<main class="one-action" data-one-action data-day={item.day} data-pages={JSON.stringify(item.pages)} data-storage={JSON.stringify({ version: 'ainight.version', done: 'ainight.done', position: 'ainight.position', last: 'ainight.last', app: 'ainight.app', draft: 'ainight.draft' })}>
+<main class="one-action" data-one-action data-day={item.day} data-pages={JSON.stringify(clientPages)} data-storage={JSON.stringify({ version: 'ainight.version', done: 'ainight.done', position: 'ainight.position', last: 'ainight.last', app: 'ainight.app', draft: 'ainight.draft' })}>
   <section class="one-action__preflight" data-preflight hidden aria-labelledby="app-choice-title">
     <p class="eyebrow">수업 시작 전</p><h1 id="app-choice-title">이번 주에 쓸 앱을 고르세요</h1>
     <fieldset class="one-action__app-options"><legend>내가 쓰는 앱</legend>
@@ -40,7 +41,7 @@ const { item } = Astro.props as { item: OneActionTutorialDay };
     const all = read(target, keys.draft, {}); all[pageKey()] = { ...(all[pageKey()] || {}), [control.id]: value };
     if (!write(target, keys.draft, all)) memoryDraft = { ...memoryDraft, [pageKey()]: { ...(memoryDraft[pageKey()] || {}), [control.id]: value } };
   };
-  const getVisible = () => pages.filter((page) => !page.track || page.track === app);
+  const getVisible = () => pages.filter((page) => !page.track || page.track === app).filter((page) => !page.visibleWhen || drafts()['d07-choice-output']?.[page.visibleWhen.choiceKey] === page.visibleWhen.equals);
   const selectedCount = (value) => Array.isArray(value) ? value.length : value ? 1 : 0;
   const controlsComplete = (page) => (page.controls || []).every((control) => {
     const count = selectedCount(values()[control.id]);
@@ -70,7 +71,7 @@ const { item } = Astro.props as { item: OneActionTutorialDay };
     const board = root.querySelector('[data-workboard]'); const state = values(); let content = '';
     if (page.view === 'FOCUS') content = `<div class="workboard-focus">${page.subtitle ? `<p>${esc(page.subtitle)}</p>` : ''}${page.flow ? `<ol>${page.flow.map((part) => `<li>${esc(part)}</li>`).join('')}</ol><strong>결과물: ${esc(page.outcome)}</strong>` : `<p>${esc(page.description)}</p>`}${page.advanceWhen === 'started' ? '<button type="button" class="one-action__primary" data-page-start>오늘의 실습 시작하기</button>' : ''}</div>`;
     if (page.view === 'WORKBENCH') content = `<div class="workboard-focus"><p>${esc(page.supporting || page.description)}</p>${(page.controls || []).map((control) => controlHtml(control, state[control.id])).join('')}</div>`;
-    if (page.view === 'SPOTLIGHT') content = `<figure class="workboard-image">${(page.images || (page.image ? [page.image] : [])).map((image) => `<button type="button" data-image-open data-src="${esc(image.src)}" data-alt="${esc(image.alt)}" aria-label="스크린샷 크게 보기"><img src="${esc(image.src)}" alt="${esc(image.alt)}"></button>`).join('')}<figcaption>${esc(page.action)}</figcaption></figure>`;
+    if (page.view === 'SPOTLIGHT') content = `<figure class="workboard-image">${(page.images || (page.image ? [page.image] : [])).map((image) => `<button type="button" data-image-open data-src="${esc(image.src)}" data-alt="${esc(image.alt)}" aria-label="스크린샷 크게 보기"><img src="${esc(image.src)}" alt="${esc(image.alt)}"></button>`).join('')}<figcaption>${esc(page.action)}</figcaption></figure>${page.prompt ? `<div class="workboard-prompt"><button type="button" data-copy>복사하기</button><pre><code>${highlighted(page.prompt, page.highlightTokens)}</code></pre></div>` : ''}`;
     if (page.view === 'PROMPT' || page.view === 'WORKBOOK') content = `<div class="workboard-prompt"><button type="button" data-copy>복사하기</button><pre><code>${highlighted(page.prompt, page.highlightTokens)}</code></pre></div>`;
     if (page.view === 'COMPARISON') content = `<div class="workboard-comparison">${(page.comparison || []).map((part) => `<section><strong>${esc(part.label)}</strong><p>${esc(part.content)}</p></section>`).join('')}</div>`;
     if (page.view !== 'SPOTLIGHT' && page.images?.length) content += `<figure class="workboard-image">${page.images.map((image) => `<button type="button" data-image-open data-src="${esc(image.src)}" data-alt="${esc(image.alt)}" aria-label="스크린샷 크게 보기"><img src="${esc(image.src)}" alt="${esc(image.alt)}"></button>`).join('')}</figure>`;
@@ -82,9 +83,11 @@ const { item } = Astro.props as { item: OneActionTutorialDay };
       const control = page.controls.find((item) => item.id === input.dataset.control); let value;
       if (control.type === 'checkbox') value = [...board.querySelectorAll(`[data-control="${CSS.escape(control.id)}"]:checked`)].map((item) => item.value);
       else if (control.type === 'check') value = input.checked; else value = input.value;
-      saveValue(control, value); updateNext(page);
+      saveValue(control, value);
+      if (page.kind === 'CHOICE') { const currentId = page.id; visible = getVisible(); index = Math.max(0, visible.findIndex((item) => item.id === currentId)); }
+      updateNext(page);
     }));
-    board.querySelector('[data-page-start]')?.addEventListener('click', () => { saveValue({ id: '__started', persist: 'local' }, true); render(); });
+    board.querySelector('[data-page-start]')?.addEventListener('click', () => { saveValue({ id: '__started', persist: 'local' }, true); index = Math.min(visible.length - 1, index + 1); render(true); });
     board.querySelector('[data-confirm]')?.addEventListener('change', (event) => { saveValue({ id: '__confirmed', persist: 'local' }, event.target.checked); updateNext(page); });
     board.querySelector('[data-copy]')?.addEventListener('click', async (event) => { const button = event.currentTarget; try { await navigator.clipboard.writeText(page.prompt || ''); saveValue({ id: '__copied', persist: 'local' }, true); button.textContent = '복사됨'; updateNext(page); } catch { button.textContent = '복사하지 못했습니다'; } });
     board.querySelectorAll('[data-image-open]').forEach((button) => button.addEventListener('click', () => { const dialog = document.createElement('dialog'); dialog.className = 'image-dialog'; dialog.innerHTML = `<button type="button" aria-label="닫기">닫기</button><img src="${button.dataset.src}" alt="${button.dataset.alt}">`; document.body.append(dialog); dialog.showModal(); const close = dialog.querySelector('button'); close.focus(); close.addEventListener('click', () => dialog.close()); dialog.addEventListener('close', () => { dialog.remove(); button.focus(); }); }));

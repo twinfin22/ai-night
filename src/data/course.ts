@@ -1,4 +1,5 @@
 import { week1Days } from './course-week1';
+import { week2Days } from './course-week2';
 import { week4Days } from './course-week4';
 import { week3CourseDays } from './course-week3';
 
@@ -59,7 +60,7 @@ export interface OneActionControl {
   min?: number;
   max?: number;
   exact?: number;
-  options?: { value: string; label: string; description?: string }[];
+  options?: readonly { value: string; label: string; description?: string }[];
   persist?: 'local' | 'session';
 }
 
@@ -69,27 +70,46 @@ export interface OneActionPage {
   view: OneActionView;
   title: string;
   description: string;
-  action: string;
+  action: string | null;
   track?: AppChoice;
   subtitle?: string;
   outcome?: string;
   flow?: string[];
-  prompt?: string;
+  prompt?: string | null;
   highlightTokens?: string[];
   image?: { src: string; alt: string };
   images?: { src: string; alt: string }[];
   officialLinks?: { label: string; href: string }[];
-  supporting?: string;
+  supporting?: string | null;
   choices?: { value: string; label: string; description: string }[];
   comparison?: { label: string; content: string }[];
   controls?: OneActionControl[];
   advanceWhen?: 'started' | 'copied' | 'controls' | 'confirmed';
+  source?: Week2SourceFields;
+  visibleWhen?: { choiceKey: string; equals: string };
+  choice?: { key: string; options: readonly { value: string; label: string; description: string }[] };
+}
+
+export interface Week2SourceFields {
+  dayLabel: string;
+  order: string;
+  sourceKind: string;
+  headline: string;
+  description: string | null;
+  flow: string | null;
+  outcome: string | null;
+  action: string | null;
+  prompt: string | null;
+  replacementText: string | null;
+  screenshot: string | null;
+  supporting: string | null;
+  bottomButton: string | null;
 }
 
 export interface OneActionTutorialDay extends Omit<TutorialDay, 'appTrack' | 'steps' | 'challenge' | 'tomorrow'> {
   experience: 'one-action';
   appTrack: AppTrack;
-  pages: OneActionPage[];
+  pages: readonly OneActionPage[];
   challenge?: string;
   tomorrow?: string;
 }
@@ -104,6 +124,8 @@ export const storageKeys = {
   last: 'ainight.last',
   app: 'ainight.app',
   draft: 'ainight.draft',
+  action: 'ainight.action',
+  choice: 'ainight.choice',
 };
 
 export const courseVersion = '5';
@@ -1663,7 +1685,7 @@ AGENTS.md와 가게 자료
 
 export const courseDays: CourseDay[] = [
   ...week1Days,
-  ...legacyCourseDays.filter((day) => day.day >= 6 && day.day <= 10),
+  ...week2Days,
   ...week3CourseDays,
   ...week4Days,
 ];

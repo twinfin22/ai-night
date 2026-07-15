@@ -1,0 +1,21 @@
+{
+  "source": {
+    "workbook": "AI야학 튜토리얼",
+    "spreadsheetId": "1aT28MPd8RuqsNzRwK77ZM2Zp5vZDKH7Bfgt59Aj2gqM",
+    "sheet": "2주차 세부 강의안",
+    "sheetId": 275570530,
+    "range": "A1:M48",
+    "readAt": "2026-07-14T23:59:08+09:00"
+  },
+  "items": [
+    { "pageId": "d06-action-06", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/website-planning/screenshots/d09-responsive-qa-success.png", "deploy": "/assets/tutorials/week2/d09-responsive-qa-success.png", "bytes": 1873557, "width": 1942, "height": 980, "alt": "브라우저 검사 결과에서 모든 확인 항목이 통과한 화면", "capturedAt": null, "sourceCheckedAt": "2026-07-14T23:59:08+09:00", "status": "verified" },
+    { "pageId": "d06-action-08", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/week3/screenshots/d11-agents-md-official.png", "deploy": "/assets/tutorials/week2/d11-agents-md-official.png", "bytes": 235298, "width": 1440, "height": 1100, "alt": "AGENTS.md 또는 CLAUDE.md에 작업 규칙을 기록하는 예시 화면", "capturedAt": null, "sourceCheckedAt": "2026-07-14T23:59:08+09:00", "status": "verified" },
+    { "pageId": "d07-action-slides", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/document-compat/screenshots/d07-claude-design-slide-deck-official.png", "deploy": "/assets/tutorials/week2/d07-claude-design-slide-deck-official.png", "bytes": 350563, "width": 1124, "height": 654, "alt": "Claude Design에서 슬라이드 결과를 확인하는 예시 화면", "capturedAt": null, "sourceCheckedAt": "2026-07-14T23:59:08+09:00", "status": "verified" },
+    { "pageId": "d09-action-01", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/website-planning/screenshots/d09-claude-design-official.jpg", "deploy": "/assets/tutorials/week2/d09-claude-design-official.jpg", "bytes": 172849, "width": 2876, "height": 1614, "alt": "Claude Design의 대화창과 캔버스에 디자인 결과가 보이는 화면", "capturedAt": null, "sourceCheckedAt": "2026-07-14T23:59:08+09:00", "status": "verified" },
+    { "pageId": "d09-action-02", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/website-planning/screenshots/d09-chatgpt-sites-at-mention-live.jpg", "deploy": "/assets/tutorials/week2/d09-chatgpt-sites-at-mention-live.jpg", "bytes": 26031, "width": 810, "height": 145, "alt": "ChatGPT 입력칸에서 @로 Sites를 선택하는 예시 화면", "capturedAt": null, "sourceCheckedAt": "2026-07-14T23:59:08+09:00", "status": "verified" },
+    { "pageId": "d09-action-03", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/website-planning/screenshots/d09-responsive-qa-success.png", "deploy": "/assets/tutorials/week2/d09-responsive-qa-success.png", "bytes": 1873557, "width": 1942, "height": 980, "alt": "브라우저 검사 결과에서 모든 확인 항목이 통과한 화면", "capturedAt": null, "sourceCheckedAt": "2026-07-14T23:59:08+09:00", "status": "verified" },
+    { "pageId": "d10-action-01", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/github-vercel/screenshots/d10-github-signup.png", "deploy": "/assets/tutorials/week2/d10-github-signup.png", "bytes": 247244, "width": 1440, "height": 1000, "alt": "GitHub 로그인 또는 가입 화면", "capturedAt": null, "sourceCheckedAt": "2026-07-14T23:59:08+09:00", "status": "verified" },
+    { "pageId": "d10-action-02", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/github-vercel/screenshots/d10-vercel-signup-github.png", "deploy": "/assets/tutorials/week2/d10-vercel-signup-github.png", "bytes": 48372, "width": 1440, "height": 1000, "alt": "GitHub 계정으로 Vercel에 로그인하는 화면", "capturedAt": null, "sourceCheckedAt": "2026-07-14T23:59:08+09:00", "status": "verified" },
+    { "pageId": "d10-action-04", "source": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/github-vercel/screenshots/d10-vercel-import-repository-official.png", "deploy": "/assets/tutorials/week2/d10-vercel-import-repository-official.png", "bytes": 28599, "width": 1200, "height": 961, "alt": "Vercel에서 GitHub 저장소를 선택해 가져오는 화면", "capturedAt": null, "sourceCheckedAt": "2026-07-14T23:59:08+09:00", "status": "verified" }
+  ]
+}
