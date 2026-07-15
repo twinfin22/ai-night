@@ -1,8 +1,15 @@
 import type { OneActionPage, OneActionTutorialDay } from './course';
 
+const screenshots: Record<string, { src: string; alt: string }[]> = {
+  '17-1': [{ src: '/assets/tutorials/week4/screenshots/d17-file-attach-live.png', alt: 'Claude 앱의 파일 첨부 위치' }],
+  '18-2': [{ src: '/assets/tutorials/week4/screenshots/d18-file-attach-live.png', alt: 'Claude 앱의 파일 첨부 위치' }],
+  '19-1': [{ src: '/assets/tutorials/week4/screenshots/d19-gpters-official.png', alt: 'GPTers 공식 페이지' }, { src: '/assets/tutorials/week4/screenshots/d19-modulabs-official.png', alt: '모두의연구소 공식 페이지' }, { src: '/assets/tutorials/week4/screenshots/d19-koding-official.png', alt: 'Koding 공식 페이지' }],
+  '19-2': [{ src: '/assets/tutorials/week4/screenshots/d19-modulet-official.png', alt: '모두레터 공식 페이지' }, { src: '/assets/tutorials/week4/screenshots/d19-aiground-official.png', alt: 'AI Ground 공식 페이지' }],
+  '19-7': [{ src: '/assets/tutorials/automations/screenshots/d05-codex-automations-official.png', alt: 'Codex Automations 공식 화면' }, { src: '/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png', alt: 'Claude 예약 작업 공식 화면' }],
+};
 const action = (day: number, index: number, title: string, description: string, prompt?: string): OneActionPage => ({
   id: `d${day}-action-${String(index).padStart(2, '0')}`, kind: 'ACTION', view: prompt ? 'PROMPT' : 'WORKBENCH', title, description, action: prompt ? '프롬프트를 복사해 AI 앱에서 진행합니다.' : '화면의 입력 또는 선택을 마칩니다.', prompt,
-  advanceWhen: prompt ? 'copied' : 'controls', controls: prompt ? undefined : [{ id: 'complete', type: 'check', label: '이 행동을 마쳤습니다', required: true, persist: 'session' }],
+  advanceWhen: prompt ? 'copied' : 'controls', controls: prompt ? undefined : [{ id: 'complete', type: 'check', label: '이 행동을 마쳤습니다', required: true, persist: 'session' }], images: screenshots[`${day}-${index}`],
 });
 const start = (day: number, title: string, subtitle: string, outcome: string): OneActionPage => ({ id: `d${day}-start`, kind: 'START', view: 'FOCUS', title, subtitle, description: subtitle, action: '오늘 할 일을 확인한 뒤 시작합니다.', outcome, flow: ['한 화면에 행동 하나씩 합니다', 'AI 앱에서 필요한 작업을 합니다', '마지막에 내 말로 회고합니다'], advanceWhen: 'started' });
 const retro = (day: number, title: string): OneActionPage => action(day, 99, '오늘의 회고', 'AI가 회고를 만들거나 평가하지 않습니다. 내 답만 저장합니다.', `오늘 ${day}일차 수업의 인간 회고만 진행해줘. 네가 회고 내용을 만들거나 평가하지 마. 아래 질문을 한 번에 하나씩 묻고, 내 답이 오기 전에는 다음 질문으로 넘어가지 마.\n\n1. 새롭게 할 수 있게 된 것은 무엇인가요?\n2. 막혔던 부분과 다음에 시도할 방법은 무엇인가요?\n3. 남아있는 궁금증 또는 새롭게 시도해보고 싶은 것은 무엇인가요?\n\n세 답을 모두 받은 뒤 현재 작업 폴더의 ai-study/daily_retro.md를 읽어. <!-- ai-study-day:${day} --> 마커 구역은 이번 답으로 교체하고, 다른 일차는 보존한 뒤 숫자 오름차순으로 정렬해. 내 답 외의 내용은 추측하지 마.`);

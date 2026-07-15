@@ -78,7 +78,7 @@
     {
       "pageId": "d17-action-01",
       "type": "screenshot",
-      "status": "blocked",
+      "status": "ready",
       "deployPath": "/assets/tutorials/week4/screenshots/d17-file-attach-live.png",
       "sourceUrl": "https://claude.ai/",
       "alt": "AI 앱에서 파일을 첨부하는 실제 화면",
@@ -90,7 +90,7 @@
     {
       "pageId": "d18-action-03",
       "type": "screenshot",
-      "status": "blocked",
+      "status": "ready",
       "deployPath": "/assets/tutorials/week4/screenshots/d18-file-attach-live.png",
       "sourceUrl": "https://claude.ai/",
       "alt": "AI 앱에서 분석할 자료를 첨부하는 실제 화면",
@@ -126,7 +126,7 @@
     {
       "pageId": "d19-action-community",
       "type": "screenshot",
-      "status": "blocked",
+      "status": "ready",
       "deployPath": "/assets/tutorials/week4/screenshots/d19-gpters-official.png",
       "sourceUrl": "https://www.gpters.org/",
       "alt": "GPTers 공식 웹사이트 화면",
@@ -138,7 +138,7 @@
     {
       "pageId": "d19-action-community",
       "type": "screenshot",
-      "status": "blocked",
+      "status": "ready",
       "deployPath": "/assets/tutorials/week4/screenshots/d19-modulabs-official.png",
       "sourceUrl": "https://modulabs.co.kr/",
       "alt": "모두의연구소 공식 웹사이트 화면",
@@ -150,7 +150,7 @@
     {
       "pageId": "d19-action-community",
       "type": "screenshot",
-      "status": "blocked",
+      "status": "ready",
       "deployPath": "/assets/tutorials/week4/screenshots/d19-koding-official.png",
       "sourceUrl": "https://koding.kr/",
       "alt": "코딩 교육 커뮤니티 공식 웹사이트 화면",
@@ -162,7 +162,7 @@
     {
       "pageId": "d19-action-newsletter",
       "type": "screenshot",
-      "status": "blocked",
+      "status": "ready",
       "deployPath": "/assets/tutorials/week4/screenshots/d19-modulet-official.png",
       "sourceUrl": "https://modulet.io/",
       "alt": "모듈렛 공식 웹사이트 화면",
@@ -174,7 +174,7 @@
     {
       "pageId": "d19-action-newsletter",
       "type": "screenshot",
-      "status": "blocked",
+      "status": "ready",
       "deployPath": "/assets/tutorials/week4/screenshots/d19-aiground-official.png",
       "sourceUrl": "https://aiground.co.kr/",
       "alt": "AI Ground 공식 웹사이트 화면",
@@ -198,7 +198,7 @@
     {
       "pageId": "d19-action-schedule",
       "type": "screenshot",
-      "status": "blocked",
+      "status": "ready",
       "deployPath": "/assets/tutorials/automations/screenshots/d05-codex-automations-official.png",
       "sourceUrl": "https://developers.openai.com/codex/",
       "alt": "Codex 예약 작업 공식 화면",
@@ -210,7 +210,7 @@
     {
       "pageId": "d19-action-schedule",
       "type": "screenshot",
-      "status": "blocked",
+      "status": "ready",
       "deployPath": "/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png",
       "sourceUrl": "https://support.anthropic.com/",
       "alt": "Claude 예약 작업 공식 화면",
