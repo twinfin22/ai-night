@@ -13,7 +13,6 @@ export function runCourseMigrations(storage: Storage): boolean {
     const version = storage.getItem(tutorialStorage.version);
     const done = parse<unknown[]>(storage.getItem(tutorialStorage.done), []).map(Number).filter(Number.isInteger);
     const position = parse<Record<string, unknown>>(storage.getItem(tutorialStorage.position), {});
-    const draft = parse<Record<string, unknown>>(storage.getItem(tutorialStorage.draft), {});
     const markers = parse<Record<string, string>>(storage.getItem(tutorialStorage.migrations), {});
 
     // v2 -> v3: only the incompatible first-week index positions are reset.
@@ -24,31 +23,11 @@ export function runCourseMigrations(storage: Storage): boolean {
       if (Number(storage.getItem(tutorialStorage.last)) <= 5) storage.removeItem(tutorialStorage.last);
     }
 
-    // Week 3 replaces unrelated legacy lessons. Preserve weeks 1, 2, and 4.
-    if (markers['week3-one-action'] !== '5') {
-      const retained = done.filter((day) => day <= 10 || day >= 16);
-      for (const key of Object.keys(position)) if (/^(?:11|12|13|14|15)(?:\.|$)/.test(key)) delete position[key];
-      for (const pageId of Object.keys(draft)) if (/^d(?:11|12|13|14|15)(?:-|$)/.test(pageId)) delete draft[pageId];
-      const last = Number(storage.getItem(tutorialStorage.last));
-      if (last >= 11 && last <= 15) storage.removeItem(tutorialStorage.last);
-      storage.setItem(tutorialStorage.done, JSON.stringify([...new Set(retained)].sort((a, b) => a - b)));
+    // Copy-only fixes: clear only the three renamed common positions, never progress or app choice.
+    if (markers['qa-copy-fixes'] !== '1') {
+      for (const key of ['11.common', '15.common', '19.common']) delete position[key];
       storage.setItem(tutorialStorage.position, JSON.stringify(position));
-      storage.setItem(tutorialStorage.draft, JSON.stringify(draft));
-      markers['week3-one-action'] = '5';
-      storage.setItem(tutorialStorage.migrations, JSON.stringify(markers));
-    }
-
-    // Week 4 replaces unrelated legacy lessons. Preserve 1-15 and the app choice.
-    if (markers['week4-one-action'] !== '4') {
-      const retained = done.filter((day) => day >= 1 && day <= 15);
-      for (const key of Object.keys(position)) if (/^(?:16|17|18|19|20)(?:\.|$)/.test(key)) delete position[key];
-      for (const pageId of Object.keys(draft)) if (/^d(?:16|17|18|19|20)-/.test(pageId)) delete draft[pageId];
-      const last = Number(storage.getItem(tutorialStorage.last));
-      if (last >= 16 && last <= 20) storage.removeItem(tutorialStorage.last);
-      storage.setItem(tutorialStorage.done, JSON.stringify([...new Set(retained)].sort((a, b) => a - b)));
-      storage.setItem(tutorialStorage.position, JSON.stringify(position));
-      storage.setItem(tutorialStorage.draft, JSON.stringify(draft));
-      markers['week4-one-action'] = '4';
+      markers['qa-copy-fixes'] = '1';
       storage.setItem(tutorialStorage.migrations, JSON.stringify(markers));
     }
     const app = storage.getItem(tutorialStorage.app);

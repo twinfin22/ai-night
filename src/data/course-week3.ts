@@ -1,4 +1,4 @@
-import type { OneActionPage, OneActionTutorialDay, TutorialDay, TutorialStep } from './course';
+import type { AppChoice, OneActionPage, OneActionTutorialDay, TutorialDay, TutorialStep } from './course';
 
 const stuck = {
   different: '화면 이름이 조금 달라도 괜찮습니다. 지금 단계의 제목이나 버튼 이름을 다시 찾아보세요.',
@@ -16,7 +16,7 @@ const action = (action: string, detail: string, success: string, kind: TutorialS
 
 const retro = (day: number, title: string): TutorialStep => prompt(
   '오늘의 회고',
-  'AI가 대신 회고를 쓰지 않습니다. 아래 질문에 내 경험으로 한 번에 하나씩 답하고, 내 답만 같은 일차 구역에 다시 저장합니다.',
+  '회고는 내 경험으로 답합니다. AI는 정리만 돕습니다.',
   `오늘 ${day}일차 수업 회고를 진행해줘. 아래 세 가지를 한 번에 하나씩 질문해.\n\n1. 새롭게 할 수 있게 된 것\n2. 막혔던 부분. 해결했다면 어떻게 했는지, 해결하지 못했다면 다음에 어떻게 시도할지\n3. 남아있는 궁금증 또는 새롭게 시도해보고 싶은 것\n\n내 답이 끝나면 Asia/Seoul 기준 현재 날짜를 YYYY-MM-DD로 확인하고, 현재 작업 폴더의 ai-study/daily_retro.md에 아래 형식으로 저장해. 폴더나 파일이 없으면 만들어.\n\n<!-- ai-study-day:${day} -->\n## YYYY-MM-DD · ${day}일차 수업 · ${title}\n\n### 새롭게 할 수 있게 된 것\n- ...\n\n### 막혔던 부분\n- 막힌 내용: ...\n- 해결했거나 다음에 시도할 방법: ...\n\n### 남아있는 궁금증 / 새롭게 시도해보고 싶은 것\n- ...\n\n같은 <!-- ai-study-day:${day} --> 구역이 이미 있으면 새 구역을 추가하지 말고 그 구역 전체와 수업일자를 최신 답변으로 바꿔. 다른 일차 구역은 그대로 둬. 답하지 않은 내용은 추측하지 말고 ‘미작성’으로 적어. 저장 후 파일을 다시 읽고 ${day}일차 구역이 하나만 있는지 확인한 다음 저장 경로를 알려줘.`,
   `ai-study/daily_retro.md의 ${day}일차 구역이 하나만 있고, 내 답만 저장되면 성공입니다.`,
   'RETRO',
@@ -30,8 +30,8 @@ const legacyWeek3Days: TutorialDay[] = [
     challenge: '', tomorrow: '내일은 회의 녹음 파일을 글로 바꿉니다.',
     steps: [
       prompt('내 규칙 파일 찾기', 'Codex는 AGENTS.md, Claude는 CLAUDE.md를 씁니다. 이 단계에서는 기존 내용을 바꾸지 않습니다.', '지금 쓰는 앱이 Codex인지 Claude인지 확인해줘. Codex면 현재 작업 폴더의 AGENTS.md, Claude면 CLAUDE.md를 찾아줘. 없으면 만들 위치를 알려주고, 있으면 내용을 바꾸지 말고 보여줘. 다른 폴더의 규칙 파일은 건드리지 마.', '현재 작업 폴더의 규칙 파일 경로를 알면 성공입니다.', 'SPOTLIGHT', { src: '/assets/tutorials/week3/screenshots/d11-agents-md-official.png', alt: 'OpenAI 공식 AGENTS.md 안내 문서 화면' }, [{ src: '/assets/tutorials/week3/screenshots/d11-claude-md-official.png', alt: 'Anthropic 공식 CLAUDE.md 안내 문서 화면' }]),
-      prompt('반복되는 내 업무 방식 찾기', '한 번의 요청이나 AI의 추측은 규칙으로 넣지 않습니다. 근거가 두 번 이상 보인 것만 후보로 봅니다.', '이 앱에서 실제로 읽을 수 있는 작업 기록·회고 파일·결과물 목록을 먼저 보여줘. /history를 파일처럼 읽을 수 없으면 그렇다고 말하고 저장된 회고 파일과 결과물만 사용해. 반복해서 확인된 내 선호·작업 방식·자주 생긴 실수를 표로 정리하고 각 항목에 근거 날짜나 파일을 붙여줘. 한 번만 나온 요청과 네 추측은 ‘규칙 후보 아님’으로 표시해줘.', '근거가 붙은 규칙 후보 표가 나오면 성공입니다.'),
-      prompt('업무 규칙 초안 만들기', '아직 파일에는 저장하지 않습니다. 계속 지킬 약속만 짧고 분명한 행동 규칙으로 만듭니다.', '실제로 접근 가능한 기록과 저장된 회고 파일만 사용해 반복해서 확인된 선호와 작업 방식으로 규칙 파일 초안을 만들어줘. /history를 읽을 수 없으면 회고 파일과 결과물만 사용하고 그 사실을 알려줘. 일회성 요청이나 추측은 넣지 말고 10개 이하로 정리해. 삭제·결제·외부 공개·메시지 발송·계정 권한 변경 직전에만 확인하도록 써줘. 아직 파일에는 저장하지 마.', '10개 이하의 초안이 나오면 성공입니다.'),
+      prompt('반복되는 내 업무 방식 찾기', '한 번의 요청이나 AI의 추측은 규칙으로 넣지 않습니다. 근거가 두 번 이상 보인 것만 후보로 봅니다.', '이 앱에서 실제로 읽을 수 있는 작업 기록·회고 파일·결과물 목록을 먼저 보여줘. 저장된 회고 파일과 결과물만 사용해 반복해서 확인된 내 선호·작업 방식·자주 생긴 실수를 표로 정리하고 각 항목에 근거 날짜나 파일을 붙여줘. 한 번만 나온 요청과 네 추측은 ‘규칙 후보 아님’으로 표시해줘.', '근거가 붙은 규칙 후보 표가 나오면 성공입니다.'),
+      prompt('업무 규칙 초안 만들기', '아직 파일에는 저장하지 않습니다. 계속 지킬 약속만 짧고 분명한 행동 규칙으로 만듭니다.', '실제로 접근 가능한 기록과 저장된 회고 파일만 사용해 반복해서 확인된 선호와 작업 방식으로 규칙 파일 초안을 만들어줘. 일회성 요청이나 추측은 넣지 말고 10개 이하로 정리해. 삭제·결제·외부 공개·메시지 발송·계정 권한 변경 직전에만 확인하도록 써줘. 아직 파일에는 저장하지 마.', '10개 이하의 초안이 나오면 성공입니다.'),
       prompt('남길 규칙 고르기', '모호하거나 겹치는 문장은 정리합니다. 꼭 필요한 규칙만 남기면 나중에도 관리하기 쉽습니다.', '방금 만든 규칙을 ① 반드시 유지 ② 있으면 도움 ③ 삭제 추천으로 나눠줘. ‘잘해줘’처럼 모호한 문장은 실제 행동으로 바꾸고 서로 겹치는 규칙은 합쳐서 최종 10개 이하로 다시 보여줘.', '남길 규칙을 직접 고르면 성공입니다.', 'WORKBENCH'),
       prompt('규칙 파일에 저장하기', '내가 고른 규칙만 현재 작업 폴더에 저장합니다. 기존 내용은 지우지 않습니다.', '내가 선택한 규칙만 저장해줘. Codex면 현재 작업 폴더의 AGENTS.md, Claude면 CLAUDE.md에 반영해. 기존 내용이 있으면 보존하고 겹치는 내용만 정리해. 저장 뒤 파일 전체를 다시 읽고 경로·규칙 수·바뀐 내용을 쉬운 말로 알려줘.', '저장 경로와 바뀐 내용을 확인하면 성공입니다.'),
       prompt('새 대화에서 규칙 확인하기', '새 대화에서 안전한 요청 하나로 확인합니다. 실제 파일 이동이나 삭제는 하지 않습니다.', '이 폴더의 파일을 보기 좋게 정리해줘. 실제로 이동하거나 삭제하기 전에는 어떤 파일을 어떻게 바꿀지 계획만 먼저 보여줘.', 'AI가 변경 계획을 먼저 보여주면 성공입니다.'),
@@ -128,6 +128,83 @@ const toPage = (day: TutorialDay, step: TutorialStep, index: number): OneActionP
   };
 };
 
+const verified = '2026-07-16';
+const official = (label: string, href: string, publisher: string, accessNote: string) => ({ label, href, publisher, verifiedAt: verified, accessNote });
+const technical = (title: string, body: string) => [{ title, body }];
+
+const week3Pages = (day: TutorialDay): OneActionPage[] => {
+  const steps = day.steps as TutorialStep[];
+  const pages = steps.flatMap((step, index) => {
+    const page = toPage(day, step, index);
+
+    if (day.day === 11 && index === 0) {
+      const trackPage = (track: AppChoice, title: string, prompt: string, image: { src: string; alt: string }, link: ReturnType<typeof official>) => ({
+        ...page,
+        id: `d11-01-${track}`,
+        track,
+        title,
+        description: `${track === 'codex' ? 'Codex는' : 'Claude는'} 현재 작업 폴더의 ${track === 'codex' ? 'AGENTS.md' : 'CLAUDE.md'}만 확인합니다. 기존 내용은 바꾸지 않습니다.`,
+        prompt,
+        image,
+        images: undefined,
+        officialLinks: [link],
+      });
+      return [
+        trackPage('codex', 'Codex 규칙 파일 찾기', '현재 작업 폴더의 AGENTS.md를 찾아줘. 없으면 만들 위치를 알려주고, 있으면 내용을 바꾸지 말고 보여줘. 다른 폴더의 규칙 파일은 건드리지 마.', { src: '/assets/tutorials/week3/screenshots/d11-agents-md-official.png', alt: 'OpenAI 공식 AGENTS.md 안내 문서 화면' }, official('AGENTS.md 공식 안내', 'https://learn.chatgpt.com/docs/agent-configuration/agents-md', 'OpenAI', '로그인이 필요할 수 있습니다.')),
+        trackPage('claude', 'Claude 규칙 파일 찾기', '현재 작업 폴더의 CLAUDE.md를 찾아줘. 없으면 만들 위치를 알려주고, 있으면 내용을 바꾸지 말고 보여줘. 다른 폴더의 규칙 파일은 건드리지 마.', { src: '/assets/tutorials/week3/screenshots/d11-claude-md-official.png', alt: 'Anthropic 공식 CLAUDE.md 안내 문서 화면' }, official('CLAUDE.md 공식 안내', 'https://code.claude.com/docs/en/memory', 'Anthropic', '로그인이 필요할 수 있습니다.')),
+      ];
+    }
+
+    if (day.day === 12 && index === 0) return [{ ...page, officialLinks: [official('클로바노트 시작', 'https://clovanote.naver.com/', 'NAVER', '로그인이 필요합니다.')] }];
+    if (day.day === 12 && index === 1) return [{ ...page, officialLinks: [official('PC 시작 안내', 'https://help.naver.com/service/24269/contents/12812?lang=ko&osType=PC', 'NAVER', 'PC 도움말이며 로그인 또는 서비스 조건이 적용될 수 있습니다.')] }];
+    if (day.day === 12 && index === 5) return [{ ...page, officialLinks: [official('다운로드 안내', 'https://help.naver.com/service/24269/contents/12831?lang=ko&osType=PC', 'NAVER', 'PC 도움말이며 로그인 또는 서비스 조건이 적용될 수 있습니다.')] }];
+
+    if (day.day === 13 && index === 0) return [{
+      ...page,
+      title: '회의록 정리 도우미와 양식 만들기',
+      description: '원본은 바꾸지 않고, 회의록을 정리하는 도우미와 양식을 만듭니다.',
+      prompt: '현재 작업 폴더에 회의록 정리 도우미와 회의록 양식을 만들어줘. 음성 기록 원본은 수정하지 마. 회의 제목·일시·참석자·결정 사항·담당자·기한·논의 내용·확인 필요 항목 형식으로 정리해. 원본에 없는 내용은 추측하지 말고 [확인 필요]로 표시해. 파일을 만들기 전에는 바꿀 파일과 계획을 먼저 보여줘.',
+      technicalDetails: technical('파일 구조 보기', '도우미 지침은 SKILL.md에, 회의록 양식은 templates/meeting-minutes.md에 둡니다.'),
+    }];
+
+    if (day.day === 14 && index >= 1 && index <= 5) {
+      const titles = ['이름과 역할', '언제 쓰는지', '처리 순서', '참고 자료', '시험 방법'];
+      const build = ['B — Base Setup(기본 설정)', 'U — Use Case Definition(사용 사례 정의)', 'I — Instructions & Behavior(지침과 행동)', 'L — Learning & Examples(참고 자료와 예시)', 'D — Deploy & Test(배포와 시험)'];
+      return [{ ...page, title: titles[index - 1], technicalDetails: technical('BUILD 용어 보기', build[index - 1]) }];
+    }
+
+    if (day.day === 15 && index === 4) {
+      const capability: OneActionPage = {
+        id: 'd15-capability', kind: 'ACTION', view: 'PROMPT', title: '예약 기능을 먼저 확인하세요',
+        description: '선택한 앱이 자료 읽기와 예약을 지원하는지 먼저 확인합니다. 지원하지 않으면 현재 연결된 자료로 수동 실행만 합니다.',
+        action: '프롬프트를 복사해 AI 앱에서 진행합니다.',
+        prompt: '지금 선택한 앱에서 자료를 읽고 예약 작업을 만들 수 있는지 먼저 확인해줘. 가능한 기능, 로그인·플랜·관리자 제한, 현재 연결된 자료를 짧게 알려줘. 둘 중 하나라도 할 수 없으면 현재 연결된 자료로 오늘 한 번만 실행할 최소 수동 대안을 제시하고, 저장·수정·발송·가격·환불·예약 변경은 하지 마.',
+        advanceWhen: 'copied',
+      };
+      const schedule = (track: AppChoice, image: { src: string; alt: string }, link: ReturnType<typeof official>): OneActionPage => ({
+        ...page, id: `d15-05-${track}`, track, image: undefined, images: [image], officialLinks: [link],
+        description: `${track === 'codex' ? 'Codex Automations' : 'Claude Cowork의 Scheduled → New task'} 화면만 엽니다. 아직 저장하지 않습니다.`,
+      });
+      return [
+        capability,
+        schedule('codex', { src: '/assets/tutorials/automations/screenshots/d05-codex-automations-official.png', alt: 'Codex Automations 공식 화면' }, official('Codex Automations', 'https://developers.openai.com/codex/app/automations', 'OpenAI', '로그인과 지원 플랜이 필요할 수 있습니다.')),
+        schedule('claude', { src: '/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png', alt: 'Claude Cowork 예약 작업 공식 화면' }, official('Claude Cowork 예약 작업', 'https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork', 'Anthropic', '로그인, 지원 플랜 또는 관리자 설정이 필요할 수 있습니다.')),
+      ];
+    }
+
+    return [page];
+  });
+
+  return [
+    {
+      id: `d${day.day}-start`, kind: 'START', view: 'FOCUS', title: day.title,
+      subtitle: day.outcome, description: day.outcome, action: '오늘의 실습 시작하기', outcome: day.outcome,
+      flow: steps.map((step) => step.action), advanceWhen: 'started',
+    },
+    ...pages,
+  ];
+};
+
 export const week3CourseDays: OneActionTutorialDay[] = legacyWeek3Days.map((day) => ({
   day: day.day,
   week: day.week,
@@ -139,12 +216,5 @@ export const week3CourseDays: OneActionTutorialDay[] = legacyWeek3Days.map((day)
   time: day.time,
   readyLabel: day.readyLabel,
   experience: 'one-action',
-  pages: [
-    {
-      id: `d${day.day}-start`, kind: 'START', view: 'FOCUS', title: day.title,
-      subtitle: day.outcome, description: day.outcome, action: '오늘의 실습 시작하기', outcome: day.outcome,
-      flow: (day.steps as TutorialStep[]).map((step) => step.action), advanceWhen: 'started',
-    },
-    ...(day.steps as TutorialStep[]).map((step, index) => toPage(day, step, index)),
-  ],
+  pages: week3Pages(day),
 }));

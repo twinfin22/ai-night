@@ -7,6 +7,8 @@ const screenshots: Record<string, { src: string; alt: string }[]> = {
   '19-2': [{ src: '/assets/tutorials/week4/screenshots/d19-modulet-official.png', alt: '모두레터 공식 페이지' }, { src: '/assets/tutorials/week4/screenshots/d19-aiground-official.png', alt: 'AI Ground 공식 페이지' }],
   '19-7': [{ src: '/assets/tutorials/automations/screenshots/d05-codex-automations-official.png', alt: 'Codex Automations 공식 화면' }, { src: '/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png', alt: 'Claude 예약 작업 공식 화면' }],
 };
+const verified = '2026-07-16';
+const official = (label: string, href: string, publisher: string, accessNote: string) => ({ label, href, publisher, verifiedAt: verified, accessNote });
 const action = (day: number, index: number, title: string, description: string, prompt?: string): OneActionPage => ({
   id: `d${day}-action-${String(index).padStart(2, '0')}`, kind: 'ACTION', view: prompt ? 'PROMPT' : 'WORKBENCH', title, description, action: prompt ? '프롬프트를 복사해 AI 앱에서 진행합니다.' : '화면의 입력 또는 선택을 마칩니다.', prompt,
   advanceWhen: prompt ? 'copied' : 'controls', controls: prompt ? undefined : [{ id: 'complete', type: 'check', label: '이 행동을 마쳤습니다', required: true, persist: 'session' }], images: screenshots[`${day}-${index}`],
@@ -14,6 +16,62 @@ const action = (day: number, index: number, title: string, description: string, 
 const start = (day: number, title: string, subtitle: string, outcome: string): OneActionPage => ({ id: `d${day}-start`, kind: 'START', view: 'FOCUS', title, subtitle, description: subtitle, action: '오늘 할 일을 확인한 뒤 시작합니다.', outcome, flow: ['한 화면에 행동 하나씩 합니다', 'AI 앱에서 필요한 작업을 합니다', '마지막에 내 말로 회고합니다'], advanceWhen: 'started' });
 const retro = (day: number, title: string): OneActionPage => action(day, 99, '오늘의 회고', 'AI가 회고를 만들거나 평가하지 않습니다. 내 답만 저장합니다.', `오늘 ${day}일차 수업의 인간 회고만 진행해줘. 네가 회고 내용을 만들거나 평가하지 마. 아래 질문을 한 번에 하나씩 묻고, 내 답이 오기 전에는 다음 질문으로 넘어가지 마.\n\n1. 새롭게 할 수 있게 된 것은 무엇인가요?\n2. 막혔던 부분과 다음에 시도할 방법은 무엇인가요?\n3. 남아있는 궁금증 또는 새롭게 시도해보고 싶은 것은 무엇인가요?\n\n세 답을 모두 받은 뒤 현재 작업 폴더의 ai-study/daily_retro.md를 읽어. <!-- ai-study-day:${day} --> 마커 구역은 이번 답으로 교체하고, 다른 일차는 보존한 뒤 숫자 오름차순으로 정렬해. 내 답 외의 내용은 추측하지 마.`);
 const day = (number: number, title: string, subtitle: string, outcome: string, items: [string, string, string?][]): OneActionTutorialDay => ({ day: number, week: 4, theme: '홀로서기', title, outcome, status: 'ready', appTrack: 'unified', time: '30분', experience: 'one-action', pages: [start(number, title, subtitle, outcome), ...items.map(([name, description, prompt], index) => action(number, index + 1, name, description, prompt)), retro(number, title)] });
+
+const day18 = (): OneActionTutorialDay => {
+  const result = day(18, '내 사업 자료, DIG로 읽고 행동 정하기', '내 자료를 보여주고(D), 사실을 확인하고(I), 이번 주 행동 하나를 정합니다(G).', '근거가 있는 이번 주 행동 1개', [
+    ['개인정보를 빼고 자료 하나를 고르세요', '내 익명 파일 또는 교육용 샘플 파일 하나만 고릅니다.'],
+    ['D: 내 자료와 질문을 보여주세요', '파일 하나를 첨부하고 자료와 질문을 설명합니다.', '이 파일은 [업종]의 [기간] [매출/주문/예약/리뷰] 자료입니다. 나는 [알고 싶은 질문]이 궁금합니다. 파일에 실제로 들어 있는 열과 기간만 알려줘.'],
+    ['I: 자료에서 보이는 변화를 찾으세요', '변화 세 개와 근거 숫자를 봅니다.', '위 파일에서 눈에 띄는 변화 3개를 찾아줘. 비교 대상, 기간, 근거 숫자를 붙이고 원인은 추측하지 마.'],
+    ['I: 내 장부와 현장으로 확인하세요', 'AI가 찾은 변화와 현장 상황을 대조합니다.'],
+    ['G: 이번 주 행동 하나를 정하세요', '확인된 사실과 연결되는 작은 행동 하나만 정합니다.', '확인한 사실만 바탕으로 이번 주에 해볼 행동 1개를 제안해줘. 내게 가능한 시간은 [예: 30분]이야. 근거가 부족하면 다음에 모을 자료 하나를 정해줘.'],
+    ['DIG 결과를 한 화면에 정리하세요', '새 숫자나 차트 없이 D→I→G 결과만 정리합니다.', '지금까지 D→I→G 단계에서 확인한 내용만 사용해 ai-study/day18-dashboard.html을 완성해줘. 새로운 숫자나 차트는 추가하지 마.'],
+    ['혼자 다시 해보기', '다음 자료에도 쓸 DIG 프롬프트를 저장합니다.', '내 사업 자료를 DIG 방식으로 같이 살펴보자. 자료와 확인할 것을 한 번에 하나씩 물어보고, 확인한 사실과 추가 확인할 것을 구분한 뒤 이번 주 행동 하나를 정하게 도와줘.'],
+  ]);
+  return {
+    ...result,
+    pages: result.pages.map((page) => page.id === 'd18-action-02' ? {
+      ...page,
+      description: '파일 하나를 첨부하고 자료와 질문을 설명합니다. 교육용 샘플은 내려받아 바로 쓸 수 있습니다.',
+      downloadLinks: [
+        { label: '카페 매출 CSV', href: '/assets/tutorials/week4/samples/d18-cafe-sales-synthetic.csv' },
+        { label: '소매 주문 CSV', href: '/assets/tutorials/week4/samples/d18-retail-orders-synthetic.csv' },
+        { label: '미용실 예약 CSV', href: '/assets/tutorials/week4/samples/d18-salon-reservations-synthetic.csv' },
+        { label: '매장 리뷰 CSV', href: '/assets/tutorials/week4/samples/d18-store-reviews-synthetic.csv' },
+      ],
+    } : page),
+  };
+};
+
+const day19 = (): OneActionTutorialDay => {
+  const title = 'AI 커뮤니티 찾아 꾸준히 배우기';
+  const common = [
+    { ...action(19, 1, '한국 AI 커뮤니티 3곳을 살펴보세요', 'GPTers, 모두의연구소, Koding의 공식 페이지를 읽습니다.'), officialLinks: [
+      official('GPTers', 'https://www.gpters.org/', 'GPTers', '가입 또는 유료 프로그램 조건이 있을 수 있습니다.'),
+      official('모두의연구소', 'https://modulabs.co.kr/', '모두의연구소', '가입 또는 유료 프로그램 조건이 있을 수 있습니다.'),
+      official('Koding', 'https://koding.kr/', 'Koding', '가입 또는 유료 프로그램 조건이 있을 수 있습니다.'),
+    ] },
+    { ...action(19, 2, '쉬운 AI 뉴스레터 3개를 살펴보세요', '모두레터, AI Ground, AI Matters의 공식 페이지를 읽습니다.'), officialLinks: [
+      official('모두레터', 'https://page.stibee.com/subscriptions/181723', '모두레터', '이메일 구독이 필요합니다.'),
+      official('AI Ground', 'https://www.aiground.co.kr/#/portal/signup/free', 'AI Ground', '무료 가입 페이지이며 서비스 조건이 바뀔 수 있습니다.'),
+      official('AI Matters', 'https://aimatters.co.kr/subscribe/', 'AI Matters', '이메일 구독이 필요합니다.'),
+    ] },
+    action(19, 3, '계속 볼 곳 하나를 고르세요', '여섯 곳 중 하나만 선택합니다.'),
+    action(19, 4, '공식 페이지에서 가입하거나 구독하세요', '공식 페이지에서 필요한 정보를 직접 입력합니다.'),
+    action(19, 5, '매주 보고 싶은 주제 3개를 적으세요', '관심 주제 세 개를 직접 적습니다.'),
+    action(19, 6, '요약 받을 요일과 시간을 정하세요', '실제로 읽을 수 있는 요일과 시간을 고릅니다.'),
+  ];
+  const schedule = (track: 'codex' | 'claude', image: { src: string; alt: string }, link: ReturnType<typeof official>): OneActionPage => ({
+    ...action(19, 7, '매주 핵심 요약을 예약하세요', `${track === 'codex' ? 'Codex Automations' : 'Claude Cowork의 Scheduled → New task'} 화면에 직접 입력하고 저장합니다.`),
+    id: `d19-action-07-${track}`, track, images: [image], officialLinks: [link],
+  });
+  return {
+    day: 19, week: 4, theme: '홀로서기', title, outcome: '가입하거나 구독한 배움 채널과 예약 작업 1개', status: 'ready', appTrack: 'unified', time: '30분', experience: 'one-action',
+    pages: [start(19, title, '수업이 끝난 이후에도 스스로 배울 수 있는 흐름을 만듭니다.', '가입하거나 구독한 배움 채널과 예약 작업 1개'), ...common,
+      schedule('codex', { src: '/assets/tutorials/automations/screenshots/d05-codex-automations-official.png', alt: 'Codex Automations 공식 화면' }, official('Codex Automations', 'https://developers.openai.com/codex/app/automations', 'OpenAI', '로그인과 지원 플랜이 필요할 수 있습니다.')),
+      schedule('claude', { src: '/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png', alt: 'Claude 예약 작업 공식 화면' }, official('Claude Cowork 예약 작업', 'https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork', 'Anthropic', '로그인, 지원 플랜 또는 관리자 설정이 필요할 수 있습니다.')),
+      retro(19, title)],
+  };
+};
 
 export const week4Days: OneActionTutorialDay[] = [
   day(16, '콘텐츠 만들기 자동화1: 블로그 제작 공정 설계하기', '단계별 할 일과 완료 기준을 정해 다음에도 그대로 실행할 콘텐츠 자동 생성 스킬을 만듭니다.', '내 사업에 맞는 콘텐츠 제작 스킬 1개', [
@@ -35,18 +93,8 @@ export const week4Days: OneActionTutorialDay[] = [
     ['선택한 규칙으로 결과를 한 번 고치세요', '중간 과정 없이 최종 결과를 한 번만 봅니다.', '내가 고른 가드레일 3개로 첫 결과를 자체 점검하고 고쳐줘. 중간 초안은 보여주지 마.'],
     ['오늘 고른 규칙으로 스킬을 수선하세요', '기존 스킬에 고른 규칙만 반영합니다.', '오늘 고른 가드레일 3개를 [스킬 파일 위치]에 반영해줘. 새 복사본을 만들지 말고 기존 파일만 고쳐.'],
   ]),
-  day(18, '내 사업 자료, DIG로 읽고 행동 정하기', '내 자료를 보여주고(D), 사실을 확인하고(I), 이번 주 행동 하나를 정합니다(G).', '근거가 있는 이번 주 행동 1개', [
-    ['개인정보를 빼고 자료 하나를 고르세요', '내 익명 파일 또는 교육용 샘플 파일 하나만 고릅니다.'],
-    ['D: 내 자료와 질문을 보여주세요', '파일 하나를 첨부하고 자료와 질문을 설명합니다.', '이 파일은 [업종]의 [기간] [매출/주문/예약/리뷰] 자료입니다. 나는 [알고 싶은 질문]이 궁금합니다. 파일에 실제로 들어 있는 열과 기간만 알려줘.'],
-    ['I: 자료에서 보이는 변화를 찾으세요', '변화 세 개와 근거 숫자를 봅니다.', '위 파일에서 눈에 띄는 변화 3개를 찾아줘. 비교 대상, 기간, 근거 숫자를 붙이고 원인은 추측하지 마.'],
-    ['I: 내 장부와 현장으로 확인하세요', 'AI가 찾은 변화와 현장 상황을 대조합니다.'],
-    ['G: 이번 주 행동 하나를 정하세요', '확인된 사실과 연결되는 작은 행동 하나만 정합니다.', '확인한 사실만 바탕으로 이번 주에 해볼 행동 1개를 제안해줘. 내게 가능한 시간은 [예: 30분]이야. 근거가 부족하면 다음에 모을 자료 하나를 정해줘.'],
-    ['DIG 결과를 한 화면에 정리하세요', '새 숫자나 차트 없이 D→I→G 결과만 정리합니다.', '지금까지 D→I→G 단계에서 확인한 내용만 사용해 ai-study/day18-dashboard.html을 완성해줘. 새로운 숫자나 차트는 추가하지 마.'],
-    ['혼자 다시 해보기', '다음 자료에도 쓸 DIG 프롬프트를 저장합니다.', '내 사업 자료를 DIG 방식으로 같이 살펴보자. 자료와 확인할 것을 한 번에 하나씩 물어보고, 확인한 사실과 추가 확인할 것을 구분한 뒤 이번 주 행동 하나를 정하게 도와줘.'],
-  ]),
-  day(19, 'AI 커뮤니티 찾아 꾸준히 배우기', '수업이 끝난 이후에도 스스로 배울 수 있는 흐름을 만듭니다.', '가입하거나 구독한 배움 채널과 예약 작업 1개', [
-    ['한국 AI 커뮤니티 3곳을 살펴보세요', 'GPTers, 모두의연구소, Koding의 공식 페이지를 읽습니다.'], ['쉬운 AI 뉴스레터 3개를 살펴보세요', '모두레터, AI Ground, AI Matters의 공식 페이지를 읽습니다.'], ['계속 볼 곳 하나를 고르세요', '여섯 곳 중 하나만 선택합니다.'], ['공식 페이지에서 가입하거나 구독하세요', '공식 페이지에서 필요한 정보를 직접 입력합니다.'], ['매주 보고 싶은 주제 3개를 적으세요', '관심 주제 세 개를 직접 적습니다.'], ['요약 받을 요일과 시간을 정하세요', '실제로 읽을 수 있는 요일과 시간을 고릅니다.'], ['매주 핵심 요약을 예약하세요', 'Codex 또는 Claude 예약 화면에 직접 입력하고 저장합니다.'],
-  ]),
+  day18(),
+  day19(),
   day(20, 'AI 야학 졸업을 축하합니다!', '20일의 기록을 평생 쓸 규칙으로 정리합니다.', '근거가 붙은 학습 진단과 AGENTS.md 규칙', [
     ['AI가 읽을 수 있는 기록을 찾으세요', '실제로 접근 가능한 기록만 목록으로 만듭니다.', '현재 작업공간에서 실제로 읽을 수 있는 작업 기록, ai-study/daily_retro.md, 1~20일차 결과물을 찾아 목록으로 보여줘. /history를 파일처럼 읽을 수 없으면 분명히 말해.'], ['진단에 쓸 기록을 직접 고르세요', '접근 가능한 자료만 선택합니다.'], ['20일 기록에서 내 패턴을 진단받으세요', '근거가 붙은 강점·막힌 점·활용법을 봅니다.', '[선택한 기록 목록]만 읽고 내 20일 학습을 진단해줘. 각 항목에 근거 날짜·파일·결과물을 붙이고 근거가 부족하면 억지로 채우지 마.'], ['계속할 활용법 3개를 고르세요', '앞으로 쓸 활용법 세 개를 사람이 고릅니다.'], ['업무 규칙 후보를 만드세요', '반복 근거와 선택한 활용법만 규칙 후보로 만듭니다.', '선택한 기록의 반복 근거와 내가 고른 활용법 3개만 사용해 AGENTS.md에 추가할 업무 규칙 후보를 10개 이하로 만들어줘. 아직 파일에는 저장하지 마.'], ['고른 규칙을 AGENTS.md에 반영하세요', '현재 폴더의 AGENTS.md만 고칩니다.', '규칙 후보 중 [선택한 번호]만 현재 작업 폴더의 AGENTS.md에 반영해줘. 전체가 200줄을 넘으면 저장하지 말고 합칠 규칙을 먼저 보여줘.'],
   ]),

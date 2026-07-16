@@ -13,6 +13,22 @@ const start = (day: number, title: string, subtitle: string, outcome: string, fl
   subtitle, description: `오늘은 ${title} 수업입니다.`, action: '결과와 순서를 확인한 뒤 한 화면씩 따라갑니다.', outcome, flow,
 });
 
+const checkedAt = '2026-07-16';
+const chatgptChromeLinks = [
+  { label: 'ChatGPT Chrome 안내', href: 'https://learn.chatgpt.com/docs/chrome-extension', publisher: 'OpenAI', verifiedAt: checkedAt, accessNote: '로그인·플랜·관리자 제한을 확인하세요.' },
+  { label: 'ChatGPT 확장', href: 'https://chromewebstore.google.com/detail/chatgpt/hehggadaopoacecdllhhajmbjkdcmajg', publisher: 'OpenAI', verifiedAt: checkedAt, accessNote: 'Chrome 웹 스토어 로그인과 설치 권한이 필요할 수 있습니다.' },
+];
+const claudeChromeLinks = [
+  { label: 'Claude in Chrome 안내', href: 'https://support.claude.com/en/articles/12012173-get-started-with-claude-in-chrome', publisher: 'Anthropic', verifiedAt: checkedAt, accessNote: '로그인·플랜·관리자 제한을 확인하세요.' },
+  { label: 'Claude 확장', href: 'https://chromewebstore.google.com/detail/claude/fcoeoabgfenejglbffodgkkbkcdhcgfn', publisher: 'Anthropic', verifiedAt: checkedAt, accessNote: 'Chrome 웹 스토어 로그인과 설치 권한이 필요할 수 있습니다.' },
+];
+const codexAutomationLinks = [
+  { label: 'Codex Automations', href: 'https://developers.openai.com/codex/app/automations', publisher: 'OpenAI', verifiedAt: checkedAt, accessNote: '로그인과 사용 가능한 플랜을 확인하세요.' },
+];
+const claudeScheduleLinks = [
+  { label: 'Claude Cowork 예약 작업', href: 'https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork', publisher: 'Anthropic', verifiedAt: checkedAt, accessNote: '로그인·플랜·관리자 제한을 확인하세요.' },
+];
+
 export const week1Days: OneActionTutorialDay[] = [
   {
     day: 1, week: 1, theme: '차리기', title: '설치·가입·첫 업무 폴더', outcome: '가입한 AI 앱, ai-study 폴더, 내 일을 설명한 5줄', status: 'ready', appTrack: 'both', time: '30분', experience: 'one-action',
@@ -24,7 +40,8 @@ export const week1Days: OneActionTutorialDay[] = [
       { id: 'd01-signin', kind: 'ACTION', view: 'FOCUS', title: '가입 또는 로그인을 시작해요', description: '이미 있는 계정이면 새로 만들지 않습니다. 비밀번호와 인증 코드는 AI에게 보내지 않습니다.', action: '계정 시작 화면까지 이동합니다.' },
       { id: 'd01-app-check', kind: 'ACTION', view: 'FOCUS', title: '앱이 열렸는지 확인해요', description: '로그인 뒤 새 대화 또는 새 작업을 시작할 수 있는 화면이 보이면 됩니다.', action: '앱의 첫 화면을 확인합니다.' },
       { id: 'd01-folder', kind: 'ACTION', view: 'WORKBENCH', title: 'ai-study 작업 폴더를 만들어요', description: '앞으로 연습 파일을 모을 폴더를 한 곳에 만듭니다.', action: '컴퓨터에 ai-study 폴더를 만듭니다.', supporting: '파일을 AI에게 맡기기 전에 어떤 자료가 들어 있는지 먼저 확인하세요.' },
-      { id: 'd01-first-prompt', kind: 'ACTION', view: 'PROMPT', title: '내 일을 5줄로 설명해 달라고 해요', description: '연습 폴더의 파일을 바꾸지 않도록 분명히 말합니다.', action: '프롬프트를 복사해 첫 대화를 시작합니다.', prompt: '지금 열어 둔 ai-study 폴더 안의 파일을 살펴보고, 내가 어떤 일을 하는 사람인지 처음 보는 사람도 이해할 수 있게 5줄로 설명해줘. 파일에서 확인한 사실과 네 추측을 구분하고, 개인정보나 고객정보가 보이면 외부로 보내지 말고 먼저 알려줘. 파일은 수정하거나 삭제하지 마.' },
+      { id: 'd01-practice-material', kind: 'ACTION', view: 'FOCUS', title: '안전한 연습 자료를 준비해요', description: '개인정보가 없는 연습 파일 하나를 ai-study 폴더에 넣거나, 내 일을 직접 3줄로 적어요. 고객 이름, 전화번호, 실제 주문 내용은 넣지 않습니다.', action: '연습 파일 또는 내 일 3줄 중 하나를 준비합니다.' },
+      { id: 'd01-first-prompt', kind: 'ACTION', view: 'PROMPT', title: '내 일을 5줄로 설명해 달라고 해요', description: '연습 파일 또는 내가 적은 3줄만 바탕으로, 파일을 바꾸지 않도록 분명히 말합니다.', action: '프롬프트를 복사해 첫 대화를 시작합니다.', prompt: 'ai-study 폴더에 개인정보 없는 연습 파일이 있으면 그 파일을 살펴봐. 파일이 없으면 아래에 내가 적은 내 일 3줄만 바탕으로 봐.\n\n내 일 3줄:\n1. [내가 하는 일]\n2. [주로 돕는 사람]\n3. [요즘 가장 자주 하는 일]\n\n내가 어떤 일을 하는 사람인지 처음 보는 사람도 이해할 수 있게 5줄로 설명해줘. 파일에서 확인한 사실과 네 추측을 구분하고, 개인정보나 고객정보가 보이면 외부로 보내지 말고 먼저 알려줘. 파일은 수정하거나 삭제하지 마.' },
       { id: 'd01-check', kind: 'ACTION', view: 'FOCUS', title: '첫 대화를 확인해요', description: 'AI가 내 일을 설명했는지, 추측과 사실을 구분했는지 봅니다.', action: '답에서 고칠 부분 하나를 말합니다.' },
       { id: 'd01-finish', kind: 'ACTION', view: 'FOCUS', title: '오늘 만든 것을 확인해요', description: '앱, 폴더, 첫 대화가 준비됐습니다.', action: '다음 수업으로 넘어갈 준비를 합니다.' },
     ],
@@ -38,8 +55,8 @@ export const week1Days: OneActionTutorialDay[] = [
       { id: 'd02-claude-usage', kind: 'ACTION', view: 'SPOTLIGHT', track: 'claude', title: 'Claude 사용량을 확인해요', description: '표시가 있는 계정에서만 현재 한도를 확인합니다.', action: '사용량 표시를 읽고 닫습니다.', image: { src: '/assets/tutorials/week1/d02-claude-usage-official.png', alt: 'Claude Code 사용량 화면' } },
       { id: 'd02-instructions', kind: 'ACTION', view: 'PROMPT', title: '프로젝트 지침 초안을 만들어요', description: 'AI가 질문을 하나씩 물을 때 아는 것만 답합니다.', action: '프롬프트를 복사합니다.', prompt: 'ai-study 프로젝트에서만 쓸 프로젝트 지침 초안을 함께 만들자. 질문은 한 번에 하나씩, 최대 4개만 해줘. 자주 맡길 일, 원하는 답변 형식, 정보가 부족할 때 물어볼 것, 파일 수정이나 발송 전에 승인받을지를 물어봐. 민감한 정보는 묻지 마. 파일을 만들거나 저장하지 말고 6줄 이내 초안만 보여줘.' },
       { id: 'd02-review', kind: 'ACTION', view: 'COMPARISON', title: '초안을 점검해요', description: '잘못된 정보와 승인 없는 행동이 없는지 봅니다.', action: '고칠 문장만 골라봅니다.', comparison: [{ label: '남길 것', content: '쉬운 말, 확인 질문, 승인 전 행동 중단' }, { label: '뺄 것', content: '비밀번호, 확정되지 않은 숫자, 자동 실행 약속' }] },
-      { id: 'd02-save', kind: 'ACTION', view: 'FOCUS', title: '지침을 저장할 위치를 확인해요', description: '앱마다 저장 위치가 다를 수 있습니다. 오늘은 위치만 확인해도 됩니다.', action: '프로젝트 폴더와 지침 위치를 확인합니다.' },
-      { id: 'd02-test', kind: 'ACTION', view: 'PROMPT', title: '새 대화에서 지침을 시험해요', description: '답변 형식과 확인 방식이 지침에 맞는지 봅니다.', action: '프롬프트를 복사해 시험합니다.', prompt: '이 프로젝트에서 다음에 할 일을 3개만 제안해줘. 파일을 수정하거나 명령을 실행하지 말고, 필요한 정보가 부족하면 먼저 한 가지 질문을 해줘. 확인되지 않은 사실이나 숫자는 추측하지 마.' },
+      { id: 'd02-save', kind: 'ACTION', view: 'PROMPT', title: '프로젝트 지침을 파일로 저장해요', description: '점검한 초안을 ai-study 프로젝트 안에 직접 저장합니다. 저장 전에는 내용과 경로를 다시 보여 달라고 합니다.', action: '프롬프트를 복사해 project-instructions.md를 저장합니다.', prompt: '방금 점검한 프로젝트 지침 초안을 ai-study/project-instructions.md에 저장해줘. 저장하기 전에 파일 경로와 최종 내용을 보여주고, 내가 승인하면 그 파일만 만들어. 다른 파일은 수정하지 마. 저장 뒤에는 파일을 다시 읽고 저장된 경로를 알려줘.' },
+      { id: 'd02-test', kind: 'ACTION', view: 'PROMPT', title: '저장한 지침을 다시 열어 확인해요', description: '새 대화를 열기 전에 방금 저장한 파일을 다시 읽어, 경로와 내용이 맞는지 확인합니다.', action: '프롬프트를 복사해 저장 파일을 다시 엽니다.', prompt: 'ai-study/project-instructions.md를 다시 열어 읽어줘. 파일 경로와 첫 줄·마지막 줄을 보여주고, 쉬운 말·확인 질문·승인 전 행동 중단 규칙이 들어 있는지만 확인해줘. 내용은 바꾸지 마.' },
       { id: 'd02-finish', kind: 'ACTION', view: 'FOCUS', title: '내 설정을 정리해요', description: '다음 수업에서도 같은 기준을 사용할 수 있습니다.', action: '지침을 다시 열 수 있는지 확인합니다.' },
     ],
   },
@@ -59,8 +76,8 @@ export const week1Days: OneActionTutorialDay[] = [
     day: 4, week: 1, theme: '차리기', title: 'AI에게 도구 쥐어주기', outcome: 'Drive 파일 5줄 요약과 확인할 일 표', status: 'ready', appTrack: 'both', time: '30분', experience: 'one-action',
     pages: [
       start(4, 'AI에게 도구 쥐어주기', '브라우저와 Google Drive를 연결해 업무 보조를 만들어요.', '파일 요약과 확인할 일 표', ['민감한 탭을 닫습니다', 'Drive를 연결합니다', '원문과 비교합니다']),
-      { id: 'd04-browser-codex', kind: 'ACTION', view: 'FOCUS', track: 'codex', title: 'Codex 브라우저 연결을 찾아봐요', description: '공식 연결 항목이 보이는 곳까지 이동합니다.', action: '연결 화면 위치만 확인합니다.' },
-      { id: 'd04-browser-claude', kind: 'ACTION', view: 'FOCUS', track: 'claude', title: 'Claude in Chrome을 찾아봐요', description: '공식 설치 화면과 게시자를 먼저 확인합니다.', action: '공식 화면 위치만 확인합니다.' },
+      { id: 'd04-browser-codex', kind: 'ACTION', view: 'SPOTLIGHT', track: 'codex', title: 'ChatGPT 브라우저 확장을 찾아봐요', description: '현재 이름은 ChatGPT입니다. 공식 안내와 Chrome 웹 스토어에서 게시자가 OpenAI인지 먼저 확인합니다.', action: '공식 링크와 게시자 OpenAI를 확인합니다.', image: { src: '/assets/tutorials/week1/d04-chatgpt-chrome-official.png', alt: 'OpenAI가 게시한 ChatGPT Chrome 확장 공식 화면' }, officialLinks: chatgptChromeLinks },
+      { id: 'd04-browser-claude', kind: 'ACTION', view: 'SPOTLIGHT', track: 'claude', title: 'Claude in Chrome을 찾아봐요', description: '공식 안내와 Chrome 웹 스토어에서 게시자가 Anthropic인지 먼저 확인합니다.', action: '공식 링크와 게시자 Anthropic을 확인합니다.', image: { src: '/assets/tutorials/week1/d04-claude-chrome-official.png', alt: 'Anthropic이 게시한 Claude Chrome 확장 공식 화면' }, officialLinks: claudeChromeLinks },
       { id: 'd04-tabs', kind: 'ACTION', view: 'COMPARISON', title: '민감한 탭을 먼저 닫아요', description: '연습과 관계없는 정보를 연결 전에 정리합니다.', action: '필요한 탭만 남깁니다.', comparison: [{ label: '닫을 탭', content: '금융, 병원, 정부, 고객 정보' }, { label: '남길 탭', content: '연습에 쓸 내 파일과 공식 안내' }] },
       { id: 'd04-drive', kind: 'ACTION', view: 'WORKBENCH', title: 'Google Drive를 연결해요', description: '요청되는 권한을 한 줄씩 읽고 내 계정인지 확인합니다.', action: '연결 완료 화면까지 진행합니다.', supporting: '권한 범위가 이해되지 않으면 연결하지 말고 먼저 내용을 확인합니다.' },
       { id: 'd04-file', kind: 'ACTION', view: 'FOCUS', title: '요약할 연습 파일을 골라요', description: '민감한 정보가 없는 내가 소유한 파일 하나만 사용합니다.', action: '파일 내용과 공유 범위를 확인합니다.' },
@@ -74,8 +91,8 @@ export const week1Days: OneActionTutorialDay[] = [
     day: 5, week: 1, theme: '차리기', title: '반복·예약 작업 설정하기', outcome: '월요일 뉴스 요약 예약 초안과 시험 기준', status: 'ready', appTrack: 'both', time: '25분', experience: 'one-action',
     pages: [
       start(5, '반복·예약 작업 설정하기', '매주 월요일 관심 분야 뉴스를 받아보세요.', '예약 초안과 시험 기준', ['예약 위치를 찾습니다', '받을 조건을 정합니다', '시험해 봅니다']),
-      { id: 'd05-open-codex', kind: 'ACTION', view: 'SPOTLIGHT', track: 'codex', title: 'Codex 예약 작업 화면을 열어봐요', description: '새 예약 작업을 만들기 직전 화면까지 이동합니다.', action: 'Automations 화면을 엽니다.', image: { src: '/assets/tutorials/week1/d05-codex-automations-official.png', alt: 'Codex Automations 공식 화면' } },
-      { id: 'd05-open-claude', kind: 'ACTION', view: 'SPOTLIGHT', track: 'claude', title: 'Claude 예약 작업 화면을 열어봐요', description: '새 작업을 만들기 직전 화면까지 이동합니다.', action: '예약 작업 화면을 엽니다.', image: { src: '/assets/tutorials/week1/d05-claude-schedule-official.png', alt: 'Claude 예약 작업 공식 화면' } },
+      { id: 'd05-open-codex', kind: 'ACTION', view: 'SPOTLIGHT', track: 'codex', title: 'Codex 예약 작업 화면을 열어봐요', description: '왼쪽 메뉴의 Scheduled에서 예약 작업을 엽니다. 로그인과 사용 가능한 플랜을 먼저 확인합니다.', action: 'Scheduled → Automations 화면을 엽니다.', image: { src: '/assets/tutorials/week1/d05-codex-automations-official.png', alt: 'Codex Automations 공식 화면' }, officialLinks: codexAutomationLinks },
+      { id: 'd05-open-claude', kind: 'ACTION', view: 'SPOTLIGHT', track: 'claude', title: 'Claude 예약 작업 화면을 열어봐요', description: 'Scheduled를 열고 New task를 고릅니다. Cowork에서 예약 작업을 쓸 수 있는 로그인·플랜·관리자 조건을 먼저 확인합니다.', action: 'Scheduled → New task 화면을 엽니다.', image: { src: '/assets/tutorials/week1/d05-claude-schedule-official.png', alt: 'Claude 예약 작업 공식 화면' }, officialLinks: claudeScheduleLinks },
       { id: 'd05-conditions', kind: 'ACTION', view: 'PROMPT', title: '내 뉴스 요약 조건을 정해요', description: '모르는 값은 정하지 말고 AI가 추측하지 않게 합니다.', action: '프롬프트를 복사해 네 가지를 답합니다.', prompt: '내 뉴스 요약 예약 작업을 만들기 전에 관심 주제, 제외 키워드, 선호 출처, 받을 분량을 한 번에 한 질문씩 물어봐줘. 내가 답하지 않은 값은 추측하지 마.' },
       { id: 'd05-create', kind: 'ACTION', view: 'PROMPT', title: '뉴스 요약 예약 초안을 만들어요', description: '승인하기 전에는 실제 예약을 만들지 않게 합니다.', action: '관심 주제를 바꿔 넣습니다.', prompt: '매주 월요일 오전 9시에 [관심 주제]의 지난 7일 소식을 요약하는 예약 작업 설정 초안만 보여줘. 공식 기관과 신뢰도 높은 언론을 우선하고 중복과 홍보성 글은 빼줘. 내가 승인하기 전에는 생성하지 마.' },
       { id: 'd05-test', kind: 'ACTION', view: 'COMPARISON', title: '예약 작업을 시험해 봐요', description: '예약 시간을 기다리지 않고 결과를 먼저 점검합니다.', action: '출처와 중복을 확인합니다.', comparison: [{ label: '확인할 것', content: '출처 링크, 중복 여부, 내 가게 영향의 근거' }, { label: '바꿀 수 있는 것', content: '관심 주제, 출처, 받을 분량' }] },
@@ -93,7 +110,7 @@ const allowedViews = {
 } as const;
 
 const expectedVisibleCounts: Record<number, Record<'claude' | 'codex', number>> = {
-  1: { claude: 9, codex: 9 }, 2: { claude: 8, codex: 8 }, 3: { claude: 7, codex: 7 },
+  1: { claude: 10, codex: 10 }, 2: { claude: 8, codex: 8 }, 3: { claude: 7, codex: 7 },
   4: { claude: 9, codex: 9 }, 5: { claude: 7, codex: 7 },
 };
 

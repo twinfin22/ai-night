@@ -45,6 +45,13 @@ export type Week2Page = {
   supporting: string | null;
   bottomButton: string;
   image?: { src: string; alt: string };
+  officialLinks?: {
+    label: string;
+    href: string;
+    publisher: string;
+    verifiedAt: string;
+    accessNote: string;
+  }[];
   visibleWhen?: Week2VisibleWhen;
   choice?: {
     key: 'output-format';
@@ -790,6 +797,46 @@ const pageView = (record: Week2SourceRecord): Week2Page['view'] => {
   return 'FOCUS';
 };
 
+const checkedAt = '2026-07-16';
+const pageOverrides: Record<string, Partial<Week2Page>> = {
+  'd06-action-07': {
+    action: '새 대화/보조 AI에 검토 프롬프트를 보냅니다.',
+    supporting: '새 대화/보조 AI는 조사·검토를 따로 맡는 작은 작업자입니다. 같은 파일 동시 편집은 피합니다.',
+  },
+  'd07-choice-output': {
+    action: '[5장 슬라이드 또는 Google Docs 문서] / [첨부한 원본 파일] / [받을 사람] / [읽고 나서 할 행동]을 한 줄로 완성합니다.',
+    replacementText: '[5장 슬라이드 또는 Google Docs 문서] / [첨부한 원본 파일] / [받을 사람] / [읽고 나서 할 행동]',
+    supporting: '[5장 슬라이드 또는 Google Docs 문서] / [첨부한 원본 파일] / [받을 사람] / [읽고 나서 할 행동]',
+  },
+  'd07-action-02': {
+    action: '첨부한 원본 파일에서 개인정보를 가린 사본을 첨부하고 프롬프트를 보냅니다.',
+    prompt: '첨부한 원본 파일의 개인정보를 가린 사본을 읽기만 해줘. 아직 원본을 수정하거나 새 파일을 만들지 말고, 개인정보나 확인하기 어려운 값이 있으면 먼저 알려줘.',
+  },
+  'd07-action-slides': {
+    prompt: '먼저 현재 사용할 수 있는 슬라이드·프레젠테이션 도구 이름을 알려줘. 없는 도구 이름을 지어내지 마.\n첨부한 원본 파일을 5장 슬라이드 초안으로 아래 순서에 맞춰 구성해줘.\n1장 제목\n2장 핵심 현황\n3장 문제\n4장 제안\n5장 다음 행동\n원문에 없는 숫자는 ‘확인 필요’로 표시해. 먼저 5장 슬라이드 목차만 보여주고 내 승인 후 제작해줘.',
+  },
+  'd07-action-docs': {
+    prompt: '먼저 현재 Google Drive·Docs에 연결되어 있는지 확인해줘. 연결되어 있으면 첨부한 원본 파일을 읽고 [주간 보고서/회의 후 할 일표/고객 문의 정리] 중 내가 고른 양식의 Google Docs 문서 초안을 만들어줘. 연결되어 있지 않으면 Google Docs에 그대로 붙일 완성형 문서 초안을 화면에 보여줘.\n핵심 수치·변화·확인 필요·다음 행동을 구분하고, 원본에 없는 내용은 추측하지 마. 저장하기 전 내 승인을 받아줘.',
+  },
+  'd07-action-05': {
+    title: '5장 슬라이드 또는 Google Docs 문서를 원본과 비교하기',
+    description: '5장 슬라이드 또는 Google Docs 문서의 제목, 숫자, 이름, 날짜, 링크가 첨부한 원본 파일과 같은지 하나씩 확인해요. 다른 부분만 고치고, 고친 뒤에는 파일이 깨지지 않았는지도 다시 살펴봐요.',
+    prompt: '5장 슬라이드 또는 Google Docs 문서의 제목·숫자·이름·날짜·링크를 첨부한 원본 파일과 대조해. 원본과 다른 값은 그 값만 원본 기준으로 고치고, 확인하지 못한 항목은 ‘확인 필요’로 남겨줘. 수정 후 파일을 다시 열어 표·글자·이미지가 깨지지 않았는지 확인하고 마지막에 대조표를 보여줘.',
+  },
+  'd10-action-01': {
+    officialLinks: [
+      { label: 'GitHub 가입', href: 'https://github.com/signup', publisher: 'GitHub', verifiedAt: checkedAt, accessNote: '가입·로그인과 이메일 인증은 내가 직접 합니다.' },
+      { label: 'GitHub 로그인', href: 'https://github.com/login', publisher: 'GitHub', verifiedAt: checkedAt, accessNote: '비밀번호와 2단계 인증 코드는 채팅에 입력하지 않습니다.' },
+    ],
+  },
+  'd10-action-02': {
+    officialLinks: [
+      { label: 'Vercel 로그인', href: 'https://vercel.com/login', publisher: 'Vercel', verifiedAt: checkedAt, accessNote: 'GitHub 연결 권한은 내가 직접 확인합니다.' },
+      { label: 'Vercel Dashboard', href: 'https://vercel.com/dashboard', publisher: 'Vercel', verifiedAt: checkedAt, accessNote: '로그인 후 내 대시보드에서만 작업합니다.' },
+    ],
+  },
+};
+
 const toPage = (record: Week2SourceRecord): Week2Page => {
   const day = Number(record.dayLabel.replace(/\D/g, ''));
   const choice = day === 7 && record.order === '2/7'
@@ -807,7 +854,7 @@ const toPage = (record: Week2SourceRecord): Week2Page => {
       ? { choiceKey: 'output-format' as const, equals: 'docs' as const }
       : undefined;
 
-  return {
+  const page: Week2Page = {
     id: pageId(record),
     kind: choice ? 'CHOICE' : record.sourceKind,
     view: pageView(record),
@@ -829,6 +876,8 @@ const toPage = (record: Week2SourceRecord): Week2Page => {
     ...(record.sourceKind === 'ACTION' && !choice ? { controls: [{ id: 'self-confirm', type: 'radio' as const, label: '이 화면에서 직접 해봤나요?', required: true as const, persist: 'local' as const, options: [{ value: 'confirmed', label: '직접 해봤어요' }, { value: 'deferred', label: '나중에 하기' }] }], advanceWhen: 'controls' as const } : {}),
     source: record,
   };
+
+  return { ...page, ...(pageOverrides[page.id] ?? {}) };
 };
 
 export const week2Days: readonly Week2TutorialDay[] = week2DayMetadata.map((metadata) => ({

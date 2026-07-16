@@ -69,14 +69,18 @@ const clientPages = item.pages.map(({ source: _source, ...page }) => page);
   };
   const renderBoard = (page) => {
     const board = root.querySelector('[data-workboard]'); const state = values(); let content = '';
+    const officialLinks = page.officialLinks?.length ? `<div class="workboard-links" aria-label="공식 링크">${page.officialLinks.map((link) => `<a href="${esc(link.href)}" target="_blank" rel="noopener noreferrer"><strong>${esc(link.label)} <span aria-label="새 창">↗</span></strong><span>${esc(link.publisher)} · ${esc(link.verifiedAt)} 확인</span><small>${esc(link.accessNote)}</small></a>`).join('')}</div>` : '';
+    const downloadLinks = page.downloadLinks?.length ? `<div class="workboard-downloads" aria-label="자료 다운로드">${page.downloadLinks.map((link) => `<a href="${esc(link.href)}" download>${esc(link.label)} 다운로드</a>`).join('')}</div>` : '';
+    const technicalDetails = page.technicalDetails?.length ? `<div class="workboard-details">${page.technicalDetails.map((detail) => `<details><summary>${esc(detail.title)}</summary><p>${esc(detail.body)}</p></details>`).join('')}</div>` : '';
     if (page.view === 'FOCUS') content = `<div class="workboard-focus">${page.subtitle ? `<p>${esc(page.subtitle)}</p>` : ''}${page.flow ? `<ol>${page.flow.map((part) => `<li>${esc(part)}</li>`).join('')}</ol><strong>결과물: ${esc(page.outcome)}</strong>` : `<p>${esc(page.description)}</p>`}${page.advanceWhen === 'started' ? '<button type="button" class="one-action__primary" data-page-start>오늘의 실습 시작하기</button>' : ''}</div>`;
     if (page.view === 'WORKBENCH') content = `<div class="workboard-focus"><p>${esc(page.supporting || page.description)}</p>${(page.controls || []).map((control) => controlHtml(control, state[control.id])).join('')}</div>`;
     if (page.view === 'SPOTLIGHT') content = `<figure class="workboard-image">${(page.images || (page.image ? [page.image] : [])).map((image) => `<button type="button" data-image-open data-src="${esc(image.src)}" data-alt="${esc(image.alt)}" aria-label="스크린샷 크게 보기"><img src="${esc(image.src)}" alt="${esc(image.alt)}"></button>`).join('')}<figcaption>${esc(page.action)}</figcaption></figure>${page.prompt ? `<div class="workboard-prompt"><button type="button" data-copy>복사하기</button><pre><code>${highlighted(page.prompt, page.highlightTokens)}</code></pre></div>` : ''}`;
     if (page.view === 'PROMPT' || page.view === 'WORKBOOK') content = `<div class="workboard-prompt"><button type="button" data-copy>복사하기</button><pre><code>${highlighted(page.prompt, page.highlightTokens)}</code></pre></div>`;
     if (page.view === 'COMPARISON') content = `<div class="workboard-comparison">${(page.comparison || []).map((part) => `<section><strong>${esc(part.label)}</strong><p>${esc(part.content)}</p></section>`).join('')}</div>`;
     if (page.view !== 'SPOTLIGHT' && page.images?.length) content += `<figure class="workboard-image">${page.images.map((image) => `<button type="button" data-image-open data-src="${esc(image.src)}" data-alt="${esc(image.alt)}" aria-label="스크린샷 크게 보기"><img src="${esc(image.src)}" alt="${esc(image.alt)}"></button>`).join('')}</figure>`;
+    content = officialLinks + content;
     content += (page.controls || []).filter((control) => page.view !== 'WORKBENCH').map((control) => controlHtml(control, state[control.id])).join('');
-    if (page.officialLinks?.length) content += `<div class="workboard-links">${page.officialLinks.map((link) => `<a href="${esc(link.href)}" target="_blank" rel="noopener noreferrer">${esc(link.label)} <span aria-label="새 창">↗</span></a>`).join('')}</div>`;
+    content += downloadLinks + technicalDetails;
     if (page.advanceWhen === 'confirmed') content += `<label class="workboard-check"><input data-confirm type="checkbox" ${state.__confirmed ? 'checked' : ''}> 공식 페이지를 확인했습니다</label>`;
     board.innerHTML = content;
     board.querySelectorAll('[data-control]').forEach((input) => input.addEventListener('input', () => {
