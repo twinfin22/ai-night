@@ -44,6 +44,7 @@ const legacyWeek3Days: TutorialDay[] = [
     status: 'ready', appTrack: 'unified', time: '24분',
     challenge: '', tomorrow: '내일은 음성 기록을 회의록으로 정리하는 스킬을 만듭니다.',
     steps: [
+      action('개인정보 없는 1분 직접 녹음 준비하기', '휴대폰이나 컴퓨터의 녹음 앱으로 가상 회의 대본을 1분 읽어 녹음합니다. 실명·회사명·전화번호·고객정보가 없는지 확인하고 파일 위치를 찾습니다.', '개인정보 없는 1분 녹음 파일의 위치를 찾으면 성공입니다.'),
       action('클로바노트 열고 새 노트 만들기', '클로바노트에 로그인하고 화면에서 ‘새 노트’를 찾습니다. 새 노트를 열면 음성 파일을 올릴 준비가 됩니다.', '새 노트 화면이 열리면 성공입니다.', 'SPOTLIGHT', { src: '/assets/tutorials/week3/screenshots/d12-clovanote-login-live.png', alt: '클로바노트 공식 시작 화면과 로그인 버튼' }),
       action('연습 음성 파일 올리기', '제목과 인식 언어를 정한 뒤 준비한 파일을 올립니다. 한국어와 영어가 섞였다면 ‘한국어+영어’를 고릅니다.', '연습 음성 파일의 변환이 시작되면 성공입니다.', 'SPOTLIGHT'),
       action('변환된 글 확인하기', '음성 기록에서 문장 하나를 누르고 원음과 함께 들어봅니다. 크게 다른지만 먼저 확인하면 됩니다.', '음성 기록과 원음 한 문장을 비교하면 성공입니다.', 'SPOTLIGHT', { src: '/assets/tutorials/week3/screenshots/d12-clovanote-transcript-official.png', alt: '클로바노트 공식 앱의 음성 기록과 화자 표시 화면' }),
@@ -76,7 +77,7 @@ const legacyWeek3Days: TutorialDay[] = [
     challenge: '', tomorrow: '내일은 자동화의 범위와 마지막 확인을 정합니다.',
     steps: [
       prompt('자동화할 일 하나 고르기', '되돌리기 어려운 일은 고르지 않습니다. 반복성, 순서 설명 가능, 자료 존재, 사람 확인 가능 기준으로 하나를 고릅니다.', '지난 7일 동안 오래 걸린 일, 지루하게 반복한 일, 여러 번 같은 설명을 한 일, 다음 7일에도 다시 할 일을 한 번에 하나씩 물어봐. 내 답에서 안전한 후보 3개를 뽑고 반복성·순서 설명 가능·필요한 자료 존재·사람 확인 가능 기준으로 비교해. 삭제·결제·외부 발송·가격 변경·환불·예약 변경은 후보에서 빼. 내가 하나를 고를 때까지 다음 설계는 시작하지 마.', '후보 3개 중 하나를 직접 고르면 성공입니다.', 'WORKBENCH'),
-      prompt('B — Base Setup(기본 설정)', '이름과 짧은 설명만 정합니다. 한 스킬에는 한 가지 일만 맡깁니다.', '내가 고른 업무로 BUILD의 B — Base Setup(기본 설정)을 작성해줘. 스킬 이름, 한 줄 설명, 하지 않을 일을 쉬운 말로 보여줘. 아직 파일을 만들거나 외부 도구를 연결하지 마.', '이름과 한 가지 목적이 정해지면 성공입니다.'),
+      prompt('이름과 역할(BUILD의 B)', '이름과 짧은 설명만 정합니다. 한 스킬에는 한 가지 일만 맡깁니다.', '내가 고른 업무로 이름과 역할(BUILD의 B, 기본 설정)을 작성해줘. 스킬 이름, 한 줄 설명, 하지 않을 일을 쉬운 말로 보여줘. 아직 파일을 만들거나 외부 도구를 연결하지 마.', '이름과 한 가지 목적이 정해지면 성공입니다.'),
       prompt('U — Use Case Definition(사용 사례 정의)', '누가 언제 쓰고, 어떤 결과면 좋은지 정합니다.', 'BUILD의 U — Use Case Definition(사용 사례 정의)을 작성해줘. 사용자, 시작할 때 필요한 자료, 좋은 결과의 기준, 한 번에 처리할 범위를 정리해. 모르는 사실은 추측하지 말고 질문해.', '좋은 결과 기준을 확인하면 성공입니다.'),
       prompt('I — Instructions & Behavior(지침과 행동)', '처리 순서, 결과 형식, 금지 행동을 구체적으로 정합니다.', 'BUILD의 I — Instructions & Behavior(지침과 행동)을 작성해줘. 처리 순서, 사용할 자료, 결과 형식, 꼭 멈추고 물어볼 경우, 금지 행동을 번호로 정리해. 원본 수정과 외부 발송은 금지해.', 'AI가 할 일과 멈출 일이 나뉘면 성공입니다.'),
       prompt('L — Learning & Examples(참고 자료와 예시)', '실제 참고 자료와 좋은 예시 3~5개만 씁니다. 없는 자료는 지어내지 않습니다.', 'BUILD의 L — Learning & Examples(참고 자료와 예시)를 작성해줘. 실제로 준비할 참고 자료와 좋은 대화 예시 3~5개를 목록으로 보여줘. 개인정보와 비공개 자료는 넣지 말고, 아직 없는 자료는 ‘준비 필요’로 표시해.', '준비할 자료와 예시가 보이면 성공입니다.'),
@@ -113,7 +114,7 @@ const toPage = (day: TutorialDay, step: TutorialStep, index: number): OneActionP
   const isRetro = step.kind === 'RETRO';
   const prompt = step.copyText;
   return {
-    id: `d${day.day}-${String(index + 1).padStart(2, '0')}`,
+    id: day.day === 12 && index > 0 ? `d12-${String(index).padStart(2, '0')}` : `d${day.day}-${String(index + 1).padStart(2, '0')}`,
     kind: isRetro ? 'RETRO' : 'ACTION',
     view: isRetro ? 'WORKBOOK' : hasImages ? 'SPOTLIGHT' : prompt ? 'PROMPT' : 'WORKBENCH',
     title: step.action,
@@ -155,21 +156,22 @@ const week3Pages = (day: TutorialDay): OneActionPage[] => {
       ];
     }
 
-    if (day.day === 12 && index === 0) return [{ ...page, officialLinks: [official('클로바노트 시작', 'https://clovanote.naver.com/', 'NAVER', '로그인이 필요합니다.')] }];
-    if (day.day === 12 && index === 1) return [{ ...page, officialLinks: [official('PC 시작 안내', 'https://help.naver.com/service/24269/contents/12812?lang=ko&osType=PC', 'NAVER', 'PC 도움말이며 로그인 또는 서비스 조건이 적용될 수 있습니다.')] }];
-    if (day.day === 12 && index === 5) return [{ ...page, officialLinks: [official('다운로드 안내', 'https://help.naver.com/service/24269/contents/12831?lang=ko&osType=PC', 'NAVER', 'PC 도움말이며 로그인 또는 서비스 조건이 적용될 수 있습니다.')] }];
+    if (day.day === 12 && index === 0) return [{ ...page, id: 'd12-prep-audio' }];
+    if (day.day === 12 && index === 1) return [{ ...page, officialLinks: [official('클로바노트 시작', 'https://clovanote.naver.com/', 'NAVER', '로그인이 필요합니다.')] }];
+    if (day.day === 12 && index === 2) return [{ ...page, officialLinks: [official('PC 시작 안내', 'https://help.naver.com/service/24269/contents/12812?lang=ko&osType=PC', 'NAVER', 'PC 도움말이며 로그인 또는 서비스 조건이 적용될 수 있습니다.')] }];
+    if (day.day === 12 && index === 6) return [{ ...page, officialLinks: [official('다운로드 안내', 'https://help.naver.com/service/24269/contents/12831?lang=ko&osType=PC', 'NAVER', 'PC 도움말이며 로그인 또는 서비스 조건이 적용될 수 있습니다.')] }];
 
     if (day.day === 13 && index === 0) return [{
       ...page,
       title: '회의록 정리 도우미와 양식 만들기',
       description: '원본은 바꾸지 않고, 회의록을 정리하는 도우미와 양식을 만듭니다.',
-      prompt: '현재 작업 폴더에 회의록 정리 도우미와 회의록 양식을 만들어줘. 음성 기록 원본은 수정하지 마. 회의 제목·일시·참석자·결정 사항·담당자·기한·논의 내용·확인 필요 항목 형식으로 정리해. 원본에 없는 내용은 추측하지 말고 [확인 필요]로 표시해. 파일을 만들기 전에는 바꿀 파일과 계획을 먼저 보여줘.',
+      prompt: '현재 작업 폴더에 회의록 정리 도우미와 회의록 양식을 만들어줘. 폴더에 접근할 수 있고 내가 승인하면 SKILL.md와 templates/meeting-minutes.md에 저장해. 폴더에 접근할 수 없으면 채팅에 SKILL과 양식 초안을 보여줘. 음성 기록 원본은 수정하지 마. 회의 제목·일시·참석자·결정 사항·담당자·기한·논의 내용·확인 필요 항목 형식으로 정리해. 원본에 없는 내용은 추측하지 말고 [확인 필요]로 표시해. 파일을 만들기 전에는 바꿀 파일과 계획을 먼저 보여줘.',
       technicalDetails: technical('파일 구조 보기', '도우미 지침은 SKILL.md에, 회의록 양식은 templates/meeting-minutes.md에 둡니다.'),
     }];
 
     if (day.day === 14 && index >= 1 && index <= 5) {
       const titles = ['이름과 역할', '언제 쓰는지', '처리 순서', '참고 자료', '시험 방법'];
-      const build = ['B — Base Setup(기본 설정)', 'U — Use Case Definition(사용 사례 정의)', 'I — Instructions & Behavior(지침과 행동)', 'L — Learning & Examples(참고 자료와 예시)', 'D — Deploy & Test(배포와 시험)'];
+      const build = ['이름과 역할(BUILD의 B, 기본 설정)', '언제 쓰는지(BUILD의 U, 사용 사례 정의)', '처리 순서(BUILD의 I, 지침과 행동)', '참고 자료(BUILD의 L, 참고 자료와 예시)', '시험 방법(BUILD의 D, 배포와 시험)'];
       return [{ ...page, title: titles[index - 1], technicalDetails: technical('BUILD 용어 보기', build[index - 1]) }];
     }
 
@@ -192,6 +194,16 @@ const week3Pages = (day: TutorialDay): OneActionPage[] => {
       ];
     }
 
+    if (day.day === 13 && step.kind !== 'RETRO') return [{
+      ...page,
+      description: `${page.description} 폴더에 접근하고 내가 승인하면 파일에 저장하고, 접근할 수 없으면 채팅에 SKILL과 양식 초안을 보여줍니다.`,
+      prompt: `${page.prompt}\n\n폴더에 접근하고 내가 승인하면 파일에 저장해. 폴더에 접근할 수 없으면 채팅에 SKILL과 양식 초안을 보여줘.`,
+    }];
+    if (day.day === 14 && index === 6) return [{
+      ...page,
+      description: `${page.description} 폴더에 접근하고 내가 승인하면 저장하고, 접근할 수 없으면 채팅에 스킬 초안을 보여줍니다.`,
+      prompt: `${page.prompt}\n\n폴더에 접근하고 내가 승인하면 저장해. 폴더에 접근할 수 없으면 채팅에 스킬 초안을 보여줘.`,
+    }];
     return [page];
   });
 

@@ -23,11 +23,11 @@ export function runCourseMigrations(storage: Storage): boolean {
       if (Number(storage.getItem(tutorialStorage.last)) <= 5) storage.removeItem(tutorialStorage.last);
     }
 
-    // Copy-only fixes: clear only the three renamed common positions, never progress or app choice.
-    if (markers['qa-copy-fixes'] !== '1') {
-      for (const key of ['11.common', '15.common', '19.common']) delete position[key];
+    // Week 3 page changes: clear only renamed positions, never progress, app choice, drafts, or other days.
+    if (markers['week3-page-ids-2026-07-16'] !== '1') {
+      for (const key of ['12.common', '13.common', '14.common', '15.common', '15.codex', '15.claude']) delete position[key];
       storage.setItem(tutorialStorage.position, JSON.stringify(position));
-      markers['qa-copy-fixes'] = '1';
+      markers['week3-page-ids-2026-07-16'] = '1';
       storage.setItem(tutorialStorage.migrations, JSON.stringify(markers));
     }
     const app = storage.getItem(tutorialStorage.app);

@@ -7,6 +7,8 @@ export interface Props {
   ogImageAlt?: string;
 }
 
+import { isValidGa4Id } from '../lib/analytics';
+
 const {
   title = 'AI 야학 — 실무자를 위한 AI 강의',
   description = '공공기관·교육기관 실무자를 위한 AI 업무자동화 강의입니다. 비전공자 대상, 코드 없이 따라 할 수 있는 실무 중심 강의.',
@@ -18,7 +20,8 @@ const {
 const siteUrl = Astro.site?.origin ?? 'https://ai-night.study';
 const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, siteUrl).href;
 const ogImage = ogImageProp ? new URL(ogImageProp, siteUrl).href : `${siteUrl}/og.png`;
-const GA4_ID = 'G-XXXXXXXXXX';
+const GA4_ID = import.meta.env.PUBLIC_GA4_ID?.trim();
+const hasGa4 = isValidGa4Id(GA4_ID);
 
 import '../styles/global.css';
 ---
@@ -65,7 +68,7 @@ import '../styles/global.css';
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
     />
 
-    <!-- GA4 (placeholder ID) -->
+    {hasGa4 && <>
     <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
     <script is:inline define:vars={{ GA4_ID }}>
       window.dataLayer = window.dataLayer || [];
@@ -101,12 +104,13 @@ import '../styles/global.css';
         referrer_raw: document.referrer || '(direct)',
       });
     </script>
+    </>}
 
   </head>
   <body>
     <slot />
 
-    <script is:inline>
+    {hasGa4 && <script is:inline>
       // GA4 click listeners
       document.addEventListener('DOMContentLoaded', () => {
         const fire = (name, params) => {
@@ -172,6 +176,6 @@ import '../styles/global.css';
         // Fire once on load in case page is short
         onScroll();
       });
-    </script>
+    </script>}
   </body>
 </html>
