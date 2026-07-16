@@ -124,8 +124,7 @@ const toPage = (day: TutorialDay, step: TutorialStep, index: number): OneActionP
     image: step.image,
     images: step.images,
     supporting: step.detail,
-    advanceWhen: prompt ? 'copied' : 'controls',
-    controls: prompt ? undefined : [{ id: 'complete', type: 'check', label: '이 행동을 마쳤습니다', required: true, persist: 'session' }],
+    advanceWhen: prompt ? 'copied' : undefined,
   };
 };
 

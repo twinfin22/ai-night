@@ -68,7 +68,6 @@ const clientPages = item.pages.map(({ source: _source, ...page }) => page);
     const state = values();
     if (page.advanceWhen === 'copied') return state.__copied === true;
     if (page.advanceWhen === 'started') return state.__started === true;
-    if (page.advanceWhen === 'confirmed') return state.__confirmed === true;
     if (page.advanceWhen === 'controls') return controlsComplete(page);
     return !page.controls?.length || controlsComplete(page);
   };
@@ -76,7 +75,6 @@ const clientPages = item.pages.map(({ source: _source, ...page }) => page);
   const controlHtml = (control, current) => {
     const name = `control-${esc(control.id)}`;
     if (control.type === 'text') return `<label class="workboard-field"><span>${esc(control.label)}</span><textarea data-control="${esc(control.id)}" rows="3">${esc(current || '')}</textarea></label>`;
-    if (control.type === 'check') return `<label class="workboard-check"><input data-control="${esc(control.id)}" type="checkbox" ${current ? 'checked' : ''}> ${esc(control.label)}</label>`;
     const type = control.type === 'radio' ? 'radio' : 'checkbox'; const selected = Array.isArray(current) ? current : [current];
     return `<fieldset class="workboard-choice"><legend>${esc(control.label)}</legend>${(control.options || []).map((option) => `<label><input data-control="${esc(control.id)}" type="${type}" name="${name}" value="${esc(option.value)}" ${selected.includes(option.value) ? 'checked' : ''}><strong>${esc(option.label)}</strong>${option.description ? `<span>${esc(option.description)}</span>` : ''}</label>`).join('')}</fieldset>`;
   };
@@ -105,18 +103,16 @@ const clientPages = item.pages.map(({ source: _source, ...page }) => page);
     content = officialLinks + content;
     content += (page.controls || []).filter((control) => page.view !== 'WORKBENCH').map((control) => controlHtml(control, state[control.id])).join('');
     content += downloadLinks + technicalDetails;
-    if (page.advanceWhen === 'confirmed') content += `<label class="workboard-check"><input data-confirm type="checkbox" ${state.__confirmed ? 'checked' : ''}> 공식 페이지를 확인했습니다</label>`;
     board.innerHTML = content;
     board.querySelectorAll('[data-control]').forEach((input) => input.addEventListener('input', () => {
       const control = page.controls.find((item) => item.id === input.dataset.control); let value;
       if (control.type === 'checkbox') value = [...board.querySelectorAll(`[data-control="${CSS.escape(control.id)}"]:checked`)].map((item) => item.value);
-      else if (control.type === 'check') value = input.checked; else value = input.value;
+      else value = input.value;
       saveValue(control, value);
       if (page.kind === 'CHOICE') { const currentId = page.id; visible = getVisible(); index = Math.max(0, visible.findIndex((item) => item.id === currentId)); }
       updateNext(page);
     }));
     board.querySelector('[data-page-start]')?.addEventListener('click', () => { saveValue({ id: '__started', persist: 'local' }, true); index = Math.min(visible.length - 1, index + 1); render(true); });
-    board.querySelector('[data-confirm]')?.addEventListener('change', (event) => { saveValue({ id: '__confirmed', persist: 'local' }, event.target.checked); updateNext(page); });
     board.querySelector('[data-copy]')?.addEventListener('click', async (event) => { const button = event.currentTarget; try { await navigator.clipboard.writeText(page.prompt || ''); saveValue({ id: '__copied', persist: 'local' }, true); button.textContent = '복사됨'; report('복사했습니다. 이제 다음으로 넘어갈 수 있습니다.'); updateNext(page); } catch { button.textContent = '복사하지 못했습니다'; report('복사하지 못했습니다. 직접 선택해 복사해 주세요.', true); } });
     board.querySelectorAll('.workboard-image img').forEach((image) => image.addEventListener('error', () => { const src = image.getAttribute('src') || ''; image.closest('button')?.remove(); if (!board.querySelector('.workboard-image button')) board.querySelector('.workboard-image')?.insertAdjacentHTML('beforeend', `<figcaption>스크린샷을 불러오지 못했습니다. <a href="${esc(src)}" target="_blank" rel="noopener noreferrer">원본 다시 열기</a></figcaption>`); report('스크린샷을 불러오지 못했습니다.', true); }));
     board.querySelectorAll('[data-image-open]').forEach((button) => button.addEventListener('click', () => { const dialog = document.createElement('dialog'); dialog.className = 'image-dialog'; dialog.innerHTML = `<button type="button" aria-label="닫기">닫기</button><img src="${button.dataset.src}" alt="${button.dataset.alt}">`; document.body.append(dialog); dialog.showModal(); const close = dialog.querySelector('button'); close.focus(); close.addEventListener('click', () => dialog.close()); dialog.addEventListener('close', () => { dialog.remove(); button.focus(); }); }));
