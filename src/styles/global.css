@@ -633,8 +633,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .workboard-focus li { padding: 8px 0; }
 .workboard-focus strong { display: block; margin-top: 30px; color: var(--workboard-accent-ink); }
 .workboard-image { max-width: 900px; margin: 0; }
-.workboard-image button { display: block; width: 100%; padding: 0; border: 1px solid var(--workboard-border); border-radius: 8px; background: transparent; cursor: zoom-in; }
-.workboard-image img { display: block; width: 100%; height: auto; }
+.workboard-image button { display: block; width: fit-content; max-width: 100%; padding: 0; border: 1px solid var(--workboard-border); border-radius: 8px; background: transparent; cursor: zoom-in; }
+.workboard-image img { display: block; width: auto; max-width: 100%; height: auto; }
 .workboard-image figcaption { margin-top: 14px; color: var(--workboard-ink-soft); line-height: 1.6; }
 .workboard-prompt { max-width: 900px; }
 .workboard-prompt button, .one-action__actions button, .one-action__primary { min-width: 110px; min-height: 48px; padding: 12px 18px; border: 1px solid var(--workboard-border); border-radius: 8px; background: transparent; color: inherit; font: inherit; font-weight: 800; cursor: pointer; }
