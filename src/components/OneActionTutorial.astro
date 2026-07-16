@@ -6,10 +6,6 @@ const clientPages = item.pages.map(({ source: _source, ...page }) => page);
 
 <main class="one-action" data-one-action data-day={item.day} data-pages={JSON.stringify(clientPages)} data-storage={JSON.stringify({ version: 'ainight.version', done: 'ainight.done', position: 'ainight.position', last: 'ainight.last', app: 'ainight.app', draft: 'ainight.draft' })}>
   <section class="one-action__preflight" data-preflight hidden aria-labelledby="app-choice-title">
-    <div class="one-action__preflight-brand" aria-label="AI 야학">
-      <img src="/assets/logo.png" alt="" width="34" height="34" />
-      <span>AI 야학</span>
-    </div>
     <p class="eyebrow">수업 시작 전</p>
     <h1 id="app-choice-title">당신의 에이전트를<br />골라주세요</h1>
     <p class="one-action__preflight-intro">하나만 고르면, 그 에이전트에 맞는 수업을 보여드려요.</p>
