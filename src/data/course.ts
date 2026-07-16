@@ -79,7 +79,15 @@ export interface OneActionPage {
   highlightTokens?: string[];
   image?: { src: string; alt: string };
   images?: { src: string; alt: string }[];
-  officialLinks?: { label: string; href: string }[];
+  officialLinks?: {
+    label: string;
+    href: string;
+    publisher: string;
+    verifiedAt: string;
+    accessNote: string;
+  }[];
+  technicalDetails?: { title: string; body: string }[];
+  downloadLinks?: { label: string; href: string }[];
   supporting?: string | null;
   choices?: { value: string; label: string; description: string }[];
   comparison?: { label: string; content: string }[];

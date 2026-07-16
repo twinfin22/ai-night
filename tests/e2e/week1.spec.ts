@@ -25,3 +25,18 @@ test('tutorial list retains direct routes for all Week 1 days', async ({ page })
     await expect(page.locator(`a[href="/tutorials/day-${String(day).padStart(2, '0')}/"]`).first()).toBeVisible();
   }
 });
+
+test('Day 4 renders only the selected app official link before its screenshot', async ({ page }) => {
+  await page.goto('/tutorials/day-04/');
+  await page.getByRole('radio', { name: /Codex/ }).check();
+  await page.getByRole('button', { name: '수업 시작' }).click();
+  await page.getByRole('button', { name: '다음' }).click();
+
+  const link = page.getByRole('link', { name: /ChatGPT Chrome 안내/ });
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute('href', 'https://learn.chatgpt.com/docs/chrome-extension');
+  await expect(link).toHaveAttribute('target', '_blank');
+  await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  await expect(page.getByRole('link', { name: /Claude in Chrome 안내/ })).toHaveCount(0);
+  await expect(page.getByRole('img', { name: 'OpenAI가 게시한 ChatGPT Chrome 확장 공식 화면' })).toBeVisible();
+});
