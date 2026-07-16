@@ -6,10 +6,26 @@ const clientPages = item.pages.map(({ source: _source, ...page }) => page);
 
 <main class="one-action" data-one-action data-day={item.day} data-pages={JSON.stringify(clientPages)} data-storage={JSON.stringify({ version: 'ainight.version', done: 'ainight.done', position: 'ainight.position', last: 'ainight.last', app: 'ainight.app', draft: 'ainight.draft' })}>
   <section class="one-action__preflight" data-preflight hidden aria-labelledby="app-choice-title">
-    <p class="eyebrow">수업 시작 전</p><h1 id="app-choice-title">이번 주에 쓸 앱을 고르세요</h1>
-    <fieldset class="one-action__app-options"><legend>내가 쓰는 앱</legend>
-      <label><input type="radio" name="app" value="codex" /> <strong>Codex</strong><span>작업 폴더를 열고 파일을 다룰 때</span></label>
-      <label><input type="radio" name="app" value="claude" /> <strong>Claude</strong><span>대화와 첨부 파일을 보며 따라갈 때</span></label>
+    <div class="one-action__preflight-brand" aria-label="AI 야학">
+      <img src="/assets/logo.png" alt="" width="34" height="34" />
+      <span>AI 야학</span>
+    </div>
+    <p class="eyebrow">수업 시작 전</p>
+    <h1 id="app-choice-title">당신의 에이전트를<br />골라주세요</h1>
+    <p class="one-action__preflight-intro">하나만 고르면, 그 에이전트에 맞는 수업을 보여드려요.</p>
+    <fieldset class="one-action__app-options"><legend>나와 함께할 에이전트</legend>
+      <label class="one-action__agent-card one-action__agent-card--codex">
+        <input type="radio" name="app" value="codex" />
+        <span class="one-action__agent-logo"><img src="/assets/tutorials/brands/openai.svg" alt="" width="38" height="38" /></span>
+        <span class="one-action__agent-copy"><small>OPENAI</small><strong>Codex</strong><span>작업 폴더를 열고 파일을 만들며 함께할 때</span></span>
+        <span class="one-action__agent-select" aria-hidden="true"></span>
+      </label>
+      <label class="one-action__agent-card one-action__agent-card--claude">
+        <input type="radio" name="app" value="claude" />
+        <span class="one-action__agent-logo"><img src="/assets/tutorials/brands/anthropic.svg" alt="" width="38" height="38" /></span>
+        <span class="one-action__agent-copy"><small>ANTHROPIC</small><strong>Claude</strong><span>대화와 첨부 파일을 보며 따라갈 때</span></span>
+        <span class="one-action__agent-select" aria-hidden="true"></span>
+      </label>
     </fieldset><button class="one-action__primary" type="button" data-start disabled>수업 시작</button>
   </section>
   <section class="one-action__shell" data-lesson hidden aria-label={`${item.day}일차 수업`}>

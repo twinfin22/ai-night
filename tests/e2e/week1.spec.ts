@@ -3,8 +3,10 @@ import { expect, test } from '@playwright/test';
 test('Day 1 lets a learner select Codex and starts the Week 1 one-action lesson', async ({ page }) => {
   await page.goto('/tutorials/day-01/');
 
-  await expect(page.getByRole('heading', { name: '이번 주에 쓸 앱을 고르세요' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '당신의 에이전트를 골라주세요' })).toBeVisible();
   await expect(page.getByRole('button', { name: '수업 시작' })).toBeDisabled();
+  await expect(page.locator('img[src="/assets/tutorials/brands/openai.svg"]')).toBeVisible();
+  await expect(page.locator('img[src="/assets/tutorials/brands/anthropic.svg"]')).toBeVisible();
 
   await page.getByRole('radio', { name: /Codex/ }).check();
   await page.getByRole('button', { name: '수업 시작' }).click();
