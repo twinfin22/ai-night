@@ -800,8 +800,8 @@ const pageView = (record: Week2SourceRecord): Week2Page['view'] => {
 const checkedAt = '2026-07-16';
 const pageOverrides: Record<string, Partial<Week2Page>> = {
   'd06-action-07': {
-    action: '새 대화/보조 AI에 검토 프롬프트를 보냅니다.',
-    supporting: '새 대화/보조 AI는 조사·검토를 따로 맡는 작은 작업자입니다. 같은 파일 동시 편집은 피합니다.',
+    action: '새 대화 또는 보조 AI에 검토 프롬프트를 보냅니다.',
+    supporting: '새 대화 또는 보조 AI는 조사·검토를 따로 맡는 작은 작업자입니다. 같은 파일 동시 편집은 피합니다.',
   },
   'd07-choice-output': {
     action: '[5장 슬라이드 또는 Google Docs 문서] / [첨부한 원본 파일] / [받을 사람] / [읽고 나서 할 행동]을 한 줄로 완성합니다.',

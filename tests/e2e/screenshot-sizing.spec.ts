@@ -4,7 +4,7 @@ test('portrait screenshots keep their native width and still open in the zoom di
   await page.goto('/tutorials/day-12/');
   await page.getByRole('button', { name: '오늘의 실습 시작하기' }).click();
 
-  for (let index = 0; index < 2; index += 1) {
+  for (let index = 0; index < 3; index += 1) {
     await page.getByRole('checkbox', { name: '이 행동을 마쳤습니다' }).check();
     await page.getByRole('button', { name: '다음' }).click();
   }

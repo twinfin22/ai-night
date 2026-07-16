@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "week": 3,
+  "assets": [
+    {"pageId":"d11-01-codex","sourceUrl":"https://learn.chatgpt.com/docs/agent-configuration/agents-md","deployPath":"/assets/tutorials/week3/screenshots/d11-agents-md-official.png","bytes":154099,"width":1200,"height":793,"alt":"OpenAI 공식 AGENTS.md 안내 문서 화면","captureDate":"2026-07-14","verifiedAt":"2026-07-16","status":"verified","privacyReview":"pass","privacyNote":"공식 문서/홍보용 예시 화면이며 계정·연락처·개인 식별정보 없음"},
+    {"pageId":"d11-01-claude","sourceUrl":"https://code.claude.com/docs/en/memory","deployPath":"/assets/tutorials/week3/screenshots/d11-claude-md-official.png","bytes":155499,"width":1200,"height":793,"alt":"Anthropic 공식 CLAUDE.md 안내 문서 화면","captureDate":"2026-07-14","verifiedAt":"2026-07-16","status":"verified","privacyReview":"pass","privacyNote":"공식 문서/홍보용 예시 화면이며 계정·연락처·개인 식별정보 없음"},
+    {"pageId":"d12-01","sourceUrl":"https://clovanote.naver.com/","deployPath":"/assets/tutorials/week3/screenshots/d12-clovanote-login-live.png","bytes":99737,"width":1200,"height":793,"alt":"클로바노트 공식 시작 화면과 로그인 버튼","captureDate":"2026-07-14","verifiedAt":"2026-07-16","status":"verified","privacyReview":"pass","privacyNote":"공식 문서/홍보용 예시 화면이며 계정·연락처·개인 식별정보 없음"},
+    {"pageId":"d12-03","sourceUrl":"https://clovanote.naver.com/","deployPath":"/assets/tutorials/week3/screenshots/d12-clovanote-transcript-official.png","bytes":110513,"width":392,"height":696,"alt":"클로바노트 공식 앱의 음성 기록과 화자 표시 화면","captureDate":"2026-07-14","verifiedAt":"2026-07-16","status":"verified","privacyReview":"pass","privacyNote":"공식 문서/홍보용 예시 화면이며 계정·연락처·개인 식별정보 없음"},
+    {"pageId":"d12-06","sourceUrl":"https://help.naver.com/service/24269/contents/12831?lang=ko&osType=PC","deployPath":"/assets/tutorials/week3/screenshots/d12-clovanote-download-official.png","bytes":98086,"width":392,"height":696,"alt":"클로바노트 공식 앱의 텍스트 문서 다운로드와 시간 기록·참석자 정보 선택 화면","captureDate":"2026-07-14","verifiedAt":"2026-07-16","status":"verified","privacyReview":"pass","privacyNote":"공식 문서/홍보용 예시 화면이며 계정·연락처·개인 식별정보 없음"}
+  ]
+}

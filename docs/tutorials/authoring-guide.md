@@ -11,18 +11,30 @@
 
 ## 콘텐츠 위치
 
-- 커리큘럼 데이터: `src/data/course.ts`
+- 커리큘럼 데이터: `src/data/course.ts` (Week 3 정적 화면은 `src/data/course-week3.ts`)
 - 출석부: `src/pages/tutorials/index.astro`
-- 위저드: `src/pages/tutorials/day-[day].astro`
+- 위저드 렌더러: `src/pages/tutorials/[day].astro`
 - 마무리 계약: `docs/tutorials/today-close-contract.md`
 
 ## Day 추가·수정 절차
 
 1. `courseDays`에서 해당 Day의 `status`를 `ready`로 바꾼다.
-2. `steps`를 5-9개로 채운다.
+2. `steps`는 화면별 one-action 원칙에 맞춰 채운다. 화면 수가 정해진 주차는 그 수를 따른다. (Week 3 Day 14는 10개이므로 5-9개 제한을 적용하지 않는다.)
 3. 1주차 앱별 화면 차이가 있으면 `appTrack: 'both'`와 `claude`, `codex` steps를 따로 쓴다.
 4. 결제처럼 건너뛰면 안 되는 단계는 `stuck.skip: false`로 둔다.
 5. `npm run build`를 실행한다.
+
+## Week 3 작성 규칙 (Day 11-15)
+
+- 공통 순서는 시작(`FOCUS`) → 실습(`PROMPT`·`WORKBENCH`·필요한 `SPOTLIGHT`) → 회고(`RETRO`)다. 시작·실습·회고를 모두 넣고, 한 화면에는 행동 하나만 둔다.
+- 복사할 프롬프트는 쉬운 존댓말로 쓰고, 학습자가 바꿀 값은 눈에 띄게 표시한다. 항상 “상황에 맞게 고쳐 사용하세요.”를 함께 쓴다.
+- Day 11은 히스토리와 회고에서 확인한 사실만 쓴다. 일회성 요청·추측·민감정보는 제외하고, 승인된 규칙 10개 이하만 `AGENTS.md` 초안에 넣는다. 사용자 승인 전에는 반영하지 않는다.
+- Day 12는 공통 흐름으로 작성하고, Claude/Codex 차이는 설명 토글로만 보완한다. 회의록 템플릿 선택 → 스킬 초안 → 미리보기 → 다음 날 녹음 준비 순서를 지킨다.
+- Day 13은 음성 첨부 → 결과 확인 → 규칙 보완 → GitHub 공개 준비 → 공개·공유 순서다. `git push`와 공개 범위를 정하기 직전에는 반드시 사용자 확인을 받는다. 음성 원본·개인정보·토큰은 저장소에 넣지 않는다.
+- Day 14는 후보 3개를 반복성·순서 설명 가능·자료 존재·사람 확인 가능 기준으로 비교하게 한다. 선택 전에는 다음 버튼을 비활성화한다. BUILD의 B/U/I/L/D를 모두 보여 주고, 외부 계정 연결·MCP·OAuth·API·되돌리기 어려운 업무는 다루지 않는다.
+- Day 15는 시작 조건을 `정해진 시간` 또는 `새 자료가 있을 때만 처리` 중 하나로 고르게 한다. 자동 범위는 요약·분류·초안까지만이다. 저장·수정·발송·가격·환불·예약 변경은 사람 승인 뒤에만 가능하다고 명시한다. 예약 전 시험 실행, 실행 기록 점검, 규칙 수정, 첫 3회 직접 검토를 포함한다.
+- Week 3 회고는 웹 입력이나 AI 평가·요약 없이 공통 `RETRO`로 처리한다. 학습자 답만 `ai-study/daily_retro.md`의 해당 Day 블록을 교체 저장한다.
+- 최신 화면 스크린샷은 manifest에 pageId·sourceUrl·deployPath·bytes·크기·alt·captureDate·verifiedAt를 기록하고, manifest 검증과 개인정보 검토를 통과한 뒤에만 튜토리얼에서 참조한다.
 
 ## 스크린샷 규칙
 

@@ -10,15 +10,15 @@ const storage = (initial: Record<string, string>): Storage => {
   };
 };
 
-describe('tutorial copy-fix migration', () => {
-  it('only clears renamed common positions and is idempotent', () => {
+describe('Week 3 page migration', () => {
+  it('only clears renamed Week 3 positions and is idempotent', () => {
     const local = storage({
       [tutorialStorage.version]: '5', [tutorialStorage.done]: '[11,15,19]', [tutorialStorage.last]: '19',
-      [tutorialStorage.app]: 'codex', [tutorialStorage.position]: '{"11.common":"old","15.common":"old","19.common":"old","11.codex":"keep","12.common":"keep"}',
+      [tutorialStorage.app]: 'codex', [tutorialStorage.position]: '{"11.common":"keep","12.common":"old","13.common":"old","14.common":"old","15.common":"old","15.codex":"old","15.claude":"old","19.common":"keep","11.codex":"keep","12.codex":"keep"}',
       [tutorialStorage.draft]: '{"d11-01":{"x":1}}', [tutorialStorage.migrations]: '{}',
     });
     expect(runCourseMigrations(local)).toBe(true);
-    expect(local.getItem(tutorialStorage.position)).toBe('{"11.codex":"keep","12.common":"keep"}');
+    expect(local.getItem(tutorialStorage.position)).toBe('{"11.common":"keep","19.common":"keep","11.codex":"keep","12.codex":"keep"}');
     expect(local.getItem(tutorialStorage.done)).toBe('[11,15,19]');
     expect(local.getItem(tutorialStorage.app)).toBe('codex');
     expect(local.getItem(tutorialStorage.last)).toBe('19');

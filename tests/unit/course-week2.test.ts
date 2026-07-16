@@ -21,8 +21,8 @@ describe('Week 2 source snapshot', () => {
     const day10 = week2Days.find((day) => day.day === 10)!;
 
     const helper = day6.pages.find((page) => page.id === 'd06-action-07')!;
-    expect(helper.action).toContain('새 대화/보조 AI');
-    expect(helper.supporting).toContain('새 대화/보조 AI');
+    expect(helper.action).toContain('새 대화 또는 보조 AI');
+    expect(helper.supporting).toContain('새 대화 또는 보조 AI');
     expect(helper.action).not.toContain('subagent');
     expect(helper.source.action).toContain('subagent');
 
