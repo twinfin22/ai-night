@@ -1,5 +1,26 @@
 import { expect, test } from '@playwright/test';
 
+test('A2 start card keeps content clear of its border', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/tutorials/day-01/');
+
+  const spacing = await page.locator('[data-preflight]').evaluate((card) => {
+    const cardBox = card.getBoundingClientRect();
+    const headingBox = card.querySelector('h1')!.getBoundingClientRect();
+    const firstChoiceBox = card.querySelector('.one-action__agent-card')!.getBoundingClientRect();
+
+    return {
+      headingLeft: headingBox.left - cardBox.left,
+      choiceLeft: firstChoiceBox.left - cardBox.left,
+      choiceRight: cardBox.right - firstChoiceBox.right,
+    };
+  });
+
+  expect(spacing.headingLeft).toBeGreaterThanOrEqual(40);
+  expect(spacing.choiceLeft).toBeGreaterThanOrEqual(40);
+  expect(spacing.choiceRight).toBeGreaterThanOrEqual(40);
+});
+
 for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720 }, { width: 900, height: 900 }, { width: 768, height: 1024 }, { width: 390, height: 844 }]) {
   test(`A2 coach/visual contract at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);

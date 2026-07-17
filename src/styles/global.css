@@ -617,7 +617,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 .one-action { min-height: 100svh; background: var(--bg); }
-.one-action section { padding: 0; border-bottom: 0; scroll-margin-top: 0; }
+/* Reset only the lesson shell. The start card needs its own inset so its
+   heading, choices, and action never sit against the outer border. */
+.one-action > section:not(.one-action__preflight) { padding: 0; border-bottom: 0; scroll-margin-top: 0; }
 .one-action__shell > *, .one-action__body > * { min-width: 0; }
 /* The lesson shell is rendered for the client-side handoff, but must stay hidden until the app choice is ready. */
 .one-action [hidden] { display: none; }
