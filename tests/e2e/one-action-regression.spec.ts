@@ -40,7 +40,7 @@ test('technical details and downloads stay in the coach immediately above naviga
   await page.getByRole('button', { name: '다음' }).click();
   await expect(page.getByText('안 보여요 · 보충 설명')).toBeVisible();
   await expect(page.locator('[data-support-details] + footer [data-next]')).toBeVisible();
-  await expect(page.getByRole('button', { name: '복사하기' })).toBeEnabled();
+  await expect(page.getByRole('button', { name: '프롬프트 복사하기' })).toBeEnabled();
   await expect(page.getByRole('button', { name: '다음' })).toBeEnabled();
 
   await page.goto('/tutorials/day-18/');
@@ -52,6 +52,11 @@ test('technical details and downloads stay in the coach immediately above naviga
   await expect(page.locator('[data-coach] .guide-downloads a')).toHaveCount(4);
 
   await page.goto('/tutorials/day-19/');
+  const day19Chooser = page.locator('[data-preflight]');
+  if (await day19Chooser.isVisible()) {
+    await page.getByRole('radio', { name: /Codex/ }).check();
+    await page.getByRole('button', { name: '수업 시작' }).click();
+  }
   await page.getByRole('button', { name: '다음' }).click();
   await expect(page.getByRole('button', { name: '다음' })).toBeEnabled();
   await expect(page.getByRole('link', { name: /GPTers/ })).toContainText('GPTers · 2026-07-16 확인');
