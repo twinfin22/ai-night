@@ -92,7 +92,6 @@ export interface OneActionPage {
   choices?: { value: string; label: string; description: string }[];
   comparison?: { label: string; content: string }[];
   controls?: OneActionControl[];
-  advanceWhen?: 'started' | 'copied' | 'controls';
   source?: Week2SourceFields;
   visibleWhen?: { choiceKey: string; equals: string };
   choice?: { key: string; options: readonly { value: string; label: string; description: string }[] };

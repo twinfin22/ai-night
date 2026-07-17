@@ -56,4 +56,11 @@ describe('Week 2 source snapshot', () => {
       }
     }
   });
+
+  it('keeps only the Day 7 output-format control as a progress gate', () => {
+    const controls = week2Days.flatMap((day) => day.pages.flatMap((page) => (page.controls || []).map((control) => ({ page: page.id, control }))));
+    expect(controls).toHaveLength(1);
+    expect(controls[0]).toMatchObject({ page: 'd07-choice-output', control: { id: 'output-format', required: true } });
+    expect(week2Days.flatMap((day) => day.pages).every((page) => !('advanceWhen' in page))).toBe(true);
+  });
 });

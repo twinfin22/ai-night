@@ -17,6 +17,7 @@ test('Day 1 lets a learner select Codex and starts the Week 1 one-action lesson'
 
   await page.getByRole('button', { name: '다음' }).click();
   await expect(page.getByRole('heading', { name: '설치 전에 준비해요' })).toBeVisible();
+  await expect(page.locator('[data-title]')).toBeFocused();
   await expect.poll(() => page.evaluate(() => localStorage.getItem('ainight.position'))).toContain('d01-prep');
 });
 
