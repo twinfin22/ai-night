@@ -124,8 +124,6 @@ const toPage = (day: TutorialDay, step: TutorialStep, index: number): OneActionP
     image: step.image,
     images: step.images,
     supporting: step.detail,
-    advanceWhen: prompt ? 'copied' : 'controls',
-    controls: prompt ? undefined : [{ id: 'complete', type: 'check', label: '이 행동을 마쳤습니다', required: true, persist: 'session' }],
   };
 };
 
@@ -181,7 +179,6 @@ const week3Pages = (day: TutorialDay): OneActionPage[] => {
         description: '선택한 앱이 자료 읽기와 예약을 지원하는지 먼저 확인합니다. 지원하지 않으면 현재 연결된 자료로 수동 실행만 합니다.',
         action: '프롬프트를 복사해 AI 앱에서 진행합니다.',
         prompt: '지금 선택한 앱에서 자료를 읽고 예약 작업을 만들 수 있는지 먼저 확인해줘. 가능한 기능, 로그인·플랜·관리자 제한, 현재 연결된 자료를 짧게 알려줘. 둘 중 하나라도 할 수 없으면 현재 연결된 자료로 오늘 한 번만 실행할 최소 수동 대안을 제시하고, 저장·수정·발송·가격·환불·예약 변경은 하지 마.',
-        advanceWhen: 'copied',
       };
       const schedule = (track: AppChoice, image: { src: string; alt: string }, link: ReturnType<typeof official>): OneActionPage => ({
         ...page, id: `d15-05-${track}`, track, image: undefined, images: [image], officialLinks: [link],
@@ -211,7 +208,7 @@ const week3Pages = (day: TutorialDay): OneActionPage[] => {
     {
       id: `d${day.day}-start`, kind: 'START', view: 'FOCUS', title: day.title,
       subtitle: day.outcome, description: day.outcome, action: '오늘의 실습 시작하기', outcome: day.outcome,
-      flow: steps.map((step) => step.action), advanceWhen: 'started',
+      flow: steps.map((step) => step.action),
     },
     ...pages,
   ];

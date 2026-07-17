@@ -69,7 +69,6 @@ export type Week2Page = {
     persist: 'local';
     options: readonly { value: string; label: string; description?: string }[];
   }[];
-  advanceWhen?: 'started' | 'copied' | 'controls';
   source: Week2SourceRecord;
 };
 
@@ -870,10 +869,7 @@ const toPage = (record: Week2SourceRecord): Week2Page => {
     ...(assetFor(record.screenshot) ? { image: assetFor(record.screenshot) } : {}),
     ...(visibleWhen ? { visibleWhen } : {}),
     ...(choice ? { choice } : {}),
-    ...(choice ? { controls: [{ id: 'output-format', type: 'radio' as const, label: '오늘 만들 결과', required: true as const, persist: 'local' as const, options: choice.options }], advanceWhen: 'controls' as const } : {}),
-    ...(record.sourceKind === 'START' ? { advanceWhen: 'started' as const } : {}),
-    ...(record.sourceKind === 'RETRO' ? { advanceWhen: 'copied' as const } : {}),
-    ...(record.sourceKind === 'ACTION' && !choice ? { controls: [{ id: 'self-confirm', type: 'radio' as const, label: '이 화면에서 직접 해봤나요?', required: true as const, persist: 'local' as const, options: [{ value: 'confirmed', label: '직접 해봤어요' }, { value: 'deferred', label: '나중에 하기' }] }], advanceWhen: 'controls' as const } : {}),
+    ...(choice ? { controls: [{ id: 'output-format', type: 'radio' as const, label: '오늘 만들 결과', required: true as const, persist: 'local' as const, options: choice.options }] } : {}),
     source: record,
   };
 
