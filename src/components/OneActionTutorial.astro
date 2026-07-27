@@ -16,7 +16,7 @@ const clientPages = item.pages.map(({ source: _source, ...page }) => page);
   </section>
   <section class="one-action__shell" data-lesson hidden aria-label={`${item.day}일차 수업`}>
     <aside class="one-action__coach" data-coach>
-      <header class="one-action__header"><a href="/tutorials/" class="one-action__brand" aria-label="AI 야학 수업 목록">AI 야학</a><strong title={`${item.day}일차 · ${item.title}`}><span>{item.day}일차</span> · {item.title}</strong><div class="one-action__progress" role="progressbar" aria-label="현재 수업 단계" aria-valuemin="1" data-progress><span data-progress-label>1 / {item.pages.length}</span></div></header>
+      <header class="one-action__header"><a href="/tutorials/" class="one-action__brand" aria-label="AI 야학 수업 목록">AI 야학</a><strong title={`${item.day}일차 · ${item.title}`}><span>{item.day}일차</span> · {item.title}<small data-time>{item.time}</small></strong><div class="one-action__progress" role="progressbar" aria-label="현재 수업 단계" aria-valuemin="1" data-progress><span data-progress-label>1 / {item.pages.length}</span></div></header>
       <div class="one-action__guide" data-guide><p class="one-action__eyebrow">지금 할 일</p><h1 tabindex="-1" data-title></h1><p data-description></p><strong data-action></strong><div data-guide-content></div><p class="one-action__status" data-status role="status" aria-live="polite"></p></div>
       <div class="one-action__support" data-support><div data-support-details></div><footer class="one-action__actions"><button type="button" data-prev>이전</button><button type="button" data-next>다음</button></footer></div>
     </aside>

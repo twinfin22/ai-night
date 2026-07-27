@@ -52,15 +52,51 @@ describe('Week 3 QA overrides', () => {
 });
 
 describe('Week 4 QA overrides', () => {
-  it('leaves Days 16, 17, and 20 source lessons unchanged', () => {
+  it('leaves Days 16 and 20 source lessons unchanged and appends Day 17 advanced practice', () => {
     expect(oneActionDay(16).pages.map((page) => page.title)).toEqual([
       '콘텐츠 만들기 자동화1: 블로그 제작 공정 설계하기', '내가 지금 하는 순서를 적으세요', 'AI에게 공정 후보 3개를 받으세요', '반복할 수 있는 공정 하나를 고르세요', '비슷한 스킬과 사례를 조사시키세요', '반영할 개선점만 고르세요', '각 단계의 일을 한 가지씩 정하세요', '검수 규칙 3개를 고르세요', '이 공정을 재사용 스킬로 저장하세요', '오늘의 회고',
     ]);
-    expect(oneActionDay(17).pages).toHaveLength(9);
+    const day17 = oneActionDay(17);
+    expect(day17.time).toBe('30분 + 선택 10분');
+    expect(day17.pages.map((page) => page.id)).toEqual([
+      'd17-start',
+      'd17-action-01',
+      'd17-action-02',
+      'd17-action-03',
+      'd17-action-04',
+      'd17-action-05',
+      'd17-action-06',
+      'd17-action-07',
+      'd17-action-08',
+      'd17-action-99',
+    ]);
     expect(oneActionDay(20).pages.map((page) => page.title)).toEqual([
       'AI 야학 졸업을 축하합니다!', 'AI가 읽을 수 있는 기록을 찾으세요', '진단에 쓸 기록을 직접 고르세요', '20일 기록에서 내 패턴을 진단받으세요', '계속할 활용법 3개를 고르세요', '업무 규칙 후보를 만드세요', '고른 규칙을 AGENTS.md에 반영하세요', '오늘의 회고',
     ]);
     expect(oneActionDay(20).pages[1]?.description).toBe('AI가 지금 열 수 있는 대화 기록과 작업 파일만 목록으로 만듭니다.');
+  });
+
+  it('keeps the optional Day 17 blog grader bounded and human-approved', () => {
+    const page = oneActionDay(17).pages.find((candidate) => candidate.id === 'd17-action-08');
+    const prompt = page?.prompt ?? '';
+
+    expect(page).toMatchObject({
+      title: '선택 심화: 내 글 합격 검사기 만들기',
+      description: expect.stringContaining('잘된 블로그 글 3개가 없으면'),
+      officialLinks: [{
+        label: '참고 원문',
+        href: 'https://app.teams.100school.com/day/13/good-enough-never-is-b2c',
+        publisher: '100 School',
+        verifiedAt: '2026-07-27',
+        accessNote: expect.stringContaining('AI 야학 수업에 맞게 재작성'),
+      }],
+    });
+    for (const contract of ['잘된 블로그 글 3개', '새 주제', '도입', '구조', '말투', '명확성', '총 100점', '오늘 수선한', '95점', '최대 2회', '사람이 최종 승인', '최종 글', '항목별 점수와 근거', '사실·말투·게시 적합성']) {
+      expect(prompt).toContain(contract);
+    }
+    expect(prompt).toContain('합격 확정이 아니다');
+    expect(prompt).toContain('게시하거나 저장하지 마');
+    expect(prompt).not.toMatch(/이메일|디자인|제안서|무한|통과할 때까지|95점이 될 때까지/);
   });
 
   it('exposes four non-empty Day 18 CSV downloads', () => {

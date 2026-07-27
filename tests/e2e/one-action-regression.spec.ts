@@ -63,6 +63,32 @@ test('technical details and downloads stay in the coach immediately above naviga
   await expect(page.locator('[data-visual] a')).toHaveCount(0);
 });
 
+for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  test(`Day 17 optional blog grader works at ${viewport.width}px`, async ({ page, context }) => {
+    await page.setViewportSize(viewport);
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.addInitScript(() => {
+      localStorage.setItem('ainight.version', '5');
+      localStorage.setItem('ainight.position', JSON.stringify({ '17.common': 'd17-action-08' }));
+    });
+    await page.goto('/tutorials/day-17/');
+
+    await expect(page.locator('[data-time]')).toHaveText('30분 + 선택 10분');
+    await expect(page.getByRole('heading', { name: '선택 심화: 내 글 합격 검사기 만들기' })).toBeVisible();
+    await expect(page.getByText('잘된 블로그 글 3개가 없으면 다음을 눌러 회고로 건너뛰세요.', { exact: false })).toBeVisible();
+    await expect(page.getByRole('link', { name: /참고 원문/ })).toContainText('100 School · 2026-07-27 확인');
+    await expect(page.locator('[data-progress-label]')).toHaveText('9 / 10');
+
+    await page.getByRole('button', { name: '프롬프트 복사하기' }).click();
+    await expect(page.getByRole('button', { name: '복사됨' })).toBeVisible();
+    await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toContain('잘된 블로그 글 3개');
+
+    await page.getByRole('button', { name: '다음' }).click();
+    await expect(page.getByRole('heading', { name: '오늘의 회고' })).toBeVisible();
+    await expect(page.locator('[data-progress-label]')).toHaveText('10 / 10');
+  });
+}
+
 test('invalid saved positions recover and Day 20 completion remains deduplicated', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => {
