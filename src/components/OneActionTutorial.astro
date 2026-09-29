@@ -44,12 +44,18 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
   const savedApp = (() => { try { return localStorage.getItem(keys.app); } catch { return null; } })();
   let app = savedApp === 'codex' || savedApp === 'claude' ? savedApp : null;
   let os = (() => { try { return localStorage.getItem(keys.os); } catch { return null; } })();
+  if (os !== 'macos' && os !== 'windows') os = null;
+  appInput.forEach((input) => { input.checked = input.value === app; });
+  osInput.forEach((input) => { input.checked = input.value === os; });
   let visible = [], index = 0, memoryDraft = {};
   const pageKey = () => visible[index]?.id;
   const drafts = () => ({ ...read(localStorage, keys.draft, {}), ...read(sessionStorage, keys.draft, {}), ...memoryDraft });
   const values = () => drafts()[pageKey()] || {};
   const saveValue = (control, value) => { const target = control.persist === 'session' ? sessionStorage : localStorage; const all = read(target, keys.draft, {}); all[pageKey()] = { ...(all[pageKey()] || {}), [control.id]: value }; if (!write(target, keys.draft, all)) memoryDraft = { ...memoryDraft, [pageKey()]: { ...(memoryDraft[pageKey()] || {}), [control.id]: value } }; };
-  const getVisible = () => pages.filter((page) => !page.track || page.track === app).filter((page) => !page.visibleWhen || drafts()['d07-choice-output']?.[page.visibleWhen.choiceKey] === page.visibleWhen.equals);
+  const getVisible = () => pages
+    .filter((page) => !page.track || page.track === app)
+    .filter((page) => !page.platform || page.platform === os)
+    .filter((page) => !page.visibleWhen || drafts()['d07-choice-output']?.[page.visibleWhen.choiceKey] === page.visibleWhen.equals);
   const positionApp = () => app || 'common';
   const hasAppTracks = pages.some((page) => page.track);
   const updateStart = () => { if (start) start.disabled = !(app && os); };
@@ -79,7 +85,7 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
     const supporting = page.supporting && page.supporting !== page.description && page.supporting !== page.action ? `<p class="guide-supporting">${esc(page.supporting)}</p>` : '';
     guide.innerHTML = `${page.view === 'WORKBOOK' ? '<p class="guide-note">이 회고는 AI가 대신 쓰거나 평가하지 않습니다. 내 말로 작성하세요.</p>' : ''}${supporting}${controls}${guideLinks(page)}`;
     visual.dataset.view = page.view; visual.innerHTML = visualHtml(page); support.innerHTML = supportHtml(page);
-    guide.querySelectorAll('[data-control]').forEach((input) => input.addEventListener('input', () => { const control = page.controls.find((item) => item.id === input.dataset.control); const value = control.type === 'checkbox' ? [...guide.querySelectorAll(`[data-control="${CSS.escape(control.id)}"]:checked`)].map((item) => item.value) : input.value; saveValue(control, value); if (page.kind === 'CHOICE') { const currentId = page.id; visible = getVisible(); index = Math.max(0, visible.findIndex((item) => item.id === currentId)); } updateNext(page); }));
+    guide.querySelectorAll('[data-control]').forEach((input) => input.addEventListener('input', () => { const control = page.controls.find((item) => item.id === input.dataset.control); const value = control.type === 'checkbox' ? [...guide.querySelectorAll(`[data-control="${CSS.escape(control.id)}"]:checked`)].map((item) => item.value) : input.value; saveValue(control, value); if (page.kind === 'CHOICE') { const currentId = page.id; visible = getVisible(); index = Math.max(0, visible.findIndex((item) => item.id === currentId)); render(); return; } updateNext(page); }));
     guide.querySelector('[data-copy]')?.addEventListener('click', async (event) => { const button = event.currentTarget; try { await navigator.clipboard.writeText(page.prompt || ''); button.textContent = '복사됨'; report('복사했습니다.'); } catch { button.textContent = '복사하지 못했습니다'; report('복사하지 못했습니다. 직접 선택해 복사해 주세요.', true); } });
     visual.querySelectorAll('img').forEach((image) => image.addEventListener('error', () => { image.closest('figure')?.remove(); report('스크린샷을 불러오지 못했습니다.', true); }));
   };

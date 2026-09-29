@@ -68,6 +68,7 @@ export interface OneActionPage {
   id: string;
   /** Internal editorial context. It is stripped before page data reaches the browser. */
   authorNote?: string;
+  platform?: 'macos' | 'windows';
   kind: OneActionKind;
   view: OneActionView;
   title: string;

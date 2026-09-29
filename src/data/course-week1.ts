@@ -43,7 +43,8 @@ export const week1Days: OneActionTutorialDay[] = [
       { id: 'd01-claude-download', kind: 'ACTION', view: 'SPOTLIGHT', track: 'claude', title: 'Claude 앱을 설치해요', description: '공식 다운로드 페이지에서 앱을 설치하고 엽니다.', action: 'Claude 앱을 설치하고 실행합니다.', image: { src: '/assets/tutorials/week1/d01-claude-download-official.png', alt: 'Claude 앱 공식 다운로드 화면' }, officialLinks: desktopInstallLinks.claude },
       { id: 'd01-signin', kind: 'ACTION', view: 'FOCUS', title: '가입 또는 로그인을 시작해요', description: '이미 있는 계정이면 새로 만들지 않습니다. 비밀번호와 인증 코드는 AI에게 보내지 않습니다.', action: '계정 시작 화면까지 이동합니다.' },
       { id: 'd01-app-check', kind: 'ACTION', view: 'FOCUS', title: '앱이 열렸는지 확인해요', description: '로그인 뒤 새 대화 또는 새 작업을 시작할 수 있는 화면이 보이면 됩니다.', action: '앱의 첫 화면을 확인합니다.' },
-      { id: 'd01-folder', kind: 'ACTION', view: 'WORKBENCH', title: 'ai-study 작업 폴더를 만들어요', description: '앞으로 연습 파일을 모을 폴더를 한 곳에 만듭니다.', action: '컴퓨터에 ai-study 폴더를 만듭니다.', supporting: '파일을 AI에게 맡기기 전에 어떤 자료가 들어 있는지 먼저 확인하세요.' },
+      { id: 'd01-folder-macos', kind: 'ACTION', view: 'WORKBENCH', platform: 'macos', title: 'Mac에 ai-study 작업 폴더를 만들어요', description: 'Finder를 열고 문서 또는 쉽게 찾을 수 있는 위치에 ai-study 폴더를 만듭니다.', action: 'Finder에서 ai-study 폴더를 만듭니다.', supporting: '파일을 AI에게 맡기기 전에 어떤 자료가 들어 있는지 먼저 확인하세요.' },
+      { id: 'd01-folder-windows', kind: 'ACTION', view: 'WORKBENCH', platform: 'windows', title: 'Windows에 ai-study 작업 폴더를 만들어요', description: '파일 탐색기를 열고 문서 또는 쉽게 찾을 수 있는 위치에 ai-study 폴더를 만듭니다.', action: '파일 탐색기에서 ai-study 폴더를 만듭니다.', supporting: '파일을 AI에게 맡기기 전에 어떤 자료가 들어 있는지 먼저 확인하세요.' },
       { id: 'd01-practice-material', kind: 'ACTION', view: 'FOCUS', title: '안전한 연습 자료를 준비해요', description: '개인정보가 없는 연습 파일 하나를 ai-study 폴더에 넣거나, 내 일을 직접 3줄로 적어요. 고객 이름, 전화번호, 실제 주문 내용은 넣지 않습니다.', action: '연습 파일 또는 내 일 3줄 중 하나를 준비합니다.' },
       { id: 'd01-first-prompt', kind: 'ACTION', view: 'PROMPT', title: '내 일을 5줄로 설명해 달라고 해요', description: '연습 파일 또는 내가 적은 3줄만 바탕으로, 파일을 바꾸지 않도록 분명히 말합니다.', action: '프롬프트를 복사해 첫 대화를 시작합니다.', prompt: 'ai-study 폴더에 개인정보 없는 연습 파일이 있으면 그 파일을 살펴봐. 파일이 없으면 아래에 내가 적은 내 일 3줄만 바탕으로 봐.\n\n내 일 3줄:\n1. [내가 하는 일]\n2. [주로 돕는 사람]\n3. [요즘 가장 자주 하는 일]\n\n내가 어떤 일을 하는 사람인지 처음 보는 사람도 이해할 수 있게 5줄로 설명해줘. 파일에서 확인한 사실과 네 추측을 구분하고, 개인정보나 고객정보가 보이면 외부로 보내지 말고 먼저 알려줘. 파일은 수정하거나 삭제하지 마.' },
       { id: 'd01-check', kind: 'ACTION', view: 'FOCUS', title: '첫 대화를 확인해요', description: 'AI가 내 일을 설명했는지, 추측과 사실을 구분했는지 봅니다.', action: '답에서 고칠 부분 하나를 말합니다.' },
@@ -137,7 +138,9 @@ for (const day of week1Days) {
     }
   }
   for (const track of ['claude', 'codex'] as const) {
-    const count = day.pages.filter((page) => !page.track || page.track === track).length;
+    const count = day.pages
+      .filter((page) => !page.track || page.track === track)
+      .filter((page) => !page.platform || page.platform === 'macos').length;
     if (count !== expectedVisibleCounts[day.day][track]) throw new Error(`Unexpected ${day.day}일차 ${track} page count: ${count}`);
   }
 }
