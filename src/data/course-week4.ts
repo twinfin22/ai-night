@@ -1,0 +1,143 @@
+import type { OneActionPage, OneActionTutorialDay } from './course';
+
+const screenshots: Record<string, { src: string; alt: string }[]> = {
+  '17-1': [{ src: '/assets/tutorials/week4/screenshots/d17-file-attach-live.png', alt: 'Claude 앱의 파일 첨부 위치' }],
+  '18-2': [{ src: '/assets/tutorials/week4/screenshots/d18-file-attach-live.png', alt: 'Claude 앱의 파일 첨부 위치' }],
+  '19-1': [{ src: '/assets/tutorials/week4/screenshots/d19-gpters-official.png', alt: 'GPTers 공식 페이지' }, { src: '/assets/tutorials/week4/screenshots/d19-modulabs-official.png', alt: '모두의연구소 공식 페이지' }, { src: '/assets/tutorials/week4/screenshots/d19-koding-official.png', alt: 'Koding 공식 페이지' }],
+  '19-2': [{ src: '/assets/tutorials/week4/screenshots/d19-modulet-official.png', alt: '모두레터 공식 페이지' }, { src: '/assets/tutorials/week4/screenshots/d19-aiground-official.png', alt: 'AI Ground 공식 페이지' }],
+  '19-7': [{ src: '/assets/tutorials/automations/screenshots/d05-codex-automations-official.png', alt: 'Codex Automations 공식 화면' }, { src: '/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png', alt: 'Claude 예약 작업 공식 화면' }],
+};
+const verified = '2026-07-16';
+const official = (label: string, href: string, publisher: string, accessNote: string) => ({ label, href, publisher, verifiedAt: verified, accessNote });
+const action = (day: number, index: number, title: string, description: string, prompt?: string): OneActionPage => ({
+  id: `d${day}-action-${String(index).padStart(2, '0')}`, kind: 'ACTION', view: prompt ? 'PROMPT' : 'WORKBENCH', title, description, action: prompt ? '프롬프트를 복사해 AI 앱에서 진행합니다.' : '화면의 입력 또는 선택을 마칩니다.', prompt,
+  images: screenshots[`${day}-${index}`],
+});
+const start = (day: number, title: string, subtitle: string, outcome: string): OneActionPage => ({ id: `d${day}-start`, kind: 'START', view: 'FOCUS', title, subtitle, description: subtitle, action: '오늘 할 일을 확인한 뒤 시작합니다.', outcome, flow: ['한 화면에 행동 하나씩 합니다', 'AI 앱에서 필요한 작업을 합니다', '마지막에 내 말로 회고합니다'] });
+const retro = (day: number, title: string): OneActionPage => action(day, 99, '오늘의 회고', 'AI가 회고를 만들거나 평가하지 않습니다. 내 답만 저장합니다.', `오늘 ${day}일차 수업의 인간 회고만 진행해줘. 네가 회고 내용을 만들거나 평가하지 마. 아래 질문을 한 번에 하나씩 묻고, 내 답이 오기 전에는 다음 질문으로 넘어가지 마.\n\n1. 새롭게 할 수 있게 된 것은 무엇인가요?\n2. 막혔던 부분과 다음에 시도할 방법은 무엇인가요?\n3. 남아있는 궁금증 또는 새롭게 시도해보고 싶은 것은 무엇인가요?\n\n세 답을 모두 받은 뒤 현재 작업 폴더의 ai-study/daily_retro.md를 읽어. <!-- ai-study-day:${day} --> 마커 구역은 이번 답으로 교체하고, 다른 일차는 보존한 뒤 숫자 오름차순으로 정렬해. 내 답 외의 내용은 추측하지 마.`);
+const day = (number: number, title: string, subtitle: string, outcome: string, items: [string, string, string?][]): OneActionTutorialDay => ({ day: number, week: 4, theme: '홀로서기', title, outcome, status: 'ready', appTrack: 'unified', time: '30분', experience: 'one-action', pages: [start(number, title, subtitle, outcome), ...items.map(([name, description, prompt], index) => action(number, index + 1, name, description, prompt)), retro(number, title)] });
+
+const day17 = (): OneActionTutorialDay => {
+  const result = day(17, '콘텐츠 만들기 자동화2: 시운전 해보고 수선하기', '가게 소개와 상품 자료를 넣어 자동으로 만들어지는 블로그 초안을 확인합니다.', '실제 자료로 만든 게시물 초안과 수선한 스킬', [
+    ['실제 자료 3개를 첨부하세요', '가게 소개, 상품 정보, 기존 글 하나를 현재 대화에 붙입니다.'],
+    ['어제 만든 스킬을 한 번만 실행하세요', '첫 결과를 기준점으로 남깁니다.', '어제 만든 [스킬 이름 또는 파일 위치]를 사용해 방금 첨부한 가게 소개·상품 정보·기존 글 1개로 결과물을 한 번만 만들어줘. 없는 사실은 확인 필요로 표시해.'],
+    ['결과에서 고칠 곳 3개를 표시하세요', '원문과 고칠 이유를 최대 세 줄 적습니다.'],
+    ['반복 실수를 막을 규칙 후보를 받으세요', '문제를 막는 가드레일 후보만 받습니다.', '내가 표시한 문제 [고칠 곳 1~3]이 다시 생기지 않도록 가드레일 후보 5개를 제안해줘. 아직 결과나 스킬은 수정하지 마.'],
+    ['가드레일 3개를 직접 고르세요', '내 가게에 필요한 규칙 세 개를 사람이 정합니다.'],
+    ['선택한 규칙으로 결과를 한 번 고치세요', '중간 과정 없이 최종 결과를 한 번만 봅니다.', '내가 고른 가드레일 3개로 첫 결과를 자체 점검하고 고쳐줘. 중간 초안은 보여주지 마.'],
+    ['오늘 고른 규칙으로 스킬을 수선하세요', '기존 스킬에 고른 규칙만 반영합니다.', '오늘 고른 가드레일 3개를 [스킬 파일 위치]에 반영해줘. 새 복사본을 만들지 말고 기존 파일만 고쳐.'],
+  ]);
+  const advanced: OneActionPage = {
+    ...action(
+      17,
+      8,
+      '선택 심화: 내 글 합격 검사기 만들기',
+      '비교할 만한 기존 글 세 개가 없으면 이 선택 심화는 건너뛰고 회고로 넘어가도 됩니다.',
+      `오늘 수선한 [스킬 이름 또는 파일 위치]로 블로그 글 합격 검사기를 진행해줘.
+
+입력:
+- 잘된 블로그 글 3개: [글 1], [글 2], [글 3]
+- 새 주제: [오늘 쓸 블로그 주제]
+
+진행 규칙:
+1. 잘된 블로그 글 3개에서 실제로 확인되는 장점을 비교해 찾아줘. 도입·구조·말투·명확성을 포함하되, 글에 없는 장점은 만들지 마.
+2. 찾은 장점으로 항목별 배점을 정하고, 배점 합계가 총 100점인 채점표를 만들어줘.
+3. 오늘 수선한 스킬로 새 주제의 블로그 글을 작성하고, 만든 채점표로 엄격하게 채점해줘.
+4. 95점은 수정 여부를 판단하는 참고값일 뿐 합격 확정이 아니다. 95점 미만이면 최대 2회만 수정하고 매번 같은 채점표로 재채점해. 두 번 수정한 뒤에는 점수와 상관없이 멈춰.
+5. 사실을 지어내지 말고 확인이 필요한 내용은 표시해. 결과를 게시하거나 저장하지 마. 사람이 최종 승인한다.
+
+마지막에는 아래 세 가지만 보여줘:
+- 최종 글
+- 항목별 점수와 근거
+- 사람이 확인할 사실·말투·게시 적합성`,
+    ),
+    officialLinks: [{
+      label: '참고 원문',
+      href: 'https://app.teams.100school.com/day/13/good-enough-never-is-b2c',
+      publisher: '100 School',
+      verifiedAt: '2026-07-27',
+      accessNote: '로그인이 필요할 수 있습니다. AI 야학 수업에 맞게 재작성했습니다.',
+    }],
+  };
+
+  return {
+    ...result,
+    time: '30분 + 선택 10분',
+    pages: result.pages.flatMap((page) => page.id === 'd17-action-99' ? [advanced, page] : [page]),
+  };
+};
+
+const day18 = (): OneActionTutorialDay => {
+  const result = day(18, '내 사업 자료, DIG로 읽고 행동 정하기', '내 자료를 보여주고(D), 사실을 확인하고(I), 이번 주 행동 하나를 정합니다(G).', '근거가 있는 이번 주 행동 1개', [
+    ['개인정보를 빼고 자료 하나를 고르세요', '내 익명 파일 또는 교육용 샘플 파일 하나만 고릅니다.'],
+    ['D: 내 자료와 질문을 보여주세요', '파일 하나를 첨부하고 자료와 질문을 설명합니다.', '이 파일은 [업종]의 [기간] [매출/주문/예약/리뷰] 자료입니다. 나는 [알고 싶은 질문]이 궁금합니다. 파일에 실제로 들어 있는 열과 기간만 알려줘.'],
+    ['I: 자료에서 보이는 변화를 찾으세요', '변화 세 개와 근거 숫자를 봅니다.', '위 파일에서 눈에 띄는 변화 3개를 찾아줘. 비교 대상, 기간, 근거 숫자를 붙이고 원인은 추측하지 마.'],
+    ['I: 내 장부와 현장으로 확인하세요', 'AI가 찾은 변화와 현장 상황을 대조합니다.'],
+    ['G: 이번 주 행동 하나를 정하세요', '확인된 사실과 연결되는 작은 행동 하나만 정합니다.', '확인한 사실만 바탕으로 이번 주에 해볼 행동 1개를 제안해줘. 내게 가능한 시간은 [예: 30분]이야. 근거가 부족하면 다음에 모을 자료 하나를 정해줘.'],
+    ['DIG 결과를 한 화면에 정리하세요', '새 숫자나 차트 없이 D→I→G 결과만 정리합니다.', '지금까지 D→I→G 단계에서 확인한 내용만 사용해 ai-study/day18-dashboard.html을 완성해줘. 새로운 숫자나 차트는 추가하지 마.'],
+    ['혼자 다시 해보기', '다음 자료에도 쓸 DIG 프롬프트를 저장합니다.', '내 사업 자료를 DIG 방식으로 같이 살펴보자. 자료와 확인할 것을 한 번에 하나씩 물어보고, 확인한 사실과 추가 확인할 것을 구분한 뒤 이번 주 행동 하나를 정하게 도와줘.'],
+  ]);
+  return {
+    ...result,
+    pages: result.pages.map((page) => page.id === 'd18-action-02' ? {
+      ...page,
+      description: '파일 하나를 첨부하고 자료와 질문을 설명합니다. 교육용 샘플은 내려받아 바로 쓸 수 있습니다.',
+      downloadLinks: [
+        { label: '카페 매출 CSV', href: '/assets/tutorials/week4/samples/d18-cafe-sales-synthetic.csv' },
+        { label: '소매 주문 CSV', href: '/assets/tutorials/week4/samples/d18-retail-orders-synthetic.csv' },
+        { label: '미용실 예약 CSV', href: '/assets/tutorials/week4/samples/d18-salon-reservations-synthetic.csv' },
+        { label: '매장 리뷰 CSV', href: '/assets/tutorials/week4/samples/d18-store-reviews-synthetic.csv' },
+      ],
+    } : page),
+  };
+};
+
+const day19 = (): OneActionTutorialDay => {
+  const title = 'AI 커뮤니티 찾아 꾸준히 배우기';
+  const common = [
+    { ...action(19, 1, '한국 AI 커뮤니티 3곳을 살펴보세요', 'GPTers, 모두의연구소, Koding의 공식 페이지를 읽습니다.'), officialLinks: [
+      official('GPTers', 'https://www.gpters.org/', 'GPTers', '가입 또는 유료 프로그램 조건이 있을 수 있습니다.'),
+      official('모두의연구소', 'https://modulabs.co.kr/', '모두의연구소', '가입 또는 유료 프로그램 조건이 있을 수 있습니다.'),
+      official('Koding', 'https://koding.kr/', 'Koding', '가입 또는 유료 프로그램 조건이 있을 수 있습니다.'),
+    ] },
+    { ...action(19, 2, '쉬운 AI 뉴스레터 3개를 살펴보세요', '모두레터, AI Ground, AI Matters의 공식 페이지를 읽습니다.'), officialLinks: [
+      official('모두레터', 'https://page.stibee.com/subscriptions/181723', '모두레터', '이메일 구독이 필요합니다.'),
+      official('AI Ground', 'https://www.aiground.co.kr/#/portal/signup/free', 'AI Ground', '무료 가입 페이지이며 서비스 조건이 바뀔 수 있습니다.'),
+      official('AI Matters', 'https://aimatters.co.kr/subscribe/', 'AI Matters', '이메일 구독이 필요합니다.'),
+    ] },
+    action(19, 3, '계속 볼 곳 하나를 고르세요', '사이트에 답을 적지 않습니다. 외부 공식 페이지에서 한 곳만 직접 고릅니다.', '내가 계속 보고 싶은 AI 학습 채널을 하나 고르려 해. 다음 후보의 차이를 쉬운 말로 비교하되, 실제 가입 여부나 가격은 모르면 추측하지 말고 공식 페이지 확인이 필요하다고 알려줘: [후보 이름].'),
+    action(19, 4, '공식 페이지에서 가입하거나 구독하세요', '외부 공식 페이지에서 필요한 정보만 직접 입력합니다. 사이트 안에는 입력할 칸이 없습니다.'),
+    action(19, 5, '매주 보고 싶은 주제 3개를 정하세요', 'AI 앱에서 관심 주제를 정리합니다. 사이트에 적을 필요가 없습니다.', '내 업종은 [업종]이고, 매주 배우고 싶은 AI 주제 세 개를 쉬운 말로 정리해줘. 내가 말하지 않은 관심사는 추측하지 마.'),
+    action(19, 6, '요약 받을 요일과 시간을 정하세요', '실제로 읽을 수 있는 시간을 AI 앱에서 정합니다. 사이트에 적을 필요가 없습니다.', '나는 [요일] [시간]에 학습 요약을 읽을 수 있어. 이 일정이 무리 없는지 한 번만 확인하고, 예약 작업에 넣을 문장으로 정리해줘.'),
+  ];
+  const schedule = (track: 'codex' | 'claude', image: { src: string; alt: string }, link: ReturnType<typeof official>): OneActionPage => ({
+    ...action(19, 7, '매주 핵심 요약을 예약하세요', `${track === 'codex' ? 'Codex Automations' : 'Claude Cowork의 Scheduled → New task'} 화면에 직접 입력하고 저장합니다.`),
+    id: `d19-action-07-${track}`, track, images: [image], officialLinks: [link],
+  });
+  return {
+    day: 19, week: 4, theme: '홀로서기', title, outcome: '가입하거나 구독한 배움 채널과 예약 작업 1개', status: 'ready', appTrack: 'unified', time: '30분', experience: 'one-action',
+    pages: [start(19, title, '수업이 끝난 이후에도 스스로 배울 수 있는 흐름을 만듭니다.', '가입하거나 구독한 배움 채널과 예약 작업 1개'), ...common,
+      schedule('codex', { src: '/assets/tutorials/automations/screenshots/d05-codex-automations-official.png', alt: 'Codex Automations 공식 화면' }, official('Codex Automations', 'https://developers.openai.com/codex/app/automations', 'OpenAI', '로그인과 지원 플랜이 필요할 수 있습니다.')),
+      schedule('claude', { src: '/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png', alt: 'Claude 예약 작업 공식 화면' }, official('Claude Cowork 예약 작업', 'https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork', 'Anthropic', '로그인, 지원 플랜 또는 관리자 설정이 필요할 수 있습니다.')),
+      retro(19, title)],
+  };
+};
+
+export const week4Days: OneActionTutorialDay[] = [
+  day(16, '콘텐츠 만들기 자동화1: 블로그 제작 공정 설계하기', '단계별 할 일과 완료 기준을 정해 다음에도 그대로 실행할 콘텐츠 자동 생성 스킬을 만듭니다.', '내 사업에 맞는 콘텐츠 제작 스킬 1개', [
+    ['내가 지금 하는 순서를 적으세요', '블로그 글 하나를 올릴 때 실제로 하는 일을 3~7개 적습니다.'],
+    ['AI에게 공정 후보 3개를 받으세요', '내 순서를 재료로 서로 다른 공정 3개를 받습니다.', '나는 [업종]을 운영하고 [게시 채널]에 올릴 블로그 글을 반복해서 만들고 싶어. 내가 평소 하는 순서는 [내가 적은 작업 목록]이야. 이 내용을 바탕으로 콘텐츠 제작 공정 후보를 서로 다르게 3개 제안해줘.'],
+    ['반복할 수 있는 공정 하나를 고르세요', '다음에도 반복할 수 있는 공정을 고릅니다.', '나는 [번호]번 흐름을 선택할게. 이 흐름을 기준으로 계속 진행하자. 아직 스킬은 만들지 마.'],
+    ['비슷한 스킬과 사례를 조사시키세요', '실제로 확인한 패턴만 찾아 공정을 보완합니다.', '방금 고른 공정과 비슷한 사례를 조사해줘. 실제로 확인한 이름·출처 링크·배울 점만 보여줘.'],
+    ['반영할 개선점만 고르세요', '내 공정에 도움이 되는 개선점만 사람이 고릅니다.'],
+    ['각 단계의 일을 한 가지씩 정하세요', 'AI가 할 일, 내가 확인할 일, 다음 단계에 넘길 내용을 정합니다.', '선택한 공정을 단계별 작업표로 정리해줘. 각 단계마다 AI가 할 일, 내가 확인할 일, 다음 단계에 넘길 내용을 하나씩만 적어줘.'],
+    ['검수 규칙 3개를 고르세요', '사람이 확인할 수 있는 규칙 세 개를 고릅니다.'],
+    ['이 공정을 재사용 스킬로 저장하세요', '확정한 공정과 규칙을 다음에도 실행할 파일로 저장합니다.', '지금까지 확정한 콘텐츠 제작 공정과 검수 규칙 3개를 재사용 가능한 스킬로 만들어 실제 파일로 저장해줘. 빠진 정보는 추측하지 말고 먼저 물어봐.'],
+  ]),
+  day17(),
+  day18(),
+  day19(),
+  day(20, 'AI 야학 졸업을 축하합니다!', '20일의 기록을 평생 쓸 규칙으로 정리합니다.', '근거가 붙은 학습 진단과 앱별 업무 지침', [
+    ['AI가 읽을 수 있는 기록을 찾으세요', 'AI가 지금 열 수 있는 대화 기록과 작업 파일만 목록으로 만듭니다.', 'AI가 지금 열 수 있는 대화 기록과 작업 파일, ai-study/daily_retro.md, 1~20일차 결과물을 찾아 목록으로 보여줘. 열 수 없는 기록은 파일처럼 읽었다고 말하지 마.'], ['진단에 쓸 기록을 직접 고르세요', '접근 가능한 자료만 선택합니다.'], ['20일 기록에서 내 패턴을 진단받으세요', '근거가 붙은 강점·막힌 점·활용법을 봅니다.', '[선택한 기록 목록]만 읽고 내 20일 학습을 진단해줘. 각 항목에 근거 날짜·파일·결과물을 붙이고 근거가 부족하면 억지로 채우지 마.'], ['계속할 활용법 3개를 고르세요', '앞으로 쓸 활용법 세 개를 사람이 고릅니다.'], ['업무 규칙 후보를 만드세요', '반복 근거와 선택한 활용법만 규칙 후보로 만듭니다.', '선택한 기록의 반복 근거와 내가 고른 활용법 3개만 사용해 업무 지침 후보를 10개 이하로 만들어줘. 아직 파일이나 프로젝트 설정에는 저장하지 마.'], ['고른 규칙을 앱별 위치에 반영하세요', 'Codex에서는 현재 작업 폴더의 AGENTS.md, Claude Cowork에서는 현재 프로젝트의 Project instructions만 사용합니다. 다른 앱의 파일이나 설정은 바꾸지 않습니다.', '먼저 내가 Codex와 Claude Cowork 중 어느 앱을 쓰는지 물어봐. Codex라면 승인한 규칙 [선택한 번호]만 현재 작업 폴더의 AGENTS.md에 반영하고, 저장 뒤 새 작업에서 적용되는지 확인해줘. Claude Cowork라면 승인한 규칙만 현재 프로젝트의 Project instructions 화면에 넣을 수 있게 최종 문안과 확인 절차를 보여줘. 어떤 경우에도 내가 승인하기 전에는 파일·프로젝트 설정을 바꾸지 마.'],
+  ]),
+];

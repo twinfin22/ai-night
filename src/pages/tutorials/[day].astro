@@ -1,0 +1,440 @@
+---
+import Base from '../../layouts/Base.astro';
+import OneActionTutorial from '../../components/OneActionTutorial.astro';
+import { courseDays, courseVersion, dayPath, storageKeys, type AppChoice, type TutorialStep, type OneActionTutorialDay } from '../../data/course';
+
+type StepAudience = 'COMMON' | 'CLAUDE' | 'CODEX';
+type StepKind = 'ACTION' | 'PROMPT' | 'COMPARISON' | 'RETRO';
+type ExtraText = string | { title?: string; label?: string; body?: string; text?: string };
+type SheetStep = TutorialStep & {
+  audience?: StepAudience;
+  screenType?: StepKind;
+  note?: ExtraText;
+  toggle?: ExtraText;
+};
+
+const audienceTrack = (step: SheetStep): AppChoice | undefined => {
+  if (step.audience === 'CLAUDE') return 'claude';
+  if (step.audience === 'CODEX') return 'codex';
+  return undefined;
+};
+
+const extraText = (value?: ExtraText) => typeof value === 'string' ? value : value?.body || value?.text || '';
+const extraLabel = (value?: ExtraText, fallback = '보충 설명 보기') => typeof value === 'string' ? fallback : value?.title || value?.label || fallback;
+
+export function getStaticPaths() {
+  return courseDays.map((item) => ({
+    params: { day: `day-${String(item.day).padStart(2, '0')}` },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const isOneAction = item.experience === 'one-action';
+const legacyItem = item as { steps: TutorialStep[] | Record<AppChoice, TutorialStep[]> };
+const stepsByTrack = legacyItem.steps;
+const trackSteps = item.appTrack === 'both' ? stepsByTrack as Record<AppChoice, TutorialStep[]> : null;
+const unifiedSteps = item.appTrack === 'unified' ? stepsByTrack as TutorialStep[] : null;
+const hasAudienceTracks = false;
+const hasTrackChoice = Boolean(trackSteps);
+const introSteps = trackSteps ? trackSteps.claude : unifiedSteps ?? [];
+const lessonStepCount = trackSteps
+  ? Math.max(trackSteps.claude.length, trackSteps.codex.length)
+  : hasAudienceTracks
+    ? Math.max(...(['claude', 'codex'] as AppChoice[]).map((app) => (unifiedSteps ?? []).filter((step) => !audienceTrack(step) || audienceTrack(step) === app).length))
+    : introSteps.length;
+const isWeek3 = false;
+const totalSteps = lessonStepCount + 3;
+const readyDayCount = courseDays.filter((day) => day.status === 'ready').length;
+const nextButtonClass = item.status === 'ready' ? 'btn btn--primary' : '';
+---
+
+<Base
+  title={`${item.day}일차. ${item.title} — AI 야학`}
+  description={item.outcome}
+  canonicalPath={dayPath(item.day)}
+>
+  {isOneAction ? <OneActionTutorial item={item as OneActionTutorialDay} /> : <>
+  <header class="tutorials-header">
+    <div class="tutorials-header__inner">
+      <a href="/tutorials/" class="tutorials-brand" aria-label="AI 야학 20일 교재">
+        <img src="/favicon.svg" alt="" width="34" height="34" />
+        <span>20일 교재</span>
+      </a>
+      <a class="tutorials-header__link" href="/tutorials/">20일 목록</a>
+    </div>
+  </header>
+
+  <main
+    class="wizard-page"
+    data-wizard
+    data-day={item.day}
+    data-status={item.status}
+    data-track-mode={hasTrackChoice ? 'both' : 'unified'}
+    data-week3={String(isWeek3)}
+    data-storage={JSON.stringify(storageKeys)}
+    data-course-version={courseVersion}
+  >
+    <nav class="wizard-back" aria-label="수업 이동">
+      <a href="/tutorials/">20일 목록</a>
+    </nav>
+
+    <section class="wizard-shell" aria-labelledby="wizard-title">
+      <div class="wizard-status">
+        <span>{item.theme}</span>
+        <span>Day {item.day}</span>
+      </div>
+
+      <div class="course-progress" aria-label="20일 과정 진도">
+        <div>
+          <span>20일 과정</span>
+          <strong data-course-progress>{readyDayCount}일 수업 중 진도 확인 중</strong>
+        </div>
+        <div class="course-progress__bar" aria-hidden="true"><span data-course-progress-bar></span></div>
+      </div>
+
+      <p class="lesson-progress" data-lesson-progress>수업 단계 1 / {totalSteps} · {item.title}</p>
+      <div class="wizard-progress" aria-label={`총 ${totalSteps}단계`}>
+        {Array.from({ length: totalSteps }).map((_, index) => <span data-dot={index}></span>)}
+      </div>
+
+      <article class="wizard-screen is-active" data-screen data-index="-1" data-title={item.title}>
+        <span class="eyebrow">{isWeek3 ? '오늘 결과물' : '오늘 만들 것'}</span>
+        <h1 id="wizard-title">{item.title}</h1>
+        <p class="wizard-outcome">{item.outcome}</p>
+        {hasTrackChoice && (
+          <div class="app-choice" aria-label="오늘 쓸 앱 선택">
+            <div class="app-choice__head">
+              <strong>오늘 쓸 앱</strong>
+              <span data-app-label>앱을 고르면 맞는 단계만 보여드립니다.</span>
+            </div>
+            <div class="app-choice__cards">
+              <button type="button" data-app-choice="claude">
+                <span class="app-choice__mark" aria-hidden="true">클</span>
+                <strong>클로드</strong>
+                <em>대화, 글 정리, 첨부 파일을 보며 따라갈 때</em>
+              </button>
+              <button type="button" data-app-choice="codex">
+                <span class="app-choice__mark" aria-hidden="true">코</span>
+                <strong>코덱스</strong>
+                <em>작업 폴더를 열고 파일을 만들며 따라갈 때</em>
+              </button>
+            </div>
+          </div>
+        )}
+        <div class="wizard-overview">
+          <strong>오늘 할 일</strong>
+          {trackSteps ? (
+            <>
+              <ol data-overview-track="claude" aria-label="클로드 수업 흐름">
+                {trackSteps.claude.map((step, index) => (
+                  <li>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <em>{step.action}</em>
+                  </li>
+                ))}
+              </ol>
+              <ol data-overview-track="codex" aria-label="코덱스 수업 흐름" hidden>
+                {trackSteps.codex.map((step, index) => (
+                  <li>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <em>{step.action}</em>
+                  </li>
+                ))}
+              </ol>
+            </>
+          ) : (
+            <ol>
+              {(unifiedSteps ?? []).map((step, index) => (
+                <li data-overview-step data-track={audienceTrack(step)}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <em>{step.action}</em>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      </article>
+
+      {trackSteps ? (
+        <>
+          {trackSteps?.claude.map((step, index) => (
+            <article class="wizard-screen" data-screen data-index={index} data-track="claude" data-title={step.action}>
+              <span class="screen-count">따라하기 {index + 1}</span>
+              <h2>{step.action}</h2>
+              <p>{step.detail}</p>
+              {extraText(step.note) && <aside class="tutorial-note"><strong>알아두세요</strong><p>{extraText(step.note)}</p></aside>}
+              {extraText(step.toggle) && <details class="tutorial-toggle"><summary>{extraLabel(step.toggle)}</summary><p>{extraText(step.toggle)}</p></details>}
+              {(step.screenType === 'RETRO' || step.kind === 'RETRO') && <aside class="human-reflection-card"><strong>이 답은 내가 직접 합니다</strong><p>AI가 대신 쓰거나 평가하지 않습니다. 내 말로 답한 뒤 정리만 맡기세요.</p></aside>}
+              {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
+              {step.copyText && (
+                <div class="copy-box">
+                  <button type="button" data-copy>복사하기</button>
+                  {step.copyText.includes('[') && <p class="prompt-personalization-guide">노란 칸은 내 상황에 맞게 바꾸세요.</p>}
+                  <pre><code>{step.copyText.split(/(\[[^\]\n]+\])/).map((part) => part.startsWith('[') && part.endsWith(']') ? <mark class="prompt-personalization">{part}</mark> : part)}</code></pre>
+                </div>
+              )}
+              <div class="success-check"><strong>이렇게 보이면 성공</strong><p>{step.success}</p></div>
+            </article>
+          ))}
+          {trackSteps?.codex.map((step, index) => (
+            <article class="wizard-screen" data-screen data-index={index} data-track="codex" data-title={step.action}>
+              <span class="screen-count">따라하기 {index + 1}</span>
+              <h2>{step.action}</h2>
+              <p>{step.detail}</p>
+              {extraText(step.note) && <aside class="tutorial-note"><strong>알아두세요</strong><p>{extraText(step.note)}</p></aside>}
+              {extraText(step.toggle) && <details class="tutorial-toggle"><summary>{extraLabel(step.toggle)}</summary><p>{extraText(step.toggle)}</p></details>}
+              {(step.screenType === 'RETRO' || step.kind === 'RETRO') && <aside class="human-reflection-card"><strong>이 답은 내가 직접 합니다</strong><p>AI가 대신 쓰거나 평가하지 않습니다. 내 말로 답한 뒤 정리만 맡기세요.</p></aside>}
+              {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
+              {step.copyText && (
+                <div class="copy-box">
+                  <button type="button" data-copy>복사하기</button>
+                  {step.copyText.includes('[') && <p class="prompt-personalization-guide">노란 칸은 내 상황에 맞게 바꾸세요.</p>}
+                  <pre><code>{step.copyText.split(/(\[[^\]\n]+\])/).map((part) => part.startsWith('[') && part.endsWith(']') ? <mark class="prompt-personalization">{part}</mark> : part)}</code></pre>
+                </div>
+              )}
+              <div class="success-check"><strong>이렇게 보이면 성공</strong><p>{step.success}</p></div>
+            </article>
+          ))}
+        </>
+      ) : (
+        unifiedSteps?.map((step, index) => (
+          <article class="wizard-screen" data-screen data-index={index} data-track={audienceTrack(step)} data-title={step.action}>
+            <span class="screen-count">{step.kind ?? '따라하기'} {index + 1}</span>
+            <h2>{step.action}</h2>
+            <p>{step.detail}</p>
+            {extraText(step.note) && <aside class="tutorial-note"><strong>알아두세요</strong><p>{extraText(step.note)}</p></aside>}
+            {extraText(step.toggle) && <details class="tutorial-toggle"><summary>{extraLabel(step.toggle)}</summary><p>{extraText(step.toggle)}</p></details>}
+            {(step.screenType === 'RETRO' || step.kind === 'RETRO') && <aside class="human-reflection-card"><strong>이 답은 내가 직접 합니다</strong><p>AI가 대신 쓰거나 평가하지 않습니다. 내 말로 답한 뒤 정리만 맡기세요.</p></aside>}
+            {step.image && <img class="wizard-shot" src={step.image.src} alt={step.image.alt} loading="lazy" />}
+            {step.images?.map((image) => <img class="wizard-shot" src={image.src} alt={image.alt} loading="lazy" />)}
+            {step.copyText && (
+              <div class="copy-box">
+                <button type="button" data-copy>복사하기</button>
+                {step.copyText.includes('[') && <p class="prompt-personalization-guide">노란 칸은 내 상황에 맞게 바꾸세요.</p>}
+                {isWeek3 && <p class="prompt-personalization-guide">상황에 맞게 고쳐 사용하세요.</p>}
+                <pre><code>{step.copyText.split(/(\[[^\]\n]+\])/).map((part) => part.startsWith('[') && part.endsWith(']') ? <mark class="prompt-personalization">{part}</mark> : part)}</code></pre>
+              </div>
+            )}
+            <div class="success-check"><strong>이렇게 보이면 성공</strong><p>{step.success}</p></div>
+          </article>
+        ))
+      )}
+
+      {!isWeek3 && <article class="wizard-screen" data-screen data-kind="challenge" data-title="오늘의 도전">
+        <span class="eyebrow">오늘의 도전</span>
+        <h2>정답 없는 응용 미션입니다.</h2>
+        <p>{item.challenge}</p>
+        <div class="success-check"><strong>완료 기준</strong><p>내 상황에 맞게 한 번 바꿔보면 충분합니다.</p></div>
+      </article>}
+
+      {!isWeek3 && <article class="wizard-screen" data-screen data-kind="finish" data-title="완료">
+        <span class="eyebrow">완료</span>
+        {item.status === 'ready' ? (
+          <>
+            <h2>마지막 버튼을 누르면 도장이 찍힙니다.</h2>
+            <p>아직 저장 전입니다. 아래의 <strong>완료하고 도장 찍기</strong>를 눌러야 브라우저에 Day {item.day} 완료가 저장됩니다.</p>
+            <p class="tomorrow">다음: {item.tomorrow}</p>
+          </>
+        ) : (
+          <>
+            <h2>이 수업은 아직 준비 중입니다.</h2>
+            <p>주소는 열리지만 도장은 찍히지 않습니다. 20일 목록에서 준비된 수업을 골라주세요.</p>
+          </>
+        )}
+      </article>}
+
+      <div class="wizard-actions">
+        <button type="button" data-prev>이전</button>
+        <button type="button" class={nextButtonClass} data-next>{item.status === 'coming-soon' ? '내용 보기' : '시작하기'}</button>
+      </div>
+    </section>
+  </main>
+  </>}
+
+  <script>
+    // @ts-nocheck
+    import { runCourseMigrations } from '../../lib/tutorial-progress';
+    const root = document.querySelector('[data-wizard]');
+    if (root) {
+    const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
+    const day = Number(root?.getAttribute('data-day') || '0');
+    const status = root?.getAttribute('data-status') || 'coming-soon';
+    const isReady = status === 'ready';
+    const trackMode = root?.getAttribute('data-track-mode') || 'unified';
+    const isWeek3 = root?.getAttribute('data-week3') === 'true';
+    const courseVersion = root?.getAttribute('data-course-version') || '2';
+    const prev = document.querySelector('[data-prev]');
+    const next = document.querySelector('[data-next]');
+    const appLabel = document.querySelector('[data-app-label]');
+    const lessonProgress = document.querySelector('[data-lesson-progress]');
+    const courseProgress = document.querySelector('[data-course-progress]');
+    const courseProgressBar = document.querySelector('[data-course-progress-bar]');
+    const dots = Array.from(document.querySelectorAll('[data-dot]'));
+    const overviewLists = Array.from(document.querySelectorAll('[data-overview-track]'));
+    const overviewSteps = Array.from(document.querySelectorAll('[data-overview-step]'));
+
+    const readJson = (key, fallback) => {
+      try {
+        return JSON.parse(window.localStorage.getItem(key) || '') || fallback;
+      } catch {
+        return fallback;
+      }
+    };
+    const writeJson = (key, value) => window.localStorage.setItem(key, JSON.stringify(value));
+    const fallbackCopy = (text) => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+    };
+
+    try { runCourseMigrations(window.localStorage); } catch { /* Continue without persistence. */ }
+    let app = window.localStorage.getItem(keys.app) || 'claude';
+    let activeIndex = -1;
+
+    const positionKey = () => trackMode === 'both' ? `${day}.${app}` : String(day);
+    const getVisibleScreens = () => Array.from(document.querySelectorAll('[data-screen]')).filter((screen) => {
+      const track = screen.getAttribute('data-track');
+      return !track || track === app;
+    });
+    const updateAppUi = () => {
+      document.querySelectorAll('[data-app-choice]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.getAttribute('data-app-choice') === app));
+      });
+      overviewLists.forEach((list) => {
+        list.hidden = list.getAttribute('data-overview-track') !== app;
+      });
+      overviewSteps.forEach((step) => {
+        const track = step.getAttribute('data-track');
+        step.hidden = Boolean(track && track !== app);
+      });
+      if (appLabel) appLabel.textContent = `${app === 'claude' ? '클로드' : '코덱스'} 단계가 열립니다.`;
+    };
+    const savePosition = () => {
+      if (!isReady) return;
+      const position = readJson(keys.position, {});
+      if (activeIndex >= 0) position[positionKey()] = activeIndex;
+      writeJson(keys.position, position);
+      window.localStorage.setItem(keys.last, String(day));
+    };
+    const markDone = () => {
+      if (!isReady) return;
+      const done = readJson(keys.done, []);
+      if (!done.includes(day)) done.push(day);
+      writeJson(keys.done, done.sort((a, b) => a - b));
+    };
+    const renderCourseProgress = () => {
+      const done = readJson(keys.done, []);
+      const doneCount = Math.min(20, done.filter((value) => Number(value) >= 1 && Number(value) <= 20).length);
+      if (courseProgress) courseProgress.textContent = `20일 중 ${doneCount}일 완료`;
+      if (courseProgressBar instanceof HTMLElement) {
+        courseProgressBar.style.width = `${Math.round((doneCount / 20) * 100)}%`;
+      }
+    };
+    const render = () => {
+      const visible = getVisibleScreens();
+      visible.forEach((screen, index) => {
+        screen.classList.toggle('is-active', index === activeIndex + 1);
+      });
+      document.querySelectorAll('[data-screen]').forEach((screen) => {
+        const track = screen.getAttribute('data-track');
+        if (track && track !== app) screen.classList.remove('is-active');
+      });
+      dots.forEach((dot, index) => {
+        dot.hidden = index >= visible.length;
+        dot.classList.toggle('is-filled', index <= activeIndex + 1);
+        dot.classList.toggle('is-current', index === activeIndex + 1);
+      });
+      const visibleIndex = Math.max(0, activeIndex + 1);
+      const currentScreen = visible[visibleIndex];
+      const currentTitle = currentScreen?.getAttribute('data-title') || '';
+      if (lessonProgress) lessonProgress.textContent = `수업 단계 ${visibleIndex + 1} / ${visible.length} · ${currentTitle}`;
+      if (prev instanceof HTMLButtonElement) prev.disabled = activeIndex < 0;
+      if (next instanceof HTMLButtonElement) {
+        const isFinish = activeIndex >= visible.length - (isWeek3 ? 1 : 2);
+        if (!isReady && isFinish) next.textContent = '20일 목록으로 돌아가기';
+        else if (!isReady) next.textContent = activeIndex < 0 ? '내용 보기' : '다음';
+        else next.textContent = activeIndex < 0 ? '시작하기' : isFinish ? '완료하고 도장 찍기' : '다음';
+      }
+      renderCourseProgress();
+      savePosition();
+    };
+
+    const restore = () => {
+      updateAppUi();
+      const position = readJson(keys.position, {});
+      if (trackMode === 'both' && position[positionKey()] === undefined) {
+        const savedTrack = ['claude', 'codex'].find((choice) => position[`${day}.${choice}`] !== undefined);
+        if (savedTrack) {
+          app = savedTrack;
+          window.localStorage.setItem(keys.app, app);
+          updateAppUi();
+        }
+      }
+      const restoredIndex = Number(position[positionKey()] ?? -1);
+      const maxIndex = Math.max(-1, getVisibleScreens().length - (isWeek3 ? 1 : 2));
+      activeIndex = Number.isFinite(restoredIndex) ? Math.min(restoredIndex, maxIndex) : -1;
+      render();
+    };
+
+    document.querySelectorAll('[data-app-choice]').forEach((button) => {
+      button.addEventListener('click', () => {
+        app = button.getAttribute('data-app-choice') || 'claude';
+        window.localStorage.setItem(keys.app, app);
+        restore();
+      });
+    });
+
+    prev?.addEventListener('click', () => {
+      activeIndex = Math.max(-1, activeIndex - 1);
+      render();
+    });
+    next?.addEventListener('click', () => {
+      const visible = getVisibleScreens();
+      if (activeIndex >= visible.length - (isWeek3 ? 1 : 2)) {
+        markDone();
+        window.location.href = '/tutorials/';
+        return;
+      }
+      activeIndex += 1;
+      render();
+    });
+
+    document.querySelectorAll('[data-copy]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const text = button.closest('.copy-box')?.querySelector('code')?.textContent || '';
+        try {
+          if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
+          else fallbackCopy(text);
+          button.textContent = '복사됨';
+        } catch {
+          fallbackCopy(text);
+          button.textContent = '복사됨';
+        }
+        window.setTimeout(() => button.textContent = '복사하기', 1200);
+      });
+    });
+
+    restore();
+    }
+  </script>
+
+  <style>
+    .wizard-shot { width: 100%; border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.1); margin: 12px 0; }
+    .tutorial-note, .human-reflection-card, .tutorial-toggle { margin-top: 16px; padding: 16px; border: 1px solid var(--hairline); border-radius: 8px; background: var(--bg-soft); }
+    .tutorial-note strong, .human-reflection-card strong { color: var(--amber); }
+    .tutorial-note p, .human-reflection-card p, .tutorial-toggle p { margin: 8px 0 0; font-size: 16px; }
+    .tutorial-toggle summary { cursor: pointer; color: var(--cream); font-weight: 800; }
+    .human-reflection-card { border-color: rgba(244, 184, 96, 0.65); background: rgba(244, 184, 96, 0.08); }
+    .prompt-personalization-guide { margin: 0; color: var(--amber); font-size: 14px; font-weight: 800; }
+    .prompt-personalization { padding: 0 3px; border-radius: 3px; background: rgba(244, 184, 96, 0.25); color: var(--cream); }
+  </style>
+</Base>
+
