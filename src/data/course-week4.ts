@@ -109,14 +109,15 @@ const day19 = (): OneActionTutorialDay => {
     action(19, 4, '공식 페이지에서 가입하거나 구독하세요', '외부 공식 페이지에서 필요한 정보만 직접 입력합니다. 사이트 안에는 입력할 칸이 없습니다.'),
     action(19, 5, '매주 보고 싶은 주제 3개를 정하세요', 'AI 앱에서 관심 주제를 정리합니다. 사이트에 적을 필요가 없습니다.', '내 업종은 [업종]이고, 매주 배우고 싶은 AI 주제 세 개를 쉬운 말로 정리해줘. 내가 말하지 않은 관심사는 추측하지 마.'),
     action(19, 6, '요약 받을 요일과 시간을 정하세요', '실제로 읽을 수 있는 시간을 AI 앱에서 정합니다. 사이트에 적을 필요가 없습니다.', '나는 [요일] [시간]에 학습 요약을 읽을 수 있어. 이 일정이 무리 없는지 한 번만 확인하고, 예약 작업에 넣을 문장으로 정리해줘.'),
+    action(19, 7, '예약 기능을 먼저 확인하세요', '선택한 앱에서 예약을 만들 수 있는지, 필요한 로그인·플랜·관리자 조건이 있는지 먼저 확인합니다. 지원되지 않으면 수동 실행 경로를 씁니다.', '지금 선택한 앱에서 학습 요약 예약 작업을 만들 수 있는지 먼저 확인해줘. 가능한 기능과 로그인·플랜·관리자 제한을 짧게 알려줘. 예약이 지원되지 않으면 내가 정한 [요일] [시간]에 이 채널의 새 내용을 한 번만 요약해 달라는 수동 실행 요청문과 직접 알림을 설정하는 방법만 보여줘. 예약이 만들어진 것처럼 말하지 말고, 저장·발송·계정 변경은 하지 마.'),
   ];
   const schedule = (track: 'codex' | 'claude', image: { src: string; alt: string }, link: ReturnType<typeof official>): OneActionPage => ({
-    ...action(19, 7, '매주 핵심 요약을 예약하세요', `${track === 'codex' ? 'Codex Automations' : 'Claude Cowork의 Scheduled → New task'} 화면에 직접 입력하고 저장합니다.`),
-    id: `d19-action-07-${track}`, track, images: [image], officialLinks: [link],
+    ...action(19, 8, '매주 핵심 요약을 예약하세요', `${track === 'codex' ? 'Codex Automations' : 'Claude Cowork의 Scheduled → New task'}에서 먼저 같은 조건으로 시험 실행합니다. 결과를 확인하고 내가 승인한 경우에만 예약을 만들고, 목록·다음 실행·수정·일시 중지 위치를 확인합니다. 예약 기능이 없으면 앞 단계의 수동 실행 경로로 마칩니다.`, '이 학습 채널의 최근 내용을 지금 한 번만 요약해 시험해줘. 출처 링크, 중복 여부, 내가 확인할 내용을 보여줘. 내가 승인하면 매주 [요일] [시간]에 같은 조건으로 요약하는 예약 작업을 만들어줘. 만든 뒤 예약 목록에서 이름·상태·다음 실행 시간을 확인하고, 수정·일시 중지 위치를 알려줘. 예약 기능이 지원되지 않으면 만들지 말고 수동 실행 요청문만 다시 보여줘.'),
+    id: `d19-action-08-${track}`, track, images: [image], officialLinks: [link],
   });
   return {
-    day: 19, week: 4, theme: '홀로서기', title, outcome: '가입하거나 구독한 배움 채널과 예약 작업 1개', status: 'ready', appTrack: 'unified', time: '30분', experience: 'one-action',
-    pages: [start(19, title, '수업이 끝난 이후에도 스스로 배울 수 있는 흐름을 만듭니다.', '가입하거나 구독한 배움 채널과 예약 작업 1개'), ...common,
+    day: 19, week: 4, theme: '홀로서기', title, outcome: '가입하거나 구독한 배움 채널과 실행 가능한 학습 일정', status: 'ready', appTrack: 'unified', time: '30분', experience: 'one-action',
+    pages: [start(19, title, '수업이 끝난 이후에도 스스로 배울 수 있는 흐름을 만듭니다.', '가입하거나 구독한 배움 채널과 실행 가능한 학습 일정'), ...common,
       schedule('codex', { src: '/assets/tutorials/automations/screenshots/d05-codex-automations-official.png', alt: 'Codex Automations 공식 화면' }, official('Codex Automations', 'https://developers.openai.com/codex/app/automations', 'OpenAI', '로그인과 지원 플랜이 필요할 수 있습니다.')),
       schedule('claude', { src: '/assets/tutorials/automations/screenshots/d05-claude-schedule-official.png', alt: 'Claude 예약 작업 공식 화면' }, official('Claude Cowork 예약 작업', 'https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork', 'Anthropic', '로그인, 지원 플랜 또는 관리자 설정이 필요할 수 있습니다.')),
       retro(19, title)],

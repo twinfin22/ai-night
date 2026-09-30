@@ -25,15 +25,15 @@ const retro = (day: number, title: string): TutorialStep => prompt(
 const legacyWeek3Days: TutorialDay[] = [
   {
     day: 11, week: 3, theme: '굴리기', title: '내 방식대로 일하는 AI 만들기',
-    outcome: '반복해서 확인된 내 업무 규칙을 10개 이하로 골라 AGENTS.md 또는 CLAUDE.md에 저장합니다.',
+    outcome: '반복해서 확인된 내 업무 규칙을 10개 이하로 골라 Codex의 AGENTS.md 또는 Claude Cowork 프로젝트 지침에 반영합니다.',
     status: 'ready', appTrack: 'unified', time: '24분',
     challenge: '', tomorrow: '내일은 회의 녹음 파일을 글로 바꿉니다.',
     steps: [
-      prompt('내 규칙 파일 찾기', 'Codex는 AGENTS.md, Claude는 CLAUDE.md를 씁니다. 이 단계에서는 기존 내용을 바꾸지 않습니다.', '지금 쓰는 앱이 Codex인지 Claude인지 확인해줘. Codex면 현재 작업 폴더의 AGENTS.md, Claude면 CLAUDE.md를 찾아줘. 없으면 만들 위치를 알려주고, 있으면 내용을 바꾸지 말고 보여줘. 다른 폴더의 규칙 파일은 건드리지 마.', '현재 작업 폴더의 규칙 파일 경로를 알면 성공입니다.', 'SPOTLIGHT', { src: '/assets/tutorials/week3/screenshots/d11-agents-md-official.png', alt: 'OpenAI 공식 AGENTS.md 안내 문서 화면' }, [{ src: '/assets/tutorials/week3/screenshots/d11-claude-md-official.png', alt: 'Anthropic 공식 CLAUDE.md 안내 문서 화면' }]),
+      prompt('내 규칙 위치 찾기', 'Codex는 현재 작업 폴더의 AGENTS.md를, Claude Cowork는 현재 프로젝트의 Project instructions를 씁니다. 이 단계에서는 기존 내용을 바꾸지 않습니다.', '지금 쓰는 앱이 Codex인지 Claude Cowork인지 확인해줘. Codex면 현재 작업 폴더의 AGENTS.md 위치를, Claude Cowork면 현재 프로젝트의 Project instructions 위치를 알려줘. 기존 내용은 바꾸지 말고 다른 폴더·프로젝트의 규칙은 건드리지 마.', '현재 앱에서 적용되는 규칙 위치를 알면 성공입니다.', 'SPOTLIGHT', { src: '/assets/tutorials/week3/screenshots/d11-agents-md-official.png', alt: 'OpenAI 공식 AGENTS.md 안내 문서 화면' }),
       prompt('반복되는 내 업무 방식 찾기', '한 번의 요청이나 AI의 추측은 규칙으로 넣지 않습니다. 근거가 두 번 이상 보인 것만 후보로 봅니다.', '이 앱에서 실제로 읽을 수 있는 작업 기록·회고 파일·결과물 목록을 먼저 보여줘. 저장된 회고 파일과 결과물만 사용해 반복해서 확인된 내 선호·작업 방식·자주 생긴 실수를 표로 정리하고 각 항목에 근거 날짜나 파일을 붙여줘. 한 번만 나온 요청과 네 추측은 ‘규칙 후보 아님’으로 표시해줘.', '근거가 붙은 규칙 후보 표가 나오면 성공입니다.'),
       prompt('업무 규칙 초안 만들기', '아직 파일에는 저장하지 않습니다. 계속 지킬 약속만 짧고 분명한 행동 규칙으로 만듭니다.', '실제로 접근 가능한 기록과 저장된 회고 파일만 사용해 반복해서 확인된 선호와 작업 방식으로 규칙 파일 초안을 만들어줘. 일회성 요청이나 추측은 넣지 말고 10개 이하로 정리해. 삭제·결제·외부 공개·메시지 발송·계정 권한 변경 직전에만 확인하도록 써줘. 아직 파일에는 저장하지 마.', '10개 이하의 초안이 나오면 성공입니다.'),
       prompt('남길 규칙 고르기', '모호하거나 겹치는 문장은 정리합니다. 꼭 필요한 규칙만 남기면 나중에도 관리하기 쉽습니다.', '방금 만든 규칙을 ① 반드시 유지 ② 있으면 도움 ③ 삭제 추천으로 나눠줘. ‘잘해줘’처럼 모호한 문장은 실제 행동으로 바꾸고 서로 겹치는 규칙은 합쳐서 최종 10개 이하로 다시 보여줘.', '남길 규칙을 직접 고르면 성공입니다.', 'WORKBENCH'),
-      prompt('규칙 파일에 저장하기', '내가 고른 규칙만 현재 작업 폴더에 저장합니다. 기존 내용은 지우지 않습니다.', '내가 선택한 규칙만 저장해줘. Codex면 현재 작업 폴더의 AGENTS.md, Claude면 CLAUDE.md에 반영해. 기존 내용이 있으면 보존하고 겹치는 내용만 정리해. 저장 뒤 파일 전체를 다시 읽고 경로·규칙 수·바뀐 내용을 쉬운 말로 알려줘.', '저장 경로와 바뀐 내용을 확인하면 성공입니다.'),
+      prompt('선택한 앱의 규칙 위치에 반영하기', '내가 고른 규칙만 선택한 앱의 실제 적용 위치에 반영합니다. 기존 내용은 지우지 않습니다.', '내가 선택한 규칙만 반영해줘. Codex면 현재 작업 폴더의 AGENTS.md에, Claude Cowork면 현재 프로젝트의 Project instructions에 반영할 최종 문안을 보여줘. 기존 내용을 보존하고 겹치는 내용만 정리해. 내가 승인하기 전에는 파일이나 프로젝트 설정을 바꾸지 마. 반영 뒤에는 새 작업에서 확인하는 방법을 쉬운 말로 알려줘.', '반영 위치와 바뀐 내용을 확인하면 성공입니다.'),
       prompt('새 대화에서 규칙 확인하기', '새 대화에서 안전한 요청 하나로 확인합니다. 실제 파일 이동이나 삭제는 하지 않습니다.', '이 폴더의 파일을 보기 좋게 정리해줘. 실제로 이동하거나 삭제하기 전에는 어떤 파일을 어떻게 바꿀지 계획만 먼저 보여줘.', 'AI가 변경 계획을 먼저 보여주면 성공입니다.'),
       retro(11, '내 방식대로 일하는 AI 만들기'),
     ],
@@ -103,7 +103,9 @@ const legacyWeek3Days: TutorialDay[] = [
       prompt('예약 프롬프트 만들기', '실행 조건, 안전 범위, 멈출 조건, 마지막 확인을 한 번에 넣습니다.', '매주 [요일] [시간]에 [확인할 메일함·시트·폴더]를 확인해. [새 문의·새 주문·새 자료]가 있을 때만 [AI 업무 설명서 이름]을 실행해서 [요약·분류·답장 초안]을 준비해줘. 새 내용이 없으면 ‘새 내용 없음’이라고만 알려줘. 원본 수정과 외부 발송은 하지 말고, 사용한 자료와 초안을 함께 보여줘. 개인정보·가격·계좌번호·환불·예약 변경·판단이 어려운 내용은 멈추고 나에게 물어봐. 예약하기 전에 지금 같은 조건으로 한 번 시험 실행하고 빠진 정보나 위험한 부분을 알려줘.', '내 상황에 맞춘 예약 프롬프트가 나오면 성공입니다.'),
       prompt('예약 전 한 번 실행하기', '바로 예약하지 않고 같은 조건으로 시험합니다. 읽은 자료와 사람이 확인할 부분을 같이 봅니다.', '예약하기 전 지금 같은 조건으로 한 번 시험 실행해줘. 읽은 자료 → AI가 한 일 → 만들어진 결과 → 내가 확인할 부분 순서로 보여줘. 원본 수정·외부 발송은 하지 마.', '시험 결과와 확인할 부분이 나오면 성공입니다.'),
       prompt('시험 결과로 프롬프트 다듬기', '시험에서 빠진 정보나 위험한 부분을 고친 뒤 다시 확인합니다.', '방금 시험 결과에서 빠진 정보, 위험한 부분, 너무 넓게 처리한 부분을 찾아 예약 프롬프트 수정안을 보여줘. 왜 고쳤는지 한 줄씩 설명하고 내가 승인하기 전에는 저장하지 마.', '수정할 이유와 문장을 확인하면 성공입니다.'),
-      prompt('예약 작업 저장하기', '내가 승인한 프롬프트만 저장합니다. 첫 3회는 직접 결과를 검토합니다.', '내가 승인한 예약 프롬프트만 저장해줘. 저장 직전에 실행 시간, 시작 조건, 자동 처리 범위, 멈출 조건, 마지막 확인 항목을 다시 보여줘. 저장 뒤에는 첫 3회 결과를 내가 직접 검토해야 한다는 알림과 실행 기록을 확인할 위치를 알려줘.', '저장 내용과 첫 3회 검토 방법을 확인하면 성공입니다.'),
+      prompt('승인한 예약 작업만 만들기', '시험을 통과한 뒤 내가 승인한 프롬프트만 만듭니다. 첫 3회는 직접 결과를 검토합니다.', '내가 승인한 예약 프롬프트만 만들어줘. 만들기 직전에 실행 시간, 시작 조건, 자동 처리 범위, 멈출 조건, 마지막 확인 항목을 다시 보여주고 내 승인을 기다려. 첫 3회 결과는 내가 직접 검토해야 한다는 알림을 남겨줘.', '승인한 설정만 만들어지면 성공입니다.'),
+      action('예약 목록과 다음 실행을 확인하기', '현재 앱의 예약 목록에서 만든 작업 이름·상태·다음 실행 시간을 확인합니다.', '예약 목록과 다음 실행 시간이 보이면 성공입니다.'),
+      action('수정과 중지 위치를 확인하기', '문제가 생기면 예약 목록에서 수정하거나 일시 중지할 위치를 먼저 확인합니다. 지금은 중지하지 않습니다.', '수정과 일시 중지 위치를 찾으면 성공입니다.'),
       retro(15, '업무 자동화2: 자동화 공정 검토하기'),
     ],
   },
@@ -142,15 +144,16 @@ const week3Pages = (day: TutorialDay): OneActionPage[] => {
         id: `d11-01-${track}`,
         track,
         title,
-        description: `${track === 'codex' ? 'Codex는' : 'Claude는'} 현재 작업 폴더의 ${track === 'codex' ? 'AGENTS.md' : 'CLAUDE.md'}만 확인합니다. 기존 내용은 바꾸지 않습니다.`,
+        description: track === 'codex'
+          ? 'Codex는 현재 작업 폴더의 AGENTS.md만 확인합니다. 기존 내용은 바꾸지 않습니다.'
+          : 'Claude Cowork는 현재 프로젝트의 Project instructions 위치만 확인합니다. 기존 내용은 바꾸지 않습니다.',
         prompt,
-        image,
-        images: undefined,
+        ...(track === 'codex' ? { image, images: undefined } : { view: 'PROMPT' as const, image: undefined, images: undefined }),
         officialLinks: [link],
       });
       return [
         trackPage('codex', 'Codex 규칙 파일 찾기', '현재 작업 폴더의 AGENTS.md를 찾아줘. 없으면 만들 위치를 알려주고, 있으면 내용을 바꾸지 말고 보여줘. 다른 폴더의 규칙 파일은 건드리지 마.', { src: '/assets/tutorials/week3/screenshots/d11-agents-md-official.png', alt: 'OpenAI 공식 AGENTS.md 안내 문서 화면' }, official('AGENTS.md 공식 안내', 'https://learn.chatgpt.com/docs/agent-configuration/agents-md', 'OpenAI', '로그인이 필요할 수 있습니다.')),
-        trackPage('claude', 'Claude 규칙 파일 찾기', '현재 작업 폴더의 CLAUDE.md를 찾아줘. 없으면 만들 위치를 알려주고, 있으면 내용을 바꾸지 말고 보여줘. 다른 폴더의 규칙 파일은 건드리지 마.', { src: '/assets/tutorials/week3/screenshots/d11-claude-md-official.png', alt: 'Anthropic 공식 CLAUDE.md 안내 문서 화면' }, official('CLAUDE.md 공식 안내', 'https://code.claude.com/docs/en/memory', 'Anthropic', '로그인이 필요할 수 있습니다.')),
+        trackPage('claude', 'Claude Cowork 프로젝트 지침 찾기', '현재 Claude Cowork 프로젝트의 Project instructions 위치를 알려줘. 기존 지침은 바꾸지 말고, 다른 프로젝트나 파일은 건드리지 마.', { src: '/assets/tutorials/week3/screenshots/d11-claude-md-official.png', alt: 'Anthropic 공식 프로젝트 지침 안내 화면' }, official('Claude Cowork 프로젝트 안내', 'https://support.claude.com/en/articles/14116274-organize-your-tasks-with-projects-in-claude-cowork', 'Anthropic', '로그인이 필요할 수 있습니다.')),
       ];
     }
 
@@ -227,4 +230,3 @@ export const week3CourseDays: OneActionTutorialDay[] = legacyWeek3Days.map((day)
   experience: 'one-action',
   pages: week3Pages(day),
 }));
-

@@ -1,43 +1,61 @@
 ---
-import type { OneActionTutorialDay } from '../data/course';
+import { courseVersion, type OneActionTutorialDay } from '../data/course';
 const { item } = Astro.props as { item: OneActionTutorialDay };
 const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, ...page }) => page);
 ---
 
-<main class="one-action" data-one-action data-day={item.day} data-pages={JSON.stringify(clientPages)} data-storage={JSON.stringify({ version: 'ainight.version', done: 'ainight.done', position: 'ainight.position', last: 'ainight.last', app: 'ainight.app', os: 'ainight.os', draft: 'ainight.draft' })}>
+<main class="one-action" data-one-action data-day={item.day} data-day-title={item.title} data-outcome={item.outcome} data-course-version={courseVersion} data-pages={JSON.stringify(clientPages)} data-storage={JSON.stringify({ version: 'ainight.version', done: 'ainight.done', position: 'ainight.position', last: 'ainight.last', app: 'ainight.app', os: 'ainight.os', draft: 'ainight.draft' })}>
   <section class="one-action__preflight" data-preflight hidden aria-labelledby="app-choice-title">
     <p class="eyebrow">수업 시작 전</p>
     <h1 id="app-choice-title">당신의 에이전트를<br />골라주세요</h1>
-    <p class="one-action__preflight-intro">하나만 고르면, 그 에이전트에 맞는 수업을 보여드려요.</p>
+    <p class="one-action__preflight-intro">에이전트와 컴퓨터를 모두 고르면, 그 환경에 맞는 수업을 보여드려요.</p>
     <fieldset class="one-action__app-options"><legend>나와 함께할 에이전트</legend>
       <label class="one-action__agent-card one-action__agent-card--codex"><input type="radio" name="app" value="codex" /><span class="one-action__agent-logo"><img src="/assets/tutorials/brands/openai.svg" alt="" width="38" height="38" /></span><span class="one-action__agent-copy"><small>OPENAI</small><strong>Codex</strong><span>작업 폴더 안의 파일을 직접 만들고 고쳐요.</span></span><span class="one-action__agent-select" aria-hidden="true"></span></label>
       <label class="one-action__agent-card one-action__agent-card--claude"><input type="radio" name="app" value="claude" /><span class="one-action__agent-logo"><img src="/assets/tutorials/brands/anthropic.svg" alt="" width="38" height="38" /></span><span class="one-action__agent-copy"><small>ANTHROPIC</small><strong>Claude</strong><span>대화와 자료를 바탕으로 생각을 정리해요.</span></span><span class="one-action__agent-select" aria-hidden="true"></span></label>
-    </fieldset><button class="one-action__primary" type="button" data-start disabled>수업 시작</button>
+    </fieldset>
     <fieldset class="one-action__app-options"><legend>사용 중인 컴퓨터</legend>
       <label class="one-action__agent-card"><input type="radio" name="os" value="macos" /><span class="one-action__agent-copy"><strong>macOS</strong><span>Mac에서 수업을 따라갑니다.</span></span></label>
       <label class="one-action__agent-card"><input type="radio" name="os" value="windows" /><span class="one-action__agent-copy"><strong>Windows</strong><span>Windows에서 수업을 따라갑니다.</span></span></label>
-    </fieldset>
+    </fieldset><button class="one-action__primary" type="button" data-start disabled>수업 시작</button>
   </section>
   <section class="one-action__shell" data-lesson hidden aria-label={`${item.day}일차 수업`}>
     <aside class="one-action__coach" data-coach>
       <header class="one-action__header"><a href="/tutorials/" class="one-action__brand" aria-label="AI 야학 수업 목록">AI 야학</a><strong title={`${item.day}일차 · ${item.title}`}><span>{item.day}일차</span> · {item.title}<small data-time>{item.time}</small></strong><div class="one-action__progress" role="progressbar" aria-label="현재 수업 단계" aria-valuemin="1" data-progress><span data-progress-label>1 / {item.pages.length}</span></div></header>
-      <div class="one-action__guide" data-guide><p class="one-action__eyebrow">지금 할 일</p><h1 tabindex="-1" data-title></h1><p data-description></p><strong data-action></strong><div data-guide-content></div><p class="one-action__status" data-status role="status" aria-live="polite"></p></div>
-      <div class="one-action__support" data-support><div data-support-details></div><footer class="one-action__actions"><button type="button" data-prev>이전</button><button type="button" data-next>다음</button></footer></div>
+      <div class="one-action__guide" data-guide><p class="one-action__eyebrow">지금 할 일</p><h1 tabindex="-1" data-title></h1><p data-description></p><strong data-action></strong><div data-guide-content></div><p class="one-action__persistence-warning" data-persistence-warning hidden role="status">저장소에 접근하지 못했습니다. 수업은 계속할 수 있지만 재접속하면 진도가 유지되지 않을 수 있습니다.</p><p class="one-action__status" data-status role="status" aria-live="polite"></p></div>
+      <div class="one-action__support" data-support><div data-support-details></div><footer class="one-action__actions"><button type="button" data-prev>이전</button><button type="button" class="one-action__help" data-help>도움이 필요해요</button><button type="button" data-next>다음</button></footer></div>
     </aside>
     <section class="one-action__visual" data-visual aria-label="참고 화면"></section>
   </section>
+  <dialog class="tutorial-help-dialog" data-help-dialog aria-labelledby="tutorial-help-title">
+    <form method="dialog" class="tutorial-help-dialog__panel" data-help-form novalidate>
+      <div class="tutorial-help-dialog__head"><div><p class="one-action__eyebrow">AI 야학 문의</p><h2 id="tutorial-help-title">도움을 요청할게요</h2></div><button type="button" class="tutorial-help-dialog__close" data-help-close aria-label="문의 창 닫기">×</button></div>
+      <p class="tutorial-help-dialog__intro" data-help-intro>답변받을 이메일과 지금 막힌 내용을 적어 주세요.</p>
+      <dl class="tutorial-help-dialog__context" data-help-context aria-label="함께 전송되는 수업 정보"></dl>
+      <label class="tutorial-help-dialog__field"><span>답변받을 이메일</span><input type="email" name="email" autocomplete="email" required data-help-email /></label>
+      <label class="tutorial-help-dialog__field"><span>질문</span><textarea name="question" rows="6" maxlength="2000" required data-help-question aria-describedby="help-question-count"></textarea><small id="help-question-count" data-help-question-count aria-live="polite">0 / 2,000자</small></label>
+      <p class="tutorial-help-dialog__error" data-help-error hidden role="alert"></p>
+      <p class="tutorial-help-dialog__success" data-help-success hidden role="status">문의가 접수되었습니다. 입력한 이메일로 답변드립니다.</p>
+      <div class="tutorial-help-dialog__actions"><button type="button" data-help-cancel>취소</button><button type="submit" data-help-submit>보내기</button></div>
+    </form>
+  </dialog>
 </main>
 
 <script>
   // @ts-nocheck
-  import { runCourseMigrations } from '../lib/tutorial-progress';
+  import { markTutorialComplete, persistenceFailureMessage, readTutorialPosition, runCourseMigrations, saveTutorialPosition } from '../lib/tutorial-progress';
   const root = document.querySelector('[data-one-action]');
   const pages = JSON.parse(root?.getAttribute('data-pages') || '[]');
   const day = Number(root?.getAttribute('data-day') || '0');
+  const dayTitle = root?.getAttribute('data-day-title') || '';
+  const lessonOutcome = root?.getAttribute('data-outcome') || '';
+  const courseVersion = root?.getAttribute('data-course-version') || '미선택';
   const keys = JSON.parse(root?.getAttribute('data-storage') || '{}');
-  try { runCourseMigrations(localStorage); } catch { /* memory-only lesson */ }
   const read = (storage, key, fallback) => { try { return JSON.parse(storage.getItem(key) || '') || fallback; } catch { return fallback; } };
-  const write = (storage, key, value) => { try { storage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } };
+  let persistenceFailed = false;
+  const storageWarning = root.querySelector('[data-persistence-warning]');
+  const noteStorageFailure = () => { persistenceFailed = true; if (storageWarning) { storageWarning.textContent = persistenceFailureMessage; storageWarning.hidden = false; } };
+  const write = (storage, key, value) => { try { storage.setItem(key, JSON.stringify(value)); return true; } catch { noteStorageFailure(); return false; } };
+  try { if (!runCourseMigrations(localStorage)) noteStorageFailure(); } catch { noteStorageFailure(); }
   const esc = (value) => String(value ?? '').replace(/[&<>'"]/g, (ch) => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' })[ch]);
   const preflight = root.querySelector('[data-preflight]'), lesson = root.querySelector('[data-lesson]');
   const start = root.querySelector('[data-start]'), appInput = root.querySelectorAll('input[name="app"]'), osInput = root.querySelectorAll('input[name="os"]');
@@ -78,21 +96,84 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
   };
   const supportHtml = (page) => page.technicalDetails?.length ? `<details class="guide-details"><summary>안 보여요 · 보충 설명</summary>${page.technicalDetails.map((detail) => `<section><strong>${esc(detail.title)}</strong><p>${esc(detail.body)}</p></section>`).join('')}</details>` : '';
   const report = (message, alert = false) => { const status = root.querySelector('[data-status]'); status.textContent = message; status.setAttribute('role', alert ? 'alert' : 'status'); };
+  const helpDialog = root.querySelector('[data-help-dialog]');
+  const helpForm = root.querySelector('[data-help-form]');
+  const helpEmail = root.querySelector('[data-help-email]');
+  const helpQuestion = root.querySelector('[data-help-question]');
+  const helpContext = root.querySelector('[data-help-context]');
+  const helpError = root.querySelector('[data-help-error]');
+  const helpSuccess = root.querySelector('[data-help-success]');
+  const helpSubmit = root.querySelector('[data-help-submit]');
+  let helpReturnFocus = null, inquiryContext = null, inquiryRequestId = null;
+  const selectedBranch = () => values()['output-format'] || drafts()['d07-choice-output']?.['output-format'] || '미선택';
+  const helpContextEntries = (context) => [
+    ['수업', `Day ${context.day} · ${context.dayTitle}`],
+    ['단계', `${context.stepId} · ${context.stepTitle}`],
+    ['앱', context.app || '미선택'],
+    ['운영체제', context.os || '미선택'],
+    ['실습 분기', context.branch],
+    ['교재 버전', context.version],
+  ];
+  const renderHelpContext = (context) => { if (helpContext) helpContext.innerHTML = helpContextEntries(context).map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join(''); };
+  const resetHelpResult = () => { helpError.hidden = true; helpError.textContent = ''; helpSuccess.hidden = true; helpSubmit.disabled = false; helpSubmit.textContent = '보내기'; };
+  const closeHelp = () => { if (helpDialog?.open) helpDialog.close(); };
+  const openHelp = (trigger) => {
+    const page = visible[index];
+    if (!page || !helpDialog) return;
+    helpReturnFocus = trigger;
+    inquiryRequestId = null;
+    inquiryContext = { day, dayTitle, stepId: page.id, stepTitle: page.title, app: app || null, os: os || null, branch: selectedBranch(), version: courseVersion };
+    renderHelpContext(inquiryContext);
+    resetHelpResult();
+    helpDialog.showModal();
+    requestAnimationFrame(() => helpEmail?.focus());
+  };
+  root.querySelector('[data-help]')?.addEventListener('click', (event) => openHelp(event.currentTarget));
+  root.querySelector('[data-help-close]')?.addEventListener('click', closeHelp);
+  root.querySelector('[data-help-cancel]')?.addEventListener('click', closeHelp);
+  helpDialog?.addEventListener('close', () => { helpReturnFocus?.focus(); helpReturnFocus = null; });
+  helpQuestion?.addEventListener('input', () => { const count = root.querySelector('[data-help-question-count]'); if (count) { const length = helpQuestion.value.length; count.textContent = length >= 2000 ? '2,000 / 2,000자 · 최대 글자 수입니다.' : `${length.toLocaleString('ko-KR')} / 2,000자`; } });
+  helpForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!inquiryContext || !helpEmail?.value.trim() || !helpQuestion?.value.trim()) { helpError.textContent = '이메일과 질문을 모두 입력해 주세요.'; helpError.hidden = false; return; }
+    if (!helpEmail.validity.valid) { helpError.textContent = '답변받을 이메일 형식을 확인해 주세요.'; helpError.hidden = false; helpEmail.focus(); return; }
+    if (helpQuestion.value.length > 2000) { helpError.textContent = '질문은 2,000자 이내로 입력해 주세요.'; helpError.hidden = false; helpQuestion.focus(); return; }
+    if (!inquiryRequestId) inquiryRequestId = crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`;
+    helpError.hidden = true;
+    helpSubmit.disabled = true;
+    helpSubmit.textContent = '보내는 중';
+    try {
+      const result = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'tutorial', email: helpEmail.value.trim(), question: helpQuestion.value.trim(), requestId: inquiryRequestId, context: inquiryContext }) });
+      const payload = await result.json().catch(() => ({}));
+      if (!result.ok || !payload.ok) throw new Error(payload.error || '문의 접수에 실패했습니다.');
+      helpSuccess.hidden = false;
+      helpSubmit.disabled = true;
+      helpSubmit.textContent = '접수됨';
+      helpQuestion.value = '';
+      inquiryRequestId = null;
+    } catch (error) {
+      helpError.textContent = error instanceof Error ? error.message : '문의 접수에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+      helpError.hidden = false;
+      helpSubmit.disabled = false;
+      helpSubmit.textContent = '다시 보내기';
+    }
+  });
   const updateNext = (page = visible[index]) => { root.querySelector('[data-next]').disabled = !controlsComplete(page); };
   const renderContent = (page) => {
     const guide = root.querySelector('[data-guide-content]'), visual = root.querySelector('[data-visual]'), support = root.querySelector('[data-support-details]'), state = values();
     const controls = (page.controls || []).map((control) => controlHtml(control, state[control.id])).join('');
     const supporting = page.supporting && page.supporting !== page.description && page.supporting !== page.action ? `<p class="guide-supporting">${esc(page.supporting)}</p>` : '';
-    guide.innerHTML = `${page.view === 'WORKBOOK' ? '<p class="guide-note">이 회고는 AI가 대신 쓰거나 평가하지 않습니다. 내 말로 작성하세요.</p>' : ''}${supporting}${controls}${guideLinks(page)}`;
+    const completion = index === visible.length - 1 ? `<section class="lesson-completion" aria-labelledby="completion-title"><p class="one-action__eyebrow">수업 마무리</p><h2 id="completion-title">결과를 직접 확인해요</h2><ul><li>${esc(lessonOutcome)}</li><li>AI 앱에서 오늘 결과를 직접 확인했습니다.</li><li>다음에 다시 찾을 위치를 알고 있습니다.</li></ul><p>아래 버튼을 누르면 내 확인에 따라 이 수업을 완료로 기록합니다.</p></section>` : '';
+    guide.innerHTML = `${page.view === 'WORKBOOK' ? '<p class="guide-note">이 회고는 AI가 대신 쓰거나 평가하지 않습니다. 내 말로 작성하세요.</p>' : ''}${supporting}${controls}${guideLinks(page)}${completion}`;
     visual.dataset.view = page.view; visual.innerHTML = visualHtml(page); support.innerHTML = supportHtml(page);
     guide.querySelectorAll('[data-control]').forEach((input) => input.addEventListener('input', () => { const control = page.controls.find((item) => item.id === input.dataset.control); const value = control.type === 'checkbox' ? [...guide.querySelectorAll(`[data-control="${CSS.escape(control.id)}"]:checked`)].map((item) => item.value) : input.value; saveValue(control, value); if (page.kind === 'CHOICE') { const currentId = page.id; visible = getVisible(); index = Math.max(0, visible.findIndex((item) => item.id === currentId)); render(); return; } updateNext(page); }));
     guide.querySelector('[data-copy]')?.addEventListener('click', async (event) => { const button = event.currentTarget; try { await navigator.clipboard.writeText(page.prompt || ''); button.textContent = '복사됨'; report('복사했습니다.'); } catch { button.textContent = '복사하지 못했습니다'; report('복사하지 못했습니다. 직접 선택해 복사해 주세요.', true); } });
     visual.querySelectorAll('img').forEach((image) => image.addEventListener('error', () => { image.closest('figure')?.remove(); report('스크린샷을 불러오지 못했습니다.', true); }));
   };
-  const render = (focus = false) => { const page = visible[index]; if (!page) { root.querySelector('[data-guide-content]').innerHTML = '<div class="guide-recovery"><h2>열 수 있는 수업 화면이 없습니다.</h2><a href="/tutorials/">수업 목록으로</a></div>'; root.querySelector('[data-visual]').innerHTML = ''; report('수업 화면을 복구하지 못했습니다.', true); return; } root.querySelector('[data-title]').textContent = page.title; root.querySelector('[data-description]').textContent = page.description; root.querySelector('[data-action]').textContent = page.action || ''; root.querySelector('[data-progress-label]').textContent = `${index + 1} / ${visible.length}`; const progress = root.querySelector('[data-progress]'); progress.setAttribute('aria-valuemax', String(visible.length)); progress.setAttribute('aria-valuenow', String(index + 1)); root.querySelector('[data-prev]').disabled = index === 0; root.querySelector('[data-next]').textContent = index === visible.length - 1 ? '완료하기' : '다음'; renderContent(page); updateNext(page); const position = read(localStorage, keys.position, {}); position[`${day}.${positionApp()}`] = page.id; write(localStorage, keys.position, position); try { localStorage.setItem(keys.last, String(day)); } catch {} if (focus) root.querySelector('[data-title]').focus(); };
-  const begin = () => { if (hasAppTracks && (!app || !os)) return; try { if (app) localStorage.setItem(keys.app, app); if (os === 'macos' || os === 'windows') localStorage.setItem(keys.os, os); } catch { report('진도를 저장하지 못해도 이 수업은 계속할 수 있습니다.', true); } visible = getVisible(); const saved = read(localStorage, keys.position, {})[`${day}.${positionApp()}`]; index = Math.max(0, visible.findIndex((page) => page.id === saved)); preflight.hidden = true; lesson.hidden = false; render(); };
+  const render = (focus = false) => { const page = visible[index]; if (!page) { root.querySelector('[data-guide-content]').innerHTML = '<div class="guide-recovery"><h2>열 수 있는 수업 화면이 없습니다.</h2><a href="/tutorials/">수업 목록으로</a></div>'; root.querySelector('[data-visual]').innerHTML = ''; report('수업 화면을 복구하지 못했습니다.', true); return; } root.querySelector('[data-title]').textContent = page.title; root.querySelector('[data-description]').textContent = page.description; root.querySelector('[data-action]').textContent = page.action || ''; root.querySelector('[data-progress-label]').textContent = `${index + 1} / ${visible.length}`; const progress = root.querySelector('[data-progress]'); progress.setAttribute('aria-valuemax', String(visible.length)); progress.setAttribute('aria-valuenow', String(index + 1)); root.querySelector('[data-prev]').disabled = index === 0; root.querySelector('[data-next]').textContent = index === visible.length - 1 ? '결과를 확인하고 수업 완료' : '다음'; renderContent(page); updateNext(page); if (!saveTutorialPosition(localStorage, { day, app: positionApp(), stepId: page.id })) noteStorageFailure(); if (focus) root.querySelector('[data-title]').focus(); };
+  const begin = () => { if (hasAppTracks && (!app || !os)) return; try { if (app) localStorage.setItem(keys.app, app); if (os === 'macos' || os === 'windows') localStorage.setItem(keys.os, os); if (!runCourseMigrations(localStorage)) noteStorageFailure(); } catch { noteStorageFailure(); } visible = getVisible(); const saved = readTutorialPosition(localStorage, day, positionApp()); index = Math.max(0, visible.findIndex((page) => page.id === saved)); preflight.hidden = true; lesson.hidden = false; render(); };
   appInput.forEach((input) => input.addEventListener('change', () => { app = input.value; updateStart(); })); osInput.forEach((input) => input.addEventListener('change', () => { os = input.value; updateStart(); })); start?.addEventListener('click', begin);
   root.querySelector('[data-prev]')?.addEventListener('click', () => { index = Math.max(0, index - 1); render(true); });
-  root.querySelector('[data-next]')?.addEventListener('click', () => { if (!controlsComplete(visible[index])) return; if (index < visible.length - 1) { index += 1; render(true); return; } const done = read(localStorage, keys.done, []).map(Number); if (!done.includes(day)) done.push(day); write(localStorage, keys.done, [...new Set(done)].sort((a, b) => a - b)); try { sessionStorage.setItem('ainight.completed', String(day)); } catch {} window.location.href = '/tutorials/'; });
+  root.querySelector('[data-next]')?.addEventListener('click', () => { if (!controlsComplete(visible[index])) return; if (index < visible.length - 1) { index += 1; render(true); return; } if (!markTutorialComplete(localStorage, day)) noteStorageFailure(); try { sessionStorage.setItem('ainight.completed', String(day)); } catch { noteStorageFailure(); } window.location.href = '/tutorials/'; });
   if (!hasAppTracks) { begin(); } else if (app === 'codex' || app === 'claude') { if (os === 'macos' || os === 'windows') begin(); else preflight.hidden = false; } else preflight.hidden = false;
 </script>
