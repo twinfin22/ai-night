@@ -277,10 +277,10 @@ export const week2SourceRecords = [
     "flow": null,
     "outcome": null,
     "action": "초안을 확인하고 저장을 승인합니다.",
-    "prompt": "오늘 만든 작업 계약과 검사·수정 지시를 합쳐 내 업무용 재사용 프롬프트 1개를 만들어줘.\n그중 다음에도 지킬 규칙을 아래 4줄로 따로 정리해줘.\n① 말투\n② 반드시 할 확인\n③ 하지 말 것\n④ 끝났다고 볼 기준\n비밀번호·고객정보·일회성 내용은 빼. Codex에서는 AGENTS.md, Claude Code/Cowork에서는 CLAUDE.md에 넣을 초안을 먼저 보여주고, 내 승인 전에는 저장하지 마.",
+    "prompt": "오늘 만든 작업 계약과 검사·수정 지시를 합쳐 내 업무용 재사용 프롬프트 1개를 만들어줘.\n그중 다음에도 지킬 규칙을 아래 4줄로 따로 정리해줘.\n① 말투\n② 반드시 할 확인\n③ 하지 말 것\n④ 끝났다고 볼 기준\n비밀번호·고객정보·일회성 내용은 빼. Codex라면 현재 작업 폴더의 AGENTS.md에, Claude Cowork라면 현재 프로젝트의 Project instructions에 넣을 초안만 먼저 보여줘. Claude Code용 파일이나 다른 프로젝트 설정은 만들거나 바꾸지 말고, 내 승인 전에는 저장하지 마.",
     "replacementText": null,
     "screenshot": "/Users/leegen/localnomad/ai-evening/public/assets/tutorials/week3/screenshots/d11-agents-md-official.png",
-    "supporting": "Codex는 AGENTS.md, Claude Code/Cowork는 CLAUDE.md를 사용합니다.",
+    "supporting": "Codex는 현재 작업 폴더의 AGENTS.md를, Claude Cowork는 현재 프로젝트의 Project instructions를 사용합니다.",
     "bottomButton": "이전 / 다음"
   },
   {
@@ -442,7 +442,7 @@ export const week2SourceRecords = [
     "flow": null,
     "outcome": null,
     "action": "프롬프트를 복사해 실행합니다.",
-    "prompt": "지금은 웹사이트 파일을 만들거나 수정하지 말고 계획만 세워줘. 내 웹사이트 목적·주요 고객·원하는 분위기·방문자가 할 핵심 행동·참고 사이트를 한 번에 하나씩, 최대 5개 질문해줘. 모르는 내용은 추측하지 말고 선택지 3개를 보여줘. 답이 끝나면 페이지 구성·각 페이지 내용·필요한 자료·휴대폰 성공 기준을 담은 PLAN.md 초안을 보여줘. 내가 승인하기 전에는 저장하거나 제작하지 마.",
+    "prompt": "지금은 웹사이트 파일을 만들거나 수정하지 말고 계획만 세워줘. 내 웹사이트 목적·주요 고객·원하는 분위기·방문자가 할 핵심 행동 하나·참고 사이트를 한 번에 하나씩, 최대 5개 질문해줘. 첫 제작 범위는 한 페이지로 좁히고, 모르는 내용은 추측하지 말고 선택지 3개를 보여줘. 답이 끝나면 페이지 구성·각 페이지 내용·필요한 자료·휴대폰 성공 기준을 담은 PLAN.md 초안을 보여줘. 내가 승인하기 전에는 저장하거나 제작하지 마.",
     "replacementText": null,
     "screenshot": null,
     "supporting": null,

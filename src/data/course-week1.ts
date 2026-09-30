@@ -69,14 +69,15 @@ export const week1Days: OneActionTutorialDay[] = [
     ],
   },
   {
-    day: 3, week: 1, theme: '차리기', title: 'AI와 대화하는 방법', outcome: '내 사업의 첫 5분 컨설팅과 이번 주 행동 하나', status: 'ready', appTrack: 'unified', time: '25분', experience: 'one-action',
+    day: 3, week: 1, theme: '차리기', title: 'AI와 대화하는 방법', outcome: '직접 확인하고 한 번 고친 작은 결과물 1개', status: 'ready', appTrack: 'unified', time: '25분', experience: 'one-action',
     pages: [
-      start(3, 'AI와 대화하는 방법', '상황, 목표, 결과물, 조건을 담아 구체적으로 대화해요.', '이번 주 첫 행동 하나', ['좋은 요청을 살핍니다', '내 상황을 적습니다', '실행안을 고릅니다']),
+      start(3, 'AI와 대화하는 방법', '상황, 목표, 결과물, 조건을 담아 작은 업무를 요청하고 한 번 고쳐 봅니다.', '직접 확인하고 한 번 고친 작은 결과물 1개', ['좋은 요청을 살핍니다', '작은 업무를 정합니다', '첫 결과를 확인합니다', '한 번 고쳐 결과를 남깁니다']),
       { id: 'd03-four-parts', kind: 'ACTION', view: 'COMPARISON', title: '좋은 요청의 네 칸을 찾아봐요', description: '목적, 상황, 결과물, 조건을 구분하면 AI가 추측할 일이 줄어듭니다.', action: '두 요청을 비교합니다.', comparison: [{ label: '모호한 요청', content: '장사 잘되게 해줘.' }, { label: '구체적인 요청', content: '내 업종과 고객을 먼저 물어보고, 이번 주 실행할 개선안 3개를 쉬운 말로 제안해줘.' }] },
-      { id: 'd03-context', kind: 'ACTION', view: 'WORKBENCH', title: '내 사업 정보를 적어봐요', description: '업종, 주요 고객, 가장 큰 고민만 한 줄씩 적습니다.', action: '민감한 정보 없이 세 가지를 준비합니다.', supporting: '매출, 고객 이름, 계약 내용처럼 외부에 보여주기 어려운 정보는 쓰지 않습니다.' },
-      { id: 'd03-consulting', kind: 'ACTION', view: 'PROMPT', title: '5분 컨설팅을 요청해요', description: 'AI가 먼저 필요한 것을 묻게 합니다.', action: '프롬프트를 복사해 답합니다.', prompt: '내 사업을 5분 동안 집중 컨설팅해줘. 업종, 주요 고객, 지금 가장 큰 고민을 먼저 물어본 뒤, 바로 실행할 개선안 3개를 예상 효과와 첫 행동까지 포함해 쉬운 말로 제안해줘. 모르는 숫자나 사실은 추측하지 마.' },
-      { id: 'd03-choice', kind: 'ACTION', view: 'WORKBENCH', title: '이번 주 실행안 하나를 골라요', description: '좋은 아이디어가 많아도 지금 할 수 있는 하나면 충분합니다.', action: '가장 쉬운 실행안 하나를 고릅니다.', supporting: '돈이나 새 계정이 필요한 일보다 오늘 15분 안에 시작할 수 있는 일을 고릅니다.' },
-      { id: 'd03-first-action', kind: 'ACTION', view: 'PROMPT', title: '첫 행동을 15분으로 줄여봐요', description: '오늘이나 내일 바로 시작할 크기로 만듭니다.', action: '선택한 실행안을 바꿔 넣습니다.', prompt: '방금 제안 중 내가 고른 것은 [선택한 개선안]이야. 15분 안에 시작할 수 있는 첫 행동 1개로 줄여줘. 돈, 날짜, 계정 정보가 필요하면 추측하지 말고 한 번에 한 질문씩 물어봐줘.' },
+      { id: 'd03-context', kind: 'ACTION', view: 'WORKBENCH', title: '작은 업무 하나를 정해요', description: '업종, 주요 고객, 지금 필요한 작은 결과물을 한 줄씩 정합니다. 예: 이번 주 안내문 초안, 자주 묻는 질문 답변, 상품 설명 한 개.', action: '민감한 정보 없이 세 가지를 준비합니다.', supporting: '매출, 고객 이름, 계약 내용처럼 외부에 보여주기 어려운 정보는 쓰지 않습니다. 오늘 15분 안에 확인할 수 있는 결과물 하나만 고르세요.' },
+      { id: 'd03-consulting', kind: 'ACTION', view: 'PROMPT', title: '첫 결과를 요청해요', description: 'AI가 모르는 정보는 먼저 묻게 하고, 정한 작은 업무 하나만 맡깁니다.', action: '프롬프트를 복사해 답합니다.', prompt: '내 업종은 [업종]이고 주요 고객은 [주요 고객]이야. 지금 [작은 결과물] 하나를 만들고 싶어. 목적은 [사용할 곳]이야. 쉬운 말로 [길이·말투·꼭 넣을 정보] 조건을 지켜 첫 초안을 만들어줘. 모르는 사실·숫자·날짜는 추측하지 말고 먼저 한 번에 하나씩 물어봐. 외부 게시·발송·파일 저장은 하지 마.' },
+      { id: 'd03-choice', kind: 'ACTION', view: 'WORKBENCH', title: '첫 결과를 직접 확인해요', description: '내가 준 사실, 빠진 정보, 읽기 쉬운지 세 가지만 직접 봅니다.', action: '고칠 곳 하나를 고릅니다.', supporting: '첫 결과가 마음에 들어도 사실과 조건이 맞는지 확인해야 합니다. 모르는 내용은 “확인 필요”로 남깁니다.' },
+      { id: 'd03-first-action', kind: 'ACTION', view: 'PROMPT', title: '고칠 곳 하나만 다시 요청해요', description: '결과 전체를 새로 만들지 않고, 내가 고른 한 가지를 고친 뒤 다시 확인합니다.', action: '프롬프트를 복사해 한 번 수정합니다.', prompt: '첫 결과에서 [고칠 곳]을 고쳐줘. 내가 준 사실과 조건은 유지하고, 바꾼 문장과 바꾼 이유만 먼저 보여줘. 원래 결과와 다른 사실을 새로 넣지 말고, 확인하지 못한 내용은 “확인 필요”로 남겨. 외부 게시·발송·파일 저장은 하지 마.' },
+      { id: 'd03-check', kind: 'ACTION', view: 'FOCUS', title: '고친 결과 하나를 남겨요', description: '수정 전후를 비교해 내가 고친 곳이 반영됐는지 확인합니다. 이 결과물은 다음에 같은 방식으로 요청할 때 쓸 수 있습니다.', action: '결과물의 위치 또는 현재 대화 제목을 기억합니다.' },
       retro(3, 'AI와 대화하는 방법'),
     ],
   },
@@ -122,7 +123,7 @@ const allowedViews = {
 } as const;
 
 const expectedVisibleCounts: Record<number, Record<'claude' | 'codex', number>> = {
-  1: { claude: 11, codex: 11 }, 2: { claude: 8, codex: 8 }, 3: { claude: 7, codex: 7 },
+  1: { claude: 11, codex: 11 }, 2: { claude: 8, codex: 8 }, 3: { claude: 8, codex: 8 },
   4: { claude: 9, codex: 9 }, 5: { claude: 11, codex: 11 },
 };
 

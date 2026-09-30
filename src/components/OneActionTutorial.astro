@@ -22,9 +22,9 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
     <aside class="one-action__coach" data-coach>
       <header class="one-action__header"><a href="/tutorials/" class="one-action__brand" aria-label="AI 야학 수업 목록">AI 야학</a><strong title={`${item.day}일차 · ${item.title}`}><span>{item.day}일차</span> · {item.title}<small data-time>{item.time}</small></strong><div class="one-action__progress" role="progressbar" aria-label="현재 수업 단계" aria-valuemin="1" data-progress><span data-progress-label>1 / {item.pages.length}</span></div></header>
       <div class="one-action__guide" data-guide><p class="one-action__eyebrow">지금 할 일</p><h1 tabindex="-1" data-title></h1><p data-description></p><strong data-action></strong><div data-guide-content></div><p class="one-action__persistence-warning" data-persistence-warning hidden role="status">저장소에 접근하지 못했습니다. 수업은 계속할 수 있지만 재접속하면 진도가 유지되지 않을 수 있습니다.</p><p class="one-action__status" data-status role="status" aria-live="polite"></p></div>
-      <div class="one-action__support" data-support><div data-support-details></div><footer class="one-action__actions"><button type="button" data-prev>이전</button><button type="button" class="one-action__help" data-help>도움이 필요해요</button><button type="button" data-next>다음</button></footer></div>
     </aside>
     <section class="one-action__visual" data-visual aria-label="참고 화면"></section>
+    <div class="one-action__support" data-support><div data-support-details></div><footer class="one-action__actions"><button type="button" data-prev>이전</button><button type="button" class="one-action__help" data-help>도움이 필요해요</button><button type="button" data-next>다음</button></footer></div>
   </section>
   <dialog class="tutorial-help-dialog" data-help-dialog aria-labelledby="tutorial-help-title">
     <form method="dialog" class="tutorial-help-dialog__panel" data-help-form novalidate>
@@ -37,6 +37,16 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
       <p class="tutorial-help-dialog__success" data-help-success hidden role="status">문의가 접수되었습니다. 입력한 이메일로 답변드립니다.</p>
       <div class="tutorial-help-dialog__actions"><button type="button" data-help-cancel>취소</button><button type="submit" data-help-submit>보내기</button></div>
     </form>
+  </dialog>
+  <dialog class="tutorial-image-dialog" data-image-dialog aria-labelledby="tutorial-image-title">
+    <div class="tutorial-image-dialog__panel">
+      <div class="tutorial-image-dialog__head">
+        <h2 id="tutorial-image-title">참고 화면 크게 보기</h2>
+        <button type="button" class="tutorial-image-dialog__close" data-image-close aria-label="참고 화면 닫기">×</button>
+      </div>
+      <p id="tutorial-image-description" class="tutorial-image-dialog__description" data-image-description></p>
+      <img data-image-original alt="" aria-describedby="tutorial-image-description" />
+    </div>
   </dialog>
 </main>
 
@@ -87,11 +97,11 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
     return `<fieldset class="guide-choice"><legend>${esc(control.label)}</legend>${(control.options || []).map((option) => `<label><input data-control="${esc(control.id)}" type="${type}" name="${name}" value="${esc(option.value)}" ${selected.includes(option.value) ? 'checked' : ''}><strong>${esc(option.label)}</strong>${option.description ? `<span>${esc(option.description)}</span>` : ''}</label>`).join('')}</fieldset>`;
   };
   const promptVisual = (page) => page.prompt ? `<div class="visual-prompt"><pre><code>${highlighted(page.prompt, page.highlightTokens)}</code></pre></div>` : '';
-  const imagesVisual = (images) => images?.length ? `<div class="visual-images">${images.map((image) => `<figure class="visual-image"><img src="${esc(image.src)}" alt="${esc(image.alt)}"></figure>`).join('')}</div>` : '';
-  const guideLinks = (page) => `${page.prompt ? '<button type="button" class="one-action__primary" data-copy>프롬프트 복사하기</button>' : ''}${page.officialLinks?.length ? `<div class="guide-links" aria-label="공식 링크">${page.officialLinks.map((link) => `<a href="${esc(link.href)}" target="_blank" rel="noopener noreferrer"><strong>${esc(link.label)} <span aria-label="새 창">↗</span></strong><span>${esc(link.publisher)} · ${esc(link.verifiedAt)} 확인</span><small>${esc(link.accessNote)}</small></a>`).join('')}</div>` : ''}${page.downloadLinks?.length ? `<div class="guide-downloads" aria-label="자료 다운로드">${page.downloadLinks.map((link) => `<a href="${esc(link.href)}" download>${esc(link.label)} 다운로드</a>`).join('')}</div>` : ''}`;
+  const imagesVisual = (images) => images?.length ? `<div class="visual-images">${images.map((image, imageIndex) => `<figure class="visual-image"><button type="button" data-image-open data-image-src="${esc(image.src)}" data-image-alt="${esc(image.alt)}" aria-label="참고 화면 ${imageIndex + 1} 크게 보기: ${esc(image.alt)}"><img src="${esc(image.src)}" alt="${esc(image.alt)}"><span class="visual-image__zoom" aria-hidden="true">원본 크게 보기 ↗</span></button></figure>`).join('')}</div>` : '';
+  const guideLinks = (page) => `${page.prompt ? '<div class="guide-copy"><button type="button" class="one-action__primary" data-copy aria-describedby="copy-feedback">프롬프트 복사하기</button><p id="copy-feedback" class="guide-copy__feedback" data-copy-feedback role="status" aria-live="polite" hidden></p></div>' : ''}${page.officialLinks?.length ? `<div class="guide-links" aria-label="공식 링크">${page.officialLinks.map((link) => `<a href="${esc(link.href)}" target="_blank" rel="noopener noreferrer"><strong>${esc(link.label)} <span aria-label="새 창">↗</span></strong><span>${esc(link.publisher)} · ${esc(link.verifiedAt)} 확인</span><small>${esc(link.accessNote)}</small></a>`).join('')}</div>` : ''}${page.downloadLinks?.length ? `<div class="guide-downloads" aria-label="자료 다운로드">${page.downloadLinks.map((link) => `<a href="${esc(link.href)}" download>${esc(link.label)} 다운로드</a>`).join('')}</div>` : ''}`;
   const visualHtml = (page) => {
-    if (page.view === 'FOCUS') return `<div class="visual-focus">${page.subtitle ? `<p>${esc(page.subtitle)}</p>` : ''}${page.flow ? `<ol class="visual-timeline" data-timeline>${page.flow.map((part) => `<li><span aria-hidden="true"></span>${esc(part)}</li>`).join('')}</ol>` : ''}${page.outcome ? `<strong>결과물: ${esc(page.outcome)}</strong>` : ''}</div>`;
-    if (page.view === 'COMPARISON') return `<div class="visual-comparison">${(page.comparison || []).map((part) => `<section><strong>${esc(part.label)}</strong><p>${esc(part.content)}</p></section>`).join('')}</div>`;
+    if (page.view === 'FOCUS') return page.subtitle || page.flow?.length || page.outcome ? `<div class="visual-focus">${page.subtitle ? `<p>${esc(page.subtitle)}</p>` : ''}${page.flow?.length ? `<ol class="visual-timeline" data-timeline>${page.flow.map((part) => `<li><span aria-hidden="true"></span>${esc(part)}</li>`).join('')}</ol>` : ''}${page.outcome ? `<strong>결과물: ${esc(page.outcome)}</strong>` : ''}</div>` : '';
+    if (page.view === 'COMPARISON') return page.comparison?.length ? `<div class="visual-comparison">${page.comparison.map((part) => `<section><strong>${esc(part.label)}</strong><p>${esc(part.content)}</p></section>`).join('')}</div>` : '';
     return `${imagesVisual(page.images || (page.image ? [page.image] : []))}${promptVisual(page)}`;
   };
   const supportHtml = (page) => page.technicalDetails?.length ? `<details class="guide-details"><summary>안 보여요 · 보충 설명</summary>${page.technicalDetails.map((detail) => `<section><strong>${esc(detail.title)}</strong><p>${esc(detail.body)}</p></section>`).join('')}</details>` : '';
@@ -104,6 +114,10 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
   const helpError = root.querySelector('[data-help-error]');
   const helpSuccess = root.querySelector('[data-help-success]');
   const helpSubmit = root.querySelector('[data-help-submit]');
+  const imageDialog = root.querySelector('[data-image-dialog]');
+  const imageOriginal = root.querySelector('[data-image-original]');
+  const imageDescription = root.querySelector('[data-image-description]');
+  let imageReturnFocus = null;
   let helpReturnFocus = null, inquiryContext = null, inquiryRequestId = null;
   const selectedBranch = () => values()['output-format'] || drafts()['d07-choice-output']?.['output-format'] || '미선택';
   const helpContextEntries = (context) => [
@@ -132,6 +146,18 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
   root.querySelector('[data-help-close]')?.addEventListener('click', closeHelp);
   root.querySelector('[data-help-cancel]')?.addEventListener('click', closeHelp);
   helpDialog?.addEventListener('close', () => { helpReturnFocus?.focus(); helpReturnFocus = null; });
+  const closeImage = () => { if (imageDialog?.open) imageDialog.close(); };
+  root.querySelector('[data-image-close]')?.addEventListener('click', closeImage);
+  imageDialog?.addEventListener('close', () => { imageReturnFocus?.focus(); imageReturnFocus = null; });
+  const openImage = (trigger) => {
+    if (!imageDialog || !imageOriginal || !imageDescription) return;
+    imageReturnFocus = trigger;
+    imageOriginal.src = trigger.dataset.imageSrc || '';
+    imageOriginal.alt = trigger.dataset.imageAlt || '참고 화면';
+    imageDescription.textContent = trigger.dataset.imageAlt || '참고 화면 원본입니다.';
+    imageDialog.showModal();
+    requestAnimationFrame(() => root.querySelector('[data-image-close]')?.focus());
+  };
   helpQuestion?.addEventListener('input', () => { const count = root.querySelector('[data-help-question-count]'); if (count) { const length = helpQuestion.value.length; count.textContent = length >= 2000 ? '2,000 / 2,000자 · 최대 글자 수입니다.' : `${length.toLocaleString('ko-KR')} / 2,000자`; } });
   helpForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -164,11 +190,16 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
     const controls = (page.controls || []).map((control) => controlHtml(control, state[control.id])).join('');
     const supporting = page.supporting && page.supporting !== page.description && page.supporting !== page.action ? `<p class="guide-supporting">${esc(page.supporting)}</p>` : '';
     const completion = index === visible.length - 1 ? `<section class="lesson-completion" aria-labelledby="completion-title"><p class="one-action__eyebrow">수업 마무리</p><h2 id="completion-title">결과를 직접 확인해요</h2><ul><li>${esc(lessonOutcome)}</li><li>AI 앱에서 오늘 결과를 직접 확인했습니다.</li><li>다음에 다시 찾을 위치를 알고 있습니다.</li></ul><p>아래 버튼을 누르면 내 확인에 따라 이 수업을 완료로 기록합니다.</p></section>` : '';
-    guide.innerHTML = `${page.view === 'WORKBOOK' ? '<p class="guide-note">이 회고는 AI가 대신 쓰거나 평가하지 않습니다. 내 말로 작성하세요.</p>' : ''}${supporting}${controls}${guideLinks(page)}${completion}`;
-    visual.dataset.view = page.view; visual.innerHTML = visualHtml(page); support.innerHTML = supportHtml(page);
+    guide.innerHTML = `${page.view === 'WORKBOOK' ? '<p class="guide-note">이 회고는 AI가 대신 쓰거나 평가하지 않습니다. 내 말로 작성하세요.</p>' : ''}${supporting}${controls}${completion}`;
+    const visualContent = visualHtml(page);
+    visual.dataset.view = page.view;
+    visual.hidden = !visualContent;
+    visual.innerHTML = visualContent;
+    support.innerHTML = `${guideLinks(page)}${supportHtml(page)}`;
     guide.querySelectorAll('[data-control]').forEach((input) => input.addEventListener('input', () => { const control = page.controls.find((item) => item.id === input.dataset.control); const value = control.type === 'checkbox' ? [...guide.querySelectorAll(`[data-control="${CSS.escape(control.id)}"]:checked`)].map((item) => item.value) : input.value; saveValue(control, value); if (page.kind === 'CHOICE') { const currentId = page.id; visible = getVisible(); index = Math.max(0, visible.findIndex((item) => item.id === currentId)); render(); return; } updateNext(page); }));
-    guide.querySelector('[data-copy]')?.addEventListener('click', async (event) => { const button = event.currentTarget; try { await navigator.clipboard.writeText(page.prompt || ''); button.textContent = '복사됨'; report('복사했습니다.'); } catch { button.textContent = '복사하지 못했습니다'; report('복사하지 못했습니다. 직접 선택해 복사해 주세요.', true); } });
-    visual.querySelectorAll('img').forEach((image) => image.addEventListener('error', () => { image.closest('figure')?.remove(); report('스크린샷을 불러오지 못했습니다.', true); }));
+    support.querySelector('[data-copy]')?.addEventListener('click', async (event) => { const button = event.currentTarget; const feedback = support.querySelector('[data-copy-feedback]'); try { await navigator.clipboard.writeText(page.prompt || ''); button.textContent = '프롬프트 복사됨'; feedback.textContent = '복사했습니다. AI 앱에 붙여 넣어 실행해 보세요.'; feedback.hidden = false; feedback.dataset.state = 'success'; report('프롬프트를 복사했습니다.'); } catch { button.textContent = '다시 복사하기'; feedback.textContent = '복사하지 못했습니다. 프롬프트를 직접 선택해 복사해 주세요.'; feedback.hidden = false; feedback.dataset.state = 'error'; report('복사하지 못했습니다. 직접 선택해 복사해 주세요.', true); } });
+    visual.querySelectorAll('[data-image-open]').forEach((trigger) => trigger.addEventListener('click', () => openImage(trigger)));
+    visual.querySelectorAll('img').forEach((image) => image.addEventListener('error', () => { image.closest('figure')?.remove(); if (!visual.querySelector('.visual-image, .visual-prompt, .visual-focus, .visual-comparison')) visual.hidden = true; report('스크린샷을 불러오지 못했습니다.', true); }));
   };
   const render = (focus = false) => { const page = visible[index]; if (!page) { root.querySelector('[data-guide-content]').innerHTML = '<div class="guide-recovery"><h2>열 수 있는 수업 화면이 없습니다.</h2><a href="/tutorials/">수업 목록으로</a></div>'; root.querySelector('[data-visual]').innerHTML = ''; report('수업 화면을 복구하지 못했습니다.', true); return; } root.querySelector('[data-title]').textContent = page.title; root.querySelector('[data-description]').textContent = page.description; root.querySelector('[data-action]').textContent = page.action || ''; root.querySelector('[data-progress-label]').textContent = `${index + 1} / ${visible.length}`; const progress = root.querySelector('[data-progress]'); progress.setAttribute('aria-valuemax', String(visible.length)); progress.setAttribute('aria-valuenow', String(index + 1)); root.querySelector('[data-prev]').disabled = index === 0; root.querySelector('[data-next]').textContent = index === visible.length - 1 ? '결과를 확인하고 수업 완료' : '다음'; renderContent(page); updateNext(page); if (!saveTutorialPosition(localStorage, { day, app: positionApp(), stepId: page.id })) noteStorageFailure(); if (focus) root.querySelector('[data-title]').focus(); };
   const begin = () => { if (hasAppTracks && (!app || !os)) return; try { if (app) localStorage.setItem(keys.app, app); if (os === 'macos' || os === 'windows') localStorage.setItem(keys.os, os); if (!runCourseMigrations(localStorage)) noteStorageFailure(); } catch { noteStorageFailure(); } visible = getVisible(); const saved = readTutorialPosition(localStorage, day, positionApp()); index = Math.max(0, visible.findIndex((page) => page.id === saved)); preflight.hidden = true; lesson.hidden = false; render(); };
