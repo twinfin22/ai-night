@@ -5,4 +5,3 @@ export function isValidGa4Id(value: string | undefined): value is string {
   const id = value?.trim() ?? '';
   return ga4Pattern.test(id) && !placeholderIds.has(id);
 }
-

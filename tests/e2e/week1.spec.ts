@@ -1,0 +1,45 @@
+import { expect, test } from '@playwright/test';
+
+test('Day 1 lets a learner select Codex and starts the Week 1 one-action lesson', async ({ page }) => {
+  await page.goto('/tutorials/day-01/');
+
+  await expect(page.getByRole('heading', { name: '당신의 에이전트를 골라주세요' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '수업 시작' })).toBeDisabled();
+  await expect(page.locator('img[src="/assets/tutorials/brands/openai.svg"]')).toBeVisible();
+  await expect(page.locator('img[src="/assets/tutorials/brands/anthropic.svg"]')).toBeVisible();
+
+  await page.getByRole('radio', { name: /Codex/ }).check();
+  await page.getByRole('button', { name: '수업 시작' }).click();
+
+  await expect(page.getByRole('heading', { name: '오늘 할 일을 먼저 살펴봐요' })).toBeVisible();
+  await expect(page.locator('[data-one-action]')).toHaveAttribute('data-day', '1');
+  await expect(page.getByRole('button', { name: '다음' })).toBeEnabled();
+
+  await page.getByRole('button', { name: '다음' }).click();
+  await expect(page.getByRole('heading', { name: '설치 전에 준비해요' })).toBeVisible();
+  await expect(page.locator('[data-title]')).toBeFocused();
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('ainight.position'))).toContain('d01-prep');
+});
+
+test('tutorial list retains direct routes for all Week 1 days', async ({ page }) => {
+  await page.goto('/tutorials/');
+
+  for (let day = 1; day <= 5; day += 1) {
+    await expect(page.locator(`a[href="/tutorials/day-${String(day).padStart(2, '0')}/"]`).first()).toBeVisible();
+  }
+});
+
+test('Day 4 renders only the selected app official link before its screenshot', async ({ page }) => {
+  await page.goto('/tutorials/day-04/');
+  await page.getByRole('radio', { name: /Codex/ }).check();
+  await page.getByRole('button', { name: '수업 시작' }).click();
+  await page.getByRole('button', { name: '다음' }).click();
+
+  const link = page.getByRole('link', { name: /ChatGPT Chrome 안내/ });
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute('href', 'https://learn.chatgpt.com/docs/chrome-extension');
+  await expect(link).toHaveAttribute('target', '_blank');
+  await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  await expect(page.getByRole('link', { name: /Claude in Chrome 안내/ })).toHaveCount(0);
+  await expect(page.getByRole('img', { name: 'OpenAI가 게시한 ChatGPT Chrome 확장 공식 화면' })).toBeVisible();
+});

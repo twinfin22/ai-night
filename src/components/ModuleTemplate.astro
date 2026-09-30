@@ -1,0 +1,785 @@
+---
+import Base from '../layouts/Base.astro';
+import { parseSkillReference } from '../data/skill-links';
+import { tutorialModules } from '../data/tutorial-meta';
+import type { TutorialStep } from '../data/tutorial-types';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonicalPath: string;
+  markdownPath: string;
+  steps: TutorialStep[];
+  overviewTemplate?: 'default' | 'flow';
+  resumePrompt: string;
+  resumePromptByTrack?: {
+    codex: string;
+    claude: string;
+  };
+  toolSelector?: boolean;
+  stepsLabel?: string;
+  firstPromptBuilder?: boolean;
+  feedbackPromptBuilder?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  steps,
+  overviewTemplate = 'default',
+  toolSelector = false,
+  firstPromptBuilder = false,
+  feedbackPromptBuilder = false,
+} = Astro.props;
+
+const overviewFlow = overviewTemplate === 'flow';
+const actorFallback = {
+  human: '사람',
+  ai: 'AI',
+  'human-ai': '사람',
+};
+---
+
+<Base title={`${title} — AI 야학`} description={description} canonicalPath={canonicalPath}>
+  <header class="module-header">
+    <div class="module-header__inner">
+      <a href="/" class="module-header__brand" aria-label="AI 야학 홈">
+        <img src="/favicon.svg" alt="" width="34" height="34" />
+        <span>AI 야학</span>
+      </a>
+      <p class="module-header__title">{title}</p>
+      <label class="sr-only" for="module-jump">다른 튜토리얼로 이동</label>
+      <select id="module-jump" class="module-header__select" data-module-jump aria-label="다른 튜토리얼로 이동">
+        {tutorialModules.map((item) => (
+          <option value={item.href} selected={item.href === canonicalPath}>{item.title}</option>
+        ))}
+      </select>
+    </div>
+  </header>
+
+  <main class={toolSelector ? 'module-page module-page--tool-selector' : 'module-page'} data-tool-selector={toolSelector ? 'true' : undefined}>
+    <section class="module-lesson-hero" aria-labelledby="module-title">
+      <div class="module-lesson-hero__inner">
+        <div>
+          <span class="eyebrow">튜토리얼</span>
+          <h1 id="module-title">{title}</h1>
+        </div>
+      </div>
+    </section>
+
+    <div class="module-shell">
+      <aside class="module-sidebar" aria-label="모듈 빠른 이동">
+        <a href="#overview">전체 흐름</a>
+        {steps.map((item) => (
+          <a href={`#step-${item.step}`} data-track={item.track ?? 'both'}>{item.step}. {item.label}</a>
+        ))}
+      </aside>
+
+      <div class="module-content">
+        <section id="overview" class="module-panel" aria-labelledby="overview-title">
+          <h2 id="overview-title">이번 튜토리얼에서 하는 일</h2>
+          {toolSelector && (
+            <div class="setup-selector" aria-labelledby="setup-selector-title">
+              <h3 id="setup-selector-title">먼저 내 환경을 골라주세요.</h3>
+              <div class="setup-selector__grid">
+                <div>
+                  <h4>컴퓨터</h4>
+                  <div class="segmented-control" role="group" aria-label="운영체제 선택">
+                    <button type="button" data-os-choice="mac">맥(Mac)</button>
+                    <button type="button" data-os-choice="windows">윈도우(Windows)</button>
+                  </div>
+                </div>
+                <div>
+                  <h4>도구</h4>
+                  <div class="segmented-control" role="group" aria-label="도구 선택">
+                    <button type="button" data-tool-choice="codex">코덱스(Codex)</button>
+                    <button type="button" data-tool-choice="claude">클로드(Claude)</button>
+                  </div>
+                </div>
+              </div>
+              <p class="setup-selector__hint">선택한 도구에 맞는 단계만 보여줍니다.</p>
+              <p class="setup-selector__empty" role="status">도구를 고르면 내 단계가 아래에 열립니다.</p>
+            </div>
+          )}
+          <ol class:list={['tutorial-flow', overviewFlow && 'tutorial-flow--arrows']}>
+            {steps.map((item) => (
+              <li
+                data-track={item.track ?? 'both'}
+                data-actor={item.actor ?? 'human'}
+                data-loop={item.loop ? 'true' : undefined}
+                data-split={overviewFlow && item.overviewItems?.length ? 'true' : undefined}
+              >
+                <a href={`#step-${item.step}`} data-track={item.track ?? 'both'}>
+                  <span class="tutorial-flow__num">{item.step}</span>
+                  {overviewFlow && item.overviewItems?.length ? (
+                    <span class="tutorial-flow__split-cards">
+                      {item.overviewItems.map((subItem) => (
+                        <span class="tutorial-flow__split-card" data-sub-actor={subItem.actor}>
+                          <span class="tutorial-flow__meta">
+                            <span class="tutorial-flow__actor">{subItem.actorLabel}</span>
+                          </span>
+                          <strong>{subItem.label}</strong>
+                          <em>{subItem.output}</em>
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    <span class="tutorial-flow__text">
+                      {overviewFlow && (item.actor || item.actorLabel) && (
+                        <span class="tutorial-flow__meta">
+                          <span class="tutorial-flow__actor">{item.actorLabel ?? actorFallback[item.actor ?? 'human']}</span>
+                        </span>
+                      )}
+                      <strong>{item.label}</strong>
+                      {overviewFlow && <em>{item.output}</em>}
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ol>
+
+          {firstPromptBuilder && (
+            <section class="first-prompt-builder" aria-labelledby="first-prompt-builder-title">
+              <div class="first-prompt-builder__head">
+                <div>
+                  <h3 id="first-prompt-builder-title">내 첫 AI 작업 지시서</h3>
+                  <p>샘플을 고른 뒤 내 가게에 맞게 5칸만 고치세요.</p>
+                </div>
+                <button type="button" data-first-prompt-copy aria-live="polite">복사하기</button>
+              </div>
+
+              <div class="sample-picker" role="group" aria-label="샘플로 채우기">
+                <button type="button" data-first-prompt-sample="restaurant">동네 식당 홍보글</button>
+                <button type="button" data-first-prompt-sample="farm">농산물 판매글</button>
+                <button type="button" data-first-prompt-sample="stay">숙소 안내문</button>
+                <button type="button" data-first-prompt-sample="class">체험 프로그램 소개글</button>
+              </div>
+
+              <div class="first-prompt-builder__grid">
+                <label>
+                  <span>내 상황</span>
+                  <textarea data-first-prompt-field="context" rows="4" placeholder="청도 읍내에서 점심 장사를 하는 작은 식당입니다. 단골은 많지만 새 손님에게 가게 분위기를 잘 알리지 못하고 있습니다."></textarea>
+                </label>
+                <label>
+                  <span>AI가 맡을 역할</span>
+                  <textarea data-first-prompt-field="role" rows="4" placeholder="동네 가게 홍보글을 잘 쓰는 사람처럼 도와주세요."></textarea>
+                </label>
+                <label>
+                  <span>해달라는 일</span>
+                  <textarea data-first-prompt-field="task" rows="4" placeholder="오늘 인스타그램에 올릴 점심 메뉴 홍보글을 써주세요."></textarea>
+                </label>
+                <label>
+                  <span>말투</span>
+                  <textarea data-first-prompt-field="style" rows="4" placeholder="너무 광고처럼 보이지 않게, 동네 손님에게 말하듯 편하게 써주세요."></textarea>
+                </label>
+                <label>
+                  <span>지켜야 할 조건</span>
+                  <textarea data-first-prompt-field="rules" rows="4" placeholder="첫 문장은 짧게 써주세요. 메뉴 이름, 가격, 오늘만 좋은 점을 넣어주세요. 문장은 5줄 안으로 써주세요."></textarea>
+                </label>
+              </div>
+
+              <div class="compare-box" aria-label="대충 말했을 때와 5칸으로 말했을 때 비교">
+                <div>
+                  <span>대충 말하면</span>
+                  <p>우리 가게 홍보글 써줘</p>
+                </div>
+                <div>
+                  <span>5칸으로 말하면</span>
+                  <pre><code data-first-prompt-output></code></pre>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {feedbackPromptBuilder && (
+            <section class="first-prompt-builder" aria-labelledby="feedback-prompt-builder-title">
+              <div class="first-prompt-builder__head">
+                <div>
+                  <h3 id="feedback-prompt-builder-title">내 피드백 요청문</h3>
+                  <p>샘플을 고른 뒤 내 아이디어에 맞게 4칸만 고치세요.</p>
+                </div>
+                <button type="button" data-feedback-prompt-copy aria-live="polite">복사하기</button>
+              </div>
+
+              <div class="sample-picker" role="group" aria-label="피드백 샘플로 채우기">
+                <button type="button" data-feedback-prompt-sample="restaurant">동네 식당</button>
+                <button type="button" data-feedback-prompt-sample="farm">농산물</button>
+                <button type="button" data-feedback-prompt-sample="stay">숙소</button>
+                <button type="button" data-feedback-prompt-sample="class">체험 수업</button>
+              </div>
+
+              <div class="first-prompt-builder__grid">
+                <label>
+                  <span>내 아이디어</span>
+                  <textarea data-feedback-prompt-field="idea" rows="4" placeholder="점심시간에 회사와 공방으로 도시락을 배달하는 서비스를 시작하려고 합니다."></textarea>
+                </label>
+                <label>
+                  <span>비평가 역할</span>
+                  <textarea data-feedback-prompt-field="critic" rows="4" placeholder="까다로운 단골 손님처럼 봐주세요. 마음에 안 드는 점을 돌려 말하지 말아주세요."></textarea>
+                </label>
+                <label>
+                  <span>혹평 주문</span>
+                  <textarea data-feedback-prompt-field="roast" rows="4" placeholder="실패할 이유, 내가 깔고 있는 가정, 놓치고 있는 부분을 각각 짚어주세요. 어느 부분이 문제인지 정확히 말해주세요."></textarea>
+                </label>
+                <label>
+                  <span>뒤집기 주문</span>
+                  <textarea data-feedback-prompt-field="refine" rows="4" placeholder="가장 아픈 지적 3개를 골라서, 우리 가게가 바로 해볼 수 있는 개선 아이디어로 바꿔주세요. 마지막에는 다음에 할 일 하나만 정해주세요."></textarea>
+                </label>
+              </div>
+
+              <div class="compare-box" aria-label="피드백 요청문 완성본">
+                <div>
+                  <span>대충 말하면</span>
+                  <p>이 아이디어 어때?</p>
+                </div>
+                <div>
+                  <span>4칸으로 말하면</span>
+                  <pre><code data-feedback-prompt-output></code></pre>
+                </div>
+              </div>
+            </section>
+          )}
+        </section>
+
+        <section id="steps" class="module-panel" aria-labelledby="steps-title">
+          <h2 id="steps-title">한 단계씩 열어서 따라가세요.</h2>
+
+          <div class="lesson-steps">
+            {steps.map((item, index) => {
+              const track = item.track ?? 'both';
+
+              return (
+                <>
+                  <details id={`step-${item.step}`} class="lesson-step" data-track={track} open={index === 0}>
+                    <summary>
+                      <span class="lesson-step__num">{item.step}</span>
+                      <span class="lesson-step__main">
+                        <strong>{item.label}</strong>
+                        <em>{item.title}</em>
+                      </span>
+                    </summary>
+
+                    <div class="lesson-step__body">
+                  <p class="lesson-step__goal">{item.goal}</p>
+
+                  {(item.officialLinks ?? []).length > 0 && (
+                    <nav class="official-links" aria-label="공식 사이트 링크">
+                      <p>공식 사이트에서 확인</p>
+                      <div class="official-links__list">
+                        {(item.officialLinks ?? []).map((link) => {
+                          const domain = new URL(link.url).hostname.replace(/^www\./, '');
+
+                          return (
+                            <a class="official-link" href={link.url} target="_blank" rel="noopener noreferrer" data-track={link.track ?? 'both'}>
+                              <span class="official-link__icon" aria-hidden="true">↗</span>
+                              <span class="official-link__text">
+                                <strong>{link.label}</strong>
+                                <em>{domain}</em>
+                              </span>
+                              <span class="official-link__action">열기</span>
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </nav>
+                  )}
+
+                  {(item.screenshots ?? []).length > 0 && (
+                    <div class="tutorial-shots">
+                      {(item.screenshots ?? []).map((shot) => (
+                        <figure data-track={shot.track ?? 'both'}>
+                          <div class="tutorial-shot-frame">
+                            <a class="tutorial-shot-link" href={shot.src} target="_blank" rel="noreferrer" aria-label={`${shot.alt} 크게 열기`}>
+                              <img src={shot.src} alt={shot.alt} loading="lazy" />
+                            </a>
+                            {(shot.hotspots ?? []).map((hotspot) => (
+                              <button
+                                type="button"
+                                class="tutorial-hotspot"
+                                style={`--hotspot-x: ${hotspot.x}%; --hotspot-y: ${hotspot.y}%;${hotspot.width ? ` --hotspot-w: ${hotspot.width}%;` : ''}${hotspot.height ? ` --hotspot-h: ${hotspot.height}%;` : ''}`}
+                                data-placement={hotspot.placement ?? 'right'}
+                                data-highlight={hotspot.width && hotspot.height ? 'area' : undefined}
+                                aria-label={`${hotspot.title}: ${hotspot.body}`}
+                              >
+                                <span class="tutorial-hotspot__dot">{hotspot.label}</span>
+                                <span class="tutorial-hotspot__tip" role="tooltip">
+                                  <strong>{hotspot.title}</strong>
+                                  <span>{hotspot.body}</span>
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                          <figcaption>
+                            {shot.captionUrl ? (
+                              <a href={shot.captionUrl} target="_blank" rel="noopener noreferrer">{shot.caption ?? shot.captionUrl}</a>
+                            ) : shot.caption ? (
+                              shot.caption
+                            ) : (
+                              <a href={shot.url} target="_blank" rel="noopener noreferrer">{shot.url}</a>
+                            )}
+                          </figcaption>
+                          {(shot.hotspots ?? []).length > 0 && (
+                            <ul class="tutorial-hotspot-list" aria-label="화면 번호 설명">
+                              {(shot.hotspots ?? []).map((hotspot) => (
+                                <li>
+                                  <span>{hotspot.label}</span>
+                                  <strong>{hotspot.title}</strong>
+                                  <em>{hotspot.body}</em>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </figure>
+                      ))}
+                    </div>
+                  )}
+
+                  <div class="skill-strip">
+                    {item.recommended.length > 0 && (
+                      <div>
+                        <span>추천 스킬</span>
+                        <ul class="skill-strip__cmds">
+                          {item.recommended.map((item) => {
+                            const skill = parseSkillReference(item);
+                            return (
+                              <li>
+                                {skill.url ? <a href={skill.url} target="_blank" rel="noreferrer">{skill.name}</a> : skill.name}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
+                    {item.useful.length > 0 && (
+                      <div>
+                        <span>같이 쓰면 좋은 기능</span>
+                        <ul>
+                          {item.useful.map((item) => {
+                            const skill = parseSkillReference(item);
+                            return (
+                              <li>
+                                {skill.url ? <a href={skill.url} target="_blank" rel="noreferrer">{skill.name}</a> : skill.name}
+                                {skill.description && <>: {skill.description}</>}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  <p class="lesson-step__output"><span>이 단계 결과물</span>{item.output}</p>
+
+                  {(item.successCriteria ?? []).length > 0 && (
+                    <div class="success-box">
+                      <h3>끝났는지 확인</h3>
+                      <ul>
+                        {(item.successCriteria ?? []).map((criterion) => <li>{criterion}</li>)}
+                      </ul>
+                    </div>
+                  )}
+
+                  {(item.conceptToggles ?? []).length > 0 && (
+                    <div class="concept-toggles">
+                      {(item.conceptToggles ?? []).map((concept) => (
+                        <details>
+                          <summary>{concept.title}</summary>
+                          <p>{concept.body}</p>
+                        </details>
+                      ))}
+                    </div>
+                  )}
+
+                  {item.prompt && (
+                    <details class="prompt-toggle">
+                      <summary>
+                        <span>복사해서 쓸 말</span>
+                      </summary>
+                      <div class="prompt-toggle__body">
+                        <button type="button" data-copy-prompt aria-live="polite">복사하기</button>
+                        <pre><code>{item.prompt}</code></pre>
+                      </div>
+                    </details>
+                  )}
+                    </div>
+                  </details>
+                </>
+              );
+            })}
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.querySelector('[data-module-jump]')?.addEventListener('change', (event) => {
+      const target = event.currentTarget;
+      if (target instanceof HTMLSelectElement && target.value && target.value !== window.location.pathname) {
+        window.location.href = target.value;
+      }
+    });
+
+    const setupRoot = document.querySelector('[data-tool-selector]');
+
+    const applySetupChoice = () => {
+      const selectedTool = window.localStorage.getItem('setup-tool') || '';
+      const selectedOs = window.localStorage.getItem('setup-os') || '';
+
+      if (setupRoot && selectedTool) {
+        document.documentElement.dataset.setupTool = selectedTool;
+      } else {
+        delete document.documentElement.dataset.setupTool;
+      }
+
+      if (setupRoot && selectedOs) {
+        document.documentElement.dataset.setupOs = selectedOs;
+      } else {
+        delete document.documentElement.dataset.setupOs;
+      }
+
+      document.querySelectorAll('[data-tool-choice]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.getAttribute('data-tool-choice') === selectedTool));
+      });
+
+      document.querySelectorAll('[data-os-choice]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.getAttribute('data-os-choice') === selectedOs));
+      });
+    };
+
+    document.querySelectorAll('[data-tool-choice]').forEach((button) => {
+      button.addEventListener('click', () => {
+        window.localStorage.setItem('setup-tool', button.getAttribute('data-tool-choice') || '');
+        applySetupChoice();
+      });
+    });
+
+    document.querySelectorAll('[data-os-choice]').forEach((button) => {
+      button.addEventListener('click', () => {
+        window.localStorage.setItem('setup-os', button.getAttribute('data-os-choice') || '');
+        applySetupChoice();
+      });
+    });
+
+    applySetupChoice();
+
+    const copyButtons = document.querySelectorAll('[data-copy-prompt]');
+
+    const fallbackCopy = (text: string) => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      (document as any).execCommand('copy');
+      textarea.remove();
+    };
+
+    copyButtons.forEach((button) => {
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!(button instanceof HTMLButtonElement)) return;
+        const prompt = button.closest('.prompt-toggle')?.querySelector('code')?.textContent || '';
+        if (!prompt.trim()) return;
+
+        try {
+          if (navigator.clipboard?.writeText) {
+            try {
+              await navigator.clipboard.writeText(prompt);
+            } catch {
+              fallbackCopy(prompt);
+            }
+          } else {
+            fallbackCopy(prompt);
+          }
+          const original = button.textContent || '복사하기';
+          button.textContent = '복사됨';
+          window.setTimeout(() => {
+            button.textContent = original;
+          }, 1400);
+        } catch {
+          button.textContent = '복사 실패';
+          window.setTimeout(() => {
+            button.textContent = '복사하기';
+          }, 1400);
+        }
+      });
+    });
+
+    const firstPromptSamples = {
+      restaurant: {
+        context: '청도 읍내에서 점심 장사를 하는 작은 식당입니다. 단골은 많지만 새 손님에게 가게 분위기를 잘 알리지 못하고 있습니다.',
+        role: '동네 가게 홍보글을 잘 쓰는 사람처럼 도와주세요.',
+        task: '오늘 인스타그램에 올릴 점심 메뉴 홍보글을 써주세요.',
+        style: '너무 광고처럼 보이지 않게, 동네 손님에게 말하듯 편하게 써주세요.',
+        rules: '첫 문장은 짧게 써주세요. 메뉴 이름, 가격, 오늘만 좋은 점을 넣어주세요. 문장은 5줄 안으로 써주세요.',
+      },
+      farm: {
+        context: '부모님과 함께 복숭아 농장을 운영합니다. 이번 주 수확한 복숭아를 택배로 판매하려고 합니다.',
+        role: '농산물 판매글을 쉽게 쓰는 사람처럼 도와주세요.',
+        task: '동네 단체방에 올릴 복숭아 판매글을 써주세요.',
+        style: '믿음이 가고 부담스럽지 않은 말투로 써주세요.',
+        rules: '복숭아 상태, 주문 방법, 마감 시간을 넣어주세요. 너무 과장하지 말아주세요.',
+      },
+      stay: {
+        context: '조용한 시골 마을에서 작은 숙소를 운영합니다. 처음 오는 손님이 길과 이용 방법을 자주 물어봅니다.',
+        role: '숙소 손님 안내문을 친절하게 정리하는 사람처럼 도와주세요.',
+        task: '예약한 손님에게 보내는 입실 안내문을 써주세요.',
+        style: '짧고 친절하게 써주세요. 딱딱한 안내문처럼 보이지 않게 해주세요.',
+        rules: '주소, 주차, 입실 시간, 와이파이, 문의 번호를 넣어주세요. 문단을 나눠서 읽기 쉽게 써주세요.',
+      },
+      class: {
+        context: '우리 공방에서 주말마다 가족 체험 수업을 엽니다. 아이와 부모가 함께 오기 좋은 수업입니다.',
+        role: '체험 프로그램 소개글을 쓰는 사람처럼 도와주세요.',
+        task: '네이버 블로그에 올릴 체험 수업 소개글 첫 부분을 써주세요.',
+        style: '따뜻하고 쉽게 써주세요. 부모가 바로 이해할 수 있게 써주세요.',
+        rules: '대상, 걸리는 시간, 만들 수 있는 결과물, 예약 방법을 넣어주세요. 어려운 말은 쓰지 말아주세요.',
+      },
+    };
+
+    const firstPromptLabels = {
+      context: '내 상황',
+      role: 'AI가 맡을 역할',
+      task: '해달라는 일',
+      style: '말투',
+      rules: '지켜야 할 조건',
+    };
+
+    const firstPromptFields = document.querySelectorAll('[data-first-prompt-field]');
+    const firstPromptOutput = document.querySelector('[data-first-prompt-output]');
+    const firstPromptHiddenPlaceholders = new WeakMap<HTMLTextAreaElement, string>();
+
+    const buildFirstPromptText = () => {
+      const taskField = document.querySelector('[data-first-prompt-field="task"]');
+      const taskText = taskField instanceof HTMLTextAreaElement ? taskField.value.trim() : '';
+      const lines = [`내가 하고 싶은 일: ${taskText}`];
+      firstPromptFields.forEach((field) => {
+        if (!(field instanceof HTMLTextAreaElement)) return;
+        const key = field.dataset.firstPromptField || '';
+        const label = firstPromptLabels[key as keyof typeof firstPromptLabels];
+        if (!label) return;
+        lines.push(`${label}: ${field.value.trim()}`);
+      });
+      lines.push('AI가 나에게 먼저 물어볼 질문: 더 잘 만들기 위해 나에게 먼저 물어봐야 할 질문 3개만 해줘. 질문은 쉬운 말로 해줘.');
+      return lines.join('\n');
+    };
+
+    const updateFirstPromptOutput = () => {
+      if (!firstPromptOutput) return;
+      firstPromptOutput.textContent = buildFirstPromptText();
+    };
+
+    firstPromptFields.forEach((field) => {
+      if (!(field instanceof HTMLTextAreaElement)) return;
+      field.addEventListener('input', updateFirstPromptOutput);
+      field.addEventListener('focus', () => {
+        if (field.value.trim()) return;
+        const placeholder = field.getAttribute('placeholder') || '';
+        if (!placeholder) return;
+        firstPromptHiddenPlaceholders.set(field, placeholder);
+        field.setAttribute('placeholder', '');
+      });
+      field.addEventListener('blur', () => {
+        if (field.value.trim() || field.getAttribute('placeholder')) return;
+        const placeholder = firstPromptHiddenPlaceholders.get(field);
+        if (!placeholder) return;
+        field.setAttribute('placeholder', placeholder);
+      });
+    });
+
+    document.querySelectorAll('[data-first-prompt-sample]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const sampleName = button.dataset.firstPromptSample as keyof typeof firstPromptSamples;
+        const sample = firstPromptSamples[sampleName];
+        if (!sample) return;
+
+        firstPromptFields.forEach((field) => {
+          if (!(field instanceof HTMLTextAreaElement)) return;
+          const key = field.dataset.firstPromptField as keyof typeof sample;
+          const placeholder = sample[key] || '';
+          field.value = '';
+          field.setAttribute('placeholder', placeholder);
+          if (placeholder) {
+            firstPromptHiddenPlaceholders.set(field, placeholder);
+          }
+        });
+
+        document.querySelectorAll('[data-first-prompt-sample]').forEach((sampleButton) => {
+          sampleButton.toggleAttribute('aria-pressed', sampleButton === button);
+        });
+        updateFirstPromptOutput();
+      });
+    });
+
+    document.querySelector('[data-first-prompt-copy]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      if (!(button instanceof HTMLButtonElement)) return;
+      const text = buildFirstPromptText();
+
+      try {
+        if (navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch {
+            fallbackCopy(text);
+          }
+        } else {
+          fallbackCopy(text);
+        }
+        button.textContent = '복사됨';
+        window.setTimeout(() => {
+          button.textContent = '복사하기';
+        }, 1400);
+      } catch {
+        button.textContent = '복사 실패';
+        window.setTimeout(() => {
+          button.textContent = '복사하기';
+        }, 1400);
+      }
+    });
+
+    updateFirstPromptOutput();
+
+    const feedbackPromptSamples = {
+      restaurant: {
+        idea: '점심시간에 회사와 공방으로 도시락을 배달하는 서비스를 시작하려고 합니다.',
+        critic: '까다로운 단골 손님처럼 봐주세요. 마음에 안 드는 점을 돌려 말하지 말아주세요.',
+        roast: '실패할 이유, 내가 깔고 있는 가정, 놓치고 있는 부분을 각각 짚어주세요. 어느 부분이 문제인지 정확히 말해주세요.',
+        refine: '가장 아픈 지적 3개를 골라서, 우리 가게가 바로 해볼 수 있는 개선 아이디어로 바꿔주세요. 마지막에는 다음에 할 일 하나만 정해주세요.',
+      },
+      farm: {
+        idea: '못난이 과일을 한 상자에 섞어 저렴하게 파는 꾸러미 상품을 만들려고 합니다.',
+        critic: '옆 가게 사장처럼 봐주세요. 실제로 팔기 어려운 이유를 먼저 말해주세요.',
+        roast: '손님이 왜 안 살지, 포장과 배송에서 무엇이 터질지, 가격에서 어떤 오해가 생길지 짚어주세요.',
+        refine: '가장 위험한 지적 3개를 골라서, 농장에서 이번 주에 시험할 수 있는 개선안으로 바꿔주세요.',
+      },
+      stay: {
+        idea: '조용한 숙소에 2주 이상 머무는 장기 투숙 할인 상품을 만들려고 합니다.',
+        critic: '회의적인 투자자처럼 봐주세요. 좋아 보이는 말보다 숫자와 운영 문제를 봐주세요.',
+        roast: '수익이 줄어들 이유, 손님 관리에서 생길 문제, 홍보 문구가 흐린 부분을 짚어주세요.',
+        refine: '가장 큰 문제 3개를 골라서, 예약 전에 확인할 조건과 작은 실험으로 바꿔주세요.',
+      },
+      class: {
+        idea: '주말마다 부모와 아이가 함께 오는 원데이 만들기 수업을 열려고 합니다.',
+        critic: '까다로운 학부모처럼 봐주세요. 신청하기 전에 걸리는 점을 솔직히 말해주세요.',
+        roast: '가격, 안전, 결과물, 아이 연령대에서 생길 불만을 짚어주세요.',
+        refine: '가장 아픈 지적 3개를 골라서, 안내문과 수업 운영에서 바로 고칠 점으로 바꿔주세요.',
+      },
+    };
+
+    const feedbackPromptLabels = {
+      idea: '내 아이디어',
+      critic: '비평가 역할',
+      roast: '혹평 주문',
+      refine: '뒤집기 주문',
+    };
+
+    const feedbackPromptFields = document.querySelectorAll('[data-feedback-prompt-field]');
+    const feedbackPromptOutput = document.querySelector('[data-feedback-prompt-output]');
+    const feedbackPromptHiddenPlaceholders = new WeakMap<HTMLTextAreaElement, string>();
+
+    const feedbackFieldText = (field: HTMLTextAreaElement) => field.value.trim() || field.getAttribute('placeholder')?.trim() || '';
+
+    const buildFeedbackPromptText = () => {
+      const lines = [
+        '아래 아이디어를 친절하지만 가차없이 봐주세요.',
+        '',
+      ];
+      feedbackPromptFields.forEach((field) => {
+        if (!(field instanceof HTMLTextAreaElement)) return;
+        const key = field.dataset.feedbackPromptField || '';
+        const label = feedbackPromptLabels[key as keyof typeof feedbackPromptLabels];
+        if (!label) return;
+        lines.push(`${label}: ${feedbackFieldText(field)}`);
+      });
+      lines.push('', '규칙: 칭찬으로 시작하지 마세요. 아이디어는 세게 비판해도 사람은 공격하지 마세요. 무른 표현 대신 바로 고칠 수 있는 말로 써주세요.');
+      return lines.join('\n');
+    };
+
+    const updateFeedbackPromptOutput = () => {
+      if (!feedbackPromptOutput) return;
+      feedbackPromptOutput.textContent = buildFeedbackPromptText();
+    };
+
+    feedbackPromptFields.forEach((field) => {
+      if (!(field instanceof HTMLTextAreaElement)) return;
+      field.addEventListener('input', updateFeedbackPromptOutput);
+      field.addEventListener('focus', () => {
+        if (field.value.trim()) return;
+        const placeholder = field.getAttribute('placeholder') || '';
+        if (!placeholder) return;
+        feedbackPromptHiddenPlaceholders.set(field, placeholder);
+        field.setAttribute('placeholder', '');
+        updateFeedbackPromptOutput();
+      });
+      field.addEventListener('blur', () => {
+        if (field.value.trim() || field.getAttribute('placeholder')) return;
+        const placeholder = feedbackPromptHiddenPlaceholders.get(field);
+        if (!placeholder) return;
+        field.setAttribute('placeholder', placeholder);
+        updateFeedbackPromptOutput();
+      });
+    });
+
+    document.querySelectorAll('[data-feedback-prompt-sample]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const sampleName = button.dataset.feedbackPromptSample as keyof typeof feedbackPromptSamples;
+        const sample = feedbackPromptSamples[sampleName];
+        if (!sample) return;
+
+        feedbackPromptFields.forEach((field) => {
+          if (!(field instanceof HTMLTextAreaElement)) return;
+          const key = field.dataset.feedbackPromptField as keyof typeof sample;
+          const placeholder = sample[key] || '';
+          field.value = '';
+          field.setAttribute('placeholder', placeholder);
+          if (placeholder) {
+            feedbackPromptHiddenPlaceholders.set(field, placeholder);
+          }
+        });
+
+        document.querySelectorAll('[data-feedback-prompt-sample]').forEach((sampleButton) => {
+          sampleButton.toggleAttribute('aria-pressed', sampleButton === button);
+        });
+        updateFeedbackPromptOutput();
+      });
+    });
+
+    document.querySelector('[data-feedback-prompt-copy]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      if (!(button instanceof HTMLButtonElement)) return;
+      const text = buildFeedbackPromptText();
+
+      try {
+        if (navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch {
+            fallbackCopy(text);
+          }
+        } else {
+          fallbackCopy(text);
+        }
+        button.textContent = '복사됨';
+        window.setTimeout(() => {
+          button.textContent = '복사하기';
+        }, 1400);
+      } catch {
+        button.textContent = '복사 실패';
+        window.setTimeout(() => {
+          button.textContent = '복사하기';
+        }, 1400);
+      }
+    });
+
+    updateFeedbackPromptOutput();
+  </script>
+</Base>

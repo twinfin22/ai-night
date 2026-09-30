@@ -85,7 +85,7 @@
     display: none !important;
   }
 
-  /* ── 폰트 렌더링 최적화 ── */
+  /* ── 폰트 렌더링 정리 ── */
   body {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;

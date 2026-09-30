@@ -6,3 +6,5 @@ dist
 .astro
 .omc/
 .claude/
+.playwright-cli/
+.gstack/
