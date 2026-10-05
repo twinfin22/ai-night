@@ -9,6 +9,8 @@ test('Day 1 lets a learner select Codex and starts the Week 1 one-action lesson'
   await expect(page.locator('img[src="/assets/tutorials/brands/anthropic.svg"]')).toBeVisible();
 
   await page.getByRole('radio', { name: /Codex/ }).check();
+  await expect(page.getByRole('button', { name: '수업 시작' })).toBeDisabled();
+  await page.getByRole('radio', { name: 'macOS' }).check();
   await page.getByRole('button', { name: '수업 시작' }).click();
 
   await expect(page.getByRole('heading', { name: '오늘 할 일을 먼저 살펴봐요' })).toBeVisible();
@@ -32,8 +34,9 @@ test('tutorial list retains direct routes for all Week 1 days', async ({ page })
 test('Day 4 renders only the selected app official link before its screenshot', async ({ page }) => {
   await page.goto('/tutorials/day-04/');
   await page.getByRole('radio', { name: /Codex/ }).check();
+  await page.getByRole('radio', { name: 'macOS' }).check();
   await page.getByRole('button', { name: '수업 시작' }).click();
-  await page.getByRole('button', { name: '다음' }).click();
+  for (let index = 0; index < 7; index += 1) await page.getByRole('button', { name: '다음' }).click();
 
   const link = page.getByRole('link', { name: /ChatGPT Chrome 안내/ });
   await expect(link).toBeVisible();

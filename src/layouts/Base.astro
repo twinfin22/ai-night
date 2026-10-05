@@ -14,7 +14,7 @@ const {
 const siteUrl = 'https://www.ai-night.study';
 const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, siteUrl).href;
 const ogImage = `${siteUrl}/og.png`;
-const GA4_ID = 'G-XXXXXXXXXX';
+const GA4_ID = import.meta.env.PUBLIC_GA4_ID;
 
 import '../styles/global.css';
 ---
@@ -61,42 +61,42 @@ import '../styles/global.css';
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
     />
 
-    <!-- GA4 (placeholder ID) -->
-    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
-    <script is:inline define:vars={{ GA4_ID }}>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        window.dataLayer.push(arguments);
-      }
-      window.gtag = gtag;
-      gtag('js', new Date());
-
-      // Capture referrer category at pageview
-      let referrerCategory = 'direct';
-      try {
-        const ref = document.referrer || '';
-        if (!ref) {
-          referrerCategory = 'direct';
-        } else if (/mail\.google|outlook|naver\.com\/mail/.test(ref)) {
-          referrerCategory = 'email';
-        } else if (/google|naver|daum|bing/.test(ref)) {
-          referrerCategory = 'search';
-        } else if (/facebook|instagram|twitter|x\.com|linkedin|kakao/.test(ref)) {
-          referrerCategory = 'social';
-        } else {
-          referrerCategory = 'other';
+    {GA4_ID && <>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
+      <script is:inline define:vars={{ GA4_ID }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.dataLayer.push(arguments);
         }
-      } catch (e) {}
+        window.gtag = gtag;
+        gtag('js', new Date());
 
-      gtag('config', GA4_ID, {
-        page_referrer_category: referrerCategory,
-      });
+        let referrerCategory = 'direct';
+        try {
+          const ref = document.referrer || '';
+          if (!ref) {
+            referrerCategory = 'direct';
+          } else if (/mail\.google|outlook|naver\.com\/mail/.test(ref)) {
+            referrerCategory = 'email';
+          } else if (/google|naver|daum|bing/.test(ref)) {
+            referrerCategory = 'search';
+          } else if (/facebook|instagram|twitter|x\.com|linkedin|kakao/.test(ref)) {
+            referrerCategory = 'social';
+          } else {
+            referrerCategory = 'other';
+          }
+        } catch (e) {}
 
-      gtag('event', 'referrer', {
-        referrer_category: referrerCategory,
-        referrer_raw: document.referrer || '(direct)',
-      });
-    </script>
+        gtag('config', GA4_ID, {
+          page_referrer_category: referrerCategory,
+        });
+
+        gtag('event', 'referrer', {
+          referrer_category: referrerCategory,
+          referrer_raw: document.referrer || '(direct)',
+        });
+      </script>
+    </>}
 
   </head>
   <body>

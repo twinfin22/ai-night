@@ -22,9 +22,9 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
     <aside class="one-action__coach" data-coach>
       <header class="one-action__header"><a href="/tutorials/" class="one-action__brand" aria-label="AI 야학 수업 목록">AI 야학</a><strong title={`${item.day}일차 · ${item.title}`}><span>{item.day}일차</span> · {item.title}<small data-time>{item.time}</small></strong><button type="button" class="one-action__environment" data-environment-edit>환경 변경</button><div class="one-action__progress" role="progressbar" aria-label="현재 수업 단계" aria-valuemin="1" data-progress><span data-progress-label>1 / {item.pages.length}</span></div></header>
       <div class="one-action__guide" data-guide><p class="one-action__eyebrow">지금 할 일</p><h1 tabindex="-1" data-title></h1><p data-description></p><strong data-action></strong><div data-guide-content></div><p class="one-action__persistence-warning" data-persistence-warning hidden role="status">저장소에 접근하지 못했습니다. 수업은 계속할 수 있지만 재접속하면 진도가 유지되지 않을 수 있습니다.</p><p class="one-action__status" data-status role="status" aria-live="polite"></p></div>
+    <div class="one-action__support" data-support><div data-support-details></div><footer class="one-action__actions"><button type="button" data-prev>이전</button><button type="button" class="one-action__help" data-help>도움이 필요해요</button><button type="button" data-next>다음</button></footer></div>
     </aside>
     <section class="one-action__visual" data-visual aria-label="참고 화면"></section>
-    <div class="one-action__support" data-support><div data-support-details></div><footer class="one-action__actions"><button type="button" data-prev>이전</button><button type="button" class="one-action__help" data-help>도움이 필요해요</button><button type="button" data-next>다음</button></footer></div>
   </section>
   <dialog class="tutorial-help-dialog" data-help-dialog aria-labelledby="tutorial-help-title">
     <form method="dialog" class="tutorial-help-dialog__panel" data-help-form novalidate>

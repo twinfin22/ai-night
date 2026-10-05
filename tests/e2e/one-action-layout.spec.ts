@@ -26,6 +26,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720
     await page.setViewportSize(viewport);
     await page.goto('/tutorials/day-01/');
     await page.getByRole('radio', { name: /Codex/ }).check();
+    await page.getByRole('radio', { name: 'macOS' }).check();
     await page.getByRole('button', { name: '수업 시작' }).click();
     await expect(page.locator('[data-coach]')).toBeVisible();
     await expect(page.locator('[data-visual]')).toBeVisible();

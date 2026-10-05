@@ -42,7 +42,7 @@ describe('Week 3 QA overrides', () => {
     expect(day14.pages.find((page) => page.id === 'd14-07')?.prompt).toContain('폴더에 접근');
 
     const day15 = oneActionDay(15);
-    expect(day15.pages.find((page) => page.id === 'd15-capability')?.prompt).toContain('최소 수동 대안');
+    expect(day15.pages.find((page) => page.id === 'd15-capability')?.prompt).toContain('최소 수동 요청문');
     expect(day15.pages.filter((page) => page.id.startsWith('d15-05-')).map((page) => page.track).sort()).toEqual(['claude', 'codex']);
     for (const app of ['codex', 'claude']) {
       const pages = day15.pages.filter((page) => !page.track || page.track === app);
@@ -68,21 +68,22 @@ describe('Week 4 QA overrides', () => {
       'd17-action-06',
       'd17-action-07',
       'd17-action-08',
+      'd17-advanced-check',
       'd17-action-99',
     ]);
     expect(oneActionDay(20).pages.map((page) => page.title)).toEqual([
-      'AI 야학 졸업을 축하합니다!', 'AI가 읽을 수 있는 기록을 찾으세요', '진단에 쓸 기록을 직접 고르세요', '20일 기록에서 내 패턴을 진단받으세요', '계속할 활용법 3개를 고르세요', '업무 규칙 후보를 만드세요', '고른 규칙을 AGENTS.md에 반영하세요', '오늘의 회고',
+      'AI 야학 졸업을 축하합니다!', 'AI가 읽을 수 있는 기록을 찾으세요', '진단에 쓸 기록을 직접 고르세요', '20일 기록에서 내 패턴을 진단받으세요', '계속할 활용법 3개를 고르세요', '다음 30일의 작은 계획을 정하세요', '업무 규칙 후보를 만드세요', '고른 규칙을 앱별 위치에 반영하세요', '오늘의 회고',
     ]);
     expect(oneActionDay(20).pages[1]?.description).toBe('AI가 지금 열 수 있는 대화 기록과 작업 파일만 목록으로 만듭니다.');
   });
 
   it('keeps the optional Day 17 blog grader bounded and human-approved', () => {
-    const page = oneActionDay(17).pages.find((candidate) => candidate.id === 'd17-action-08');
+    const page = oneActionDay(17).pages.find((candidate) => candidate.id === 'd17-advanced-check');
     const prompt = page?.prompt ?? '';
 
     expect(page).toMatchObject({
       title: '선택 심화: 내 글 합격 검사기 만들기',
-      description: expect.stringContaining('잘된 블로그 글 3개가 없으면'),
+      description: expect.stringContaining('기존 글 세 개가 없으면'),
       officialLinks: [{
         label: '참고 원문',
         href: 'https://app.teams.100school.com/day/13/good-enough-never-is-b2c',
@@ -114,7 +115,7 @@ describe('Week 4 QA overrides', () => {
       'https://www.gpters.org/', 'https://modulabs.co.kr/', 'https://koding.kr/',
       'https://page.stibee.com/subscriptions/181723', 'https://www.aiground.co.kr/#/portal/signup/free', 'https://aimatters.co.kr/subscribe/',
     ]);
-    expect(day19.pages.filter((page) => page.id.startsWith('d19-action-07-')).map((page) => page.track).sort()).toEqual(['claude', 'codex']);
+    expect(day19.pages.filter((page) => page.id.startsWith('d19-action-08-')).map((page) => page.track).sort()).toEqual(['claude', 'codex']);
   });
 
   it('uses the same human-only retro wording across Week 3', () => {

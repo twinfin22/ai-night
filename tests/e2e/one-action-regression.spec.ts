@@ -2,22 +2,23 @@ import { expect, test } from '@playwright/test';
 
 for (const sample of [
   { day: 1, key: '1.codex', page: 'd01-start', view: 'FOCUS' },
-  { day: 1, key: '1.codex', page: 'd01-folder', view: 'WORKBENCH' },
+  { day: 1, key: '1.codex', page: 'd01-folder-macos', view: 'WORKBENCH' },
   { day: 1, key: '1.codex', page: 'd01-codex-download', view: 'SPOTLIGHT' },
   { day: 1, key: '1.codex', page: 'd01-first-prompt', view: 'PROMPT' },
   { day: 2, key: '2.codex', page: 'd02-review', view: 'COMPARISON' },
-  { day: 3, key: '3.common', page: 'd03-retro', view: 'WORKBOOK' },
+  { day: 3, key: '3.codex', page: 'd03-retro', view: 'WORKBOOK' },
 ]) {
-  test(`${sample.view} keeps the visual read-only`, async ({ page }) => {
+  test(`${sample.view} keeps the visual read-only except image enlargement`, async ({ page }) => {
     await page.addInitScript((state) => {
       localStorage.setItem('ainight.version', '5');
       localStorage.setItem('ainight.app', 'codex');
+      localStorage.setItem('ainight.os', 'macos');
       localStorage.setItem('ainight.position', JSON.stringify({ [state.key]: state.page }));
     }, sample);
     await page.goto(`/tutorials/day-${String(sample.day).padStart(2, '0')}/`);
     await expect(page.locator('[data-visual]')).toHaveAttribute('data-view', sample.view);
-    await expect(page.locator('[data-visual] button, [data-visual] a, [data-visual] input, [data-visual] textarea, [data-visual] select, [data-visual] summary')).toHaveCount(0);
-    await expect(page.locator('[data-lesson] :is(button,a,input,textarea,select,summary):not([data-coach] *)')).toHaveCount(0);
+    await expect(page.locator('[data-visual] button:not([data-image-open]), [data-visual] a, [data-visual] input, [data-visual] textarea, [data-visual] select, [data-visual] summary')).toHaveCount(0);
+    await expect(page.locator('[data-lesson] :is(button,a,input,textarea,select,summary):not([data-coach] *):not([data-image-open])')).toHaveCount(0);
   });
 }
 
@@ -27,11 +28,12 @@ test('all 20 one-action routes open a usable lesson', async ({ page }) => {
     const chooser = page.locator('[data-preflight]');
     if (await chooser.isVisible()) {
       await page.getByRole('radio', { name: /Codex/ }).check();
+      await page.getByRole('radio', { name: 'macOS' }).check();
       await page.getByRole('button', { name: '수업 시작' }).click();
     }
     await expect(page.locator('[data-lesson]')).toBeVisible();
     await expect(page.locator('[data-title]')).not.toBeEmpty();
-    await expect(page.getByRole('button', { name: /다음|완료하기/ })).toBeVisible();
+    await expect(page.getByRole('button', { name: /다음|수업 완료/ })).toBeVisible();
   }
 });
 
@@ -55,6 +57,7 @@ test('technical details and downloads stay in the coach immediately above naviga
   const day19Chooser = page.locator('[data-preflight]');
   if (await day19Chooser.isVisible()) {
     await page.getByRole('radio', { name: /Codex/ }).check();
+    await page.getByRole('radio', { name: 'macOS' }).check();
     await page.getByRole('button', { name: '수업 시작' }).click();
   }
   await page.getByRole('button', { name: '다음' }).click();
@@ -74,18 +77,19 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
     await page.goto('/tutorials/day-17/');
 
     await expect(page.locator('[data-time]')).toHaveText('30분 + 선택 10분');
+    await page.getByRole('button', { name: '다음' }).click();
     await expect(page.getByRole('heading', { name: '선택 심화: 내 글 합격 검사기 만들기' })).toBeVisible();
-    await expect(page.getByText('잘된 블로그 글 3개가 없으면 다음을 눌러 회고로 건너뛰세요.', { exact: false })).toBeVisible();
+    await expect(page.getByText('기존 글 세 개가 없으면 이 선택 심화는 건너뛰고 회고로 넘어가도 됩니다.', { exact: false })).toBeVisible();
     await expect(page.getByRole('link', { name: /참고 원문/ })).toContainText('100 School · 2026-07-27 확인');
-    await expect(page.locator('[data-progress-label]')).toHaveText('9 / 10');
+    await expect(page.locator('[data-progress-label]')).toHaveText('10 / 11');
 
     await page.getByRole('button', { name: '프롬프트 복사하기' }).click();
-    await expect(page.getByRole('button', { name: '복사됨' })).toBeVisible();
+    await expect(page.getByRole('button', { name: '프롬프트 복사됨' })).toBeVisible();
     await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toContain('잘된 블로그 글 3개');
 
     await page.getByRole('button', { name: '다음' }).click();
     await expect(page.getByRole('heading', { name: '오늘의 회고' })).toBeVisible();
-    await expect(page.locator('[data-progress-label]')).toHaveText('10 / 10');
+    await expect(page.locator('[data-progress-label]')).toHaveText('11 / 11');
   });
 }
 
@@ -101,7 +105,7 @@ test('invalid saved positions recover and Day 20 completion remains deduplicated
 
   await page.goto('/tutorials/day-20/');
   await expect(page.getByRole('heading', { name: '오늘의 회고' })).toBeVisible();
-  await page.getByRole('button', { name: '완료하기' }).click();
+  await page.getByRole('button', { name: '결과를 확인하고 수업 완료' }).click();
   await expect(page).toHaveURL(/\/tutorials\/$/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('ainight.done'))).toBe('[19,20]');
   await expect.poll(() => page.evaluate(() => sessionStorage.getItem('ainight.completed'))).toBe('20');

@@ -29,7 +29,7 @@ describe('Week 1 one-action course data', () => {
     }
   });
 
-  it('adds the Day 1 safe-practice branch and saves then reopens Day 2 instructions', () => {
+  it('adds the Day 1 safe-practice branch and keeps Day 2 instructions app-scoped', () => {
     const day1 = courseDays.find((day) => day.day === 1)!;
     const day2 = courseDays.find((day) => day.day === 2)!;
     if (day1.experience !== 'one-action' || day2.experience !== 'one-action') throw new Error('Week 1 must use one-action pages.');
@@ -41,11 +41,15 @@ describe('Week 1 one-action course data', () => {
     expect(day1.pages[prepIndex].description).toContain('개인정보가 없는 연습 파일');
     expect(day1.pages[promptIndex].prompt).toContain('[내가 하는 일]');
 
-    const save = day2.pages.find((page) => page.id === 'd02-save')!;
+    const codexSave = day2.pages.find((page) => page.id === 'd02-save-codex')!;
+    const claudeSave = day2.pages.find((page) => page.id === 'd02-save-claude')!;
     const reopen = day2.pages.find((page) => page.id === 'd02-test')!;
-    expect(save.prompt).toContain('ai-study/project-instructions.md');
-    expect(reopen.prompt).toContain('다시 열어 읽어줘');
-    expect(reopen.prompt).toContain('내용은 바꾸지 마');
+    expect(codexSave.track).toBe('codex');
+    expect(codexSave.prompt).toContain('AGENTS.md');
+    expect(claudeSave.track).toBe('claude');
+    expect(claudeSave.prompt).toContain('Project instructions');
+    expect(reopen.prompt).toContain('안전한 예시');
+    expect(reopen.prompt).toContain('실제 파일 수정·삭제·발송은 하지 마');
   });
 
   it('keeps Day 4 and Day 5 official links inside the selected app track', () => {
