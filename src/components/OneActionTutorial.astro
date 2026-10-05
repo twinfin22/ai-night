@@ -20,7 +20,7 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
   </section>
   <section class="one-action__shell" data-lesson hidden aria-label={`${item.day}일차 수업`}>
     <aside class="one-action__coach" data-coach>
-      <header class="one-action__header"><a href="/tutorials/" class="one-action__brand" aria-label="AI 야학 수업 목록">AI 야학</a><strong title={`${item.day}일차 · ${item.title}`}><span>{item.day}일차</span> · {item.title}<small data-time>{item.time}</small></strong><div class="one-action__progress" role="progressbar" aria-label="현재 수업 단계" aria-valuemin="1" data-progress><span data-progress-label>1 / {item.pages.length}</span></div></header>
+      <header class="one-action__header"><a href="/tutorials/" class="one-action__brand" aria-label="AI 야학 수업 목록">AI 야학</a><strong title={`${item.day}일차 · ${item.title}`}><span>{item.day}일차</span> · {item.title}<small data-time>{item.time}</small></strong><button type="button" class="one-action__environment" data-environment-edit>환경 변경</button><div class="one-action__progress" role="progressbar" aria-label="현재 수업 단계" aria-valuemin="1" data-progress><span data-progress-label>1 / {item.pages.length}</span></div></header>
       <div class="one-action__guide" data-guide><p class="one-action__eyebrow">지금 할 일</p><h1 tabindex="-1" data-title></h1><p data-description></p><strong data-action></strong><div data-guide-content></div><p class="one-action__persistence-warning" data-persistence-warning hidden role="status">저장소에 접근하지 못했습니다. 수업은 계속할 수 있지만 재접속하면 진도가 유지되지 않을 수 있습니다.</p><p class="one-action__status" data-status role="status" aria-live="polite"></p></div>
     </aside>
     <section class="one-action__visual" data-visual aria-label="참고 화면"></section>
@@ -75,15 +75,20 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
   if (os !== 'macos' && os !== 'windows') os = null;
   appInput.forEach((input) => { input.checked = input.value === app; });
   osInput.forEach((input) => { input.checked = input.value === os; });
-  let visible = [], index = 0, memoryDraft = {};
+  let visible = [], index = 0, memoryDraft = {}, pendingStepId = null, editingEnvironment = false;
   const pageKey = () => visible[index]?.id;
   const drafts = () => ({ ...read(localStorage, keys.draft, {}), ...read(sessionStorage, keys.draft, {}), ...memoryDraft });
   const values = () => drafts()[pageKey()] || {};
   const saveValue = (control, value) => { const target = control.persist === 'session' ? sessionStorage : localStorage; const all = read(target, keys.draft, {}); all[pageKey()] = { ...(all[pageKey()] || {}), [control.id]: value }; if (!write(target, keys.draft, all)) memoryDraft = { ...memoryDraft, [pageKey()]: { ...(memoryDraft[pageKey()] || {}), [control.id]: value } }; };
+  const choiceValue = (choiceKey) => {
+    const owners = pages.filter((page) => page.controls?.some((control) => control.id === choiceKey));
+    if (owners.length !== 1) return undefined;
+    return drafts()[owners[0].id]?.[choiceKey];
+  };
   const getVisible = () => pages
     .filter((page) => !page.track || page.track === app)
     .filter((page) => !page.platform || page.platform === os)
-    .filter((page) => !page.visibleWhen || drafts()['d07-choice-output']?.[page.visibleWhen.choiceKey] === page.visibleWhen.equals);
+    .filter((page) => !page.visibleWhen || choiceValue(page.visibleWhen.choiceKey) === page.visibleWhen.equals);
   const positionApp = () => app || 'common';
   const hasAppTracks = pages.some((page) => page.track);
   const updateStart = () => { if (start) start.disabled = !(app && os); };
@@ -119,7 +124,10 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
   const imageDescription = root.querySelector('[data-image-description]');
   let imageReturnFocus = null;
   let helpReturnFocus = null, inquiryContext = null, inquiryRequestId = null;
-  const selectedBranch = () => values()['output-format'] || drafts()['d07-choice-output']?.['output-format'] || '미선택';
+  const selectedBranch = () => {
+    const condition = pages.find((page) => page.visibleWhen)?.visibleWhen;
+    return condition ? choiceValue(condition.choiceKey) || '미선택' : '해당 없음';
+  };
   const helpContextEntries = (context) => [
     ['수업', `Day ${context.day} · ${context.dayTitle}`],
     ['단계', `${context.stepId} · ${context.stepTitle}`],
@@ -202,8 +210,9 @@ const clientPages = item.pages.map(({ source: _source, authorNote: _authorNote, 
     visual.querySelectorAll('img').forEach((image) => image.addEventListener('error', () => { image.closest('figure')?.remove(); if (!visual.querySelector('.visual-image, .visual-prompt, .visual-focus, .visual-comparison')) visual.hidden = true; report('스크린샷을 불러오지 못했습니다.', true); }));
   };
   const render = (focus = false) => { const page = visible[index]; if (!page) { root.querySelector('[data-guide-content]').innerHTML = '<div class="guide-recovery"><h2>열 수 있는 수업 화면이 없습니다.</h2><a href="/tutorials/">수업 목록으로</a></div>'; root.querySelector('[data-visual]').innerHTML = ''; report('수업 화면을 복구하지 못했습니다.', true); return; } root.querySelector('[data-title]').textContent = page.title; root.querySelector('[data-description]').textContent = page.description; root.querySelector('[data-action]').textContent = page.action || ''; root.querySelector('[data-progress-label]').textContent = `${index + 1} / ${visible.length}`; const progress = root.querySelector('[data-progress]'); progress.setAttribute('aria-valuemax', String(visible.length)); progress.setAttribute('aria-valuenow', String(index + 1)); root.querySelector('[data-prev]').disabled = index === 0; root.querySelector('[data-next]').textContent = index === visible.length - 1 ? '결과를 확인하고 수업 완료' : '다음'; renderContent(page); updateNext(page); if (!saveTutorialPosition(localStorage, { day, app: positionApp(), stepId: page.id })) noteStorageFailure(); if (focus) root.querySelector('[data-title]').focus(); };
-  const begin = () => { if (hasAppTracks && (!app || !os)) return; try { if (app) localStorage.setItem(keys.app, app); if (os === 'macos' || os === 'windows') localStorage.setItem(keys.os, os); if (!runCourseMigrations(localStorage)) noteStorageFailure(); } catch { noteStorageFailure(); } visible = getVisible(); const saved = readTutorialPosition(localStorage, day, positionApp()); index = Math.max(0, visible.findIndex((page) => page.id === saved)); preflight.hidden = true; lesson.hidden = false; render(); };
+  const begin = () => { if (hasAppTracks && (!app || !os)) return; try { if (app) localStorage.setItem(keys.app, app); if (os === 'macos' || os === 'windows') localStorage.setItem(keys.os, os); if (!runCourseMigrations(localStorage)) noteStorageFailure(); } catch { noteStorageFailure(); } visible = getVisible(); const saved = readTutorialPosition(localStorage, day, positionApp()); const stableIndex = pendingStepId ? visible.findIndex((page) => page.id === pendingStepId) : -1; const savedIndex = visible.findIndex((page) => page.id === saved); index = stableIndex >= 0 ? stableIndex : Math.max(0, savedIndex); const recovered = editingEnvironment && pendingStepId && stableIndex < 0; pendingStepId = null; editingEnvironment = false; preflight.hidden = true; lesson.hidden = false; render(); if (recovered) report('새 환경에서 같은 단계를 열 수 없어, 이 수업의 안전한 시작 단계로 이동했습니다.'); };
   appInput.forEach((input) => input.addEventListener('change', () => { app = input.value; updateStart(); })); osInput.forEach((input) => input.addEventListener('change', () => { os = input.value; updateStart(); })); start?.addEventListener('click', begin);
+  root.querySelector('[data-environment-edit]')?.addEventListener('click', () => { pendingStepId = pageKey(); editingEnvironment = true; start.textContent = '변경 저장'; preflight.hidden = false; lesson.hidden = true; });
   root.querySelector('[data-prev]')?.addEventListener('click', () => { index = Math.max(0, index - 1); render(true); });
   root.querySelector('[data-next]')?.addEventListener('click', () => { if (!controlsComplete(visible[index])) return; if (index < visible.length - 1) { index += 1; render(true); return; } if (!markTutorialComplete(localStorage, day)) noteStorageFailure(); try { sessionStorage.setItem('ainight.completed', String(day)); } catch { noteStorageFailure(); } window.location.href = '/tutorials/'; });
   if (!hasAppTracks) { begin(); } else if (app === 'codex' || app === 'claude') { if (os === 'macos' || os === 'windows') begin(); else preflight.hidden = false; } else preflight.hidden = false;

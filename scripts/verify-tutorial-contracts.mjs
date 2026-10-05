@@ -81,13 +81,17 @@ for (let day = 1; day <= 20; day += 1) {
   }
 
   const controls = new Map();
-  for (const page of pages) for (const control of page.controls || []) controls.set(control.id, control);
+  for (const page of pages) for (const control of page.controls || []) {
+    assert(typeof control.id === 'string' && control.id.length > 0, `Day ${day}/${page.id}: control without an ID`);
+    assert(!controls.has(control.id), `Day ${day}: duplicate control ID ${control.id}`);
+    if (!controls.has(control.id)) controls.set(control.id, { control, page });
+  }
   const conditionalValues = new Map();
   for (const page of pages.filter((item) => item.visibleWhen)) {
     const condition = page.visibleWhen;
-    const control = controls.get(condition.choiceKey);
-    assert(control, `Day ${day}/${page.id}: visibility control ${condition.choiceKey} is missing`);
-    assert(control?.options?.some((option) => option.value === condition.equals), `Day ${day}/${page.id}: visibility value ${condition.equals} is not selectable`);
+    const owner = controls.get(condition.choiceKey);
+    assert(owner, `Day ${day}/${page.id}: visibility control ${condition.choiceKey} is missing`);
+    assert(owner?.control.options?.some((option) => option.value === condition.equals), `Day ${day}/${page.id}: visibility value ${condition.equals} is not selectable`);
     if (!conditionalValues.has(condition.choiceKey)) conditionalValues.set(condition.choiceKey, new Set());
     conditionalValues.get(condition.choiceKey).add(condition.equals);
   }

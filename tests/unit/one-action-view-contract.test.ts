@@ -19,10 +19,13 @@ describe('one-action view contract', () => {
     expect(oneActionDays.flatMap((day) => day.pages).every((page) => expectedViews.includes(page.view))).toBe(true);
   });
 
-  it('uses no advanceWhen flags and only one required progress control', () => {
+  it('uses no advanceWhen flags and gives every choice control a unique ID within its lesson', () => {
     const pages = courseDays.filter((day): day is OneActionTutorialDay => day.experience === 'one-action').flatMap((day) => day.pages);
-    const controls = pages.flatMap((page) => (page.controls || []).map((control) => ({ page: page.id, control })));
+    const lessons = courseDays.filter((day): day is OneActionTutorialDay => day.experience === 'one-action');
     expect(pages.every((page) => !('advanceWhen' in page))).toBe(true);
-    expect(controls).toEqual([expect.objectContaining({ page: 'd07-choice-output', control: expect.objectContaining({ id: 'output-format', required: true }) })]);
+    for (const lesson of lessons) {
+      const controlIds = lesson.pages.flatMap((page) => (page.controls || []).map((control) => control.id));
+      expect(new Set(controlIds).size).toBe(controlIds.length);
+    }
   });
 });
