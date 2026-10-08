@@ -1,3 +1,5 @@
+import { reserveContactAttempt } from '../server/contact-admission';
+
 declare const process: {
   env: Record<string, string | undefined>;
 };
@@ -66,10 +68,20 @@ const sendWithTimeout = async (payload: Record<string, unknown>, headers: Record
   }
 };
 
+const admitContact = async (request: any, response: any, email: string) => {
+  const admission = await reserveContactAttempt(request, email);
+  if (admission.allowed) return true;
+  response.setHeader('Cache-Control', 'no-store');
+  if (admission.status === 429) response.setHeader('Retry-After', String(admission.retryAfter));
+  response.status(admission.status).json({ error: admission.status === 429 ? 'Too many contact attempts.' : 'Contact service temporarily unavailable.' });
+  return false;
+};
+
 const sendTutorialContact = async (
   body: ContactPayload,
   resendApiKey: string,
   response: any,
+  request: any,
 ) => {
   const email = requiredText(body.email, 254);
   const question = requiredText(body.question, 2000);
@@ -103,6 +115,8 @@ const sendTutorialContact = async (
   if (!requestId || /[\r\n]/.test(requestId)) {
     return response.status(400).json({ error: 'A request identifier is required.' });
   }
+
+  if (!await admitContact(request, response, email)) return;
 
   const appLabel = app === 'codex' ? 'Codex' : app === 'claude' ? 'Claude' : UNSELECTED;
   const osLabel = os === 'macos' ? 'macOS' : os === 'windows' ? 'Windows' : UNSELECTED;
@@ -140,15 +154,14 @@ const sendTutorialContact = async (
     });
 
     if (!resendResponse.ok) {
-      const errorText = await resendResponse.text().catch(() => '');
-      console.error('Resend tutorial contact failed:', resendResponse.status, errorText);
+      console.error('Resend tutorial contact failed:', resendResponse.status);
       return response.status(502).json({ error: 'Email delivery failed.' });
     }
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
       return response.status(504).json({ error: 'Email service timed out.' });
     }
-    console.error('Resend tutorial contact request failed:', error);
+    console.error('Resend tutorial contact request failed');
     return response.status(502).json({ error: 'Email delivery failed.' });
   }
 
@@ -168,7 +181,7 @@ export default async function handler(request: any, response: any) {
 
   const body = (request.body ?? {}) as ContactPayload;
   if (body.type === 'tutorial') {
-    return sendTutorialContact(body, resendApiKey, response);
+    return sendTutorialContact(body, resendApiKey, response, request);
   }
 
   const name = cleanText(body.name, 120);
@@ -178,6 +191,8 @@ export default async function handler(request: any, response: any) {
   if (!email || !isValidEmail(email)) {
     return response.status(400).json({ error: 'Valid email is required.' });
   }
+
+  if (!await admitContact(request, response, email)) return;
 
   const from = process.env.RESEND_FROM_EMAIL || DEFAULT_FROM;
   const to = process.env.CONTACT_EMAIL || DEFAULT_TO;
@@ -208,13 +223,12 @@ export default async function handler(request: any, response: any) {
     if (error instanceof Error && error.name === 'AbortError') {
       return response.status(504).json({ error: 'Email service timed out.' });
     }
-    console.error('Resend email request failed:', error);
+    console.error('Resend email request failed');
     return response.status(502).json({ error: 'Email delivery failed.' });
   }
 
   if (!resendResponse.ok) {
-    const errorText = await resendResponse.text().catch(() => '');
-    console.error('Resend email failed:', resendResponse.status, errorText);
+    console.error('Resend email failed:', resendResponse.status);
     return response.status(502).json({ error: 'Email delivery failed.' });
   }
 

@@ -461,6 +461,7 @@ const sections = [
               <button type="submit" class="btn btn--primary">보내기</button>
               <p class="contact-form__status" role="status" aria-live="polite"></p>
             </div>
+            <p><a href="mailto:hello@ai-night.study">hello@ai-night.study로 직접 문의하기</a></p>
           </form>
         </details>
       </div>
@@ -486,6 +487,7 @@ const sections = [
   </a>
 
   <script>
+    import { contactFailureMessage } from '../lib/contact-feedback';
     const stickyCta = document.querySelector('.sticky-cta');
     const hero = document.querySelector('.hero');
     const updateStickyCta = () => {
@@ -586,14 +588,18 @@ const sections = [
           }),
         });
 
-        if (!res.ok) throw new Error('request failed');
+        if (!res.ok) {
+          formStatus.dataset.state = 'error';
+          formStatus.textContent = contactFailureMessage(res.status, res.headers.get('Retry-After'));
+          return;
+        }
 
         form.reset();
         formStatus.dataset.state = 'success';
         formStatus.textContent = '문의가 전송되었습니다.';
       } catch {
         formStatus.dataset.state = 'error';
-        formStatus.textContent = '전송에 실패했습니다. hello@ai-night.study 로 직접 보내주세요.';
+        formStatus.textContent = contactFailureMessage(0, null);
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = '보내기';

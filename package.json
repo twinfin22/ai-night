@@ -11,7 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "npm run test:unit && npm run test:e2e",
-    "test:unit": "vitest run",
+    "test:unit": "vitest run && node --test tests/security/public-assets.test.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {
